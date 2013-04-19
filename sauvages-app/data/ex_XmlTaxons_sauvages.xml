@@ -1,0 +1,54 @@
+<?xml version="1.0" ?> 
+<TAXONS SUBJECT="XML">
+	<TAXON id="391" value="Chêne-liège" sciName="Quercus suber L." groupe="1">
+		<DESCRIPTION>Mesurant jusqu’à 15 m de haut, il est célèbre pour son écorce spongieuse pouvant atteindre 30 cm d’épaisseur. Son tronc est court et tortueux et sa cime très large. Semblable au chêne vert, son feuillage persistant est vert foncé et grisâtre au revers. Les feuilles sont coriaces, de forme ovale avec un bord denté. Ses ﬂeurs mâles forment des grappes pendantes, appelées chatons. Les ﬂeurs femelles sont plus discrètes et regroupées par 2 ou 3. Son fruit est le gland.</DESCRIPTION>
+		<PICTURES>
+			<PICTURE>Chene_liege.jpg</PICTURE> 
+			<PICTURE>Chene_liege1.jpg</PICTURE> 
+			<PICTURE>Chene_liege2.jpg</PICTURE> 
+			<PICTURE>Chene_liege3.jpg</PICTURE> 
+			<PICTURE>Chene_liege4.jpg</PICTURE> 
+			<PICTURE>Chene_liege5.jpg</PICTURE> 
+		</PICTURES>
+		<CRITERIAS>
+			<VALUE code="1.1.3"/>
+			<VALUE code="1.2.1"/>
+			<VALUE code="1.3.1"/>
+			<VALUE code="1.4.1"/>
+		</CRITERIAS>
+	</TAXON>
+	<TAXON id="6940" value="Pin maritime" sciName="Pinus pinaster Aiton." groupe="1">
+		<DESCRIPTION>Le pin maritime est relativement facile à reconnaître</DESCRIPTION> 
+		<PICTURES>
+			<PICTURE>Pin_maritime.jpg</PICTURE> 
+			<PICTURE>Pin_maritime1.jpg</PICTURE> 
+			<PICTURE>Pin_maritime2.jpg</PICTURE> 
+			<PICTURE>Pin_maritime3.jpg</PICTURE> 
+			<PICTURE>Pin_maritime4.jpg</PICTURE> 
+			<PICTURE>Pin_maritime5.jpg</PICTURE> 
+		</PICTURES>
+		<CRITERIAS>
+			<VALUE code="1.1.2"/>
+			<VALUE code="1.2.3"/>
+			<VALUE code="1.3.3"/>
+			<VALUE code="1.4.2"/>
+		</CRITERIAS>
+	</TAXON>
+	<TAXON id="392" value="Pin d`Alep" sciName="Pinus halepensis Mill." groupe="1">
+		<DESCRIPTION>Une des essences forestières les plus typiques de notre végétation. Il peut atteindre jusqu'au 20 mètres de haut et possède un tronc noueux à la cime, irrégulière et peu dense. Les aiguilles du Pin d’Alep sont disposées par 2 sur le rameau et mesurent de 6 à 10 cm. Ses principales menaces sont le risque d'incendie et l'Hylésine des pins (insecte). La chenille processionnaire du pin n’est, quant à elle, pas une menace directe pour la continuité des populations.</DESCRIPTION> 
+		<PICTURES>
+			<PICTURE>Pin_d_alep.jpg</PICTURE> 
+			<PICTURE>Pin_d_alep1.jpg</PICTURE> 
+			<PICTURE>Pin_d_alep2.jpg</PICTURE> 
+			<PICTURE>Pin_d_alep3.jpg</PICTURE> 
+			<PICTURE>Pin_d_alep4.jpg</PICTURE> 
+			<PICTURE>Pin_d_alep5.jpg</PICTURE> 
+		</PICTURES>
+		<CRITERIAS>
+			<VALUE code="1.1.2"/>
+			<VALUE code="1.2.3"/>
+			<VALUE code="1.3.3"/>
+			<VALUE code="1.4.2"/>
+		</CRITERIAS>
+	</TAXON>
+</TAXONS>

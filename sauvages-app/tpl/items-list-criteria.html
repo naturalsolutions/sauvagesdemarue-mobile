@@ -1,0 +1,28 @@
+<li>
+  <div id='<%= criteraId %>' class="taxon-list-item pad-right">
+  <div>
+      <div class="taxonName">
+        <p><b><i><%= name %></i></b></p>
+        <p><%= description %></p>
+      </div>
+  </div>
+
+  <% 
+  if (typeof(defCaracValues) !== 'undefined') {
+  %>
+    <ul>
+      <% 
+        _.each(defCaracValues.models,function(item,key,list){
+      %>
+        <li>
+         <p><%= item.get('name') %></p>
+        </li>
+      <%
+        });
+      %>
+    </ul> 
+  <% 
+  }   
+  %>
+  </div>
+</li>
