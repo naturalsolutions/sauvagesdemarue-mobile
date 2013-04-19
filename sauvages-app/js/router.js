@@ -7,7 +7,7 @@ app.Router = Backbone.Router.extend({
   
   routes: {
    'identification' : 'viewIdentKey',
-   '' : 'viewTaxonlist',
+   'taxonlist' : 'viewTaxonlist',
   },
 
   initialize: function() {
