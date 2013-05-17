@@ -4,6 +4,10 @@
 
 //************************************** Alimenter la base de données par le contenu des  XML taxons et criteres d'identification
 function loadXmlTaxa(){
+  var sqlTaxon = 'INSERT INTO Ttaxon ( taxonId,fk_group,commonName,scientificName,description,picture) VALUES (?,?,?,?,?,?) ';
+  var sqlPicture = 'INSERT INTO Tpicture ( fk_taxon,path,description,author) VALUES (?,?,?,?) ';
+  var sqlCriteria = 'INSERT INTO TvalTaxon_Criteria_values ( fk_taxon,fk_carac_value) VALUES (?,?) ';
+
 	var urlFile = "data/ex_XmlTaxons_sauvages.xml";
   var dfd = $.Deferred();
   var arr = [];
@@ -13,40 +17,36 @@ function loadXmlTaxa(){
     dataType: "xml",
     success: function(xml) {
       $(xml).find('TAXON').each(function(){	
-        var oTaxon = new app.models.Taxon();
-        oTaxon.set('taxonId',parseInt(  $(this).attr('id')));
-        oTaxon.set('commonName' ,$(this).attr('value'));
-        oTaxon.set('scientificName', $(this).attr('sciName'));
-        if (typeof ($(this).attr('groupe')) === 'undefined') { oTaxon.set('fk_group', "");}
+        var oTaxon = new Array();
+        oTaxon['taxonId'] = parseInt(  $(this).attr('id'));
+        oTaxon['commonName'] =$(this).attr('value');
+        oTaxon['scientificName']= $(this).attr('sciName');
+        if (typeof ($(this).attr('groupe')) === 'undefined') { oTaxon['fk_group']= "";}
         else { 
-          oTaxon.set('fk_group', parseInt( $(this).attr('groupe')));
+          oTaxon['fk_group'] = parseInt( $(this).attr('groupe'));
         }
-        oTaxon.set('description',$(this).find('DESCRIPTION').text());
+        oTaxon['description']=$(this).find('DESCRIPTION').text();
         // stocker le nom de fichier de la première photo dans la table Ttaxons
+                
         if ( $(this).find('PICTURE').length >0) {
-          oTaxon.set('picture',$(this).find('PICTURE:first').attr('media'));
+          oTaxon['picture'] = $(this).find('PICTURE:first').attr('media');
           var cPicture = new app.models.PicturesCollection();
           //Stockage des photos
           $(this).find('PICTURE').each(function(){
-            var oPicture = new app.models.Picture();
-            oPicture.set('fk_taxon', oTaxon.get('taxonId'));
-            oPicture.set('path', $(this).attr('media'));
-            oPicture.set('author', $(this).find('author:first').text());
-            cPicture.add(oPicture);
+           arr.push(runQuery(sqlPicture , [oTaxon['taxonId'] ,$(this).attr('media'), 'NULL',  $(this).find('author:first').text() ]));
           });
-          oTaxon.set('pictures', cPicture);
+        }
+        else {
+          oTaxon['picture'] = 'NULL'; 
         }
         
         //Stockage des caractères associés aux taxons
-        var cTaxonCaracValues = new app.models.TaxonCaracValuesCollection();
         $(this).find('CRITERIAS VALUE').each(function(){
-          var oCaracTaxon = new app.models.TaxonCaracValue();
-          oCaracTaxon.set('fk_taxon', oTaxon.get('taxonId'));
-          oCaracTaxon.set('fk_carac_value', $(this).attr('code'));
-          cTaxonCaracValues.add(oCaracTaxon);
+           arr.push(runQuery(sqlCriteria , [oTaxon['taxonId'] ,$(this).attr('code')]));
         });
-        oTaxon.set('caracValues', cTaxonCaracValues);
-        arr.push(oTaxon.save());
+       //INSERT INTO Ttaxon ( taxonId,fk_group,commonName,scientificName,description,picture) VALUES (?,?,?,?,?,?) 
+        arr.push(runQuery(sqlTaxon , [oTaxon['taxonId'],oTaxon['fk_group'],oTaxon['commonName'],
+                oTaxon['scientificName'], oTaxon['description'], oTaxon['picture']]));
       });
       $.when.apply(this, arr).then(function () {
         console.log('when finished dfd.resolve loadTaxaFile');
@@ -115,6 +115,8 @@ function loadXmlCriteria(){
 
 function runQuery(query , param) {
     return $.Deferred(function (d) {
+        /*console.log(query);
+        console.log(param.length);*/
         app.db.transaction(function (tx) {
             tx.executeSql(query, param, successWrapper(d), failureWrapper(d));
         });
@@ -131,6 +133,7 @@ function successWrapper(d) {
 function failureWrapper(d) {
     return (function (tx, error) {
        console.log('failureWrapper');
+      // console.log(error);
         d.reject(error)
     })
 };
