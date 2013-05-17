@@ -1,27 +1,73 @@
 <keys>
-<groupe id="1">
-	<nom>Arbres</nom>
-	<media>images/pictos/icone_arbre.png</media>
-  <criteres>
-  <critere id="1.3">
-					  <label>forme de la feuille</label>
-					  <valeurs><valeur code="1.3.0" >composée</valeur><valeur code="1.3.1" >simple lobée</valeur><valeur code="1.3.2" >simple entière</valeur></valeurs></critere>
-  <critere id="1.4">
-					  <label>bord de la feuille</label>
-					  <valeurs><valeur code="1.4.0" >0</valeur><valeur code="1.4.1" >lisse</valeur><valeur code="1.4.2" >denté</valeur></valeurs></critere>
-  <critere id="1.5">
-					  <label>disposition des feuilles sur la tige</label>
-					  <valeurs><valeur code="1.5.0" >alterne</valeur><valeur code="1.5.1" >opposée</valeur><valeur code="1.5.2" >verticillée</valeur><valeur code="1.5.3" >0</valeur></valeurs></critere>
-  <critere id="1.6">
-					  <label>pilosité</label>
-					  <valeurs><valeur code="1.6.0" >0</valeur><valeur code="1.6.1" >forte</valeur></valeurs></critere>
-  <critere id="1.7">
-					  <label>couleur</label>
-					  <valeurs><valeur code="1.7.0" >blanche</valeur><valeur code="1.7.1" >jaune</valeur><valeur code="1.7.2" >rose/violet</valeur><valeur code="1.7.3" >ligneuse</valeur><valeur code="1.7.4" >bleu</valeur><valeur code="1.7.5" >spore</valeur><valeur code="1.7.6" >verte</valeur><valeur code="1.7.7" >0</valeur><valeur code="1.7.8" >rouge</valeur></valeurs></critere>
-  <critere id="1.8">
-					  <label>type de fleur</label>
-					  <valeurs><valeur code="1.8.0" >ombelle</valeur><valeur code="1.8.1" >5</valeur><valeur code="1.8.2" >0</valeur><valeur code="1.8.3" >épi</valeur><valeur code="1.8.4" >papillonacée</valeur><valeur code="1.8.5" >astéracée</valeur><valeur code="1.8.6" >labiée</valeur><valeur code="1.8.7" >4</valeur></valeurs>
-  </critere>
-  </criteres>
+				<groupe id="1">
+					<nom>Arbres</nom>
+					<media>data/images/key_picto/icone_arbre.png</media>
+					
+<criteres>
+<critere id="1.3">
+							<label>forme de la feuille</label>
+							<description>Cela s’applique aux feuilles simples et aux folioles.</description>
+  <valeurs>
+		<valeur code="1.3.0" media="data/images/key_picto/composee.png">composée</valeur>
+		<valeur code="1.3.1" media="data/images/key_picto/simple_lobee.png">simple lobée</valeur>
+		<valeur code="1.3.2" media="data/images/key_picto/simple_entiere.png">simple entière</valeur>	
+  </valeurs>
+</critere>
+<critere id="1.4">
+							<label>bord de la feuille</label>
+							<description>Cela s’applique aux feuilles simples et aux folioles.</description>
+  <valeurs>
+		<valeur code="1.4.0" media="data/images/key_picto/Lisse.png">0</valeur>
+		<valeur code="1.4.1" media="data/images/key_picto/Lisse.png">lisse</valeur>
+		<valeur code="1.4.2" media="data/images/key_picto/Dentee.png">denté</valeur>	
+  </valeurs>
+</critere>
+<critere id="1.5">
+							<label>disposition des feuilles sur la tige</label>
+							<description>Cela s’applique aux feuilles simples et aux folioles.</description>
+  <valeurs>
+		<valeur code="1.5.0" media="data/images/key_picto/Alternee.png">alterne</valeur>
+		<valeur code="1.5.1" media="data/images/key_picto/Opposee.png">opposée</valeur>
+		<valeur code="1.5.2" media="data/images/key_picto/En_bouquet.png">verticillée</valeur>
+		<valeur code="1.5.3" media="data/images/key_picto/0.png">0</valeur>
+  </valeurs>
+</critere>
+<critere id="1.6">
+							<label>pilosité</label>
+							<description>Cela s’applique aux feuilles simples et aux folioles.</description>
+  <valeurs>
+		<valeur code="1.6.0" media="data/images/key_picto/0.png">0</valeur>
+		<valeur code="1.6.1" media="data/images/key_picto/forte.png">forte</valeur>	
+  </valeurs>
+</critere>
+<critere id="1.7">
+							<label>couleur</label>
+							<description>Cela s’applique aux feuilles simples et aux folioles.</description>
+  <valeurs>
+    <valeur code="1.7.0" media="data/images/key_picto/blanche.png">blanche</valeur>
+		<valeur code="1.7.1" media="data/images/key_picto/jaune.png">jaune</valeur>
+		<valeur code="1.7.2" media="data/images/key_picto/Rose-violace.png">rose/violet</valeur>
+		<valeur code="1.7.3" media="data/images/key_picto/Lisse.png">ligneuse</valeur>
+		<valeur code="1.7.4" media="data/images/key_picto/bleu.png">bleu</valeur>
+		<valeur code="1.7.5" media="data/images/key_picto/spore.png">spore</valeur>
+		<valeur code="1.7.6" media="data/images/key_picto/verte.png">verte</valeur>
+		<valeur code="1.7.7" media="data/images/key_picto/Lisse.png">0</valeur>
+		<valeur code="1.7.8" media="data/images/key_picto/rouge.png">rouge</valeur>	
+  </valeurs>
+</critere>
+<critere id="1.8">
+							<label>type de fleur</label>
+							<description>Cela s’applique aux feuilles simples et aux folioles.</description>
+  <valeurs>
+		<valeur code="1.8.0" media="data/images/key_picto/ombelle.png">ombelle</valeur>
+		<valeur code="1.8.1" media="data/images/key_picto/5.png">5</valeur>
+		<valeur code="1.8.2" media="data/images/key_picto/0.png">0</valeur>
+		<valeur code="1.8.3" media="data/images/key_picto/epi.png">épi</valeur>
+		<valeur code="1.8.4" media="data/images/key_picto/Lisse.png">papillonacée</valeur>
+		<valeur code="1.8.5" media="data/images/key_picto/Lisse.png">astéracée</valeur>
+		<valeur code="1.8.6" media="data/images/key_picto/Lisse.png">labiée</valeur>
+		<valeur code="1.8.7" media="data/images/key_picto/4.png">4</valeur>
+	</valeurs>
+</critere></criteres>
 </groupe>
 </keys>
