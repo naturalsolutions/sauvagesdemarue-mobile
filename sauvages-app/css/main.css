@@ -1,5 +1,9 @@
 a {
-  color:black;
+  color:#27A22D;
+}
+
+a:hover, a:active {
+  color:#256226;
 }
 
 .list-el{
@@ -16,24 +20,61 @@ a {
 .list-el a {
   width: 100%;
 }
+/**color**/
+.vert-fonce-bg {
+  background: #256226;
+}
+.vert-anis{
+  color:#DEDB00;
+}
 
-.navbar{
-  background-color:green;
-  color:white;
+.vert-anis-bg{
+  background:#DEDB00;
+}
+
+.white {
+  color: white;
+}
+
+.red{
+  color:#E2001A;
+}
+
+.vert-logo{
+  color:#27A22D;
+}
+
+/***Footer***/
+footer{
+  height: 43px;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 1000;
+}
+
+footer a{
+  color: white;
+  height: 43px;
+  width: 100%;
+  float: left;
+}
+
+footer a:active,footer a:hover,footer a:focus{
+  color: white;
+  background:#E2001A;
+  text-decoration: none;
 }
 
 .footer-el{
-  padding: 0;
-  margin: 0;
-  width: 33%;
-  text-align:center;
-  border:solid 1px;    
-  height:30px;
-  color:white;
+  width: 33.333333%;
+  float: left;
+  text-align: center;
+  height: 43px;
 }
-.footer-el a {
-  color:white;
-}
+/******************/
 
 .loc-header{
   height:60px;
