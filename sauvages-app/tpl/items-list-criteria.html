@@ -13,7 +13,7 @@
     <ul  class="criteria-value-list">
       <% 
         _.each(defCaracValues.models,function(item,key,list){
-      %><% console.log('rere');  if (typeof(item.get('criteraValueId')) !== 'undefined') {%>
+      %><% if (typeof(item.get('criteraValueId')) !== 'undefined') {%>
         <li>
           <p>
             <label for="defCaracValue-<%= item.get('criteraValueId') %>">
