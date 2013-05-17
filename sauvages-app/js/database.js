@@ -143,7 +143,7 @@ function runQuery(query , param) {
 
 function successWrapper(d) {
     return (function (tx, data) {
-        console.log('wsuccessWrapper');
+        //console.log('wsuccessWrapper');
         d.resolve(data)
     })
 };
