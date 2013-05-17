@@ -2,11 +2,11 @@
   <div id='taxonList-div-<%= taxonId %>' class="taxon-list-item pad-right">
   <div>
       <div class="taxonName">
-      <a href = "#taxondetail/<%= taxonId %>" >
-        <% if ((typeof(picture) !== "undefined")  &&  (picture !== "undefined")){ %>
-          <img class="taxon-img-thumb" id="taxonList-img-<%= taxonId %>" src="<%=picture%>" alt="image : <%= scientificName %>"/>
-        <% } %> 
-        <b><%= commonName %></b> <span class="sci-taxon-name"><%= scientificName %></span>
+        <a href = "#taxondetail/<%= taxonId %>" >
+          <% if ((typeof(picture) !== "undefined")  &&  (picture !== "undefined")){ %>
+            <img class="taxon-img-thumb" id="taxonList-img-<%= taxonId %>" src="<%=picture%>" alt="image : <%= scientificName %>"/>
+          <% } %> 
+          <p><b><%= commonName %></b></br><em><%= scientificName %></em></p>
         </a>
       </div>
   </div>
