@@ -29,10 +29,23 @@ Backbone.Model.prototype.initialize = Backbone.Collection.prototype.initialize =
   }
 };
 
+    // Return models with matching attributes. Useful for simple cases of
+    // `filter`.
+Backbone.Collection.prototype.multiValueWhere =  function(attrs, first) {
+  if (_.isEmpty(attrs)) return first ? void 0 : [];
+  return this[first ? 'find' : 'filter'](function(model) {
+    for (var key in attrs) {
+      for (var ind in attrs[key] ) {
+        if (attrs[key][ind] === model.get(key)) return true;
+      }
+    }
+    return false;
+  });
+};
+
 // -------------------------------------------------- The Models ---------------------------------------------------- //
 // The Taxon Model
 app.models.Taxon = Backbone.Model.extend({
-  
   //@TODO reflechir et implémenter aux actions en cascade
   //delete :  true/false
   table : 'Ttaxon',
@@ -76,6 +89,48 @@ app.models.TaxonCollection = Backbone.Collection.extend({
   
 });
 
+
+// The Taxon Model
+app.models.TaxonLite = Backbone.Model.extend({
+  
+  //@TODO reflechir et implémenter aux actions en cascade
+  //delete :  true/false
+  table : 'Ttaxon',
+  schema: {
+    taxonId: { title:'taxonId',type:'Number', sqltype:'INTEGER', required: true, sqlconstraints:'PRIMARY KEY'},
+    fk_group: { title:'fk_group', sqltype:'INTEGER'},
+    commonName: { title:'commonName', type:'Text', sqltype:'NVARCHAR(200)',  required: true },
+    scientificName: { title:'scientificName', type:'Text', sqltype:'NVARCHAR(500)',  required: true },
+    picture : { title:'picture', type:'Text', sqltype:'NVARCHAR(500)',  required: true},
+   },
+  
+  dao: app.dao.TaxonDAO,
+  
+});
+// The TaxonCollection Model
+app.models.TaxonLiteCollection = Backbone.Collection.extend({
+
+  dao: app.dao.TaxonDAO,
+//@TODO reflechir et implémenter aux actions en cascade
+  //delete :  true/false
+  /*subobjects:{
+    pictures : {type: 'app.models.PicturesCollection',className : 'PicturesCollection' , pk : 'taxonId', fk: 'fk_taxon', fetch: true, save:true},
+    caracValues : {type: 'app.models.TaxonCaracValuesCollection', className : 'TaxonCaracValuesCollection', pk : 'taxonId', fk: 'fk_taxon', fetch: true, save:true},
+  },*/
+  table : 'Ttaxon',
+  schema: {
+    taxonId: { title:'taxonId',type:'Number', sqltype:'INTEGER', required: true, sqlconstraints:'PRIMARY KEY'},
+    fk_group: { title:'fk_group', sqltype:'INTEGER'},
+    commonName: { title:'commonName', type:'Text', sqltype:'NVARCHAR(200)',  required: true },
+    scientificName: { title:'scientificName', type:'Text', sqltype:'NVARCHAR(500)',  required: true },
+    picture : { title:'picture', type:'Text', sqltype:'NVARCHAR(500)',  required: true},
+   },
+    
+  model: app.models.TaxonLite,
+  
+});
+
+
 // The Picture Model
 app.models.Picture =Backbone.Model.extend({
 
@@ -84,6 +139,7 @@ app.models.Picture =Backbone.Model.extend({
     fk_taxon: { title:'fk_taxon', type:'Number', sqltype:'INTEGER', required: true},
     path : { title:'path', type:'Text', sqltype:'NVARCHAR(500)',required: true},
     description: { title:'description',type:'TextArea', sqltype:'text'},
+    author: { title:'author', type:'Text', sqltype:'NVARCHAR(500)',},
   },
   
   dao: app.dao.PictureDAO,
@@ -99,6 +155,7 @@ app.models.PicturesCollection =Backbone.Collection.extend({
     fk_taxon: { title:'fk_taxon', type:'Number', sqltype:'INTEGER', required: true},
     path : { title:'path', type:'Text', sqltype:'NVARCHAR(500)',required: true},
     description: { title:'description',type:'TextArea', sqltype:'text'},
+    author: { title:'author', type:'Text', sqltype:'NVARCHAR(500)',},
   },
   
   dao: app.dao.PictureDAO,
@@ -125,7 +182,6 @@ app.models.TaxonCaracValuesCollection =Backbone.Collection.extend({
     fk_carac_value : { title:'fk_carac_value', type:'Text', sqltype:'NVARCHAR(20)', required: true},
   },
     
-
   dao: app.dao.TaxonCaracValueDAO,
   
   model : app.models.TaxonCaracValue,

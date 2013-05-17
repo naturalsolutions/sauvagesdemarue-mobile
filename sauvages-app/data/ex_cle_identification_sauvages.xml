@@ -2,50 +2,26 @@
 <groupe id="1">
 	<nom>Arbres</nom>
 	<media>images/pictos/icone_arbre.png</media>
-	<criteres>
-		<critere id="1.1">
-			<label>Ces feuilles sont…?</label>
-			<description>Cela s’applique aux feuilles simples et aux folioles.</description>
-			<valeurs>
-				<valeur code="1.1.2" media="images/pictos/Aiguille.png">Aiguille</valeur>
-				<valeur code="1.1.3" media="images/pictos/Ovale.png">Ovale</valeur>
-			</valeurs>
-		</critere>
-		<critere id="1.2">
-			<label>Comment est le bord de la feuille?</label>
-			<description>Le contour des feuilles peut prendre divers aspects: régulier, denté ou même piquant.</description>
-			<valeurs>
-				<valeur code="1.2.1" media="images/pictos/Lisse.png">Lisse</valeur>
-				<valeur code="1.2.3" media="images/pictos/Dentee_piquant.png">Dentée et piquante</valeur>
-			</valeurs>
-		</critere>
-	</criteres>
-</groupe>
-<groupe id="2">
-	<nom>Arbustes et plantes</nom>
-	<media>images/pictos/icone_arbuste.png</media>
-	<criteres>
-		<critere id="2.1">
-			<label>De quelles formes sont les feuilles?</label>
-			<description>Cela s’applique aux feuilles simples et aux folioles.</description>
-			<valeurs>
-				<valeur code="2.1.1" media="images/pictos/Coeur.png">Coeur</valeur>
-				<valeur code="2.1.2" media="images/pictos/Aiguille.png">Aiguille</valeur>
-				<valeur code="2.1.3" media="images/pictos/Ovale.png">Ovale</valeur>
-				<valeur code="2.1.4" media="images/pictos/Lance.png">Lance</valeur>
-				<valeur code="2.1.5" media="images/pictos/Ecaille.png">Ecaille</valeur>		
-			</valeurs>
-		</critere>
-		<critere id="2.2">
-			<label>Le bord de la feuille est-il…?</label>
-			<description>Le contour des feuilles peut prendre divers aspects: régulier, denté ou même piquant.</description>
-			<valeurs>
-				<valeur code="2.2.1" media="images/pictos/Lisse.png">Lisse</valeur>
-				<valeur code="2.2.2" media="images/pictos/Dentee.png">Denté</valeur>
-				<valeur code="2.2.3" media="images/pictos/Dentee_piquant.png">Denté et piquant</valeur>
-				<valeur code="2.2.4" media="images/pictos/Crenele.png">Crénelé</valeur>
-			</valeurs>
-		</critere>
-	</criteres>
+  <criteres>
+  <critere id="1.3">
+					  <label>forme de la feuille</label>
+					  <valeurs><valeur code="1.3.0" >composée</valeur><valeur code="1.3.1" >simple lobée</valeur><valeur code="1.3.2" >simple entière</valeur></valeurs></critere>
+  <critere id="1.4">
+					  <label>bord de la feuille</label>
+					  <valeurs><valeur code="1.4.0" >0</valeur><valeur code="1.4.1" >lisse</valeur><valeur code="1.4.2" >denté</valeur></valeurs></critere>
+  <critere id="1.5">
+					  <label>disposition des feuilles sur la tige</label>
+					  <valeurs><valeur code="1.5.0" >alterne</valeur><valeur code="1.5.1" >opposée</valeur><valeur code="1.5.2" >verticillée</valeur><valeur code="1.5.3" >0</valeur></valeurs></critere>
+  <critere id="1.6">
+					  <label>pilosité</label>
+					  <valeurs><valeur code="1.6.0" >0</valeur><valeur code="1.6.1" >forte</valeur></valeurs></critere>
+  <critere id="1.7">
+					  <label>couleur</label>
+					  <valeurs><valeur code="1.7.0" >blanche</valeur><valeur code="1.7.1" >jaune</valeur><valeur code="1.7.2" >rose/violet</valeur><valeur code="1.7.3" >ligneuse</valeur><valeur code="1.7.4" >bleu</valeur><valeur code="1.7.5" >spore</valeur><valeur code="1.7.6" >verte</valeur><valeur code="1.7.7" >0</valeur><valeur code="1.7.8" >rouge</valeur></valeurs></critere>
+  <critere id="1.8">
+					  <label>type de fleur</label>
+					  <valeurs><valeur code="1.8.0" >ombelle</valeur><valeur code="1.8.1" >5</valeur><valeur code="1.8.2" >0</valeur><valeur code="1.8.3" >épi</valeur><valeur code="1.8.4" >papillonacée</valeur><valeur code="1.8.5" >astéracée</valeur><valeur code="1.8.6" >labiée</valeur><valeur code="1.8.7" >4</valeur></valeurs>
+  </critere>
+  </criteres>
 </groupe>
 </keys>

@@ -5,6 +5,8 @@
 //************************************** Alimenter la base de données par le contenu des  XML taxons et criteres d'identification
 function loadXmlTaxa(){
 	var urlFile = "data/ex_XmlTaxons_sauvages.xml";
+  var dfd = $.Deferred();
+  var arr = [];
 	$.ajax( {
     type: "GET",
 		url: urlFile,
@@ -21,15 +23,20 @@ function loadXmlTaxa(){
         }
         oTaxon.set('description',$(this).find('DESCRIPTION').text());
         // stocker le nom de fichier de la première photo dans la table Ttaxons
-        oTaxon.set('picture',$(this).find('PICTURE:first').text());
-        var cPicture = new app.models.PicturesCollection();
-        //Stockage des photos
-        $(this).find('PICTURE').each(function(){
-          var oPicture = new app.models.Picture();
-          oPicture.set('fk_taxon', oTaxon.get('taxonId'));
-          oPicture.set('path', $(this).text());
-          cPicture.add(oPicture);
-        });
+        if ( $(this).find('PICTURE').length >0) {
+          oTaxon.set('picture',$(this).find('PICTURE:first').attr('media'));
+          var cPicture = new app.models.PicturesCollection();
+          //Stockage des photos
+          $(this).find('PICTURE').each(function(){
+            var oPicture = new app.models.Picture();
+            oPicture.set('fk_taxon', oTaxon.get('taxonId'));
+            oPicture.set('path', $(this).attr('media'));
+            oPicture.set('author', $(this).find('author:first').text());
+            cPicture.add(oPicture);
+          });
+          oTaxon.set('pictures', cPicture);
+        }
+        
         //Stockage des caractères associés aux taxons
         var cTaxonCaracValues = new app.models.TaxonCaracValuesCollection();
         $(this).find('CRITERIAS VALUE').each(function(){
@@ -38,18 +45,23 @@ function loadXmlTaxa(){
           oCaracTaxon.set('fk_carac_value', $(this).attr('code'));
           cTaxonCaracValues.add(oCaracTaxon);
         });
-        oTaxon.set('pictures', cPicture);
         oTaxon.set('caracValues', cTaxonCaracValues);
-        
-        oTaxon.save();
+        arr.push(oTaxon.save());
+      });
+      $.when.apply(this, arr).then(function () {
+        console.log('when finished dfd.resolve loadTaxaFile');
+        return  dfd.resolve();
       });
 			}
   });
+  return dfd.promise();
  }
  
  
 function loadXmlCriteria(){
 	var urlFile = "data/ex_cle_identification_sauvages.xml";
+  var dfd = $.Deferred();
+  var arr = [];
 	$.ajax( {
     type: "GET",
 		url: urlFile,
@@ -86,12 +98,17 @@ function loadXmlCriteria(){
           cCaracteristiqueDefs.add(oCaracteristiqueDef);
         });
         
-        cCaracteristiqueDefs.save();
+        arr.push(cCaracteristiqueDefs.save());
         
-        oGroupe.save();
+        arr.push(oGroupe.save());
+        $.when.apply(this, arr).then(function () {
+          console.log('when finished dfd.resolve loadXmlCriteria');
+          return  dfd.resolve();
+        });
       });
 			}
   });
+  return dfd.promise();
  }
  
 // ----------------------------------------------- Utilitaire de requêtes------------------------------------------ //

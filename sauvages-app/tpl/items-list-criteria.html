@@ -1,7 +1,7 @@
 <li>
-  <div id='<%= criteraId %>' class="taxon-list-item pad-right">
+  <div id='<%= criteraId %>' class="criteria-list-item pad-right">
   <div>
-      <div class="taxonName">
+      <div class="criteria-name">
         <p><b><i><%= name %></i></b></p>
         <p><%= description %></p>
       </div>
@@ -10,13 +10,22 @@
   <% 
   if (typeof(defCaracValues) !== 'undefined') {
   %>
-    <ul>
+    <ul  class="criteria-value-list">
       <% 
         _.each(defCaracValues.models,function(item,key,list){
-      %>
+      %><% console.log('rere');  if (typeof(item.get('criteraValueId')) !== 'undefined') {%>
         <li>
-         <p><%= item.get('name') %></p>
+          <p>
+            <label for="defCaracValue-<%= item.get('criteraValueId') %>">
+              <input type="checkbox" name="defCarac-<%= criteraId %>" id="defCaracValue-<%= item.get('criteraValueId') %>" value="<%= item.get('criteraValueId') %>"/>
+              <% if ((typeof(item.get('picture') ) !== "undefined")  &&  (item.get('picture')  !== "undefined")){ %> 
+                <img src="<%= item.get('picture')  %>" />
+              <%} %>
+              <%= item.get('name') %>
+            </label>
+          </p>
         </li>
+        <% } %>
       <%
         });
       %>

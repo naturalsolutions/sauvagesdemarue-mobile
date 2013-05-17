@@ -1,0 +1,32 @@
+<div id="taxon-detail-content" class="container">
+    <div  class="navbar navbar-fixed-top loc-header">
+        <div class="span page-title"><%= commonName %></div>
+        <div class="span page-subtitle sci-taxon-name"><%= scientificName %></div>
+        <a href="#taxonlist">Liste</a>
+    </div>
+   
+   
+   
+  <div class="loc-container" >
+    <% 
+    _.each(pictures.models,function(item,key,list){
+    %>
+      <ul>
+        <li>
+         <img src = "<%= item.get('path')%>" alt = "<%= commonName %> image <%= key %>" />
+    
+        </li>
+      </ul>
+
+        <%
+          });
+        %>
+     
+     <h2>En savoir plus </h2>
+     <div id="taxon-description"><%= description %></div>
+     
+     <h2>Les indices pour la reconnaitre</h2>
+     <div id="criteria-list-container">
+     </div>
+  </div>
+</div>

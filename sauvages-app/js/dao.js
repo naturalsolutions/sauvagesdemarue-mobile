@@ -12,7 +12,7 @@
 
 Backbone.sync = function(method, model, options) {
   var dao = new model.dao(app.db);
-
+  var dfd ;
   if (method === "read") {   
    if (model.get('FAKE_taxonName')) {
      dao.findByName(model, function(data) {
@@ -31,10 +31,11 @@ Backbone.sync = function(method, model, options) {
     }
   }
   else if (method === "create") {
-    dao.create(model, function(data) {
+    dfd = dao.create(model, function(data) {
       options.success(data);
     });
   }
+  return dfd;
 };
 
 

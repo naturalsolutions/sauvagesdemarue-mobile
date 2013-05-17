@@ -3,6 +3,45 @@
 
 // -------------------------------------------------- Utilities ---------------------------------------------------- //
 
+
+app.utils.queryData = {
+  //count taxon nb
+  getFilterTaxonIdList: function(filters, exact) {
+    var dfd = $.Deferred();
+    var sqlWere = ' WHERE ';
+    var parameters = new Array();
+    $.each(filters, function(index, arg) {
+      sqlWere = sqlWere +  ' fk_carac_value =  ? OR';
+      parameters.push(""+arg+"");
+    });
+    sqlWere = sqlWere.slice(0, -3);
+    var sqlGroupBy = ' GROUP BY fk_taxon ' ;
+    if (exact == true) {
+      sqlGroupBy =  sqlGroupBy + ' HAVING count(*) = '+ filters.length;
+    }
+    else {
+      sqlGroupBy =  sqlGroupBy + '  ORDER BY count(*) ';
+    }
+    var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlGroupBy;
+    runQuery(sql, parameters).done(
+      function(results){
+          var len = results.rows.length,
+            data = [],
+            i = 0;
+          for (; i < len; i = i + 1) {
+            data[i] = results.rows.item(i);
+          }
+          
+          return dfd.resolve(data);
+      }
+    );
+    return dfd.promise();
+  }
+  
+}
+    
+    
+
 // WebDataBase DAO base code
 app.dao.baseDAOBD = {
   
@@ -58,7 +97,8 @@ app.dao.baseDAOBD = {
   },
  
   populate: function(model, callback) {
-    deferreds.push(runQuery(this.buildSQLTable(model) , []));
+    //Run sql create query and return defered object
+    return runQuery(this.buildSQLTable(model) , []);
   },
   
   create: function(model, callback) {
@@ -76,24 +116,18 @@ app.dao.baseDAOBD = {
         }
       });    
     }
-    this.db.transaction(
-      function(tx) {
-        //Build SQL 
-        var sql = self.buildSQLInsert(model);
-        var values = _.map(self.getSQLFieldList(model), function(field){ return model.get(field); });
-        console.log(values);
-        tx.executeSql(sql,values);
-      },
-      function(tx, error) {
-        console.log(tx);
-      }
-    );
+    var sql = self.buildSQLInsert(model);
+    var values = _.map(self.getSQLFieldList(model), function(field){ return model.get(field); });
+      //console.log(values);
+      //Return a defered object
+    return runQuery(sql , values);
   },
   
   findAll: function(model, callback) {
     this.db.transaction(
       function(tx) {
-        var sql = 'SELECT * FROM '+model.table+' LIMIT 500 ';
+        var selectField = _.filter(_.pluck(model.schema, 'title'), function(key){ return (typeof(key) !== 'undefined') ; }).join(','); 
+        var sql = 'SELECT '+selectField+' FROM '+model.table+' LIMIT 500 ';
         console.log(sql);
         tx.executeSql(sql,[], function(tx, results) {
           var len = results.rows.length,
@@ -116,13 +150,15 @@ app.dao.baseDAOBD = {
       function(tx) {
         //Récupération des arguments
         var args = ((model.attributes) ? model.attributes: model.filters); 
-        
         var sqlWere = ' WHERE ';
         var parameters = new Array();
         //Mise en place du filtre WHERE et du tableau des valeurs
         $.each(args, function(index, arg) {
-          sqlWere = sqlWere +  ' ' + index + ' =  ? AND';
-          parameters.push(""+arg+"");
+          //@TODO join query for nested model criteria
+          if (model.schema[index]['type'] !== 'NestedModel') {
+            sqlWere = sqlWere +  ' ' + index + ' =  ? AND';
+            parameters.push(""+arg+"");
+          }
         });
         sqlWere = sqlWere.slice(0, -3);
         
@@ -135,6 +171,8 @@ app.dao.baseDAOBD = {
           for (; i < len; i = i + 1) {
             data[i] = results.rows.item(i);
           }
+          //@TODO test if collection or model
+          if (data.length === 1) data = data[0]
           //Charger les données des subviews
           callback(data);
         });

@@ -8,13 +8,21 @@ app.Router = Backbone.Router.extend({
   routes: {
    'identification' : 'viewIdentKey',
    'taxonlist' : 'viewTaxonlist',
+   'taxondetail/:id' : 'viewTaxonDetail',
+   '' : 'viewHomePage',
   },
 
   initialize: function() {
-
+    app.globals.currentFilter = new Array();
+    app.globals.currentFilterTaxonIdList = new Array();
+    
+  },
+  viewHomePage: function() {
+    var currentView = new app.views.HomePageView();
+    this.displayView(currentView);
   },
   
-  viewIdentKey : function(view) {
+  viewIdentKey : function() {
     console.log('viewIdentKey viewIdentKey');
     var self = this;
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
@@ -26,17 +34,31 @@ app.Router = Backbone.Router.extend({
     }) 
   },
   
-  viewTaxonlist : function(view) {
+  viewTaxonlist : function() {
     console.log('viewTaxonlist');
+    var taxons;
+    if (app.globals.currentFilterTaxonIdList.length >0 ) {
+      taxons  = new app.models.TaxonLiteCollection();
+      taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
+    }
+    else {
+        taxons = app.globals.cListAllTaxons;
+    }
+    var currentView = new app.views.TaxonListView({collection: taxons});
+    this.displayView(currentView);
+  },
+  
+  viewTaxonDetail : function(id) {
+    console.log('viewTaxonDetail');
     var self = this;
-    var cListAllTaxons = new app.models.TaxonCollection();
-    cListAllTaxons.fetch({
-        success: function(data) {
-         /*var currentView = new app.views.IdentificationKeyView({model: data});
-          self.displayView(currentView);*/
-          console.log(data);
-        }
-    }) 
+    var taxon= new app.models.Taxon({"taxonId": id});
+    taxon.fetch({
+          success: function(data) {
+            var currentView = new app.views.TaxonDetailView({model: data});
+            self.displayView(currentView);
+            
+          }
+      });
   },
   
   displayView : function (view) {
