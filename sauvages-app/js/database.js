@@ -8,6 +8,12 @@ function loadXmlTaxa(){
   var sqlPicture = 'INSERT INTO Tpicture ( fk_taxon,path,description,author) VALUES (?,?,?,?) ';
   var sqlCriteria = 'INSERT INTO TvalTaxon_Criteria_values ( fk_taxon,fk_carac_value) VALUES (?,?) ';
 
+  var sqlInsertPicture = 'INSERT INTO Tpicture ( fk_taxon,path,description,author) ';
+  var sqlInsertCriteria = 'INSERT INTO TvalTaxon_Criteria_values ( fk_taxon,fk_carac_value) ';
+  
+  var arrPictureData = [];
+  var arrCriteriaData = [];
+  
 	var urlFile = "data/ex_XmlTaxons_sauvages.xml";
   var dfd = $.Deferred();
   var arr = [];
@@ -33,7 +39,7 @@ function loadXmlTaxa(){
           var cPicture = new app.models.PicturesCollection();
           //Stockage des photos
           $(this).find('PICTURE').each(function(){
-           arr.push(runQuery(sqlPicture , [oTaxon['taxonId'] ,$(this).attr('media'), 'NULL',  $(this).find('author:first').text() ]));
+           arrPictureData.push(' SELECT '+oTaxon['taxonId'] +",'"+$(this).attr('media')+"',NULL ,'"+$(this).find('author:first').text()+"'");
           });
         }
         else {
@@ -42,12 +48,24 @@ function loadXmlTaxa(){
         
         //Stockage des caractères associés aux taxons
         $(this).find('CRITERIAS VALUE').each(function(){
-           arr.push(runQuery(sqlCriteria , [oTaxon['taxonId'] ,$(this).attr('code')]));
+           arrCriteriaData.push(' SELECT '+oTaxon['taxonId'] +",'"+$(this).attr('code')+"' ");
         });
-       //INSERT INTO Ttaxon ( taxonId,fk_group,commonName,scientificName,description,picture) VALUES (?,?,?,?,?,?) 
         arr.push(runQuery(sqlTaxon , [oTaxon['taxonId'],oTaxon['fk_group'],oTaxon['commonName'],
                 oTaxon['scientificName'], oTaxon['description'], oTaxon['picture']]));
       });
+      
+      //Tip to simulate multiple row insert
+      var i = 0;
+      for (;  i < arrPictureData.length; i = i + 500) {
+        var subarrPictureData = arrPictureData.slice(i,i+500); 
+        arr.push(runQuery(sqlInsertPicture +' '+ subarrPictureData.join(' UNION ALL ') , []));
+      }
+      i = 0;
+      for (;  i < arrCriteriaData.length; i = i + 500) {
+        var subarrData = arrCriteriaData.slice(i,i+500); 
+        arr.push(runQuery(sqlInsertCriteria +' '+ subarrData.join(' UNION ALL ') , []));
+      }
+          
       $.when.apply(this, arr).then(function () {
         console.log('when finished dfd.resolve loadTaxaFile');
         return  dfd.resolve();
@@ -125,7 +143,7 @@ function runQuery(query , param) {
 
 function successWrapper(d) {
     return (function (tx, data) {
-        //console.log('wsuccessWrapper');
+        console.log('wsuccessWrapper');
         d.resolve(data)
     })
 };
@@ -133,7 +151,7 @@ function successWrapper(d) {
 function failureWrapper(d) {
     return (function (tx, error) {
        console.log('failureWrapper');
-      // console.log(error);
+        console.log(error);
         d.reject(error)
     })
 };
