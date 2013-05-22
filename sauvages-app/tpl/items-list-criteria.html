@@ -1,37 +1,38 @@
 <li>
   <div id='<%= criteraId %>' class="criteria-list-item pad-right">
-  <div>
-      <div class="criteria-name">
-        <p><b><i><%= name %></i></b></p>
-        <p><%= description %></p>
-      </div>
-  </div>
-
-  <% 
-  if (typeof(defCaracValues) !== 'undefined') {
-  %>
-    <ul  class="criteria-value-list">
-      <% 
-        _.each(defCaracValues.models,function(item,key,list){
-      %><% if (typeof(item.get('criteraValueId')) !== 'undefined') {%>
-        <li>
-          <p>
-            <label for="defCaracValue-<%= item.get('criteraValueId') %>">
+    <div>
+        <div class="criteria-name">
+          <p><b><i><%= name %></i></b></p>
+          <p><%= description %></p>
+        </div>
+    </div>
+  
+    <% 
+    if (typeof(defCaracValues) !== 'undefined') {
+    %>
+      <ul  class="criteria-value-list">
+        <% 
+          _.each(defCaracValues.models,function(item,key,list){
+        %><% if (typeof(item.get('criteraValueId')) !== 'undefined') {%>
+          <li>
+            <span class="">
+              <label for="defCaracValue-<%= item.get('criteraValueId') %>">
+                
+                <% if ((typeof(item.get('picture') ) !== "undefined")  &&  (item.get('picture')  !== "undefined")){ %> 
+                  <img src="<%= item.get('picture')  %>" />
+                <%} %>
+                <%= item.get('name') %>
+              </label>
               <input type="checkbox" name="defCarac-<%= criteraId %>" id="defCaracValue-<%= item.get('criteraValueId') %>" value="<%= item.get('criteraValueId') %>"/>
-              <% if ((typeof(item.get('picture') ) !== "undefined")  &&  (item.get('picture')  !== "undefined")){ %> 
-                <img src="<%= item.get('picture')  %>" />
-              <%} %>
-              <%= item.get('name') %>
-            </label>
-          </p>
-        </li>
-        <% } %>
-      <%
-        });
-      %>
-    </ul> 
-  <% 
-  }   
-  %>
+            </span>
+          </li>
+          <% } %>
+        <%
+          });
+        %>
+      </ul> 
+    <% 
+    }   
+    %>
   </div>
 </li>

@@ -1,27 +1,35 @@
 <div id="taxon-detail-content" class="container">
     <div  class="navbar navbar-fixed-top loc-header">
-        <div class="span page-title"><%= commonName %></div>
-        <div class="span page-subtitle sci-taxon-name"><%= scientificName %></div>
-        <a href="#taxonlist">Liste</a>
+        <!--<a href="#" class="header-button header-button-left header-back-button"><button>Back</button></a>-->
+        <a href="#" class="header-logo"><img src="./css/images/logo_sauvages.png"/></a>
+        <div class="page-block-title">
+            <div class="span page-title"><%= commonName %></div>
+            <div class="span page-subtitle sci-taxon-name"><%= scientificName %></div>
+        </div>
+        <button class='btn pull-right'><a href="#taxonlist">Liste</a></button>
     </div>
    
    
    
   <div class="loc-container" >
-    <% 
-    _.each(pictures.models,function(item,key,list){
-    %>
-      <ul>
-        <li>
-         <img src = "<%= item.get('path')%>" alt = "<%= commonName %> image <%= key %>" />
-    
-        </li>
-      </ul>
-
-        <%
-          });
+    <div id="carousel-container">
+        <ul>
+        <% 
+        _.each(pictures.models,function(item,key,list){
         %>
-     
+          
+            <li>
+             <img src = "<%= item.get('path')%>" alt = "<%= commonName %> image <%= key %>" />
+        
+            </li>
+         
+    
+            <%
+              });
+            %>
+        </ul>
+    </div>
+  <hr class="clearLeft"></hr>
      <h2>En savoir plus </h2>
      <div id="taxon-description"><%= description %></div>
      

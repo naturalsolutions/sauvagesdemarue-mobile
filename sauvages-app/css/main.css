@@ -6,6 +6,10 @@ a:hover, a:active {
   color:#256226;
 }
 
+.clearLeft{
+	clear:left;
+}
+
 .list-el{
   padding: 0;
   display: -webkit-box;
@@ -76,18 +80,36 @@ footer a:active,footer a:hover,footer a:focus{
 }
 /******************/
 
-.loc-header{
+/*.loc-header{
   height:60px;
+}*/
+.header-logo {
+	width: 38px;
+	float: left;
+	padding: 0px 5px;
+}
+.header-button.header-button-left.header-back-button {
+	float: left;
+}
+.page-block-title {
+	float: left;
+}
+.page-title{
+ /* font-size:200%;*/
+ font-weight:bold;
+}
+.page-title, .page-subtitle{
+	width: auto;
+	float: left;
 }
 
-.page-title{
-  font-size:200%;
-  padding: 10px;
+.page-subtitle{
+	clear: left;
 }
 
 .loc-container{
-  margin-top: 70px;
   margin-bottom: 40px;
+  margin-top: 50px;
 }
 
 
@@ -97,6 +119,13 @@ footer a:active,footer a:hover,footer a:focus{
 .taxon-img-thumb{
   width:80px;
 }
+/********HOME*********/
+.container-home .row{
+	margin:10px;
+}
+
+
+
 
 /***********LIST***************/
 
@@ -122,19 +151,81 @@ footer a:active,footer a:hover,footer a:focus{
   display: -moz-box;
   display: box;
   width: 100%;
-  border:solid 1px;    
-  box-shadow: 2px 2px 6px #000000;
-  margin-top: 5px;
+  border-top:solid 1px grey;    
 }
+/**********carousel-container*************/
+#carousel-container{
+  float:left; /* important for inline positioning */  
+  width:430px; /* important (this width = width of list item(including margin) * items shown */  
+  background: #F0F0F0;
+  overflow-y: hidden;
+  overflow-x:auto;
+  margin-top:10px;
+}
+#carousel-container ul{
+  position:relative;  
+  list-style-type: none; /* removing the default styling for unordered list items */  
+  margin: 0px;  
+  padding: 0px;  
+  width:9999px; /* important */  
+  /* non-important styling bellow */  
+  padding-bottom:10px;  
+}
+
+#carousel-container ul li {
+  float: left; /* important for inline positioning of the list items */  
+  width:400px;  /* fixed width, important */  
+  /* just styling bellow*/  
+  padding:0px;  
+  height:300px;  
+  background: #000000;  
+  margin-top:10px;  
+  margin-bottom:10px;  
+  margin-left:5px;  
+  margin-right:5px;  
+}
+
+#carousel-container ul li img {  
+margin-bottom:-4px; /* IE is making a 4px gap bellow an image inside of an anchor (<a href...>) so this is to fix that*/  
+/* styling */  
+cursor:pointer;  
+cursor: hand;  
+border:0px;  
+}  
+
+
+/*********MEDIA QUERIE***/
+@media (min-width: 768px){
+	#carousel-container {
+	width: 100%;
+	}
+}
+
 /*******SURCHARGE DE TWITTER BOOTSTRAP*******/
+
 @media (max-width: 767px){
   body {
 	padding-right: 0;
 	padding-left: 0;
+  }
+ /* [class*="span"], .uneditable-input[class*="span"], .row-fluid [class*="span"] {
+	width: 80%;
+	float: left;
+  }*/
+  .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+	margin-right: 0;
+	margin-left: 0;
   }
 }
 .nav-list {
   padding-right: 0;
   padding-left: 0;
   margin: 0;
+}
+
+.navbar-fixed-top{
+  position: fixed;
+  background:whitesmoke;
+  height:43px;
+  padding:5px 5px 0 ;
 }

@@ -41,6 +41,7 @@ function init(){
     }); 
     
   });
+  
 }
 
 function initDB(){
