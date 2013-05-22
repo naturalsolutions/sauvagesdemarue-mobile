@@ -1,0 +1,38 @@
+<li>
+  <div id='<%= criteraId %>' class="criteria-list-item pad-right">
+    <div>
+        <div class="criteria-name">
+          <p><b><%= capitaliseFirstLetter(name) %></b></p>
+        </div>
+    </div>
+  
+    <% 
+    if (typeof(defCaracValues) !== 'undefined') {
+    $('input[type=checkbox]').uncheckableRadio(); 
+    %>
+      <ul  class="criteria-value-list">
+        <% 
+          _.each(defCaracValues.models,function(item,key,list){
+        %><% if (typeof(item.get('criteraValueId')) !== 'undefined') {%>
+          <li>
+            <span class="RadioCustom">
+              <label for="defCaracValue-<%= item.get('criteraValueId') %>">
+                
+                <% if ((typeof(item.get('picture') ) !== "undefined")  &&  (item.get('picture')  !== "undefined")){ %> 
+                  <img src="<%= item.get('picture')  %>" />
+                <%} %>
+                
+              </label>
+              <input type="checkbox" name="defCarac-<%= criteraId %>" id="defCaracValue-<%= item.get('criteraValueId') %>" value="<%= item.get('criteraValueId') %>"/>
+            </span>
+          </li>
+          <% } %>
+        <%
+          });
+        %>
+      </ul> 
+    <% 
+    }   
+    %>
+  </div>
+</li>

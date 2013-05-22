@@ -1,0 +1,66 @@
+/*-----------------BOUTON RADIO-----------------------*/
+#radioCollection li{
+	list-style:none;
+}
+
+#radioCollection ul{
+	margin-left:0;
+}
+
+.criteria-list-item {
+	padding: 5px 5px 0px;
+		float: left;
+		width: 100%;
+		border-bottom: 1px solid grey;
+}
+
+.criteria-list-item p{
+		margin: 0 0 5px;
+		line-height: 10px;
+}
+
+.criteria-value-list li {
+	
+
+}
+.RadioCustom{
+		background:transparent url(../css/images/btn_criteres.png)no-repeat;
+    float:left;
+    width:50px;
+}
+.RadioCustomOn{
+    background:transparent url(../css/images/btn_criteres.png)no-repeat -50px 0px;
+		left:-50px;
+    float:left;
+    width:50px;
+}
+.RadioCustom input[type="checkbox"]{
+    position:relative;
+    margin-left:-15px;
+    cursor:pointer;
+    position:relative;
+    float:left;
+    display:none;
+		visibility:hidden;
+}
+
+.RadioCustom label{
+    cursor:pointer;
+    float:left;
+    height:50px;
+}
+
+#crit-list li h3{
+    margin:1px;
+	display:inline;
+	font-size:0.9em;
+}
+#crit-list li{
+    padding:10px;
+	min-height:25px;
+}
+.imgHelpKey {
+	height:25px;
+	position:relative;
+	float:right;
+}
