@@ -57,7 +57,6 @@ app.views.IdentificationKeyView =  app.views.BaseView.extend({
   filterTaxon : function(event) { 
     //if checked
     if ($(event.currentTarget).is(':checked') == true) {
-      console.log($(event.currentTarget).val() );
       app.globals.currentFilter.push($(event.currentTarget).val() );
     }
     else { //if uncheked
@@ -74,7 +73,6 @@ app.views.IdentificationKeyView =  app.views.BaseView.extend({
        
       }
     );
-
   }
 });
 
@@ -160,10 +158,21 @@ app.views.TaxonListView =  app.views.BaseView.extend({
   },
 
   beforeRender: function() {
-    this.collection.each(function(taxon) {
-      this.insertView("#values-list", new app.views.TaxonItemView({model: taxon}));
-    }, this);
-  }
+    var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
+    
+    this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  60}));
+    
+    this.collection.models = _.sortBy(this.collection.models, function(taxon){
+      return taxon.get("commonName").toUpperCase(); 
+    });
+    
+  },
+  
+  serialize: function() {
+    if (this.collection) return {collection : this.collection};
+    return true;
+  },
+
 
 });
 
@@ -211,4 +220,37 @@ app.views.CriteriaValueTaxonView=  app.views.BaseView.extend({
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
   },
+});
+
+app.views.AlphabeticAnchorView =  app.views.BaseView.extend({
+
+  template: 'subview-alphabetic-anchor',
+
+  initialize: function() {
+    this.anchorBaseName = this.options['anchorBaseName'];
+    this.navheight = this.options['navheight'];
+    this.activeBtn = this.options['activeBtn'];
+  },
+
+  events: {
+    "click input[type=button].internal-anchor": "goToAnchor"  
+  },
+
+  afterRender:function() {
+    var self = this;
+    $(this.el).find('.internal-anchor').attr('disabled','disabled');
+    _.each(this.activeBtn,function(l){ 
+      $(self.el).find('#anc-'+l).removeAttr('disabled');
+    });
+  },
+  
+  goToAnchor : function(event){
+    var el = $(event.currentTarget).attr('value');
+    var elWrapped = $('#'+this.anchorBaseName+el);
+    if (elWrapped.length !== 0) {
+      var totalScroll = elWrapped.offset().top-this.navheight;
+      $("html,body").animate({ scrollTop: totalScroll }, "slow");
+    }
+  },
+
 });

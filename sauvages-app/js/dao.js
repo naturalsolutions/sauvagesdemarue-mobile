@@ -38,8 +38,6 @@ Backbone.sync = function(method, model, options) {
   return dfd;
 };
 
-
-
 // -------------------------------------------------- DAO ---------------------------------------------------- //
 // The Taxon Data Access Object (DAO). Encapsulates logic (in this case SQL statements) to access data.
 app.dao.TaxonDAO = function(db) {
@@ -60,6 +58,21 @@ app.dao.CaracteristiqueDefDAO = function(db) {
 app.dao.CaracteristiqueDefValueDAO = function(db) {
     this.db = db;
 };
+app.dao.ContextDAO = function(db) {
+    this.db = db;
+};
+
+
+
+_.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.GroupeDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
+
+
 
 _.extend(
 app.dao.TaxonDAO.prototype, {
@@ -132,9 +145,3 @@ app.dao.TaxonDAO.prototype, {
 });
 
 
-_.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD);
-_.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);
-_.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
-_.extend(app.dao.GroupeDAO.prototype, app.dao.baseDAOBD);
-_.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
-_.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);

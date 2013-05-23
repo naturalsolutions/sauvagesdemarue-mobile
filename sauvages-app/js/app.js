@@ -47,18 +47,18 @@ function init(){
 function initDB(){
   console.log("initBD");
   // Initialisation des données 
-  app.db = openDatabase("sauvage-PACA", "1.0", "db sauvage-PACA", 20*1024*1024); // espace accordé à la BD: 20 MO
+  app.db = openDatabase("sauvage-PACA", "1.0", "db sauvage-PACA", 20*1024*1024);
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Groupe()));
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.Context()));
 
-  //test if data are already loaded
   var dfd = $.Deferred();
   deferreds.push(dfd);
-  //Test si les données existes
+  //test if data are already loaded
   //Si oui alors => pas de chargement des données en base
   $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
     var arr = [];

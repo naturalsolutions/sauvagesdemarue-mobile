@@ -9,10 +9,41 @@
         <button class='btn pull-right'><a href="#identificationText">assistant text</a></button>
         <button class='btn pull-right'><a href="#identification">assistant</a></button>
     </div>
+
    
+   <%
+    var col = _.groupBy(collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
+   %>
    <div class="loc-container" >
+      
+   <div id="aphabetic-list">
+    
+   </div>
+   
       <fieldset id ="radioCollection" class="" >
-        <ul id="values-list" class="taxonList nav-list"></ul>
+        <ul id="values-list" class="taxonList nav-list">
+        <%  _.each(col,function(item,key,list){ %>
+          <li id="anchor-taxon-<%= key %>"><%= key %></li>
+          <ul> 
+          <% _.each(item,function(taxon,k){%>
+            <li>
+              <div id='taxonList-div-<%= taxon.get('taxonId') %>' class="taxon-list-item pad-right">
+                <div>
+                    <div class="taxonName">
+                      <a href = "#taxondetail/<%= taxon.get('taxonId') %>" >
+                        <% if ((typeof(taxon.get('picture')) !== "undefined")  &&  (taxon.get('picture') !== "undefined")){ %>
+                          <img class="taxon-img-thumb" id="taxonList-img-<%= taxon.get('taxonId') %>" src="<%=taxon.get('picture')%>" alt="image : <%= taxon.get('scientificName') %>"/>
+                        <% } %> 
+                        <p><b><%= taxon.get('commonName') %></b></br><em><%= taxon.get('scientificName') %></em></p>
+                      </a>
+                    </div>
+                </div>
+              </div>
+            </li>
+          <% }); %>
+          </ul>
+        <% }); %>
+        </ul>
       </fieldset>
     </div>
 </div>

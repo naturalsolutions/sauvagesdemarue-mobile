@@ -63,6 +63,7 @@ app.models.Taxon = Backbone.Model.extend({
   dao: app.dao.TaxonDAO,
   
 });
+
 // The TaxonCollection Model
 app.models.TaxonCollection = Backbone.Collection.extend({
 
@@ -270,3 +271,36 @@ app.models.CaracteristiqueDefValuesCollection =Backbone.Collection.extend({
   
   
 });
+
+
+// The CaracteristiqueDefValue Model
+app.models.Context = Backbone.Model.extend({
+
+  table : 'Tcontext',
+  schema: {
+    fk_context: { title:'fk_context', type:'Text',sqltype:'NVARCHAR(500)', required: true},
+    fk_object : { title:'fk_object',type:'Text', sqltype:'NVARCHAR(500)', required: true},
+    context_type: { title:'context_type', type:'Text',sqltype:'NVARCHAR(500)', required: true},
+    object_type : { title:'object_type',type:'Text', sqltype:'NVARCHAR(500)', required: true},
+  },
+  dao: app.dao.ContextDAO,
+
+});
+
+// The CaracteristiqueDefValue Collection
+app.models.ContextCollection =Backbone.Collection.extend({
+  
+  dao: app.dao.ContextDAO,
+  
+  model : app.models.Context,
+  
+  table : 'Tcontext',
+  schema: {
+    fk_context: { title:'fk_context', type:'Text',sqltype:'NVARCHAR(500)', required: true},
+    fk_object : { title:'fk_object',type:'Text', sqltype:'NVARCHAR(500)', required: true},
+    context_type: { title:'context_type', type:'Text',sqltype:'NVARCHAR(500)', required: true},
+    object_type : { title:'object_type',type:'Text', sqltype:'NVARCHAR(500)', required: true},
+  },
+  
+});
+
