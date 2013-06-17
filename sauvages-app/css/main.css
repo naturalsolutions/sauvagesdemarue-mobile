@@ -1,3 +1,20 @@
+.disabled{
+	z-index: 1;
+	filter: Alpha(Opacity=30);
+	opacity: .3;
+	zoom: 1;
+}
+.disabled, disabled a {
+	cursor: default!important;
+	pointer-events: none;
+}
+
+#dataloader-img {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+}
+
 a {
   color:#27A22D;
 }
@@ -10,6 +27,9 @@ a:hover, a:active {
 	clear:left;
 }
 
+ul{
+	margin:0;
+}
 .list-el{
   padding: 0;
   display: -webkit-box;
@@ -46,10 +66,6 @@ a:hover, a:active {
 
 .vert-logo{
   color:#27A22D;
-}
-.btnObs{
-	width:25%;
-	margin:10px 37.5%;
 }
 
 /***Footer***/
@@ -112,7 +128,7 @@ footer a:active,footer a:hover,footer a:focus{
 }
 
 .loc-container{
-  margin-bottom: 40px;
+  margin:50px 10px 40px ;
   margin-top: 50px;
 }
 
@@ -158,46 +174,23 @@ footer a:active,footer a:hover,footer a:focus{
   border-top:solid 1px grey;    
 }
 /**********carousel-container*************/
-#carousel-container{
-  float:left; /* important for inline positioning */  
-  width:430px; /* important (this width = width of list item(including margin) * items shown */  
-  background: #F0F0F0;
-  overflow-y: hidden;
-  overflow-x:auto;
-  margin-top:10px;
+#taxon-detail-content .flexslider{
+	margin:0 0 25px;
 }
-#carousel-container ul{
-  position:relative;  
-  list-style-type: none; /* removing the default styling for unordered list items */  
-  margin: 0px;  
-  padding: 0px;  
-  width:9999px; /* important */  
-  /* non-important styling bellow */  
-  padding-bottom:10px;  
+#taxon-detail-content .flex-control-nav{
+	bottom:-25px;
+}
+#taxon-detail-content .flex-control-paging li a{
+	width:5px;
+	height:5px;
 }
 
-#carousel-container ul li {
-  float: left; /* important for inline positioning of the list items */  
-  width:400px;  /* fixed width, important */  
-  /* just styling bellow*/  
-  padding:0px;  
-  height:300px;  
-  background: #000000;  
-  margin-top:10px;  
-  margin-bottom:10px;  
-  margin-left:5px;  
-  margin-right:5px;  
-}
 
-#carousel-container ul li img {  
-margin-bottom:-4px; /* IE is making a 4px gap bellow an image inside of an anchor (<a href...>) so this is to fix that*/  
-/* styling */  
-cursor:pointer;  
-cursor: hand;  
-border:0px;  
-}  
 /***DETAIL TAXON***/
-
+.btnObs{
+	width:25%;
+	margin:0px 37.5% 5px;
+}
 /*********MEDIA QUERIE***/
 @media (min-width: 768px){
 	#carousel-container {

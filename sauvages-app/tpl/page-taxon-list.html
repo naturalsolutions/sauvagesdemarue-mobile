@@ -12,7 +12,7 @@
 
    
    <%
-    var col = _.groupBy(collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
+    var col = _.groupBy(data.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
    %>
    <div class="loc-container" >
       
@@ -32,7 +32,9 @@
                     <div class="taxonName">
                       <a href = "#taxondetail/<%= taxon.get('taxonId') %>" >
                         <% if ((typeof(taxon.get('picture')) !== "undefined")  &&  (taxon.get('picture') !== "undefined")){ %>
-                          <img class="taxon-img-thumb" id="taxonList-img-<%= taxon.get('taxonId') %>" src="<%=taxon.get('picture')%>" alt="image : <%= taxon.get('scientificName') %>"/>
+                        <% var picture = taxon.get('picture')
+                        picture = picture.replace("http://www.tela-botanica.org/appli:cel-img:","./data/images/images_formated/")%>
+                          <img class="taxon-img-thumb" id="taxonList-img-<%= taxon.get('taxonId') %>" src="<%=picture%>" alt="image : <%= taxon.get('scientificName') %>"/>
                         <% } %> 
                         <p><b><%= taxon.get('commonName') %></b></br><em><%= taxon.get('scientificName') %></em></p>
                       </a>

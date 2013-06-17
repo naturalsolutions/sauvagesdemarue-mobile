@@ -198,18 +198,26 @@ app.views.TaxonDetailView=  app.views.BaseView.extend({
   },
   
   beforeRender: function() {
-    console.log(this.model.get('caracValues').models); 
+    console.log(this.model.get('caracValues').models);
+		//$(".flexslider").addClass('loading');
     var self = this;
-    
-
-
     self.model.get('caracValues').each(function(model) {
       var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
+			
         criM.fetch({
           success: function(data) {
-						  $('.flexslider').flexslider({
-    animation: "slide"
-  });
+						
+					var target_flexslider = $('.flexslider');
+       target_flexslider.flexslider({
+           animation: "slide",  
+           slideshow: false,
+           controlsContainer: ".slider",
+
+           start: function(slider) {
+               target_flexslider.removeClass('loading');
+           }
+						});
+						
             self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
           }
         });

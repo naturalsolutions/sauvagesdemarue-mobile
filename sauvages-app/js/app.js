@@ -23,7 +23,7 @@ function init(){
 
   window.deferreds = [];
   
-  $("body").addClass("ui-disabled");
+  $("body").find("a").addClass("disabled");
   $("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
   
   initDB();
@@ -36,7 +36,7 @@ function init(){
           app.route = new app.Router();
           Backbone.history.start();
           $('#dataloader-img').remove();
-          $("body").removeClass("ui-disabled");
+          $("body").find("a").removeClass("disabled");
         }
     }); 
     
@@ -48,6 +48,8 @@ function initDB(){
   console.log("initBD");
   // Initialisation des données 
   app.db = openDatabase("sauvage-PACA", "1.0", "db sauvage-PACA", 20*1024*1024);
+  // Customize Underscore templates behaviour: 'with' statement is prohibited in JS strict mode
+  _.templateSettings['variable'] = 'data';
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));

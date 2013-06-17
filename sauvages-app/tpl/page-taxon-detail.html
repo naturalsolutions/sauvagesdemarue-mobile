@@ -3,8 +3,8 @@
         <!--<a href="#" class="header-button header-button-left header-back-button"><button>Back</button></a>-->
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
         <div class="page-block-title">
-            <div class="span page-title"><%= commonName %></div>
-            <div class="span page-subtitle sci-taxon-name"><%= scientificName %></div>
+            <div class="span page-title"><%= data.commonName %></div>
+            <div class="span page-subtitle sci-taxon-name"><%= data.scientificName %></div>
         </div>
         <button class='btn pull-right'><a href="#taxonlist">Liste</a></button>
     </div>
@@ -12,49 +12,46 @@
    
    
   <div class="loc-container" >
-  <div class="flexslider">
-  <ul class="slides">
-    <% 
-    _.each(pictures.models,function(item,key,list){
-    %>
-    <li>
-     <img src = "<%= item.get('path')%>" alt = "<%= commonName %> image <%= key %>" />
-    </li>
-    <%
-    });
-    %>
-  </ul>
-</div>
-  
-  
-  
-  <hr class="clearLeft"></hr>
-    <button class="btn btn-large btnObs" type="button">+</button>
-    <div class="accordion" id="accordion2">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                En savoir plus 
-                </a>
-            </div>
-            <div id="collapseOne" class="accordion-body collapse">
-                <div class="accordion-inner">
-                <%= description %>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                Les indices pour la reconnaitre
-                </a>
-            </div>
-            <div id="collapseTwo" class="accordion-body collapse">
-                <div class="accordion-inner" id="criteria-list-container">
-                
-                </div>
-            </div>
-        </div>
-    </div>
+  <div class="flexslider loading">
+    <ul class="slides">
+      <% 
+      _.each(data.pictures.models,function(item,key,list){
+      %>
+      <li>
+       <img src = "<%= item.get('path')%>" alt = "<%= data.commonName %> image <%= key %>" />
+      </li>
+      <%
+      });
+      %>
+    </ul>
+  </div>
+
+  <button class="btn btn-large btnObs" type="button">+</button>
+  <div class="accordion" id="accordion2">
+      <div class="accordion-group">
+          <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+              En savoir plus 
+              </a>
+          </div>
+          <div id="collapseOne" class="accordion-body collapse">
+              <div class="accordion-inner">
+              <%= data.description %>
+              </div>
+          </div>
+      </div>
+      <div class="accordion-group">
+          <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+              Les indices pour la reconnaitre
+              </a>
+          </div>
+          <div id="collapseTwo" class="accordion-body collapse">
+              <div class="accordion-inner" id="criteria-list-container">
+              
+              </div>
+          </div>
+      </div>
+  </div>
   </div>
 </div>
