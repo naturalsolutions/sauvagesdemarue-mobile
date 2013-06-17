@@ -47,6 +47,10 @@ a:hover, a:active {
 .vert-logo{
   color:#27A22D;
 }
+.btnObs{
+	width:25%;
+	margin:10px 37.5%;
+}
 
 /***Footer***/
 footer{
@@ -192,7 +196,7 @@ cursor:pointer;
 cursor: hand;  
 border:0px;  
 }  
-
+/***DETAIL TAXON***/
 
 /*********MEDIA QUERIE***/
 @media (min-width: 768px){

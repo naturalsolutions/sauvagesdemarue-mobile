@@ -201,10 +201,15 @@ app.views.TaxonDetailView=  app.views.BaseView.extend({
     console.log(this.model.get('caracValues').models); 
     var self = this;
     
-    this.model.get('caracValues').each(function(model) {
+
+
+    self.model.get('caracValues').each(function(model) {
       var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
         criM.fetch({
           success: function(data) {
+						  $('.flexslider').flexslider({
+    animation: "slide"
+  });
             self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
           }
         });

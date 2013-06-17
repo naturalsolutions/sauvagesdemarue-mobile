@@ -12,29 +12,49 @@
    
    
   <div class="loc-container" >
-    <div id="carousel-container">
-        <ul>
-        <% 
-        _.each(pictures.models,function(item,key,list){
-        %>
-          
-            <li>
-             <img src = "<%= item.get('path')%>" alt = "<%= commonName %> image <%= key %>" />
-        
-            </li>
-         
-    
-            <%
-              });
-            %>
-        </ul>
-    </div>
+  <div class="flexslider">
+  <ul class="slides">
+    <% 
+    _.each(pictures.models,function(item,key,list){
+    %>
+    <li>
+     <img src = "<%= item.get('path')%>" alt = "<%= commonName %> image <%= key %>" />
+    </li>
+    <%
+    });
+    %>
+  </ul>
+</div>
+  
+  
+  
   <hr class="clearLeft"></hr>
-     <h2>En savoir plus </h2>
-     <div id="taxon-description"><%= description %></div>
-     
-     <h2>Les indices pour la reconnaitre</h2>
-     <div id="criteria-list-container">
-     </div>
+    <button class="btn btn-large btnObs" type="button">+</button>
+    <div class="accordion" id="accordion2">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                En savoir plus 
+                </a>
+            </div>
+            <div id="collapseOne" class="accordion-body collapse">
+                <div class="accordion-inner">
+                <%= description %>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Les indices pour la reconnaitre
+                </a>
+            </div>
+            <div id="collapseTwo" class="accordion-body collapse">
+                <div class="accordion-inner" id="criteria-list-container">
+                
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 </div>
