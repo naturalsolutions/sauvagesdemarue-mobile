@@ -7,7 +7,6 @@ app.Router = Backbone.Router.extend({
   
   routes: {
    'identification' : 'viewIdentKey',
-   'identificationText' : 'viewIdentKeyText',
    'taxonlist' : 'viewTaxonlist',
    'taxonlist/:all' : 'viewTaxonlist',
    'taxondetail/:id' : 'viewTaxonDetail',
@@ -47,23 +46,11 @@ app.Router = Backbone.Router.extend({
         }
     }) 
   },
-  /*********démo clé texte*********/
-  viewIdentKeyText : function() {
-    console.log('viewIdentKey viewIdentKey');
-    var self = this;
-    var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
-    cListAllCriterias.fetch({
-        success: function(data) {
-          var currentView = new app.views.IdentificationKeyViewText({collection: data});
-          self.displayView(currentView);
-        }
-    }) 
-  },
-  /**************/
+
   viewTaxonlist : function(all) {
     console.log('viewTaxonlist');
     var taxons;
-    if(all){
+    if(all || app.globals.currentFilterTaxonIdList.length == 0  ){
       taxons = app.globals.cListAllTaxons;    
     }
     else {
