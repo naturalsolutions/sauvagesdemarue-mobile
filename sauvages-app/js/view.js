@@ -206,16 +206,14 @@ app.views.TaxonDetailView=  app.views.BaseView.extend({
 			
         criM.fetch({
           success: function(data) {
-						
-					var target_flexslider = $('.flexslider');
-       target_flexslider.flexslider({
-           animation: "slide",  
-           slideshow: false,
-           controlsContainer: ".slider",
+						$('.flexslider').flexslider({
+						   animation: "slide",  
+						   slideshow: false,
+							 touch: true,  
 
-           start: function(slider) {
-               target_flexslider.removeClass('loading');
-           }
+						   start: function(slider) {
+						       $('.flexImages').show();
+						   }
 						});
 						
             self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();

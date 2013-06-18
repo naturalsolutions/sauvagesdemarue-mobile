@@ -9,6 +9,7 @@ app.Router = Backbone.Router.extend({
    'identification' : 'viewIdentKey',
    'identificationText' : 'viewIdentKeyText',
    'taxonlist' : 'viewTaxonlist',
+   'taxonlist/:all' : 'viewTaxonlist',
    'taxondetail/:id' : 'viewTaxonDetail',
    '' : 'viewHomePage',
   },
@@ -59,15 +60,17 @@ app.Router = Backbone.Router.extend({
     }) 
   },
   /**************/
-  viewTaxonlist : function() {
+  viewTaxonlist : function(all) {
     console.log('viewTaxonlist');
     var taxons;
-    if (app.globals.currentFilterTaxonIdList.length >0 ) {
-      taxons  = new app.models.TaxonLiteCollection();
-      taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
+    if(all){
+      taxons = app.globals.cListAllTaxons;    
     }
     else {
-        taxons = app.globals.cListAllTaxons;
+      if (app.globals.currentFilterTaxonIdList.length >0 ) {
+        taxons  = new app.models.TaxonLiteCollection();
+        taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
+      }
     }
     var currentView = new app.views.TaxonListView({collection: taxons});
     this.displayView(currentView);

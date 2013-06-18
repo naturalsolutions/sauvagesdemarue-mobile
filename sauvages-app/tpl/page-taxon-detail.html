@@ -6,18 +6,18 @@
             <div class="span page-title"><%= data.commonName %></div>
             <div class="span page-subtitle sci-taxon-name"><%= data.scientificName %></div>
         </div>
-        <button class='btn pull-right'><a href="#taxonlist">Liste</a></button>
+        <button class='btn pull-right'><a href="#taxonlist/all">Liste</a></button>
     </div>
    
    
    
   <div class="loc-container" >
-  <div class="flexslider loading">
+  <div class="flexslider ">
     <ul class="slides">
       <% 
       _.each(data.pictures.models,function(item,key,list){
       %>
-      <li>
+      <li class="loading">
        <img src = "<%= item.get('path')%>" alt = "<%= data.commonName %> image <%= key %>" />
       </li>
       <%
