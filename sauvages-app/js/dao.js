@@ -11,7 +11,8 @@
 */
 
 Backbone.sync = function(method, model, options) {
-  var dao = new model.dao(app.db);
+  //Get dao 
+  var dao = (typeof(model.constructor.dao) === 'undefined') ?  new model.model.dao(app.db) :  new model.constructor.dao(app.db);
   var dfd ;
   if (method === "read") {   
    if (model.get('FAKE_taxonName')) {
@@ -35,6 +36,11 @@ Backbone.sync = function(method, model, options) {
       options.success(data);
     });
   }
+	else if (method === "update") {
+		 dfd = dao.update(model, function(data) {
+      options.success(data);
+    });
+	}
   return dfd;
 };
 
@@ -61,7 +67,13 @@ app.dao.CaracteristiqueDefValueDAO = function(db) {
 app.dao.ContextDAO = function(db) {
     this.db = db;
 };
+app.dao.OccurenceDataValueDAO = function(db) {
+    this.db = db;
+};
 
+app.dao.ParcoursDataValueDAO = function(db) {
+    this.db = db;
+};
 
 
 _.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD);
@@ -71,8 +83,24 @@ _.extend(app.dao.GroupeDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.ParcoursDataValueDAO.prototype, app.dao.baseDAOBD);
 
+_.extend(app.dao.ParcoursDataValueDAO.prototype , {
 
+  getDefaultRueName: function( callback) {
+		
+		var dfd = $.Deferred();
+		var sql = "SELECT max(id) + 1 as nextStreet " + 
+				"FROM TdataObs_parcours ";			
+		console.log(sql);
+		runQuery( sql , []).done(function(d) {
+			var defaultStreetName =  (!d.rows.item(0)['nextStreet']) ? 'Rue 1' : 'Rue ' +d.rows.item(0)['nextStreet'];
+			return  dfd.resolve(defaultStreetName);
+		});
+     return  dfd.promise();     
+	}
+});
 
 _.extend(
 app.dao.TaxonDAO.prototype, {

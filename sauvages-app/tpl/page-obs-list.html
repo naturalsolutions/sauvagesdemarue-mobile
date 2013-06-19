@@ -1,0 +1,32 @@
+<div id="taxon-list-content" class="container">
+    <div  class="navbar navbar-fixed-top loc-header">
+        <a href="#" class="header-button header-button-left header-back-button"><button class="btn"><b>&lang;</b></button></a>
+        <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
+        <div class="page-block-title">
+            <div class="span page-title">Espèces</div>
+        </div>
+        
+        <button class='btn pull-right'><a href="#identificationText">assistant text</a></button>
+        <button class='btn pull-right'><a href="#identification">assistant</a></button>
+    </div>
+  
+  <div class="loc-container" >
+        <ul id="values-list" class="taxonList nav-list">
+        <%  _.each(data.collection.models,function(item,key,list){ %>
+        <% console.log(item)%>
+            <li>
+              <div id='taxonList-div-<%=key %>' class="taxon-list-item pad-right">
+                <div>
+                    <div class="taxonName"><%= item.get('name_taxon') %>
+                    <%= item.get('fk_taxon') %>
+                    <%= item.get('latitude') %>
+                    <%= item.get('longitude') %>
+                    <%= item.get('milieu') %>
+                    </div>
+                </div>
+              </div>
+            </li>
+        <% }); %>
+        </ul>
+      </div>
+</div>
