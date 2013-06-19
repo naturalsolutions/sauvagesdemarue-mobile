@@ -92,19 +92,23 @@ app.Router = Backbone.Router.extend({
 		alert('Rue non initialisée');
 		return false;
 	}
-    if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+	var self = this;
+	setTimeout(function() {
+		if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
       var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
       var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
       obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
       obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
       var currentView = new app.views.AddSauvageOccurenceView({model:obs});
       
-      this.displayView(currentView);   
+      self.displayView(currentView);   
     }
     else{
 		sauvages.notifications.gpsNotStart();
 		this.goToLastPage();
     }
+		},500);
+    
   },
   
 

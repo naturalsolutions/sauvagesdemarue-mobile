@@ -15,7 +15,7 @@ function() {
 				type: 'error',
 				title: 'GPS:',
 				message: 'wait until GPS start',
-				delay: 10
+				delay: 1
 			});
 	},
 	
@@ -25,7 +25,7 @@ function() {
 				type: 'info',
 				title: '',
 				message: 'Retrouver vos données dans "Mes observations"<br/> N\'oublier pas de les partager <br/>  <a href="#addParcours/new" class="btn btn-primary" >Nouvelle rue</a>',
-				delay: 5
+				delay: 3
 			});
 	}
 	
@@ -34,7 +34,7 @@ function() {
 				type: 'info',
 				title: '',
 				message: 'Félicitation',
-				delay: 10
+				delay: 1
 			});
 	}
   return sauvages;

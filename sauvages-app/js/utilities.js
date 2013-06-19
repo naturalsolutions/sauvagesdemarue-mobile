@@ -325,3 +325,7 @@ app.utils.geolocalisation = {
     console.log("Error: " + errors[error.code]);
   },
 }
+
+
+
+	

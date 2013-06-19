@@ -18,6 +18,7 @@
               <div id='taxonList-div-<%=key %>' class="taxon-list-item pad-right">
                 <div>
                     <div class="taxonName"><%= item.get('name_taxon') %>
+										<img src="<%= item.get('photo') %>">
                     <%= item.get('fk_taxon') %>
                     <%= item.get('latitude') %>
                     <%= item.get('longitude') %>
