@@ -398,3 +398,23 @@ app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
   },
 
 });
+
+/********/
+
+
+	
+app.views.ObservationListView =  app.utils.BaseView.extend({
+
+  template: 'page-obs-list',
+  
+  initialize: function() {
+    this.collection.bind("reset", this.render, this);
+  },
+  
+  serialize: function() {
+    if (this.collection) return {collection : this.collection};
+    return true;
+  },
+
+
+});
