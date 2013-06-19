@@ -10,13 +10,18 @@ app.Router = Backbone.Router.extend({
    'taxonlist' : 'viewTaxonlist',
    'taxonlist/:all' : 'viewTaxonlist',
    'taxondetail/:id' : 'viewTaxonDetail',
+   'addObs/:taxonId' : 'viewFormAddObs',
+   'addParcours(/:state)' : 'viewFormAddParcours',
+   'myObservation' : 'viewTableMyObs',
    '' : 'viewHomePage',
   },
 
   initialize: function() {
     app.globals.currentFilter = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
-    
+		//Démarrage de l'écoute GPS
+		app.utils.geolocalisation.watchCurrentPosition();
+
     var self = this;
 
       // Keep track of the history of pages (we only store the page URL). Used to identify the direction
@@ -30,6 +35,11 @@ app.Router = Backbone.Router.extend({
       });
 
   },
+	
+  goToLastPage: function() {
+    window.history.back();
+  },
+	
   viewHomePage: function() {
     var currentView = new app.views.HomePageView();
     this.displayView(currentView);
@@ -75,7 +85,66 @@ app.Router = Backbone.Router.extend({
           }
       });
   },
+
+
+  viewFormAddObs : function(taxonI) {
+	if (typeof(app.globals.currentrue) === 'undefined') {
+		alert('Rue non initialisée');
+		return false;
+	}
+    if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+      var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
+      var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
+      obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
+      obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+      var currentView = new app.views.AddSauvageOccurenceView({model:obs});
+      
+      this.displayView(currentView);   
+    }
+    else{
+		sauvages.notifications.gpsNotStart();
+		this.goToLastPage();
+    }
+  },
   
+
+  viewFormAddParcours : function(state) {
+		var self = this;
+    if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+			if (typeof( app.globals.currentrue) === 'undefined') {
+				//Get default street Name
+				var nb= new app.dao.ParcoursDataValueDAO(app.db).getDefaultRueName().done(function(d) { 
+					app.globals.currentrue = new app.models.ParcoursDataValue({name : d});
+					var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
+					self.displayView(currentView);  
+				});
+			}
+			else {
+				var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
+				self.displayView(currentView);  
+			}
+     
+       
+    }
+    else{
+      sauvages.notifications.gpsNotStart();
+			this.goToLastPage();
+    }
+  },
+/**************/
+  viewTableMyObs : function() {
+    var self = this;
+    console.log('viewTableMyObs');
+    var myObsColl = new app.models.OccurenceDataValuesCollection();
+    myObsColl.fetch({
+       success: function(data) {
+          var currentView = new app.views.ObservationListView({collection: data});
+          self.displayView(currentView);
+        }
+    }); 
+  },
+  
+
   displayView : function (view) {
     if (this._currentView) {
         this._currentView.remove();

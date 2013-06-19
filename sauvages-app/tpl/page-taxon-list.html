@@ -7,6 +7,7 @@
         </div>
         
         <button class='btn pull-right'><a href="#identification">assistant</a></button>
+        <button class='btn pull-right'><a href="#addParcours">Fin de parcours</a></button>
     </div>
 
    
@@ -37,6 +38,7 @@
                         <% } %> 
                         <p><b><%= taxon.get('commonName') %></b></br><em><%= taxon.get('scientificName') %></em></p>
                       </a>
+                      <a href = "#addObs/<%= taxon.get('taxonId') %>" >ajouter</a>
                     </div>
                 </div>
               </div>

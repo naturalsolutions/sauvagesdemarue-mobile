@@ -45,12 +45,18 @@ app.utils.queryData = {
 // WebDataBase DAO base code
 app.dao.baseDAOBD = {
   
+  getDaoMetadata : function (model) {
+    this.table = (typeof(model.constructor.table) === 'undefined') ?  model.model.table :  model.constructor.table;
+    this.schema = (typeof(model.constructor.schema) === 'undefined') ?  model.model.schema :  model.constructor.schema;
+  },
+  
   buildSQLTable: function(model) {
+    this.getDaoMetadata(model);
+    //var schema = (options.initialData) ? options.initialData : {};
     //Construction de la requête SQL
-    var sql = 'CREATE TABLE  IF NOT EXISTS ' + model.table + ' ( ';
+    var sql = 'CREATE TABLE  IF NOT EXISTS ' + this.table+ ' ( ';
     var pKisDefined = false;
-    _.each(model.schema, function( field, index) {
-      
+    _.each(this.schema, function( field, index) {
       //Set the col type
       var type = '' ;
       if (field.sqltype) type =field.sqltype ; 
@@ -61,38 +67,59 @@ app.dao.baseDAOBD = {
         if (typeof(field.constraints) === 'undefined') {
           constraint  = '';
         }
+				//@TODO improve code
         if (field.required) constraint  = constraint + app.utils.bbforms2sqlite.constraints.required;
+        if (field.autoincrement) constraint  = constraint + app.utils.bbforms2sqlite.constraints.autoincrement;
         
         if (field.sqlconstraints === 'PRIMARY KEY') {
+					constraint = 'PRIMARY KEY  '+constraint;
           pKisDefined = true;
         }
         
         sql = sql + index + ' ' + type  + ' ' + constraint + ',';
       }
     });
-    if (!pKisDefined ) sql = sql + 'PK INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,';
+    if (!pKisDefined ) sql = sql + 'id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,';
     sql = sql.slice(0, -1);
     sql = sql + ')';
     console.log (sql);
     return sql;
   },
     
-  getSQLFieldList: function(model)  {
-   var field =  _.map(model.schema, function(field, key) {
-      if ((field.sqltype) || (app.utils.bbforms2sqlite.dataType[field.type] !=='NOT_AVAILABLE' ) ) return  key;  
+  getSQLFieldList: function()  {
+   var field =  _.map(this.schema, function(field, key) {
+      if ( ((field.sqltype) || (app.utils.bbforms2sqlite.dataType[field.type] !=='NOT_AVAILABLE' )) && ((field.autoincrement=== false )  || (!field.autoincrement)  ) )  {
+				return  key;  
+			}
     });
     field = _.filter(field, function(key){ return (typeof(key) !== 'undefined') ; }); 
     return field;
   },
   
   buildSQLInsert: function(model) {
+    this.getDaoMetadata(model);
     //Construction de la requête SQL
-    var sql = ' INSERT INTO ' + model.table + ' ( ';
+    var sql = ' INSERT INTO ' + this.table + ' ( ';
     var field = this.getSQLFieldList(model);
     sql = sql + field.join(',') + ') VALUES (' ;
     sql = sql + Array(field.length+1).join('?,');
     sql = sql.slice(0, -1);
     sql = sql + ')';
+		console.log(sql);
+    return sql;
+  },
+  
+  buildSQLUpdate: function(model) {
+    this.getDaoMetadata(model);
+    //Construction de la requête SQL
+    var sql = ' UPDATE ' + this.table + '  SET ';
+    var field = this.getSQLFieldList(model);
+			
+    sql = sql + field.join('= ? ,') + ' =? ' ;
+    //Find PK 
+		
+		sql = sql +  ' WHERE id = ? ';
+		console.log(sql);
     return sql;
   },
  
@@ -102,15 +129,16 @@ app.dao.baseDAOBD = {
   },
   
   create: function(model, callback) {
+    this.getDaoMetadata(model);
     var self =this;
     //First save subModel data
-    var subobjects = _.map(model.schema, function(field, key) {
+    var subobjects = _.map(this.schema, function(field, key) {
       if (field.type === 'NestedModel' ) return  key;  
     });
     subobjects = _.filter(subobjects, function(key){ return (typeof(key) !== 'undefined') ; }); 
     if (subobjects.length >0) {
       $.each(subobjects, function(index, data) {
-        if (model.schema[data].save) {
+        if (self.schema[data].save) {
           var subValues = model.get(data);
           if (typeof(subValues) !== 'undefined')  subValues.save();
         }
@@ -122,12 +150,37 @@ app.dao.baseDAOBD = {
       //Return a defered object
     return runQuery(sql , values);
   },
+	update: function(model, callback) {
+    this.getDaoMetadata(model);
+    var self =this;
+    //First save subModel data
+    var subobjects = _.map(this.schema, function(field, key) {
+      if (field.type === 'NestedModel' ) return  key;  
+    });
+    subobjects = _.filter(subobjects, function(key){ return (typeof(key) !== 'undefined') ; }); 
+    if (subobjects.length >0) {
+      $.each(subobjects, function(index, data) {
+        if (self.schema[data].save) {
+          var subValues = model.get(data);
+          if (typeof(subValues) !== 'undefined')  subValues.save();
+        }
+      });    
+    }
+    var sql = self.buildSQLUpdate(model);
+    var values = _.map(self.getSQLFieldList(model), function(field){ return model.get(field); });
+		values = values.concat([model.get('id')]);
+      //console.log(values);
+      //Return a defered object
+    return runQuery(sql , values);
+  },
   
-  findAll: function(model, callback) {
+  findAll: function(model, callback) { 
+    this.getDaoMetadata(model);
+    var self = this;
     this.db.transaction(
       function(tx) {
-        var selectField = _.filter(_.pluck(model.schema, 'title'), function(key){ return (typeof(key) !== 'undefined') ; }).join(','); 
-        var sql = 'SELECT '+selectField+' FROM '+model.table+' LIMIT 500 ';
+        var selectField = _.filter(_.pluck(self.schema, 'title'), function(key){ return (typeof(key) !== 'undefined') ; }).join(','); 
+        var sql = 'SELECT '+selectField+' FROM '+self.table+' LIMIT 500 ';
         console.log(sql);
         tx.executeSql(sql,[], function(tx, results) {
           var len = results.rows.length,
@@ -146,6 +199,8 @@ app.dao.baseDAOBD = {
   },
 
   findWithCriteria :  function(model, callback) {
+    this.getDaoMetadata(model);
+    var self = this;
     this.db.transaction(
       function(tx) {
         //Récupération des arguments
@@ -155,14 +210,14 @@ app.dao.baseDAOBD = {
         //Mise en place du filtre WHERE et du tableau des valeurs
         $.each(args, function(index, arg) {
           //@TODO join query for nested model criteria
-          if (model.schema[index]['type'] !== 'NestedModel') {
+          if ((self.schema[index]['type'] !== 'NestedModel') && (typeof(arg) !== 'undefined')) {
             sqlWere = sqlWere +  ' ' + index + ' =  ? AND';
-            parameters.push(""+arg+"");
+            parameters.push(arg);
           }
         });
         sqlWere = sqlWere.slice(0, -3);
         
-        var sql = 'SELECT * FROM '+model.table+' ' + sqlWere + ' LIMIT 500 ';
+        var sql = 'SELECT * FROM '+self.table+' ' + sqlWere + ' LIMIT 500 ';
         console.log(sql);
         tx.executeSql(sql,parameters, function(tx, results) {
           var len = results.rows.length,
@@ -227,7 +282,8 @@ app.utils.bbforms2sqlite= {
     'Boolean':'INTEGER',
   },
   constraints: {
-    'required' : 'NOT NULL'
+    'required' : 'NOT NULL', 
+		'autoincrement':'AUTOINCREMENT',
   },  
 }
 // capitaliseFirstLetter
@@ -236,3 +292,36 @@ function capitaliseFirstLetter(string){
 }
 
 
+
+
+// -------------------------------------------------- GEOLOCALISATION ---------------------------------------------------- //
+
+app.utils.geolocalisation = {
+  // Fonction de callback en cas de succès
+  watchCurrentPosition : function () {
+    var survId = navigator.geolocation.watchPosition(_.bind(this.gotPositionCoords, this));
+  },
+
+  getCurrentPosition : function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.gotErr, { enableHighAccuracy: true, maximumAge: 100, timeout: 1000 });
+    }
+    else
+      console.log("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+  },
+  
+  // We've got our position, let's show map and update user
+  gotPositionCoords: function (position) {
+    this.currentPosition = position.coords;
+  },//gotPos
+
+  // Trap a GPS error, log it to console and display on site
+  gotErr:  function (error) {
+    var errors = { 
+            1: 'Permission denied',
+            2: 'Position unavailable',
+            3: 'Request timeout'
+        };
+    console.log("Error: " + errors[error.code]);
+  },
+}

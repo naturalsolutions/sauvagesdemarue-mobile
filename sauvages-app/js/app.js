@@ -13,14 +13,45 @@ var app = {
   globals : {},
 };
 
+/*
+* Base view: customize Backbone.Layout for remote template loading
+*/
+
+app.utils.BaseView = Backbone.Layout.extend({
+    prefix: app.config.root + '/tpl/',
+    el: false, // LM will use template's root node
+
+    fetch: function(path) {
+        path += '.html';
+        app.templates = app.templates || {};
+        if (app.templates[path]) {
+            return app.templates[path];
+        }
+        var done = this.async();
+        $.get(path, function(contents) {
+            done(app.templates[path] = _.template(contents));
+        }, "text");
+    },
+
+    serialize: function() {
+      if (this.model) return this.model.toJSON();
+      return true;
+    }
+});
+
 // ----------------------------------------------- The Application initialisation ------------------------------------------ //
 
 $().ready(function() {
   init();
 }) ;
+$(document).ready(function() {
+    new NS.UI.NotificationList();
+});
+
 
 function init(){
-
+  // Customize Underscore templates behaviour: 'with' statement is prohibited in JS strict mode
+  _.templateSettings['variable'] = 'data';
   window.deferreds = [];
   
   $("body").find("a").addClass("disabled");
@@ -48,8 +79,6 @@ function initDB(){
   console.log("initBD");
   // Initialisation des données 
   app.db = openDatabase("sauvage-PACA", "1.0", "db sauvage-PACA", 20*1024*1024);
-  // Customize Underscore templates behaviour: 'with' statement is prohibited in JS strict mode
-  _.templateSettings['variable'] = 'data';
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
@@ -57,6 +86,8 @@ function initDB(){
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Groupe()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Context()));
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.OccurenceDataValue()));
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.ParcoursDataValue()));
 
   var dfd = $.Deferred();
   deferreds.push(dfd);
