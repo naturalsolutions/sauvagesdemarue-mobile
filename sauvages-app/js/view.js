@@ -1,41 +1,174 @@
 "use strict";
 
-/*
-* Base view: customize Backbone.Layout for remote template loading
-*/
-
-app.views.BaseView = Backbone.Layout.extend({
-    prefix: app.config.root + '/tpl/',
-    el: false, // LM will use template's root node
-
-    fetch: function(path) {
-        path += '.html';
-        app.templates = app.templates || {};
-        if (app.templates[path]) {
-            return app.templates[path];
-        }
-        var done = this.async();
-        $.get(path, function(contents) {
-            done(app.templates[path] = _.template(contents));
-        }, "text");
-    },
-
-    serialize: function() {
-      if (this.model) return this.model.toJSON();
-      return true;
-    }
-});
 
 // -------------------------------------------------- The Views ---------------------------------------------------- //
 
 	
-app.views.HomePageView=  app.views.BaseView.extend({
+app.views.Capture = app.utils.BaseView.extend({
+	template: 'form/editor-camera',
+	events: {
+			'click #take-picture': 'capturePhoto',
+			'change #input-picture': 'loadPhoto'
+	},
+
+	initialize : function() {
+			
+	},
+	
+	loadPhoto : function () {
+		var input = document.querySelector('input[type=file]');
+		var file = input.files[0];
+		var imgURL = URL.createObjectURL(file);
+		this.onSuccess(imgURL) 
+	},
+
+	capturePhoto: function() {
+			// Take picture using device camera and retrieve image as a local path
+			navigator.camera.getPicture(
+					_.bind(this.onSuccess, this),
+					_.bind(this.onFail, this),
+					{
+							quality: 50,
+							correctOrientation: false,
+							encodingType: navigator.camera.EncodingType.JPEG,
+							source: navigator.camera.PictureSourceType.CAMERA,
+							targetWidth: 1024,
+							destinationType: navigator.camera.DestinationType.FILE_URI
+					});
+	},
+
+	onSuccess: function(imageURI) {
+			console.log(imageURI);
+			this.$el.find('.img-preview img').attr('src', imageURI);
+	},
+
+	onFail: function(message) {
+			this.$el.find('.img-preview').hide();
+			this.$el.find('.img-error').show();
+			this.$el.find('#img-error-msg').html(message);
+	},
+	
+
+});
+
+
+app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
+  template: 'form-add-obs',
+
+  initialize: function() {
+    this.model.bind("reset", this.render, this);
+  },
+//TEST PHOTOS
+  beforeRender: function() {
+    this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
+		this.insertView("#pict-form", new app.views.Capture());
+  },
+	
+	serialize: function() {
+		if (app.globals.currentrue) return app.globals.currentrue.toJSON();
+		return true;
+	}
+});
+
+app.views.FormAddOccurenceView = NS.UI.Form.extend({
+	
+
+
+    initialize: function(options) {
+      NS.UI.Form.prototype.initialize.apply(this, arguments);
+      this.on('submit:valid', function(instance) {
+				//Get value for hidden fields
+				instance.set('datetime', new Date());
+				app.utils.geolocalisation.getCurrentPosition();
+        instance.save().done( function(model, response, options) {
+					
+						sauvages.notifications.obsSaveSuccess();
+						setTimeout(function() {
+							app.route.navigate('taxonlist', {trigger: true});
+							$('.notification-list').empty();
+							},500);
+          }
+        );
+      });
+    },
+				
+		afterRender: function () {
+			$('input:submit', this.$el).attr('value', sauvages.messages.save);
+			$('input:reset', this.$el).attr('style', 'display:none');
+		},
+
+});
+
+
+app.views.AddSauvageRueView = app.utils.BaseView.extend({
+  template: 'form-add-sauvagerue',
+  
+  initialize: function() {
+    this.model.bind("reset", this.render, this);
+		//app.globals.currentrue
+  },
+
+  beforeRender: function() {
+		var self = this;
+    this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
+		
+  },
+});
+app.views.FormAddSauvageRue = NS.UI.Form.extend({
+
+    initialize: function(options) {
+      NS.UI.Form.prototype.initialize.apply(this, arguments);
+			//Test if new instance
+			this.isNew = this.instance.isNew();
+			
+			var self = this;
+      this.on('submit:valid', function(instance) {
+				//Get value for hidden fields
+				var prefix = 'end_';
+				if (self.isNew) prefix = 'begin_';
+				
+				instance.set(prefix+'datetime', new Date());
+				instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
+				instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
+			 
+        instance.save().done( function(model, response, options) {
+							//On refetch le model pour récupérer le PK
+							instance.fetch({
+								success: function(data) {
+									if (!self.isNew) {
+										delete app.globals.currentrue;
+										sauvages.notifications.finParcours();
+										setTimeout(function() {
+											app.route.navigate('addParcours/new', {trigger: true});
+											$('.notification-list').empty();
+										},2000);	//Attend 2 secondes
+									}
+									else {
+										app.globals.currentrue =	data;
+										app.route.navigate('taxonlist', {trigger: true});
+									}
+								}
+						});
+          }
+        );
+      });
+    },
+		
+		afterRender: function () {
+			if (this.isNew)  $('input:submit', this.$el).attr('value', sauvages.messages.begin_street);
+			else $('input:submit', this.$el).attr('value', sauvages.messages.end_street);
+			
+			$('input:reset', this.$el).attr('style', 'display:none');
+		},
+
+});
+app.views.HomePageView=  app.utils.BaseView.extend({
 
   template: 'page-home',
 
 });
 
-app.views.IdentificationKeyView =  app.views.BaseView.extend({
+app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
   template: 'page-identification-key',
   
@@ -78,7 +211,7 @@ app.views.IdentificationKeyView =  app.views.BaseView.extend({
 
 /*****démo clé texte****/
 
-app.views.IdentificationKeyViewText =  app.views.BaseView.extend({
+app.views.IdentificationKeyViewText =  app.utils.BaseView.extend({
 
   template: 'page-identification-key',
   
@@ -122,7 +255,7 @@ app.views.IdentificationKeyViewText =  app.views.BaseView.extend({
 });
 
 
-app.views.IKCriteriaListItemViewText =  app.views.BaseView.extend({
+app.views.IKCriteriaListItemViewText =  app.utils.BaseView.extend({
 
   template: 'items-list-criteria',
 
@@ -137,7 +270,7 @@ app.views.IKCriteriaListItemViewText =  app.views.BaseView.extend({
 
 
 
-app.views.IKCriteriaListItemView =  app.views.BaseView.extend({
+app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 
   template: 'items-list-criteria-picto',
 
@@ -149,7 +282,7 @@ app.views.IKCriteriaListItemView =  app.views.BaseView.extend({
 });
 
 	
-app.views.TaxonListView =  app.views.BaseView.extend({
+app.views.TaxonListView =  app.utils.BaseView.extend({
 
   template: 'page-taxon-list',
   
@@ -176,7 +309,7 @@ app.views.TaxonListView =  app.views.BaseView.extend({
 
 });
 
-app.views.TaxonItemView =  app.views.BaseView.extend({
+app.views.TaxonItemView =  app.utils.BaseView.extend({
 
   template: 'items-list-taxon',
 
@@ -188,7 +321,7 @@ app.views.TaxonItemView =  app.views.BaseView.extend({
 });
 
 
-app.views.TaxonDetailView=  app.views.BaseView.extend({
+app.views.TaxonDetailView=  app.utils.BaseView.extend({
 
   template: 'page-taxon-detail',
 
@@ -223,7 +356,7 @@ app.views.TaxonDetailView=  app.views.BaseView.extend({
    },
 });
 
-app.views.CriteriaValueTaxonView=  app.views.BaseView.extend({
+app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
 
   template: 'items-list-taxondetail-criteria',
 
@@ -233,7 +366,7 @@ app.views.CriteriaValueTaxonView=  app.views.BaseView.extend({
   },
 });
 
-app.views.AlphabeticAnchorView =  app.views.BaseView.extend({
+app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
 
   template: 'subview-alphabetic-anchor',
 
