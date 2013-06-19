@@ -61,7 +61,6 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 //TEST PHOTOS
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
-		this.insertView("#pict-form", new app.views.Capture());
   },
 	
 	serialize: function() {
@@ -85,8 +84,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 						sauvages.notifications.obsSaveSuccess();
 						setTimeout(function() {
 							app.route.navigate('taxonlist', {trigger: true});
-							$('.notification-list').empty();
-							},500);
+							},2000);
           }
         );
       });
@@ -141,7 +139,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 										setTimeout(function() {
 											app.route.navigate('addParcours/new', {trigger: true});
 											$('.notification-list').empty();
-										},2000);	//Attend 2 secondes
+										},10000);	//Attend 10 secondes
 									}
 									else {
 										app.globals.currentrue =	data;

@@ -238,9 +238,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
 	defaults: {
 		milieu:'Mur',
 	},
-	
-	
-	
+
 },{
   table : 'TdataObs_occurences',
   schema: {
@@ -250,9 +248,12 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
       fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
 			fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
       name_taxon: { title:'name_taxon',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
-      milieu:      { title:'milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Mur', label:'Mur'}, {val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}] },
+      milieu: { title:'milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Mur', label:'Mur'}, {val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}] },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
-      //photo:,
+      photo: { 
+				title:'photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: false, 
+				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.FILE_URI'} 
+			},
   }, 
   dao: app.dao.OccurenceDataValueDAO,
   verboseName: 'Occurence'
