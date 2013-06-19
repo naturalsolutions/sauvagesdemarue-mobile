@@ -799,6 +799,111 @@ NS.UI = (function(ns) {
         },
         editors: editors  // Keep a reference to editor classes in order to allow templateSrc customization
     });
+		
+		editors.Picture = BaseEditor.extend({
+        templateId: 'editor-picture',
 
+        getValue: function() {
+					if (this.$el) {
+							var val = this.$el.find('img').attr('src');
+							if (val === this.nullValue || val === null) return undefined;
+							if (! this.multiple) return [val];
+							return val;
+					}
+        },
+
+        postProcessData: function (rawData) {
+            if (typeof(rawData) === 'undefined') return rawData;
+            // When the select source is a collection, convert model ids into model instance.
+            var optionConfig = _.result(this, 'optionConfig');
+            if (optionConfig instanceof Backbone.Collection)
+                rawData = _.map(rawData, function(value) {
+                    return this.get(value);
+                }, optionConfig);
+
+            // Unpack data when multiple selection is not allowed
+            return (this.multiple) ? rawData : rawData[0];
+        },
+				events: {
+							'click #take-picture': 'capturePhoto',
+							'change #input-picture': 'loadPhoto'
+					},
+
+			initialize : function() {
+				BaseEditor.prototype.initialize.apply(this, arguments);	
+				this.optCamera = _.defaults(this.options.optCamera || {}, {
+					quality: 50,
+					correctOrientation: false,
+					encodingType: 'navigator.camera.EncodingType.JPEG',
+					source: 'navigator.camera.PictureSourceType.CAMERA',
+					targetWidth: 1024,
+					destinationType: 'navigator.camera.DestinationType.FILE_URI'
+				});
+			},
+
+			loadPhoto : function () {
+				var input = document.querySelector('input[type=file]');
+				var file = input.files[0];
+				var imgURL = URL.createObjectURL(file);
+				this.onSuccess(imgURL) 
+			},
+
+			capturePhoto: function() {
+				var self = this;
+					// Take picture using device camera and retrieve image as a local path
+					navigator.camera.getPicture(
+							_.bind(this.onSuccess, this),
+							_.bind(this.onFail, this), {
+									quality: window[self.optCamera.quality],
+									correctOrientation: window[self.optCamera.correctOrientation],
+									encodingType: window[self.optCamera.encodingType],
+									source:window[self.optCamera.source],
+									targetWidth:window[self.optCamera.targetWidth],
+									destinationType: window[self.optCamera.destinationType],
+							});
+			},
+
+			onSuccess: function(imageURI) {
+					this.$el.find('.img-preview img').attr('src', imageURI);
+			},
+
+			onFail: function(message) {
+					this.$el.find('.img-preview').hide();
+					this.$el.find('.img-error').show();
+					this.$el.find('#img-error-msg').html(message);
+			},
+	
+    }, {
+        templateSrc: {
+            stacked:
+                '<div class="container-fluid">'+
+								'	<div class="row-fluid img-preview">'+
+								'		<img class="editor-picture-img span12" src="" style="height: 100px;width: 100px;"/>'+
+								'	</div>'+
+								'	<div class="row-fluid">'+
+								'		<% if (navigator.camera) { %> '+
+								'			<button class="btn span12 btn-camera" id="take-picture" type="button">Photos</button>'+
+								'		<%} else {%>'+
+								'			<input type="file" accept="image/*" capture  id="input-picture" >'+
+								'		<%} %>'+
+								'	</div>'+
+								'</div>',
+            inline:
+                '<td<% if (data.helpText) { %> title="<%- data.helpText %>"<% } %> class="control-group">' +
+                '<div class="container-fluid">'+
+								'	<div class="row-fluid img-preview">'+
+								'		<img class="editor-picture-img span12" src="" style="height: 100px;width: 100px;"/>'+
+								'	</div>'+
+								'	<div class="row-fluid">'+
+								'		<% if (navigator.camera) { %> '+
+								'			<button class="btn btn-large span12" id="take-picture" type="button"><i class="icon-ok-sign"></i> Photos </button>'+
+								'		<%} else {%>'+
+								'			<input type="file" accept="image/*" capture  id="input-picture" >'+
+								'		<%} %>'+
+								'	</div>'+
+								'</div>'+
+                '</td>'
+        }
+    });
     return ns;
 })(NS.UI || {});
