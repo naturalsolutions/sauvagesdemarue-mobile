@@ -11,30 +11,40 @@ function() {
 		},
 		
 	 sauvages.gpsNotStart = function gpsNotStart() {
-			new NS.UI.Notification({
+		 var myModal = new NS.UI.NotificationModal({
 				type: 'error',
-				title: 'GPS:',
-				message: 'wait until GPS start',
-				delay: 1
+				title: 'GPS not start',
+				message: 'wait',
+				delay: 1,
+				btnLabel: '',
 			});
 	},
 	
 	
 	 sauvages.finParcours = function finParcours() {
-			new NS.UI.Notification({
+			var myModal = new NS.UI.NotificationModal({
 				type: 'info',
-				title: '',
-				message: 'Retrouver vos données dans "Mes observations"<br/> N\'oublier pas de les partager <br/>  <a href="#addParcours/new" class="btn btn-primary" >Nouvelle rue</a>',
-				delay: 3
+				title: 'Rue sauvegardée',
+				message: 'Retrouver vos données dans "Mes observations"<br/> N\'oublier pas de les partager <br/>',
+				delay: '',
+				btnLabel: 'Nouvelle rue',
+				onClick: function() {
+					app.route.navigate('addParcours/new', {trigger: true});
+					},
 			});
-	}
+	},
 	
 	 sauvages.obsSaveSuccess = function obsSaveSuccess() {
-			new NS.UI.Notification({
+			new NS.UI.NotificationModal({
 				type: 'info',
-				title: '',
+				title: 'Observation sauvegardée',
 				message: 'Félicitation',
-				delay: 1
+				delay: 1,
+				btnLabel: '', 
+				onClose: function() {
+					app.route.navigate('taxonlist', {trigger: true});
+					},
+				
 			});
 	}
   return sauvages;

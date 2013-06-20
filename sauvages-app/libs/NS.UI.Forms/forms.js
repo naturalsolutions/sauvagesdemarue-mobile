@@ -864,7 +864,7 @@ NS.UI = (function(ns) {
 			},
 
 			onSuccess: function(imageURI) {
-					this.$el.find('.img-preview img').attr('src', imageURI);
+					this.$el.find('.img-preview img.editor-picture-img').attr('src', imageURI);
 			},
 
 			onFail: function(message) {
@@ -875,34 +875,37 @@ NS.UI = (function(ns) {
 	
     }, {
         templateSrc: {
-            stacked:
-                '<div class="container-fluid">'+
-								'	<div class="row-fluid img-preview">'+
-								'		<img class="editor-picture-img span12" src="" style="height: 100px;width: 100px;"/>'+
-								'	</div>'+
-								'	<div class="row-fluid">'+
+          stacked: '<div class="control-group">' +
+                '    <label class="control-label"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+                '    <div class="controls">' +
+                '	<div class="row-fluid img-preview">'+
+								'		<img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
 								'		<% if (navigator.camera) { %> '+
-								'			<button class="btn span12 btn-camera" id="take-picture" type="button">Photos</button>'+
+								'			<button class="btn btn-camera" id="take-picture" type="button"><img src="css/images/btn_camera.png"/></button>'+
 								'		<%} else {%>'+
 								'			<input type="file" accept="image/*" capture  id="input-picture" >'+
 								'		<%} %>'+
-								'	</div>'+
-								'</div>',
-            inline:
-                '<td<% if (data.helpText) { %> title="<%- data.helpText %>"<% } %> class="control-group">' +
-                '<div class="container-fluid">'+
-								'	<div class="row-fluid img-preview">'+
-								'		<img class="editor-picture-img span12" src="" style="height: 100px;width: 100px;"/>'+
-								'	</div>'+
-								'	<div class="row-fluid">'+
+								'	</div>'+                
+                '        <div class="help-inline"></div>' +
+                '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+                '    </div>' +
+                '</div>',
+          inline:
+                 '<div class="control-group">' +
+                '    <label class="control-label"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+                '    <div class="controls">' +
+                '	<div class="row-fluid img-preview">'+
+								'		<img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
 								'		<% if (navigator.camera) { %> '+
-								'			<button class="btn btn-large span12" id="take-picture" type="button"><i class="icon-ok-sign"></i> Photos </button>'+
+								'			<button class="btn btn-camera" id="take-picture" type="button"><img src="css/images/btn_camera.png"/></button>'+
 								'		<%} else {%>'+
 								'			<input type="file" accept="image/*" capture  id="input-picture" >'+
 								'		<%} %>'+
-								'	</div>'+
-								'</div>'+
-                '</td>'
+								'	</div>'+                
+                '        <div class="help-inline"></div>' +
+                '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+                '    </div>' +
+                '</div>'
         }
     });
     return ns;

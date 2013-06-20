@@ -4,54 +4,6 @@
 // -------------------------------------------------- The Views ---------------------------------------------------- //
 
 	
-app.views.Capture = app.utils.BaseView.extend({
-	template: 'form/editor-camera',
-	events: {
-			'click #take-picture': 'capturePhoto',
-			'change #input-picture': 'loadPhoto'
-	},
-
-	initialize : function() {
-			
-	},
-	
-	loadPhoto : function () {
-		var input = document.querySelector('input[type=file]');
-		var file = input.files[0];
-		var imgURL = URL.createObjectURL(file);
-		this.onSuccess(imgURL) 
-	},
-
-	capturePhoto: function() {
-			// Take picture using device camera and retrieve image as a local path
-			navigator.camera.getPicture(
-					_.bind(this.onSuccess, this),
-					_.bind(this.onFail, this),
-					{
-							quality: 50,
-							correctOrientation: false,
-							encodingType: navigator.camera.EncodingType.JPEG,
-							source: navigator.camera.PictureSourceType.CAMERA,
-							targetWidth: 1024,
-							destinationType: navigator.camera.DestinationType.FILE_URI
-					});
-	},
-
-	onSuccess: function(imageURI) {
-			console.log(imageURI);
-			this.$el.find('.img-preview img').attr('src', imageURI);
-	},
-
-	onFail: function(message) {
-			this.$el.find('.img-preview').hide();
-			this.$el.find('.img-error').show();
-			this.$el.find('#img-error-msg').html(message);
-	},
-	
-
-});
-
-
 app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   template: 'form-add-obs',
 
@@ -80,11 +32,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 				instance.set('datetime', new Date());
 				app.utils.geolocalisation.getCurrentPosition();
         instance.save().done( function(model, response, options) {
-					
 						sauvages.notifications.obsSaveSuccess();
-						setTimeout(function() {
-							app.route.navigate('taxonlist', {trigger: true});
-							},2000);
           }
         );
       });
@@ -136,10 +84,6 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 									if (!self.isNew) {
 										delete app.globals.currentrue;
 										sauvages.notifications.finParcours();
-										setTimeout(function() {
-											app.route.navigate('addParcours/new', {trigger: true});
-											$('.notification-list').empty();
-										},10000);	//Attend 10 secondes
 									}
 									else {
 										app.globals.currentrue =	data;

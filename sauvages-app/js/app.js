@@ -46,6 +46,7 @@ $().ready(function() {
 }) ;
 $(document).ready(function() {
     new NS.UI.NotificationList();
+		new NS.UI.NotificationModalList();
 });
 
 
