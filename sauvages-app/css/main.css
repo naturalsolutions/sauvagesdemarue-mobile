@@ -172,7 +172,13 @@ footer a:active,footer a:hover,footer a:focus{
 
 
 /***********LIST***************/
-
+.taxon-list-item {
+	width: 100%;
+}
+.taxonName {
+	width: 80%;
+	float: left;
+}
 .taxonName a {
   height: 80px;
   width: 100%;
@@ -183,7 +189,9 @@ footer a:active,footer a:hover,footer a:focus{
   float: left;
   margin-top: 10px;
 }
-
+.btnAddObsList.pull-right a {
+	height: 80px;
+}
 .taxonName .taxon-img-thumb {
   width: 80px;
   margin: 5px;
@@ -213,7 +221,7 @@ footer a:active,footer a:hover,footer a:focus{
 /***DETAIL TAXON***/
 .btnObs{
 	width:25%;
-	margin:0px 37.5% 5px;
+	margin:0px 35.3% 5px;
 }
 /*********MEDIA QUERIE***/
 @media (min-width: 768px){
