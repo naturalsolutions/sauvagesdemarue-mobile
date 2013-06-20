@@ -1,13 +1,11 @@
 <div id="taxon-list-content" class="container">
     <div  class="navbar navbar-fixed-top loc-header">
-        <a href="#" class="header-button header-button-left header-back-button"><button class="btn"><b>&lang;</b></button></a>
+        <a href="#" class=" btn header-button header-button-left header-back-button"><b>&lang;</b></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
         <div class="page-block-title">
             <div class="span page-title">Espèces</div>
         </div>
-        
-        <button class='btn pull-right'><a href="#identificationText">assistant text</a></button>
-        <button class='btn pull-right'><a href="#identification">assistant</a></button>
+        <a class='btn pull-right' href="#identification">assistant</a>
     </div>
   
   <div class="loc-container" >
@@ -17,12 +15,13 @@
             <li>
               <div id='taxonList-div-<%=key %>' class="taxon-list-item pad-right">
                 <div>
-                    <div class="taxonName"><%= item.get('name_taxon') %>
-										<img src="<%= item.get('photo') %>">
+                    <div class="listObsItem">
+										<img class="taxon-img-thumb" src="<%= item.get('photo') %>">
+										<p><b><%= item.get('name_taxon') %></b> - <%= item.get('milieu') %> </p>
                     <%= item.get('fk_taxon') %>
                     <%= item.get('latitude') %>
                     <%= item.get('longitude') %>
-                    <%= item.get('milieu') %>
+                    
                     </div>
                 </div>
               </div>

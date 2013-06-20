@@ -179,7 +179,7 @@ app.dao.baseDAOBD = {
     var self = this;
     this.db.transaction(
       function(tx) {
-        var selectField = _.filter(_.pluck(self.schema, 'title'), function(key){ return (typeof(key) !== 'undefined') ; }).join(','); 
+        var selectField = _.filter(_.keys(self.schema), function(key){ return (typeof(key) !== 'undefined') ; }).join(','); 
         var sql = 'SELECT '+selectField+' FROM '+self.table+' LIMIT 500 ';
         console.log(sql);
         tx.executeSql(sql,[], function(tx, results) {

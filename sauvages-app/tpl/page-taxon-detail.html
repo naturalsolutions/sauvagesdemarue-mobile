@@ -6,7 +6,7 @@
             <div class="span page-title"><%= data.commonName %></div>
             <div class="span page-subtitle sci-taxon-name"><%= data.scientificName %></div>
         </div>
-        <button class='btn pull-right'><a href="#taxonlist/all">Liste</a></button>
+        <a href="#taxonlist/all" class='btn pull-right'>Liste</a>
     </div>
    
    
@@ -26,7 +26,7 @@
     </ul>
   </div>
 
-  <button class="btn btn-large btnObs" type="button"><a href="#addObs/<%=data.taxonId %>">+</a></button>
+  <a class="btn btn-large btnObs" href="#addObs/<%=data.taxonId %>">+</a>
   <div class="accordion" id="accordion2">
       <div class="accordion-group">
           <div class="accordion-heading">
