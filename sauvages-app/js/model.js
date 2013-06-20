@@ -247,11 +247,11 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
       longitude: { type: 'hidden', title:'Longitude',sqltype:'REAL', required: true} ,
       fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
 			fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
-      name_taxon: { title:'name_taxon',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
-      milieu: { title:'milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Mur', label:'Mur'}, {val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}] },
+      name_taxon: { title:'Espèce',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
+      milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Mur', label:'Mur'}, {val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}] },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
       photo: { 
-				title:'photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: false, 
+				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: false, 
 				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.FILE_URI'} 
 			},
   }, 
@@ -276,8 +276,8 @@ app.models.ParcoursDataValue = Backbone.Model.extend({
    schema: {
 		 //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
 			id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
-      name: { title:'name', type:'Text'},
-			cote: { title:'cote', type: 'Select', sqltype:'NVARCHAR(500)', options: [{val:'Pair', label:'Pair'}, {val:'Impair', label:'Impair'}, {val:'Les deux', label:'Les deux'}] },
+      name: { title:'Nom de ma rue', type:'Text'},
+			cote: { title:'Coté', type: 'Select', sqltype:'NVARCHAR(500)', options: [{val:'Pair', label:'Pair'}, {val:'Impair', label:'Impair'}, {val:'Les deux', label:'Les deux'}] },
       
       begin_latitude:{ type: 'hidden', sqltype:'REAL',title:'begin_latitude'}, 
       begin_longitude: { type: 'hidden',sqltype:'REAL', title:'begin_longitude'},
