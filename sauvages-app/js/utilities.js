@@ -179,7 +179,7 @@ app.dao.baseDAOBD = {
     var self = this;
     this.db.transaction(
       function(tx) {
-        var selectField = _.filter(_.keys(self.schema), function(key){ return (typeof(key) !== 'undefined') ; }).join(','); 
+        var selectField = _.filter(_.keys(self.schema), function(key){ return (self.schema[key].type !== 'NestedModel') ; }).join(','); 
         var sql = 'SELECT '+selectField+' FROM '+self.table+' LIMIT 500 ';
         console.log(sql);
         tx.executeSql(sql,[], function(tx, results) {
@@ -217,7 +217,8 @@ app.dao.baseDAOBD = {
         });
         sqlWere = sqlWere.slice(0, -3);
         
-        var sql = 'SELECT * FROM '+self.table+' ' + sqlWere + ' LIMIT 500 ';
+        var selectField = _.filter(_.keys(self.schema), function(key){ return (self.schema[key].type !== 'NestedModel') ; }).join(','); 
+        var sql = 'SELECT '+selectField+' FROM '+self.table+' ' + sqlWere + ' LIMIT 500 ';
         console.log(sql);
         tx.executeSql(sql,parameters, function(tx, results) {
           var len = results.rows.length,

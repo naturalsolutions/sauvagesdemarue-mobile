@@ -15,16 +15,9 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
   },
 	
-	serialize: function() {
-		if (app.globals.currentrue) return app.globals.currentrue.toJSON();
-		return true;
-	}
 });
 
 app.views.FormAddOccurenceView = NS.UI.Form.extend({
-	
-
-
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
       this.on('submit:valid', function(instance) {
@@ -41,7 +34,9 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 		afterRender: function () {
 			$('input:submit', this.$el).attr('value', sauvages.messages.save);
 			$('input:reset', this.$el).attr('style', 'display:none');
+			$('h3', this.$el).attr('style', 'display:none');
 		},
+		
 
 });
 
@@ -101,6 +96,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 			else $('input:submit', this.$el).attr('value', sauvages.messages.end_street);
 			
 			$('input:reset', this.$el).attr('style', 'display:none');
+			$('h3', this.$el).attr('style', 'display:none');
 		},
 
 });
