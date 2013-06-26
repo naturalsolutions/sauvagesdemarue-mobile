@@ -112,7 +112,7 @@ footer a{
 
 footer a:active,footer a:hover,footer a:focus{
   color: white;
-  background:#E2001A;
+  background:#008D00;
   text-decoration: none;
 }
 
@@ -121,6 +121,7 @@ footer a:active,footer a:hover,footer a:focus{
   float: left;
   text-align: center;
   height: 43px;
+  background:gray;
 }
 /******************/
 
