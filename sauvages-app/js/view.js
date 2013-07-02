@@ -10,6 +10,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   initialize: function() {
     this.model.bind("reset", this.render, this);
   },
+  
 //TEST PHOTOS
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
@@ -23,7 +24,6 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 				//Get value for hidden fields
 				instance.set('datetime', new Date());
-				app.utils.geolocalisation.getCurrentPosition();
         instance.save().done( function(model, response, options) {
 						sauvages.notifications.obsSaveSuccess();
           }
@@ -67,6 +67,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 				//Get value for hidden fields
 				var prefix = 'end_';
 				if (self.isNew) prefix = 'begin_';
+				app.utils.geolocalisation.getCurrentPosition();
 				
 				instance.set(prefix+'datetime', new Date());
 				instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
@@ -141,7 +142,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 			 console.log(data);
        //refresh front end
        $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
-       
       }
     );
   }

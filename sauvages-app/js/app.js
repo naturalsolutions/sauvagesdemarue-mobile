@@ -70,8 +70,7 @@ function init(){
           $('#dataloader-img').remove();
           $("body").find("a").removeClass("disabled");
         }
-    }); 
-    
+    });
   });
   
 }

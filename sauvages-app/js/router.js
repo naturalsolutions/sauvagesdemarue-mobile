@@ -60,7 +60,7 @@ app.Router = Backbone.Router.extend({
   viewTaxonlist : function(all) {
     console.log('viewTaxonlist');
     var taxons;
-    if(all || app.globals.currentFilterTaxonIdList.length == 0  ){
+    if( all || app.globals.currentFilterTaxonIdList.length == 0  ){
       taxons = app.globals.cListAllTaxons;    
     }
     else {
@@ -94,6 +94,7 @@ app.Router = Backbone.Router.extend({
 	}
 	var self = this;
 	setTimeout(function() {
+    app.utils.geolocalisation.getCurrentPosition();
 		if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
       var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
       var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
@@ -104,8 +105,8 @@ app.Router = Backbone.Router.extend({
       self.displayView(currentView);   
     }
     else{
-		sauvages.notifications.gpsNotStart();
-		this.goToLastPage();
+      sauvages.notifications.gpsNotStart();
+      this.goToLastPage();
     }
 		},500);
     
@@ -126,9 +127,7 @@ app.Router = Backbone.Router.extend({
 			else {
 				var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
 				self.displayView(currentView);  
-			}
-     
-       
+			}       
     }
     else{
       sauvages.notifications.gpsNotStart();

@@ -20,7 +20,6 @@ function() {
 			});
 	},
 	
-	
 	 sauvages.finParcours = function finParcours() {
 			var myModal = new NS.UI.NotificationModal({
 				type: 'info',
@@ -34,7 +33,7 @@ function() {
 			});
 	},
 	
-	 sauvages.obsSaveSuccess = function obsSaveSuccess() {
+	sauvages.obsSaveSuccess = function obsSaveSuccess() {
 			new NS.UI.NotificationModal({
 				type: 'info',
 				title: 'Observation sauvegardée',

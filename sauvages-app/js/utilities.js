@@ -219,7 +219,7 @@ app.dao.baseDAOBD = {
         
         var selectField = _.filter(_.keys(self.schema), function(key){ return (self.schema[key].type !== 'NestedModel') ; }).join(','); 
         var sql = 'SELECT '+selectField+' FROM '+self.table+' ' + sqlWere + ' LIMIT 500 ';
-        console.log(sql);
+        
         tx.executeSql(sql,parameters, function(tx, results) {
           var len = results.rows.length,
             data = [],
@@ -310,7 +310,7 @@ app.utils.geolocalisation = {
     else
       console.log("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
   },
-  
+
   // We've got our position, let's show map and update user
   gotPositionCoords: function (position) {
     this.currentPosition = position.coords;
@@ -326,7 +326,3 @@ app.utils.geolocalisation = {
     console.log("Error: " + errors[error.code]);
   },
 }
-
-
-
-	

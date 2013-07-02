@@ -864,6 +864,7 @@ NS.UI = (function(ns) {
 			},
 
 			onSuccess: function(imageURI) {
+          console.log(imageURI);
 					this.$el.find('.img-preview img.editor-picture-img').attr('src', imageURI);
 			},
 

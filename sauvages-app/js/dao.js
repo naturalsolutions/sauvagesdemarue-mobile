@@ -89,11 +89,8 @@ _.extend(app.dao.ParcoursDataValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ParcoursDataValueDAO.prototype , {
 
   getDefaultRueName: function( callback) {
-		
 		var dfd = $.Deferred();
-		var sql = "SELECT max(id) + 1 as nextStreet " + 
-				"FROM TdataObs_parcours ";			
-		console.log(sql);
+		var sql = "SELECT max(id) + 1 as nextStreet FROM TdataObs_parcours ";			
 		runQuery( sql , []).done(function(d) {
 			var defaultStreetName =  (!d.rows.item(0)['nextStreet']) ? 'Rue 1' : 'Rue ' +d.rows.item(0)['nextStreet'];
 			return  dfd.resolve(defaultStreetName);
