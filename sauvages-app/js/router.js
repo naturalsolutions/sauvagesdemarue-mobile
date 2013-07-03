@@ -47,7 +47,12 @@ app.Router = Backbone.Router.extend({
   
   viewIdentKey : function() {
     console.log('viewIdentKey viewIdentKey');
+		console.log(app.globals.currentFilter);
+		
     var self = this;
+		/*if (app.globals.currentFilter.length == 0) {
+			app.globals.currentFilter = 0;
+		}*/
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
     cListAllCriterias.fetch({
         success: function(data) {
@@ -64,10 +69,8 @@ app.Router = Backbone.Router.extend({
       taxons = app.globals.cListAllTaxons;    
     }
     else {
-      if (app.globals.currentFilterTaxonIdList.length >0 ) {
         taxons  = new app.models.TaxonLiteCollection();
         taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
-      }
     }
     var currentView = new app.views.TaxonListView({collection: taxons});
     this.displayView(currentView);

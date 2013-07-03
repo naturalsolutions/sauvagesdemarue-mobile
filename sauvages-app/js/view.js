@@ -111,8 +111,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
   template: 'page-identification-key',
   
-  initialize: function() {
-    app.globals.currentFilter= new Array();
+  initialize: function() { 		
     this.collection.bind("reset", this.render, this);
   },
   
@@ -147,65 +146,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   }
 });
 
-/*****démo clé texte****/
-
-app.views.IdentificationKeyViewText =  app.utils.BaseView.extend({
-
-  template: 'page-identification-key',
-  
-  initialize: function() {
-    app.globals.currentFilter= new Array();
-    this.collection.bind("reset", this.render, this);
-  },
-  
-  events: {
-    "click input[type=checkbox]": "filterTaxon"
-  },
-
-  beforeRender: function() {
-    this.collection.each(function(criteria) {
-      this.insertView("#values-list", new app.views.IKCriteriaListItemViewText({model: criteria}));
-    }, this);
-  },
-  
-  filterTaxon : function(event) { 
-    //if checked
-    if ($(event.currentTarget).is(':checked') == true) {
-      console.log($(event.currentTarget).val() );
-      app.globals.currentFilter.push($(event.currentTarget).val() );
-    }
-    else { //if uncheked
-      var index =  app.globals.currentFilter.indexOf($(event.currentTarget).val());
-       app.globals.currentFilter.splice(index, 1);
-    }
-    //Select Taxon Id; for the moment exact matching (must contain all the selected criteria)
-    app.utils.queryData.getFilterTaxonIdList(app.globals.currentFilter, true).done(
-      function(data) {
-       app.globals.currentFilterTaxonIdList =  data;
-			 console.log(data);
-       //refresh front end
-       $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
-       
-      }
-    );
-
-  }
-});
-
-
-app.views.IKCriteriaListItemViewText =  app.utils.BaseView.extend({
-
-  template: 'items-list-criteria',
-
-  initialize: function() {
-    this.model.bind("reset", this.render, this);
-    this.model.bind("change", this.render, this);
-  },
-
-});
-/********/
-
-
 
 
 app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
@@ -216,7 +156,38 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
   },
+	events: {
+    "click .help": "helpShow"
+  },
+	afterRender:function() {
+   if (app.globals.currentFilter.length > 0) { 
+			_.each(app.globals.currentFilter,function(l){ 
+				var currentInput = 'defCaracValue-'+l ;
+				$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
+				$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+			});
+		}
+	},
+	helpShow :function(){
+		var self=this;
+		console.log('rrrrrr');
+		var criteriaName = capitaliseFirstLetter(self.model.get('name'));
+		var msg = _.template(
+								"<div class='helpKeyDiv'>"+
+									'<p><%= data.criteriaDescription %></p> '+
+									'<ul><% _.each(data.criteriaValues,function(criteriaValueItem,i){%>'+
+										"<li><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p><%= criteriaValueItem.get('name') %><p></li>"+
+									'<% }); %></ul>'+
+								'</div>'					
+							);
+		
+	
+		
+		//var criteriaValues = this.model.get('defCaracValues').models;
+		sauvages.notifications.helpKey(criteriaName,msg({criteriaName : criteriaName,criteriaDescription:this.model.get('description'), criteriaValues: this.model.get('defCaracValues').models}));
+	}
 
+	
 });
 
 	
@@ -255,7 +226,6 @@ app.views.TaxonItemView =  app.utils.BaseView.extend({
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
   },
-
 });
 
 
@@ -270,23 +240,22 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   
   beforeRender: function() {
     console.log(this.model.get('caracValues').models);
-		//$(".flexslider").addClass('loading');
+    //$(".flexslider").addClass('loading');
     var self = this;
     self.model.get('caracValues').each(function(model) {
       var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
 			
         criM.fetch({
           success: function(data) {
-						$('.flexslider').flexslider({
-						   animation: "slide",  
-						   slideshow: false,
-							 touch: true,  
+	    $('.flexslider').flexslider({
+	      animation: "slide",  
+	      slideshow: false,
+	      touch: true,  
 
-						   start: function(slider) {
-						       $('.flexImages').show();
-						   }
-						});
-						
+	      start: function(slider) {
+		$('.flexImages').show();
+	      }
+	    });
             self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
           }
         });

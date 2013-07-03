@@ -27,7 +27,7 @@ NS.UI = (function(ns) {
 						'    <h3 id="myModalLabel"><%= data.title %></h3> '+
 						'  </div> '+
 						'  <div class="modal-body"> '+
-						'    <p><%= data.message %></p> '+
+						'    <p><%= data.message%></p> '+
 						'  </div> '+
 						'  <% if (data.btnLabel !== "") { %> '+
 						'		<div class="modal-footer"> '+
@@ -36,6 +36,7 @@ NS.UI = (function(ns) {
 						'</div>',
 
         initialize: function(options) {
+            console.log ('init');
             this.options = _.defaults(options || {}, {
                 type: 'error',
                 title: 'Error',

@@ -64,6 +64,20 @@
 	position:relative;
 	float:right;
 }
+/*******Modal Help********/
+.helpKeyDiv li {
+	min-height: 55px;
+	list-style-type: none;
+	clear:both;
+}
+.helpKeyDiv img {
+	float: left;
+}
+.helpKeyDiv p{
+	float: left;
+	padding: 10px;
+}
+
 /****Annuaire****/
 .btn-group-vertical > .btn:first-child {
 		-webkit-border-radius: 0;

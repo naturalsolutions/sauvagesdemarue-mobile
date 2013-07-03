@@ -45,6 +45,21 @@ function() {
 					},
 				
 			});
+	},
+  sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
+			new NS.UI.NotificationModal({
+				type: 'info',
+				title: criteriaName,
+				message: criteriaValues,
+				delay: '',
+				btnLabel: '', 
+				onClose: function() {
+					app.route.navigate('taxonlist', {trigger: true});
+					},
+				
+			});
 	}
+  
+  
   return sauvages;
 })(sauvages.notifications|| {});
