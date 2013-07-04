@@ -4,6 +4,7 @@
     <div>
         <div class="criteria-name">
           <p><b><%= capitaliseFirstLetter(data.name) %></b></p>
+           <a class="btn btn-mini <%= data.criteraId %> help">Aide</a>
         </div>
     </div>
     <% 
@@ -38,6 +39,5 @@
     <% 
     }   
     %>
-  <a class="btn <%= data.criteraId %> help">Aide</a>
   </div>
 </li>

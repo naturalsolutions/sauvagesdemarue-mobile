@@ -248,7 +248,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
       fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
 			fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
       name_taxon: { title:'Espèce',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
-      milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Mur', label:'Mur'}, {val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}] },
+      milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Mur', label:'Mur'}, {val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
       photo: { 
 				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: false, 

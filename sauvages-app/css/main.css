@@ -14,10 +14,10 @@
   left: 50%;
   top: 50%;
 }
-.loading{
-	background: url(./images/ajax-loader.gif)no-repeat;
-	background-size:25px;
-	/*width:100%!important;*/
+.loading-slideshow{
+	background-image: url(./images/slideshow-loader.gif);
+	background-repeat:no-repeat;
+	background-size:100%;
 }
 
 a {
@@ -262,4 +262,39 @@ footer a:active,footer a:hover,footer a:focus{
 
 .notification-list{
 	margin-top : 10%;
+}
+/****Annuaire****/
+.btn-group-vertical > .btn:first-child {
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		border-radius: 0;
+		margin-top: 0;
+}
+
+#aphabetic-list-el{
+		position: fixed;
+		right: 0px;
+		background: whitesmoke;
+}
+.internal-anchor {
+		border: 0;
+		font-size: xx-small !important;
+		min-width: 100%;
+		padding: 0;
+		margin: 5px 5px 0px;
+		background-color: transparent;
+		background-image: none;
+		height: 4%;
+}
+@media all {
+	#aphabetic-list-el {
+		overflow                    : hidden;
+		position                    : fixed;
+		display                     : block;
+		/*width                       : 100%;
+	  padding-top               : 60px;
+		padding-bottom              : 60px;
+		top                         : 0;*/
+	 height: 80%;  /* uncomment if desktop */
+	}
 }
