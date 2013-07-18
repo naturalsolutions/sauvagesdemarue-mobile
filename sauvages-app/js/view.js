@@ -125,12 +125,30 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     }, this);
   },
   
-  filterTaxon : function(event) { 
+  filterTaxon : function(event) {
+    var objCurrentTarget=$(event.currentTarget);
+    var idCurrentTarget= objCurrentTarget['context']['id'];
     //if checked
     if ($(event.currentTarget).is(':checked') == true) {
-      app.globals.currentFilter.push($(event.currentTarget).val() );
+      //test if a value has a class RadioCustomOn
+      var criteriaValueChecked = $(event.currentTarget).parent().parent().parent().find("span").hasClass('RadioCustomOn');
+      if (criteriaValueChecked == true) {
+	var objcriteriaValueChecked = $(event.currentTarget).parent().parent().parent().children().children(".RadioCustomOn");
+	var idcriteriaValueChecked = objcriteriaValueChecked.children('input').attr('id');
+	$('input[name="'+idcriteriaValueChecked+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
+	//remove the old value of the variable app.globals.currentFilter
+	var index =  app.globals.currentFilter.indexOf(idcriteriaValueChecked);
+	 app.globals.currentFilter.splice(index, 1);	
+      }
+      
+      // add the class radioCustomOn to currentTarget
+      $('input[name="'+idCurrentTarget+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
+      //add the currentTarget to the variable app.globals.currentFilter
+      app.globals.currentFilter.push($(event.currentTarget).val());
+
     }
     else { //if uncheked
+      $('input[name="'+idCurrentTarget+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
       var index =  app.globals.currentFilter.indexOf($(event.currentTarget).val());
        app.globals.currentFilter.splice(index, 1);
     }
@@ -138,7 +156,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     app.utils.queryData.getFilterTaxonIdList(app.globals.currentFilter, true).done(
       function(data) {
        app.globals.currentFilterTaxonIdList =  data;
-			 console.log(data);
        //refresh front end
        $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
       }
@@ -159,15 +176,15 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 	events: {
     "click .help": "helpShow"
   },
-	afterRender:function() {
+  afterRender:function() {
    if (app.globals.currentFilter.length > 0) { 
-			_.each(app.globals.currentFilter,function(l){ 
-				var currentInput = 'defCaracValue-'+l ;
-				$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
-				$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
-			});
-		}
-	},
+      _.each(app.globals.currentFilter,function(l){ 
+	var currentInput = 'defCaracValue-'+l ;
+	$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
+	$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+      });
+    }
+  },
 	helpShow :function(){
 		var self=this;
 		console.log('rrrrrr');
