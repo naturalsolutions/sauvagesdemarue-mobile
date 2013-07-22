@@ -22,7 +22,8 @@
    
       <fieldset>
         <ul id="values-list" class="taxonList nav-list">
-        <%  _.each(col,function(item,key,list){ %>
+        <%  _.each(col,function(item,key,list)%>
+        <% if(key != ""){%>
           <li id="anchor-taxon-<%= key %>"><%= key %></li>
           <ul> 
           <% _.each(item,function(taxon,k){%>
@@ -48,6 +49,7 @@
             </li>
           <% }); %>
           </ul>
+        <%}%>
         <% }); %>
         </ul>
       </fieldset>
