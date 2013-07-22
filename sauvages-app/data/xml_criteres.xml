@@ -13,7 +13,7 @@
 		</valeurs>
 	</critere>
 	<critere id="1.4">
-  		<label>bord de la feuille</label>
+  		<label>Comment est le bord des feuilles ?</label>
   		<description>Le contour de la feuille peut être lisse ou denté.</description>
   		<valeurs>
 				<valeur code="1.4.1" media="bord_lisse.png">lisse</valeur>
@@ -21,7 +21,7 @@
 		</valeurs>
 	</critere>
 	<critere id="1.5">
-  		<label>disposition des feuilles sur la tige</label>
+  		<label>Comment sont disposées les feuilles ?</label>
   		<description>Les feuilles peuvent avoir une disposition alterne, opposée ou verticillée autour de la tige.</description>
   		<valeurs>
 				<valeur code="1.5.0" media="disposition_alterne.png">alterne</valeur>
@@ -30,15 +30,15 @@
 		</valeurs>
 	</critere>
 	<critere id="1.6">
-  		<label>pilosité</label>
+  		<label>La plante est-elle poilue ?</label>
   		<description>Les feuilles et la tige peuvent être recouverts de poils.</description>
-  		
-				<valeurs>
-				<valeur code="1.6.1" media="pilosite_forte.png">forte</valeur>
+		<valeurs>
+		  <valeur code="1.6.0" media="pilosite_sans.png">sans</valeur>
+		  <valeur code="1.6.1" media="pilosite_avec.png">avec</valeur>
 		</valeurs>
 	</critere>
 	<critere id="1.7">
-  		<label>couleur</label>
+  		<label>Quelle est la couleur des fleurs ?</label>
   		<description>Les fleurs peuvent avoir de nombreuses couleurs : blanche, bleu, jaune, rouge, vert ou rose/violet.</description>
   		<valeurs>
 				<valeur code="1.7.0" media="couleur_blanche.png">blanche</valeur>
@@ -50,7 +50,7 @@
 		</valeurs>
 	</critere>
 	<critere id="1.8">
-  		<label>morphotype de fleur</label>
+  		<label>Quelle est la forme des fleurs ? </label>
   		<description>Que voit-on comme forme dès que l'on observe la fleur ? </description>
   		<valeurs>
 				<valeur code="1.8.0" media="morphotype_ombelle.png">ombelle</valeur>

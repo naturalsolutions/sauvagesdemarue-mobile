@@ -14,7 +14,7 @@ function loadXmlTaxa(){
   var arrPictureData = [];
   var arrCriteriaData = [];
   
-	var urlFile = "data/ex_XmlTaxons_sauvages.xml";
+	var urlFile = "data/xml_taxons.xml";
   var dfd = $.Deferred();
   var arr = [];
 	$.ajax( {
@@ -77,7 +77,7 @@ function loadXmlTaxa(){
  
  
 function loadXmlCriteria(){
-	var urlFile = "data/ex_cle_identification_sauvages.xml";
+	var urlFile = "data/xml_criteres.xml";
   var dfd = $.Deferred();
   var arr = [];
 	$.ajax( {
