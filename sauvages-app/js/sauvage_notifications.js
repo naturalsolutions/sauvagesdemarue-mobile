@@ -22,7 +22,7 @@ function() {
 	
 	 sauvages.finParcours = function finParcours() {
 			var myModal = new NS.UI.NotificationModal({
-				type: 'info',
+				type: 'success',
 				title: 'Rue sauvegardée',
 				message: 'Retrouver vos données dans "Mes observations"<br/> N\'oublier pas de les partager <br/>',
 				delay: '',
@@ -35,7 +35,7 @@ function() {
 	
 	sauvages.obsSaveSuccess = function obsSaveSuccess() {
 			new NS.UI.NotificationModal({
-				type: 'info',
+				type: 'success',
 				title: 'Observation sauvegardée',
 				message: 'Félicitation',
 				delay: 1,
@@ -48,7 +48,7 @@ function() {
 	},
   sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
 			new NS.UI.NotificationModal({
-				type: 'info',
+				type: 'success',
 				title: criteriaName,
 				message: criteriaValues,
 				delay: '',

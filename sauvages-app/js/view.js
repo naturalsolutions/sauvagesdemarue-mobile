@@ -33,6 +33,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 				
 		afterRender: function () {
 			$('input:submit', this.$el).attr('value', sauvages.messages.save);
+			$('input:submit', this.$el).removeClass('btn-primary').addClass('btn-large btn-success');
 			$('input:reset', this.$el).attr('style', 'display:none');
 			$('h3', this.$el).attr('style', 'display:none');
 		},
@@ -93,8 +94,12 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
     },
 		
 		afterRender: function () {
-			if (this.isNew)  $('input:submit', this.$el).attr('value', sauvages.messages.begin_street);
-			else $('input:submit', this.$el).attr('value', sauvages.messages.end_street);
+			if (this.isNew)  $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');
+			else $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
+			
+			//enlever si possibilité de customiser NS_UI_form pour voir un style 'mobiles'
+			$(this.$el).removeClass('form-horizontal');
+			$('input:submit', this.$el).removeClass('btn-primary');
 			
 			$('input:reset', this.$el).attr('style', 'display:none');
 			$('h3', this.$el).attr('style', 'display:none');
@@ -255,6 +260,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
     this.model.bind("change", this.render, this);
   },
   
+  
   beforeRender: function() {
     console.log(this.model.get('caracValues').models);
     //$(".flexslider").addClass('loading');
@@ -278,6 +284,21 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
         });
     }, this);
    },
+   events: {
+        'click div.accordion-heading': 'changeIcon',
+				'click .moreInfo':'tooltipIucn'
+    },
+      
+    changeIcon: function(event){
+      $('.accordion-group').on('hide', function () {
+				$(this).children().children().children("i").removeClass('icon-minus');
+				$(this).children().children().children("i").addClass('icon-plus');
+      });
+      $('.accordion-group').on('show', function () {
+				$(this).children().children().children("i").removeClass('icon-plus');
+				$(this).children().children().children("i").addClass('icon-minus');
+      });
+    },
 });
 
 app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({

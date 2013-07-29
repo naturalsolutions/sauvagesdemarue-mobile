@@ -2,7 +2,9 @@
 #radioCollection li{
 	list-style:none;
 }
-
+#radioCollection li:nth-child(even){
+background:#EBECDE;
+}
 #radioCollection ul{
 	margin-left:0;
 	clear:both;

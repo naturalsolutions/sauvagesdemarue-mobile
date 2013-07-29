@@ -91,7 +91,65 @@ ul{
 .vert-logo{
   color:#27A22D;
 }
-
+/****************/
+/*:focus,select:focus {
+outline-color: green;
+}
+*/
+/******FORM CUSTOM à retirer apres compréhension NS_UI-Form****************/
+input[type='text']
+{
+  width:96%;
+}
+select
+{
+  width:100%;
+}
+.form-actions .btn{
+  margin:0px auto;
+  display: block;
+  width:65%;
+}
+.form-actions {
+padding: 19px 5px 20px;
+}
+/**surcharge du focus bootstrap couleur verte**/
+/*textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus, input[type="month"]:focus,
+input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus,
+input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus, .uneditable-input:focus {
+border-color: rgba(35, 162, 45, 0.8);
+outline: 0;
+outline: thin dotted \9;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(35, 162, 45, 0.6);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(35, 162, 45, 0.6);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(35, 162, 45, 0.6);
+}*/
+.btn-success {
+color: #ffffff;
+text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+background-color: #27A22D;
+background-image: -moz-linear-gradient(top, #27A22D, #007600);
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#27A22D), to(#007600));
+background-image: -webkit-linear-gradient(top, #27A22D, #007600);
+background-image: -o-linear-gradient(top, #27A22D, #007600);
+background-image: linear-gradient(to bottom, #27A22D, #007600);
+background-repeat: repeat-x;
+border-color: #51a351 #51a351 #387038;
+border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+.btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled] {
+color: #ffffff;
+background-color: #007600;
+}
 
 /*****SPRITE*******/
 .sprite-arrow-div-list-transparent{ background-position: 0 0; width: 29px; height: 67px; } 
@@ -146,7 +204,7 @@ position: absolute;
 right: 0;
 }
 .sprite-sauvages.sprite-btn-assistant,.sprite-sauvages.sprite-back,.sprite-sauvages.sprite-list-fond{
-  margin-top:3px;
+  margin-top:6px;
 }
 /******SVG*******/
 #home-page-content{
@@ -180,7 +238,7 @@ footer a:active,footer a:hover,footer a:focus{
 }
 
 .footer-el{
-  width: 33.13%;
+  width: 33.12%;
   float: left;
   text-align: center;
   height: 43px;
@@ -199,13 +257,14 @@ border-left: 1px solid #6B6B6B;
 .header-logo {
 	width: 38px;
 	float: left;
-	padding: 0px 5px;
+	padding: 2px 5px;
 }
 .header-button.header-button-left.header-back-button {
 	float: left;
 }
 .page-block-title {
 	float: left;
+	padding-top:2px;
 }
 .page-title{
  /* font-size:200%;*/
@@ -221,13 +280,13 @@ border-left: 1px solid #6B6B6B;
 }
 
 .loc-container{
-  margin:75px 10px 40px ;
+  margin:80px 2% 40px ;
 }
 #identification-list-content .loc-container{
   margin:75px 0px 40px ;
 }
 #taxon-list-content .loc-container{
-  margin: 75px 16px 40px 2px;
+  margin: 73px 16px 40px 2px;
 }
 
 .sci-taxon-name{
@@ -311,7 +370,7 @@ border-bottom: 0px;
   background-color:#A0CA10;
   font-weight: bold;
   position: fixed;
-top: 45px;
+top: 43px;
 width: 100%;
 z-index:1000;
 }
@@ -342,7 +401,7 @@ right: 70px;
 -webkit-margin-after: 0px;
 text-shadow: 1px 0px 1px gray;
 }
-#values-list li:last-of-type{
+.taxonList li:last-of-type{
 border-bottom: 1px solid black;
 }
 li.item-list-alphabetique{
@@ -356,7 +415,8 @@ background:#EBECDE;
 }
 /**********carousel-container*************/
 #taxon-detail-content .flexslider{
-	margin:0 0 25px;
+	margin:0 0 35px;
+	min-height: 50px;
 }
 #taxon-detail-content .flex-control-nav{
 	bottom:-25px;
@@ -374,6 +434,31 @@ background:#EBECDE;
 .btnObs{
   width:25%;
   margin:0px 32% 5px;
+}
+.btnObs {
+margin: 10px auto;
+background-image: url('images/btn-add-obs-round.png');
+background-repeat: no-repeat;
+width: 74px;
+height: 60px;
+display: block;
+}
+.accordion-toggle {
+color: black;
+}
+.accordion-toggle:hover {
+color: black;
+text-decoration: none;
+}
+.accordion-toggle i {
+margin-right: 7px;
+}
+.accordion {
+margin-bottom: 60px;
+}
+#criteria-list-container li {
+list-style: none;
+margin: 10px;
 }
 /*********MEDIA QUERIE***/
 @media (min-width: 768px){
@@ -408,7 +493,6 @@ background:#EBECDE;
   position: fixed;
   background:whitesmoke;
   height:43px;
-  padding:5px 5px 0 ;
 }
 
 .notification-list{
