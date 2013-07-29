@@ -16,58 +16,83 @@
 }
 
 .criteria-name p{
-		margin: 0 0 5px;
-		line-height: 10px;
-		float:left;
+  margin:3px 0 0px;
+  line-height: 10px;
+  float:left;
 }
 .criteria-name a{
 		float:right;
 }
 
 .criteria-value-list li {
-	
+  border:none;	
 
 }
 .RadioCustom{
-  background-image:;
-    float:left;
-    width:50px;
+/*gradient à épurer pour le prod garder comptabilité chrome seulement*/
+  background: #ffffff; /* Old browsers */
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlNWU1ZTUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-8 */
+  float:left;
+  border-right: 1px solid black;
+border-top: 1px solid black;
+border-left: 3px solid black;
+border-bottom-width: 3px;
+border-bottom-color: black;
+border-bottom-style: solid;
+margin: 2px 3px 5px;
+border-radius: 4px;
+box-shadow: -2px 2px 4px gray;
 }
 .RadioCustomOn{
-    background:transparent url(../css/images/btn_criteres.png)no-repeat -50px 0px;
-		left:-50px;
-    float:left;
-    width:50px;
+  background:#BFE639;
+  border-top-width:3px;
+  border-right-width:3px;
+  margin-top:0px;
+  box-shadow: -1px -1px 2px #BFE639,1px 1px 2px #BFE639;
 }
 .RadioCustom input[type="checkbox"]{
-    position:relative;
-    margin-left:-15px;
-    cursor:pointer;
-    position:relative;
-    float:left;
-    display:none;
-    visibility:hidden;
+  position:relative;
+  margin-left:-15px;
+  cursor:pointer;
+  position:relative;
+  float:left;
+  display:none;
+  visibility:hidden;
 }
 
 .RadioCustom label{
-    cursor:pointer;
-    float:left;
-    height:50px;
+  cursor:pointer;
+  float:left;
+  margin-bottom:0;
 }
 
 #crit-list li h3{
-    margin:1px;
-	display:inline;
-	font-size:0.9em;
+  margin:1px;
+  display:inline;
+  font-size:0.9em;
 }
 #crit-list li{
-    padding:10px;
-	min-height:25px;
+  padding:10px;
+  min-height:25px;
 }
 .imgHelpKey {
-	height:25px;
-	position:relative;
-	float:right;
+  height:25px;
+  position:relative;
+  float:right;
+}
+.help{
+  background-image:url(images/btn-aide.png);
+width: 16px;
+height: 16px;	
+margin-right:6px;
 }
 /*******Modal Help********/
 .helpKeyDiv li {

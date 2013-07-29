@@ -3,7 +3,10 @@
         <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
         <div class="page-block-title">
-            <div class="span page-title">Nom de la rue</div>
+            <div class="span page-title">Ma rue</div>
+            <% if (typeof(app.globals.currentrue !== 'undefined')) { %>
+              <div class="span page-subtitle sci-rue-name"><%= app.globals.currentrue.get('name') %> - <%= app.globals.currentrue.get('cote') %></div>
+            <% } %>
         </div>
         
         <a class='pull-right sprite-sauvages sprite-btn-assistant' href="#identification"></a>
@@ -28,7 +31,7 @@
           <%  _.each(col,function(item,key,list){%>
         <% if(key != ""){%>
           <li id="anchor-taxon-<%= key %>" class="item-list-alphabetique"><p><%= key %></p></li>
-          <ul> 
+          <ul class="item-alphabetique-taxon-list"> 
           <% _.each(item,function(taxon,k){%>
             <li>
               <div id='taxonList-div-<%= taxon.get('taxonId') %>' class="taxon-list-item pad-right">

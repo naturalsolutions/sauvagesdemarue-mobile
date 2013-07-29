@@ -180,7 +180,7 @@ footer a:active,footer a:hover,footer a:focus{
 }
 
 .footer-el{
-  width: 33.1%;
+  width: 33.13%;
   float: left;
   text-align: center;
   height: 43px;
@@ -303,7 +303,7 @@ border-bottom: 0px;
   display: -moz-box;
   display: box;
   width: 100%;
-  background-color: #EBECDE;   
+  background-color:white;   
 }
 .page-block-sub-title{
   height:30px;
@@ -313,13 +313,21 @@ border-bottom: 0px;
   position: fixed;
 top: 45px;
 width: 100%;
-z-index:2000;
+z-index:1000;
 }
 h1.page-sub-title {
 font-size: 20px;
 line-height: 24px;
 -webkit-margin-before: 0.2em;
+-webkit-margin-after: 0.1em;
 }
+
+.page-block-sub-title em{
+  width:100%;
+  background:white;
+  display:block;
+}
+
 .sprite-arrow-div-list-transparent {
 position: absolute;
 margin-top: 3px;
@@ -334,8 +342,17 @@ right: 70px;
 -webkit-margin-after: 0px;
 text-shadow: 1px 0px 1px gray;
 }
-li:last-of-type{
+#values-list li:last-of-type{
 border-bottom: 1px solid black;
+}
+li.item-list-alphabetique{
+  background:#EBECDE;
+}
+.item-alphabetique-taxon-list li:nth-child(odd){
+background:white;
+}
+.item-alphabetique-taxon-list li:nth-child(even){
+background:#EBECDE;
 }
 /**********carousel-container*************/
 #taxon-detail-content .flexslider{
@@ -345,21 +362,24 @@ border-bottom: 1px solid black;
 	bottom:-25px;
 }
 #taxon-detail-content .flex-control-paging li a{
-	width:5px;
-	height:5px;
+  width:5px;
+  height:5px;
 }
 
 
 /***DETAIL TAXON***/
+#taxon-detail-content .loc-container{
+  margin:90px 10px 40px;
+}
 .btnObs{
-	width:25%;
-	margin:0px 32% 5px;
+  width:25%;
+  margin:0px 32% 5px;
 }
 /*********MEDIA QUERIE***/
 @media (min-width: 768px){
-	#carousel-container {
-	width: 100%;
-	}
+  #carousel-container {
+  width: 100%;
+  }
 }
 
 /*******SURCHARGE DE TWITTER BOOTSTRAP*******/

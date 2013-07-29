@@ -1,13 +1,16 @@
 <div id="taxon-list-content" class="container">
     <div  class="navbar navbar-fixed-top loc-header">
-        <!--<a href="#" class="header-button header-button-left header-back-button"><button>Back</button></a>-->
+        <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
         <div class="page-block-title">
-            <div class="span page-title">Nouvelle observation</div>
+            <div class="span page-title">Ma rue</div>
             <% if (typeof(app.globals.currentrue !== 'undefined')) { %>
               <div class="span page-subtitle sci-rue-name"><%= app.globals.currentrue.get('name') %> - <%= app.globals.currentrue.get('cote') %></div>
             <% } %>
         </div>
+    </div>
+    <div class="page-block-sub-title">
+        <h1 class="page-sub-title">Nouvelle observation</h1>
     </div>
     <div class="loc-container" >
       <div id="obs-form"></div>

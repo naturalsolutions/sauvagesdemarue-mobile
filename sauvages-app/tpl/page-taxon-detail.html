@@ -1,16 +1,20 @@
 <div id="taxon-detail-content" class="container">
     <div  class="navbar navbar-fixed-top loc-header">
-        <!--<a href="#" class="header-button header-button-left header-back-button"><button>Back</button></a>-->
+        <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
+        <a href="#taxonlist/all" class='pull-right sprite-sauvages sprite-list-fond'></a>
         <div class="page-block-title">
-            <div class="span page-title"><%= data.commonName %></div>
-            <div class="span page-subtitle sci-taxon-name"><%= data.scientificName %></div>
-        </div>
-        <a href="#taxonlist/all" class='btn pull-right'>Liste</a>
+            <div class="span page-title">Nom de la rue</div>
+            <% if (typeof(app.globals.currentrue !== 'undefined')) { %>
+              <div class="span page-subtitle sci-rue-name"><%= app.globals.currentrue.get('name') %> - <%= app.globals.currentrue.get('cote') %></div>
+            <% } %>
+        </div> 
     </div>
-   
-   
-   
+    <div class="page-block-sub-title">
+        <h1 class="page-sub-title"><%= data.commonName %></h1>
+        <em><%= data.scientificName %></em>
+    </div>
+  
   <div class="loc-container" >
   <div class="flexslider ">
     <ul class="slides">

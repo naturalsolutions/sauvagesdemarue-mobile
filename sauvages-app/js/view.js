@@ -219,7 +219,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   beforeRender: function() {
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
-    this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  60}));
+    this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
     
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 

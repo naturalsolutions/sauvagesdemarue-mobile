@@ -2,14 +2,17 @@
     <div  class="navbar navbar-fixed-top loc-header">
         <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
-        <div class="span page-title"> Nom de la rue</div>
         <a href="#taxonlist/all" class='pull-right sprite-sauvages sprite-list-fond'></a>
-        
+        <div class="page-block-title">
+            <div class="span page-title">Nom de la rue</div>
+            <% if (typeof(app.globals.currentrue !== 'undefined')) { %>
+              <div class="span page-subtitle sci-rue-name"><%= app.globals.currentrue.get('name') %> - <%= app.globals.currentrue.get('cote') %></div>
+            <% } %>
+        </div> 
     </div>
      <div class="page-block-sub-title">
         <a href="#taxonlist" class='pull-right sprite-sauvages sprite-btn-resultat'><span id="taxonNb">0</span></a>
         <h1 class="page-sub-title">Assistant</h1>
-        
     </div>
    <div class="loc-container">
       <fieldset id ="radioCollection" class="" >
