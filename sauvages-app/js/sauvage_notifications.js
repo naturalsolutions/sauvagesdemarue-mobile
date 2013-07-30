@@ -37,7 +37,7 @@ function() {
 			new NS.UI.NotificationModal({
 				type: 'success',
 				title: 'Observation sauvegardée',
-				message: 'Félicitations!',
+				message: 'Félicitations !',
 				delay: 1,
 				btnLabel: '', 
 				onClose: function() {

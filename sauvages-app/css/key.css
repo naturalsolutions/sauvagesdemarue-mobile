@@ -96,7 +96,7 @@ width: 16px;
 height: 16px;	
 margin-right:6px;
 }
-#taxonNb:hover {
+a.sprite-btn-resultat:hover {
 text-decoration: none;
 }
 

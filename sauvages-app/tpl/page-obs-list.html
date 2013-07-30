@@ -1,4 +1,4 @@
-<div id="taxon-list-content" class="container">
+<div id="obs-list-content" class="container">
     <div  class="navbar navbar-fixed-top loc-header">
         <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
@@ -6,16 +6,19 @@
             <div class="span page-title">Mes observations</div>
         </div>
     </div>
+    <div class="page-block-sub-title">
+        <h1 class="page-sub-title">Mes Espèces</h1>
+    </div>
   
   <div class="loc-container" >
-        <ul id="values-list" class="taxonList nav-list">
+        <ul id="values-list" class="obsList nav-list">
         <%  _.each(data.collection.models,function(item,key,list){ %>
         <% console.log(item)%>
             <li>
-              <div id='taxonList-div-<%=key %>' class="taxon-list-item">
-                <div class="taxonName">
+              <div id='taxonList-div-<%=key %>' class="obs-list-item">
+                <div class="obsName">
                     <div class="listObsItem">
-		    <img class="taxon-img-thumb" src="<%= item.get('photo') %>">
+		    <img class="taxon-img-thumb img-rounded" src="<%= item.get('photo') %>">
 		    <p><b><%= item.get('name_taxon') %></b> - <%= item.get('milieu') %> </p>
                     
                     
