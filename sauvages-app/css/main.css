@@ -113,6 +113,9 @@ select
 .form-actions {
 padding: 19px 5px 20px;
 }
+#rue-form .disabled {
+opacity: .6;
+}
 /**surcharge du focus bootstrap couleur verte**/
 /*textarea:focus,
 input[type="text"]:focus,
