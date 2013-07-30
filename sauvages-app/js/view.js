@@ -148,11 +148,10 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 	var idcriteriaValueChecked = objcriteriaValueChecked.children('input').attr('id');
 	$('input[name="'+idcriteriaValueChecked+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
 	//remove the old value of the variable app.globals.currentFilter
-	
 	var index =  app.globals.currentFilter.indexOf(valuecriteriaValueChecked);
 	if (index> -1) {
 	 var newAppglogal = app.globals.currentFilter.splice(index, 1);	 
-			}
+	}
 		
       }
       
@@ -166,15 +165,22 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
       $('input[name="'+idCurrentTarget+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
       var index =  app.globals.currentFilter.indexOf($(event.currentTarget).val());
        app.globals.currentFilter.splice(index, 1);
+      
     }
     //Select Taxon Id; for the moment exact matching (must contain all the selected criteria)
-    app.utils.queryData.getFilterTaxonIdList(app.globals.currentFilter, true).done(
-      function(data) {
-       app.globals.currentFilterTaxonIdList =  data;
-       //refresh front end
-       $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
-      }
-    );
+    if (app.globals.currentFilter.length > 0) {
+	
+      app.utils.queryData.getFilterTaxonIdList(app.globals.currentFilter, true).done(
+	function(data) {
+	 app.globals.currentFilterTaxonIdList =  data;
+	 //refresh front end
+	 $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+	}
+      
+      );
+    }else{
+      $("#taxonNb").html(app.globals.cListAllTaxons.length);
+      }	
   }
 });
 
