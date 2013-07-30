@@ -1,6 +1,5 @@
 <div id="identification-list-content" class="container">
     <div  class="navbar navbar-fixed-top loc-header">
-        <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
         <a href="#taxonlist/all" class='pull-right sprite-sauvages sprite-list-fond'></a>
         <div class="page-block-title">
@@ -11,7 +10,7 @@
         </div> 
     </div>
      <div class="page-block-sub-title">
-        <a href="#taxonlist" class='pull-right sprite-sauvages sprite-btn-resultat'><span id="taxonNb">0</span></a>
+        <a href="#taxonlist" class='pull-right sprite-sauvages sprite-btn-resultat'><span id="taxonNb"><%= app.globals.cListAllTaxons.length %></span></a>
         <h1 class="page-sub-title">Assistant</h1>
     </div>
    <div class="loc-container">

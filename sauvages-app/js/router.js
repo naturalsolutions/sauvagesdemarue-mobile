@@ -50,9 +50,7 @@ app.Router = Backbone.Router.extend({
 		console.log(app.globals.currentFilter);
 		
     var self = this;
-		/*if (app.globals.currentFilter.length == 0) {
-			app.globals.currentFilter = 0;
-		}*/
+		
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
     cListAllCriterias.fetch({
         success: function(data) {

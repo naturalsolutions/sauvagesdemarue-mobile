@@ -37,11 +37,11 @@ function() {
 			new NS.UI.NotificationModal({
 				type: 'success',
 				title: 'Observation sauvegardée',
-				message: 'Félicitation',
+				message: 'Félicitations!',
 				delay: 1,
 				btnLabel: '', 
 				onClose: function() {
-					app.route.navigate('taxonlist', {trigger: true});
+					app.route.navigate('taxonlist/:all', {trigger: true});
 					},
 				
 			});

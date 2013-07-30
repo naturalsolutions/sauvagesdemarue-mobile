@@ -105,7 +105,7 @@ app.models.Picture =Backbone.Model.extend({
 },{
   table : 'Tpicture',
   schema: {
-		id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+    id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
     fk_taxon: { title:'fk_taxon', type:'Number', sqltype:'INTEGER', required: true},
     path : { title:'path', type:'Text', sqltype:'NVARCHAR(500)',required: true},
     description: { title:'description',type:'TextArea', sqltype:'text'},
@@ -127,7 +127,7 @@ app.models.TaxonCaracValue = Backbone.Model.extend({
   
   table : 'TvalTaxon_Criteria_values',
   schema: {
-		id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+    id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
     fk_taxon: { title:'fk_taxon', type:'Number', sqltype:'INTEGER', required: true},
     fk_carac_value : { title:'fk_carac_value', type:'Text', sqltype:'NVARCHAR(20)', required: true},
   },
@@ -236,17 +236,17 @@ app.models.ContextCollection =Backbone.Collection.extend({
 // The CaracteristiqueDefValue Model
 app.models.OccurenceDataValue = Backbone.Model.extend({
 	defaults: {
-		milieu:'Mur',
+	  milieu:'Mur',
 	},
 
 },{
   table : 'TdataObs_occurences',
   schema: {
-			id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+      id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
       latitude:{ type: 'hidden', title:'Latitude',sqltype:'REAL', required: true}, 
       longitude: { type: 'hidden', title:'Longitude',sqltype:'REAL', required: true} ,
       fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
-			fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
+      fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
       name_taxon: { title:'Espèce',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
       milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Mur', label:'Mur'}, {val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 

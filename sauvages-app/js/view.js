@@ -51,7 +51,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
-		var self = this;
+    var self = this;
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
 		
   },
@@ -84,7 +84,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 									}
 									else {
 										app.globals.currentrue =	data;
-										app.route.navigate('taxonlist', {trigger: true});
+										app.route.navigate('taxonlist/:all', {trigger: true});
 									}
 								}
 						});
@@ -94,8 +94,13 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
     },
 		
 		afterRender: function () {
-			if (this.isNew)  $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');
-			else $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
+			if (this.isNew)  {
+			  $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');}
+			else{
+			  $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
+			   $('input:text', this.$el).addClass('disabled');
+			   $('select', this.$el).addClass('disabled');
+			}
 			
 			//enlever si possibilité de customiser NS_UI_form pour voir un style 'mobiles'
 			$(this.$el).removeClass('form-horizontal');
@@ -139,11 +144,16 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
       var criteriaValueChecked = $(event.currentTarget).parent().parent().parent().find("span").hasClass('RadioCustomOn');
       if (criteriaValueChecked == true) {
 	var objcriteriaValueChecked = $(event.currentTarget).parent().parent().parent().children().children(".RadioCustomOn");
+	var valuecriteriaValueChecked = objcriteriaValueChecked.children('input').attr('value');
 	var idcriteriaValueChecked = objcriteriaValueChecked.children('input').attr('id');
 	$('input[name="'+idcriteriaValueChecked+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
 	//remove the old value of the variable app.globals.currentFilter
-	var index =  app.globals.currentFilter.indexOf(idcriteriaValueChecked);
-	 app.globals.currentFilter.splice(index, 1);	
+	
+	var index =  app.globals.currentFilter.indexOf(valuecriteriaValueChecked);
+	if (index> -1) {
+	 var newAppglogal = app.globals.currentFilter.splice(index, 1);	 
+			}
+		
       }
       
       // add the class radioCustomOn to currentTarget
