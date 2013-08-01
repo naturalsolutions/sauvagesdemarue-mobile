@@ -10,9 +10,9 @@
 }
 
 #dataloader-img {
-  position: fixed;
-  left: 50%;
-  top: 50%;
+  width:32px;
+  display:block;
+  margin: 40% auto;
 }
 .loading-slideshow{
 	background-image: url(./images/slideshow-loader.gif);
@@ -219,11 +219,11 @@ right: 0;
 footer{
   height: 43px;
   width: 100%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: fixed;
-  z-index: 1000;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  position: fixed !important;
+  z-index: 1000 !important;
 }
 
 footer a{
@@ -534,8 +534,8 @@ margin: 10px;
 }
 
 #aphabetic-list-el{
-		position: fixed;
-		right: 0px;
+		position: fixed !important;
+		right: 0px !important;
 		background: whitesmoke;
 }
 .internal-anchor {
