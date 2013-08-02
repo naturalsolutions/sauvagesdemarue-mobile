@@ -214,6 +214,7 @@ right: 0;
   background-image:url(images/map-home.svg);
   background-repeat: no-repeat;
   background-position: bottom;
+  width:100%;
 }
 /***Footer***/
 footer{
@@ -241,12 +242,14 @@ footer a:active,footer a:hover,footer a:focus{
 }
 
 .footer-el{
-  width: 33.12%;
+  box-sizing: border-box;
+  width: 33.33333%;
   float: left;
   text-align: center;
   height: 43px;
   background:gray;
   border-top: 2px solid #6B6B6B
+  font-size:12px;
 }
 .footer-el:nth-child(2){
 border-right: 1px solid #6B6B6B;
@@ -306,14 +309,14 @@ border-left: 1px solid #6B6B6B;
   }
 
 
-/* Smartphones (portrait) ----------- 
-@media   only screen and (max-width : 320px){
+/****Smartphones (portrait)*****/
+@media only screen and (max-height : 320px){
     #home-bonhomme {
-    margin: 15% 5px 5px 60%;
+    margin: 1% 5px 1px 60%;
+    width:30px;
   }
-}*/
-/* iphone 4 ----------- */
-@media only screen and (max-height : 480px)
+}
+@media only screen and (min-height : 321px) and (max-height : 480px)
 {
     #home-bonhomme {
     margin: 15% 5px 5px 60%;
