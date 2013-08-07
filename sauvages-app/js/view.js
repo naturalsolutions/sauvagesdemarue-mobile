@@ -303,12 +303,12 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
       
     changeIcon: function(event){
       $('.accordion-group').on('hide', function () {
-				$(this).children().children().children("i").removeClass('icon-minus');
-				$(this).children().children().children("i").addClass('icon-plus');
+				$(this).children().children().children("i").removeClass('glyphicon-minus');
+				$(this).children().children().children("i").addClass('glyphicon-plus');
       });
       $('.accordion-group').on('show', function () {
-				$(this).children().children().children("i").removeClass('icon-plus');
-				$(this).children().children().children("i").addClass('icon-minus');
+				$(this).children().children().children("i").removeClass('glyphicon-plus');
+				$(this).children().children().children("i").addClass('glyphicon-minus');
       });
     },
 });
