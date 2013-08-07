@@ -788,7 +788,7 @@ NS.UI = (function(ns) {
     }, {
         templateSrc: {
             stacked:
-                '<form class="<% if (data.inline) { %>form-inline<% } else { %>form-horizontal<% } %>">' +
+                '<form class="<% if (data.inline) { %>form-inline<% } else { %><% } %>">' +
                 '    <h3><%- data.title %></h3>' +
                 '    <div class="form-content"></div>' +
                 '    <div class="form-actions">' +

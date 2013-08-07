@@ -96,15 +96,8 @@ ul{
 outline-color: green;
 }
 */
-/******FORM CUSTOM à retirer apres compréhension NS_UI-Form****************/
-input[type='text']
-{
-  width:96%;
-}
-select
-{
-  width:100%;
-}
+/****** NS_UI-Form****************/
+
 .form-actions .btn{
   margin:0px auto;
   display: block;
@@ -261,7 +254,6 @@ border-left: 1px solid #6B6B6B;
   height:60px;
 }*/
 .header-logo {
-	width: 38px;
 	float: left;
 	padding: 2px 5px;
 }
@@ -379,6 +371,7 @@ border-bottom: 0px;
 top: 43px;
 width: 100%;
 z-index:1000;
+right: 0;
 }
 h1.page-sub-title {
 font-size: 20px;

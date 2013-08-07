@@ -33,7 +33,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 				
 		afterRender: function () {
 			$('input:submit', this.$el).attr('value', sauvages.messages.save);
-			$('input:submit', this.$el).removeClass('btn-primary').addClass('btn-large btn-success');
+			$('input:submit', this.$el).addClass('btn-large btn-success');
 			$('input:reset', this.$el).attr('style', 'display:none');
 			$('h3', this.$el).attr('style', 'display:none');
 		},
@@ -98,13 +98,9 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 			  $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');}
 			else{
 			  $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
-			   $('input:text', this.$el).addClass('disabled');
-			   $('select', this.$el).addClass('disabled');
+			  $('input:text', this.$el).addClass('disabled');
+			  $('select', this.$el).addClass('disabled');
 			}
-			
-			//enlever si possibilité de customiser NS_UI_form pour voir un style 'mobiles'
-			$(this.$el).removeClass('form-horizontal');
-			$('input:submit', this.$el).removeClass('btn-primary');
 			
 			$('input:reset', this.$el).attr('style', 'display:none');
 			$('h3', this.$el).attr('style', 'display:none');
