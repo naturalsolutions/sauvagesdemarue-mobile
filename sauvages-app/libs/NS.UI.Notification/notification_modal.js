@@ -21,19 +21,23 @@ NS.UI = (function(ns) {
     });
 
     ns.NotificationModal = Backbone.View.extend({
-        templateSrc: '<div id="nodal" class="modal hide fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> '+
-						'  <div class="modal-header alert-<%= data.type %>"> '+
-						'    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> '+
-						'    <h3 id="myModalLabel"><%= data.title %></h3> '+
-						'  </div> '+
-						'  <div class="modal-body"> '+
-						'    <p><%= data.message%></p> '+
-						'  </div> '+
-						'  <% if (data.btnLabel !== "") { %> '+
-						'		<div class="modal-footer"> '+
-						'    <button id="modal-close" class="btn  btn-primary" data-dismiss="modal" aria-hidden="true"><%= data.btnLabel %></button> '+
-						'  </div> <% } %>'+
-						'</div>',
+        templateSrc:    '<div id="nodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> '+
+                        '   <div class="modal-dialog">'+
+                        '       <div class="modal-content">'+
+                        '           <div class="modal-header alert-<%= data.type %>"> '+
+                        '               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> '+
+                        '               <h3 id="myModalLabel"><%= data.title %></h3> '+
+                        '           </div> '+
+                        '       <div class="modal-body"> '+
+                        '           <p><%= data.message%></p> '+
+                        '       </div> '+
+                        '       <% if (data.btnLabel !== "") { %> '+
+                        '	<div class="modal-footer"> '+
+                        '           <button id="modal-close" class="btn  btn-primary" data-dismiss="modal" aria-hidden="true"><%= data.btnLabel %></button> '+
+                        '       </div> <% } %>'+
+                        '    </div>'+
+                        '   </div>'+
+                        '</div>',
 
         initialize: function(options) {
             console.log ('init');
@@ -48,8 +52,8 @@ NS.UI = (function(ns) {
         },
 
         render: function() {
-						var self = this;
-						$('#myModal').empty();
+            var self = this;
+            $('#myModal').empty();
             var data = _.pick(this.options, 'type', 'title', 'message', 'btnLabel');
             var $html = $(_.template(this.templateSrc, data, {variable: 'data'}));
             this.setElement($html);
