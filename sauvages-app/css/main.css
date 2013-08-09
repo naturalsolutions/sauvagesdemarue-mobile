@@ -293,13 +293,16 @@ border-left: 1px solid #6B6B6B;
 
 /********HOME*********/
 .container-home .row{
-	margin:10px;
+  margin:10px;
 }
 
-  #home-bonhomme {
+#home-bonhomme {
   margin: 25% 5px 5px 60%;  
-  }
-
+}
+#home-logo{
+  margin:auto;
+  display:block;
+}
 
 /****Smartphones (portrait)*****/
 @media only screen and (max-height : 320px){
@@ -412,24 +415,13 @@ background:white;
 .item-alphabetique-taxon-list li:nth-child(even){
 background:#EBECDE;
 }
+ul.nav-list ul {
+  padding-left: 0;
+}
 
 /*****LIST OBS*****/
-.obsList li {
-list-style-type: none;
-height: 70px;
-border-bottom: 1px solid gray;
-}
-.listObsItem img.taxon-img-thumb {
-width: 75px;
-float: left;
-margin: 5px;
-clear: left;
-}
-.listObsItem p {
-float: left;
-margin-top: 5px;
-}
-.obsList li:nth-child(even){
+
+.list-group li:nth-child(even){
 background:#EBECDE;
 }
 #obs-list-content .loc-container {

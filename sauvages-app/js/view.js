@@ -15,6 +15,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
   },
+  
 	
 });
 
@@ -22,22 +23,19 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
       this.on('submit:valid', function(instance) {
-				//Get value for hidden fields
-				instance.set('datetime', new Date());
+	//Get value for hidden fields
+	instance.set('datetime', new Date());
         instance.save().done( function(model, response, options) {
-						sauvages.notifications.obsSaveSuccess();
-          }
-        );
+	  sauvages.notifications.obsSaveSuccess();
+        });
       });
+    },			
+    afterRender: function () {
+      $('input:submit', this.$el).attr('value', sauvages.messages.save);
+      $('input:submit', this.$el).addClass('btn-large btn-success');
+      $('input:reset', this.$el).attr('style', 'display:none');
+      $('h3', this.$el).attr('style', 'display:none');
     },
-				
-		afterRender: function () {
-			$('input:submit', this.$el).attr('value', sauvages.messages.save);
-			$('input:submit', this.$el).addClass('btn-large btn-success');
-			$('input:reset', this.$el).attr('style', 'display:none');
-			$('h3', this.$el).attr('style', 'display:none');
-		},
-		
 
 });
 
@@ -45,67 +43,89 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 app.views.AddSauvageRueView = app.utils.BaseView.extend({
   template: 'form-add-sauvagerue',
   
-  initialize: function() {
+  initialize: function(options) {
     this.model.bind("reset", this.render, this);
-		//app.globals.currentrue
+    this.collection = options.collection;
+    
   },
 
   beforeRender: function() {
     var self = this;
-    this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
+    this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model, collection: this.collection}));
 		
   },
 });
 app.views.FormAddSauvageRue = NS.UI.Form.extend({
 
-    initialize: function(options) {
-      NS.UI.Form.prototype.initialize.apply(this, arguments);
-			//Test if new instance
-			this.isNew = this.instance.isNew();
-			
-			var self = this;
-      this.on('submit:valid', function(instance) {
-				//Get value for hidden fields
-				var prefix = 'end_';
-				if (self.isNew) prefix = 'begin_';
-				app.utils.geolocalisation.getCurrentPosition();
-				
-				instance.set(prefix+'datetime', new Date());
-				instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
-				instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
-			 
-        instance.save().done( function(model, response, options) {
-							//On refetch le model pour récupérer le PK
-							instance.fetch({
-								success: function(data) {
-									if (!self.isNew) {
-										delete app.globals.currentrue;
-										sauvages.notifications.finParcours();
-									}
-									else {
-										app.globals.currentrue =	data;
-										app.route.navigate('taxonlist/:all', {trigger: true});
-									}
-								}
-						});
-          }
-        );
+  initialize: function(options) {
+    NS.UI.Form.prototype.initialize.apply(this, arguments);
+      //Test if new instance
+      this.isNew = this.instance.isNew();
+      this.collection = options.collection;
+      
+      var self = this;
+    this.on('submit:valid', function(instance) {
+      //Get value for hidden fields
+      var prefix = 'end_';
+      if (self.isNew) prefix = 'begin_';
+      app.utils.geolocalisation.getCurrentPosition();
+      
+      instance.set(prefix+'datetime', new Date());
+      instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
+      instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
+		       
+      instance.save().done( function(model, response, options) {
+	//On refetch le model pour récupérer le PK
+	instance.fetch({
+	  success: function(data) {
+	    if (!self.isNew) {
+	      delete app.globals.currentrue;
+	      sauvages.notifications.finParcours();
+	    }
+	    else {
+	      app.globals.currentrue =	data;
+	      app.route.navigate('taxonlist/:all', {trigger: true});
+	    }
+	  }
+	});
       });
-    },
-		
-		afterRender: function () {
-			if (this.isNew)  {
-			  $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');}
-			else{
-			  $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
-			  $('input:text', this.$el).addClass('disabled');
-			  $('select', this.$el).addClass('disabled');
-			}
-			
-			$('input:reset', this.$el).attr('style', 'display:none');
-			$('h3', this.$el).attr('style', 'display:none');
-		},
+    });
+  },
+	      
+  afterRender: function () {
+    if (this.isNew)  {
+      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');}
+    else{
+      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
+      $('input:text', this.$el).addClass('disabled');
+      $('select', this.$el).addClass('disabled');    
+     }
+    $('input:reset', this.$el).attr('style', 'display:none');
+    $('h3', this.$el).attr('style', 'display:none');
+  },
+  beforeRender: function(){
+    if (this.collection) {
+      this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
+    }
+  }
+});
 
+app.views.ObsRueView=  app.utils.BaseView.extend({
+
+  template: 'table-obs-rue',
+  
+  initialize: function() {
+  this.collection.bind('reset', this.render, this);
+ },
+ events:{
+ },
+ serialize: function() {
+   return {collection:this.obsCurrentRue};
+ },
+   beforeRender: function(){
+      this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});   
+  }
+  
 });
 app.views.HomePageView=  app.utils.BaseView.extend({
 
@@ -204,7 +224,6 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
   },
 	helpShow :function(){
 		var self=this;
-		console.log('rrrrrr');
 		var criteriaName = capitaliseFirstLetter(self.model.get('name'));
 		var msg = _.template(
 								"<div class='helpKeyDiv'>"+
@@ -251,8 +270,8 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 
 
 });
-
-app.views.TaxonItemView =  app.utils.BaseView.extend({
+//sert à quelque chose ??
+/*app.views.TaxonItemView =  app.utils.BaseView.extend({
 
   template: 'items-list-taxon',
 
@@ -260,7 +279,7 @@ app.views.TaxonItemView =  app.utils.BaseView.extend({
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
   },
-});
+});*/
 
 
 app.views.TaxonDetailView=  app.utils.BaseView.extend({
@@ -275,7 +294,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   
   beforeRender: function() {
     console.log(this.model.get('caracValues').models);
-    //$(".flexslider").addClass('loading');
     var self = this;
     self.model.get('caracValues').each(function(model) {
       var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
@@ -298,17 +316,17 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
    },
    events: {
         'click div.accordion-heading': 'changeIcon',
-				'click .moreInfo':'tooltipIucn'
+	'click .moreInfo':'tooltipIucn'
     },
       
     changeIcon: function(event){
-      $('.accordion-group').on('hide', function () {
-				$(this).children().children().children("i").removeClass('glyphicon-minus');
-				$(this).children().children().children("i").addClass('glyphicon-plus');
+      $('.accordion-group').on('hide.bs.collapse', function () {
+				$(this).children().children().children(".glyphicon").removeClass('glyphicon-minus');
+				$(this).children().children().children(".glyphicon").addClass('glyphicon-plus');
       });
-      $('.accordion-group').on('show', function () {
-				$(this).children().children().children("i").removeClass('glyphicon-plus');
-				$(this).children().children().children("i").addClass('glyphicon-minus');
+      $('.accordion-group').on('show.bs.collapse', function () {
+				$(this).children().children().children(".glyphicon").removeClass('glyphicon-plus');
+				$(this).children().children().children(".glyphicon").addClass('glyphicon-minus');
       });
     },
 });
@@ -372,6 +390,28 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     if (this.collection) return {collection : this.collection};
     return true;
   },
-
+  events: {
+    "click #tabObs a[href='#espece']": "tabObsespece",
+    "click #tabObs a[href='#rue']": "tabObrue",
+    'click div.accordion-heading': 'changeIcon'
+  },
+  
+  tabObsespece: function(event){
+    $("#tabObs a[href='#espece']").tab('show');
+  },
+  tabObrue: function(event){
+    $("#tabObs a[href='#rue']").tab('show');
+  },
+  
+  changeIcon: function(event){
+  $('.accordion-group').on('hide.bs.collapse', function () {
+			    $(this).children().children().children(".glyphicon").removeClass('glyphicon-minus');
+			    $(this).children().children().children(".glyphicon").addClass('glyphicon-plus');
+  });
+  $('.accordion-group').on('show.bs.collapse', function () {
+			    $(this).children().children().children(".glyphicon").removeClass('glyphicon-plus');
+			    $(this).children().children().children(".glyphicon").addClass('glyphicon-minus');
+  });
+},
 
 });

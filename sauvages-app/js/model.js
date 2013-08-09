@@ -213,7 +213,7 @@ app.models.Context = Backbone.Model.extend({
 },{
   table : 'Tcontext',
   schema: {
-		id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+    id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
     fk_context: { title:'fk_context', type:'Text',sqltype:'NVARCHAR(500)', required: true},
     fk_object : { title:'fk_object',type:'Text', sqltype:'NVARCHAR(500)', required: true},
     context_type: { title:'context_type', type:'Text',sqltype:'NVARCHAR(500)', required: true},
@@ -293,6 +293,19 @@ app.models.ParcoursDataValue = Backbone.Model.extend({
 app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
 
   model : app.models.ParcoursDataValue,
+  
+  dao: app.dao.ParcoursDataValueDAO,
+  
+  initialize: function() {
+  },
+  
+   getNameRueById : function(fktaxon) {
+    var selectedRue = this.findWhere( {'id': fktaxon});
+    if(typeof(selectedRue) !== 'undefined'){
+      return selectedRue.get('name');
+    }
+   
+  } 
 
 });
 

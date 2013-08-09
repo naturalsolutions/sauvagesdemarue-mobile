@@ -19,6 +19,8 @@ app.Router = Backbone.Router.extend({
   initialize: function() {
     app.globals.currentFilter = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
+    app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;
+    
 		//Démarrage de l'écoute GPS
 		app.utils.geolocalisation.watchCurrentPosition();
 
@@ -89,27 +91,27 @@ app.Router = Backbone.Router.extend({
 
 
   viewFormAddObs : function(taxonI) {
-	if (typeof(app.globals.currentrue) === 'undefined') {
-		alert('Rue non initialisée');
-		return false;
-	}
-	var self = this;
-	setTimeout(function() {
-    app.utils.geolocalisation.getCurrentPosition();
-		if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
-      var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
-      var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
-      obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
-      obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
-      var currentView = new app.views.AddSauvageOccurenceView({model:obs});
-      
-      self.displayView(currentView);   
+    if (typeof(app.globals.currentrue) === 'undefined') {
+	    alert('Rue non initialisée');
+	    return false;
     }
-    else{
-      sauvages.notifications.gpsNotStart();
-      this.goToLastPage();
-    }
-		},500);
+    var self = this;
+    setTimeout(function() {
+      app.utils.geolocalisation.getCurrentPosition();
+		  if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+	var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
+	var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
+	obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
+	obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+	var currentView = new app.views.AddSauvageOccurenceView({model:obs});
+	
+	self.displayView(currentView);   
+      }
+      else{
+	sauvages.notifications.gpsNotStart();
+	this.goToLastPage();
+      }
+    },500);
     
   },
   
@@ -117,18 +119,23 @@ app.Router = Backbone.Router.extend({
   viewFormAddParcours : function(state) {
 		var self = this;
     if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
-			if (typeof( app.globals.currentrue) === 'undefined') {
-				//Get default street Name
-				var nb= new app.dao.ParcoursDataValueDAO(app.db).getDefaultRueName().done(function(d) { 
-					app.globals.currentrue = new app.models.ParcoursDataValue({name : d});
-					var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
-					self.displayView(currentView);  
-				});
-			}
-			else {
-				var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
-				self.displayView(currentView);  
-			}       
+      if (typeof( app.globals.currentrue) === 'undefined') {
+	      //Get default street Name
+	      var nb= new app.dao.ParcoursDataValueDAO(app.db).getDefaultRueName().done(function(d) { 
+		      app.globals.currentrue = new app.models.ParcoursDataValue({name : d});
+		      var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
+		      self.displayView(currentView);  
+	      });
+      }
+      else {
+	var collObs = new app.models.OccurenceDataValuesCollection;
+	collObs.fetch({
+	  success: function(data) {
+	    var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
+	    self.displayView(currentView);
+	  }
+	});
+      }       
     }
     else{
       sauvages.notifications.gpsNotStart();
@@ -140,6 +147,12 @@ app.Router = Backbone.Router.extend({
     var self = this;
     console.log('viewTableMyObs');
     var myObsColl = new app.models.OccurenceDataValuesCollection();
+    var mesRuesColl = new app.models.ParcoursDataValuesCollection();
+    mesRuesColl.fetch({
+       success: function(data) {
+	app.globals.currentRueList = data;
+        }
+    });
     myObsColl.fetch({
        success: function(data) {
           var currentView = new app.views.ObservationListView({collection: data});
