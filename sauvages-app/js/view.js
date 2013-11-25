@@ -32,7 +32,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
     },			
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-      $('input:submit', this.$el).addClass('btn-large btn-success');
+      $('input:submit', this.$el).addClass('btn-lg btn-success');
       $('input:reset', this.$el).attr('style', 'display:none');
       $('h3', this.$el).attr('style', 'display:none');
     },
@@ -94,9 +94,9 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 	      
   afterRender: function () {
     if (this.isNew)  {
-      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');}
+      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');}
     else{
-      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
+      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');    
      }
