@@ -42,17 +42,17 @@ app.utils.queryData = {
   getObservationsTelaWSFormated: function() {
     var dfd = $.Deferred();
     var parameters = new Array();
-    var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',datetime) as date,"
-        +" begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
-        +" p.name AS lieudit, o.latitude, o.longitude, "
-        +" o.name_taxon as nom_sel, o.name_taxon as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
-        +" o.milieu, "
-        +" o.photo as img,"
-        +" p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue"
-        +" FROM TdataObs_occurences o "
-        +" JOIN  TdataObs_parcours p"
-        +" ON p.id = o.fk_rue";
-        +" WHERE o.sended=0";
+    var sql = "SELECT COALESCE(o.id, -1) as ido, p.id as idp, strftime('%d/%m/%Y',COALESCE(o.datetime, p.begin_datetime)) as date,"
+         +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
+         +"p.name AS lieudit, o.latitude, o.longitude, "
+         +"o.name_taxon as nom_sel, o.name_taxon as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
+         +"o.milieu, "
+         +"o.photo as img,"
+         +"p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue "
+         +"FROM TdataObs_parcours p "
+         +"LEFT OUTER JOIN  TdataObs_occurences o "
+         +"ON p.id = o.fk_rue "
+         +"WHERE o.sended=0 OR (o.id IS NULL AND p.sended = 0)";
     runQuery(sql, parameters).done(
       function(results){
           var len = results.rows.length,

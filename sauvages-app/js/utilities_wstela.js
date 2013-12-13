@@ -31,35 +31,48 @@ NS.WSTelaAPIClient = (function() {
       var nbSavePerObs = new Array();
       for (var idp in obsPerParcours) {
         nbSavePerObs[idp] = {'nbObsTheorique' : obsPerParcours[idp].length, 'nbObsSended': 0};
-        console.log(obsPerParcours[idp]);
         for (var id in obsPerParcours[idp]) {
           var obs = _.defaults(obsPerParcours[idp][id], this.defaultObs);
           var observations = this.formatObsToSend(obs);
-          this.sendToTelaWS(observations, obsPerParcours[idp][id].ido) 
-            .done(function() {
+          dfdObs.push(this.sendToTelaWS(observations, obsPerParcours[idp][id].ido) 
+            .done(_.bind(function() {
               // Mise a jour de l'obs sended = 1
-              cObservation.get(obsPerParcours[idp][id].ido).set('sended',1);
-              nbSavePerObs[idp]['nbObsSended'] += 1
-              dfdObs.push(cObservation.get(obsPerParcours[idp][id].ido).save());
-            })
+              this.nbSavePerObs[this.idp]['nbObsSended'] += 1
+              if (this.ido !== -1 ) {
+                this.cObservation.get(this.ido).set('sended',1);
+                this.dfdObs.push(this.cObservation.get(this.ido).save());
+              }
+              else {
+                this.dfdObs.push(new $.Deferred().resolve());
+              }
+            }, {
+                'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 
+                'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs
+              }
+            ))
             .fail(function() {
               console.log( "error" );
               console.log (nbObsSended + '/' + nbObsTheorique);
-            });
+            }));
         }
       }
       //Quand toutes les données sont envoyées et les obs MAJ (sended == 1) alors 
       // MAJ des parcours et resolve du deferred
       $.when.apply(this, dfdObs).then(
         function (status) {
+          var dfdParcours= [];
           console.log('when finished dfd.resolve obser per rue');
           for (var idp in nbSavePerObs) {
             if (nbSavePerObs[idp]['nbObsSended'] == nbSavePerObs[idp]['nbObsTheorique']) {
               cParcours.get(obsPerParcours[idp][0].idp).set('sended',1);
-              cParcours.get(obsPerParcours[idp][0].idp).save();
+              dfdParcours.push(cParcours.get(obsPerParcours[idp][0].idp).save());
             }
           }
-          return dfd.resolve();
+          $.when.apply(this, dfdParcours).then(
+            function (a) {
+              return dfd.resolve();
+            }
+          );
         },
         function (status) {
           return dfd.reject();
@@ -79,9 +92,6 @@ NS.WSTelaAPIClient = (function() {
      * ***/
     wsTelaApiClient.prototype.formatObsToSend= function (obs){
       var observations = new Object();
-      obs = _.omit(obs, 'ido');
-      obs = _.omit(obs, 'idp');
-      
        //Traitement des images
       var img_noms;
       var img_codes;
@@ -90,7 +100,7 @@ NS.WSTelaAPIClient = (function() {
       //Traitement de l'observation
       var json = {
         'date' : obs.date, 
-        'notes' :  obs.note,
+        'notes' : (obs.ido === -1) ? 'rue sans observation; '+obs.note: obs.note,
         'nom_sel' : obs.nom_sel,
         'num_nom_sel' : obs.num_nom_sel,
         'nom_ret' : obs.nom_ret,
@@ -99,10 +109,10 @@ NS.WSTelaAPIClient = (function() {
         'famille' : obs.famille ,
         'referentiel' : obs.referentiel ,
 
-        'latitude' : obs.latitude,
-        'longitude' : obs.longitude,
-        'commune_nom' : obs.commune,
-        'commune_code_insee' : obs.code_insee,
+        'latitude' : (obs.latitude !== null) ? obs.latitude : obs.latitudeDebutRue,
+        'longitude' : (obs.longitude !== null) ? obs.longitude : obs.longitudeDebutRue,
+        'commune_nom' : obs.commune_nom,
+        'commune_code_insee' : obs.commune_code_insee,
         'lieudit' : obs.lieudit,
         'station' : obs.station,
         'milieu' : obs.milieu,
@@ -115,6 +125,10 @@ NS.WSTelaAPIClient = (function() {
         'image_b64' : img_codes 
       };
       
+      obs = _.omit(obs, 'ido');
+      obs = _.omit(obs, 'idp');
+      
+      console.log(json);
       //Ajout des données supplémentaires associées à sauvages
       //@TODO gestion des undefined
       var additionalValues = _.difference(_.keys(obs), _.keys(this.defaultObs));
@@ -145,13 +159,13 @@ NS.WSTelaAPIClient = (function() {
     * Fonction génère la requete  POST d'envoie d'une obs aux services de tela
     * ***/
     wsTelaApiClient.prototype.sendToTelaWS= function (obs, id_obs) {
-      /*return $.ajax({
+      return $.ajax({
         url : this.basePath,
         type : 'POST',
         data : obs,
         dataType : 'json'
-      });*/
-      return $.Deferred().resolve();
+      });
+      //return $.Deferred().resolve();
     }
 
     return wsTelaApiClient;
