@@ -3,7 +3,8 @@
 
 // -------------------------------------------------- Utilities ---------------------------------------------------- //
 
-
+// Ensemble des méthodes permettant de manipuler les données en dehors des modèles/collection au sens Backbone
+// Correspond à des requêtes SQL customisée et optimisée
 app.utils.queryData = {
   //count taxon nb
   getFilterTaxonIdList: function(filters, exact) {
@@ -36,11 +37,37 @@ app.utils.queryData = {
       }
     );
     return dfd.promise();
+  },
+  //get observations to sends
+  getObservationsTelaWSFormated: function() {
+    var dfd = $.Deferred();
+    var parameters = new Array();
+    var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',datetime) as date,"
+        +" begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
+        +" p.name AS lieudit, o.latitude, o.longitude, "
+        +" o.name_taxon as nom_sel, o.name_taxon as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
+        +" o.milieu, "
+        +" o.photo as img,"
+        +" p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue"
+        +" FROM TdataObs_occurences o "
+        +" JOIN  TdataObs_parcours p"
+        +" ON p.id = o.fk_rue";
+        +" WHERE o.sended=0";
+    runQuery(sql, parameters).done(
+      function(results){
+          var len = results.rows.length,
+            data = [],
+            i = 0;
+          for (; i < len; i = i + 1) {
+            data[i] = results.rows.item(i);
+          }
+          return dfd.resolve(data);
+      }
+    );
+    return dfd.promise();
   }
   
 }
-    
-    
 
 // WebDataBase DAO base code
 app.dao.baseDAOBD = {
@@ -105,7 +132,6 @@ app.dao.baseDAOBD = {
     sql = sql + Array(field.length+1).join('?,');
     sql = sql.slice(0, -1);
     sql = sql + ')';
-		console.log(sql);
     return sql;
   },
   
@@ -114,12 +140,9 @@ app.dao.baseDAOBD = {
     //Construction de la requête SQL
     var sql = ' UPDATE ' + this.table + '  SET ';
     var field = this.getSQLFieldList(model);
-			
     sql = sql + field.join('= ? ,') + ' =? ' ;
     //Find PK 
-		
-		sql = sql +  ' WHERE id = ? ';
-		console.log(sql);
+    sql = sql +  ' WHERE id = ? ';
     return sql;
   },
  
@@ -127,7 +150,7 @@ app.dao.baseDAOBD = {
     //Run sql create query and return defered object
     return runQuery(this.buildSQLTable(model) , []);
   },
-  
+
   create: function(model, callback) {
     this.getDaoMetadata(model);
     var self =this;
@@ -146,10 +169,10 @@ app.dao.baseDAOBD = {
     }
     var sql = self.buildSQLInsert(model);
     var values = _.map(self.getSQLFieldList(model), function(field){ return model.get(field); });
-      //console.log(values);
-      //Return a defered object
+    //Return a defered object
     return runQuery(sql , values);
   },
+
   update: function(model, callback) {
     this.getDaoMetadata(model);
     var self =this;
@@ -292,8 +315,25 @@ function capitaliseFirstLetter(string){
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+Date.prototype.format = function(format) {
+  var o = {
+    "M+" : this.getMonth()+1, //month
+    "d+" : this.getDate(),    //day
+    "h+" : this.getHours(),   //hour
+    "m+" : this.getMinutes(), //minute
+    "s+" : this.getSeconds(), //second
+    "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+    "S" : this.getMilliseconds() //millisecond
+  }
 
-
+  if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+    (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+  for(var k in o)if(new RegExp("("+ k +")").test(format))
+    format = format.replace(RegExp.$1,
+      RegExp.$1.length==1 ? o[k] :
+        ("00"+ o[k]).substr((""+ o[k]).length));
+  return format;
+}
 
 // -------------------------------------------------- GEOLOCALISATION ---------------------------------------------------- //
 

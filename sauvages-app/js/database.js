@@ -3,10 +3,11 @@
 // ----------------------------------------------- Database Initialisation ------------------------------------------ //
 
 //************************************** Alimenter la base de données par le contenu des  XML taxons et criteres d'identification
+// Insertion des données spécifiques pour des questions de perfs
+// Taxon => Requête paramétrée (avec les ?) écrite en "dur", insertion valeur par valeur
+// Critère/Picture => Requête écrite en "dur", insertion par lot avec un select + UNION pour chaque donnée
 function loadXmlTaxa(){
   var sqlTaxon = 'INSERT INTO Ttaxon ( taxonId,fk_group,commonName,scientificName,description,picture) VALUES (?,?,?,?,?,?) ';
-  var sqlPicture = 'INSERT INTO Tpicture ( fk_taxon,path,description,author) VALUES (?,?,?,?) ';
-  var sqlCriteria = 'INSERT INTO TvalTaxon_Criteria_values ( fk_taxon,fk_carac_value) VALUES (?,?) ';
 
   var sqlInsertPicture = 'INSERT INTO Tpicture ( fk_taxon,path,description,author) ';
   var sqlInsertCriteria = 'INSERT INTO TvalTaxon_Criteria_values ( fk_taxon,fk_carac_value) ';
@@ -17,9 +18,9 @@ function loadXmlTaxa(){
 	var urlFile = "data/xml_taxons.xml";
   var dfd = $.Deferred();
   var arr = [];
-	$.ajax( {
+  $.ajax( {
     type: "GET",
-		url: urlFile,
+    url: urlFile,
     dataType: "xml",
     success: function(xml) {
       $(xml).find('TAXON').each(function(){	
@@ -33,7 +34,6 @@ function loadXmlTaxa(){
         }
         oTaxon['description']=$(this).find('DESCRIPTION').text();
         // stocker le nom de fichier de la première photo dans la table Ttaxons
-                
         if ( $(this).find('PICTURE').length >0) {
           oTaxon['picture'] = $(this).find('PICTURE:first').attr('media');
           var cPicture = new app.models.PicturesCollection();
@@ -76,13 +76,14 @@ function loadXmlTaxa(){
  }
  
  
+// Insertion des données par la méthode "classique" : création de modèle et de collection backbone
 function loadXmlCriteria(){
 	var urlFile = "data/xml_criteres.xml";
   var dfd = $.Deferred();
   var arr = [];
 	$.ajax( {
     type: "GET",
-		url: urlFile,
+    url: urlFile,
     dataType: "xml",
     success: function(xml) {
       $(xml).find('groupe').each(function(){	
@@ -132,27 +133,22 @@ function loadXmlCriteria(){
 // ----------------------------------------------- Utilitaire de requêtes------------------------------------------ //
 
 function runQuery(query , param) {
-    return $.Deferred(function (d) {
-        /*console.log(query);
-        console.log(param.length);*/
-        app.db.transaction(function (tx) {
-            tx.executeSql(query, param, successWrapper(d), failureWrapper(d));
-        });
+  return $.Deferred(function (d) {
+    app.db.transaction(function (tx) {
+      tx.executeSql(query, param, successWrapper(d), failureWrapper(d));
     });
+  });
 };
 
 function successWrapper(d) {
-    return (function (tx, data) {
-        //console.log('wsuccessWrapper');
-        d.resolve(data)
-    })
+  return (function (tx, data) {
+    d.resolve(data)
+  })
 };
 
 function failureWrapper(d) {
-    return (function (tx, error) {
-       console.log('failureWrapper');
-        console.log(error);
-        d.reject(error)
-    })
+  return (function (tx, error) {
+    d.reject(error)
+  })
 };
 
