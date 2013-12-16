@@ -10,7 +10,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   initialize: function() {
     this.model.bind("reset", this.render, this);
   },
-  
+
 //TEST PHOTOS
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
@@ -24,15 +24,15 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
       NS.UI.Form.prototype.initialize.apply(this, arguments);
       this.on('submit:valid', function(instance) {
 	//Get value for hidden fields
-	instance.set('datetime', new Date());
+	instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
         instance.save().done( function(model, response, options) {
-	  sauvages.notifications.obsSaveSuccess();
+          sauvages.notifications.obsSaveSuccess();
         });
       });
-    },			
+    },
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-      $('input:submit', this.$el).addClass('btn-large btn-success');
+      $('input:submit', this.$el).addClass('btn-lg btn-success');
       $('input:reset', this.$el).attr('style', 'display:none');
       $('h3', this.$el).attr('style', 'display:none');
     },
@@ -70,7 +70,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
       if (self.isNew) prefix = 'begin_';
       app.utils.geolocalisation.getCurrentPosition();
       
-      instance.set(prefix+'datetime', new Date());
+      instance.set(prefix+'datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
       instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
       instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
 		       
@@ -94,9 +94,9 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 	      
   afterRender: function () {
     if (this.isNew)  {
-      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-large btn-success');}
+      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');}
     else{
-      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-large btn-danger');
+      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');    
      }
@@ -113,17 +113,20 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 app.views.ObsRueView=  app.utils.BaseView.extend({
 
   template: 'table-obs-rue',
-  
+
   initialize: function() {
-  this.collection.bind('reset', this.render, this);
- },
- events:{
- },
- serialize: function() {
-   return {collection:this.obsCurrentRue};
- },
-   beforeRender: function(){
-      this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});   
+    this.collection.bind('reset', this.render, this);
+  },
+  
+  events:{
+  },
+  
+  serialize: function() {
+    return {collection:this.obsCurrentRue};
+  },
+  
+  beforeRender: function(){
+    this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});   
   }
   
 });
@@ -159,44 +162,39 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
       //test if a value has a class RadioCustomOn
       var criteriaValueChecked = $(event.currentTarget).parent().parent().parent().find("span").hasClass('RadioCustomOn');
       if (criteriaValueChecked == true) {
-	var objcriteriaValueChecked = $(event.currentTarget).parent().parent().parent().children().children(".RadioCustomOn");
-	var valuecriteriaValueChecked = objcriteriaValueChecked.children('input').attr('value');
-	var idcriteriaValueChecked = objcriteriaValueChecked.children('input').attr('id');
-	$('input[name="'+idcriteriaValueChecked+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
-	//remove the old value of the variable app.globals.currentFilter
-	var index =  app.globals.currentFilter.indexOf(valuecriteriaValueChecked);
-	if (index> -1) {
-	 var newAppglogal = app.globals.currentFilter.splice(index, 1);	 
-	}
-		
+        var objcriteriaValueChecked = $(event.currentTarget).parent().parent().parent().children().children(".RadioCustomOn");
+        var valuecriteriaValueChecked = objcriteriaValueChecked.children('input').attr('value');
+        var idcriteriaValueChecked = objcriteriaValueChecked.children('input').attr('id');
+        $('input[name="'+idcriteriaValueChecked+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
+        //remove the old value of the variable app.globals.currentFilter
+        var index =  app.globals.currentFilter.indexOf(valuecriteriaValueChecked);
+        if (index> -1) {
+         var newAppglogal = app.globals.currentFilter.splice(index, 1);
+        }
       }
-      
       // add the class radioCustomOn to currentTarget
       $('input[name="'+idCurrentTarget+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
       //add the currentTarget to the variable app.globals.currentFilter
       app.globals.currentFilter.push($(event.currentTarget).val());
-
     }
     else { //if uncheked
       $('input[name="'+idCurrentTarget+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
       var index =  app.globals.currentFilter.indexOf($(event.currentTarget).val());
        app.globals.currentFilter.splice(index, 1);
-      
     }
     //Select Taxon Id; for the moment exact matching (must contain all the selected criteria)
     if (app.globals.currentFilter.length > 0) {
-	
       app.utils.queryData.getFilterTaxonIdList(app.globals.currentFilter, true).done(
-	function(data) {
-	 app.globals.currentFilterTaxonIdList =  data;
-	 //refresh front end
-	 $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
-	}
-      
+        function(data) {
+          app.globals.currentFilterTaxonIdList =  data;
+          //refresh front end
+          $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+        }
       );
-    }else{
+    }
+    else{
       $("#taxonNb").html(app.globals.cListAllTaxons.length);
-      }	
+    }
   }
 });
 
@@ -376,8 +374,6 @@ app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
 
 /********/
 
-
-	
 app.views.ObservationListView =  app.utils.BaseView.extend({
 
   template: 'page-obs-list',
@@ -390,10 +386,12 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     if (this.collection) return {collection : this.collection};
     return true;
   },
+  
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
-    'click div.accordion-heading': 'changeIcon'
+    'click div.accordion-heading': 'changeIcon',
+    'click #send-obs': 'sendObs'
   },
   
   tabObsespece: function(event){
@@ -404,14 +402,32 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   },
   
   changeIcon: function(event){
-  $('.accordion-group').on('hide.bs.collapse', function () {
-			    $(this).children().children().children(".glyphicon").removeClass('glyphicon-minus');
-			    $(this).children().children().children(".glyphicon").addClass('glyphicon-plus');
-  });
-  $('.accordion-group').on('show.bs.collapse', function () {
-			    $(this).children().children().children(".glyphicon").removeClass('glyphicon-plus');
-			    $(this).children().children().children(".glyphicon").addClass('glyphicon-minus');
-  });
-},
+    $('.accordion-group').on('hide.bs.collapse', function () {
+      $(this).children().children().children(".glyphicon").removeClass('glyphicon-minus');
+      $(this).children().children().children(".glyphicon").addClass('glyphicon-plus');
+    });
+    $('.accordion-group').on('show.bs.collapse', function () {
+      $(this).children().children().children(".glyphicon").removeClass('glyphicon-plus');
+      $(this).children().children().children(".glyphicon").addClass('glyphicon-minus');
+    });
+  },
+  
+  sendObs: function (event) {
+    //Get current Obs
+    var obsTosend ;
+    var self = this;
+    app.utils.queryData.getObservationsTelaWSFormated().done(
+      function(data) {
+        //Send to tela via cel ws
+        //@TODO paramétriser les variables et les sortir du code
+        var wstela = new NS.WSTelaAPIClient("http://api-test.tela-botanica.org/service:cel:CelWidgetSaisie", "sauvages", "sauvages", "sauvages-dev");
+        wstela.sendSauvageObservation(data, self.collection, app.globals.currentRueList).done(function() { 
+          alert('notificication OKOKOK')
+          self.render();
+          $("#tabObs a[href='#rue']").tab('show');
+        });
+      }
+    );
+  }
 
 });

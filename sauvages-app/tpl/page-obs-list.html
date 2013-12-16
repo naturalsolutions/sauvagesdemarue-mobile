@@ -27,8 +27,8 @@
                 var nameTaxon = group[0].get('name_taxon');	
           %>    
             <li class="list-group-item">
-		<span class="badge"><%= group.length %></span>
-		<p><%= nameTaxon %></p>
+              <span class="badge"><%= group.length %></span>
+              <p><%= nameTaxon %></p>
             </li>
         <% }); %>
         </ul>
@@ -36,42 +36,41 @@
       
       <div class="tab-pane" id="rue">
 	<div class="accordion" id="mesObsParRue">
-	<%
-            var groups = _.groupBy(data.collection.models,function(item,key,list){
-                return item.get('fk_rue');
-            });
-            _.each(groups,function(group,i,list){
-                var rueId = group[0].get('fk_rue');
-		var rueName = app.globals.currentRueList.getNameRueById(rueId);
+          <%
+          console.log(app.globals.currentRueList.models);
+            _.each(app.globals.currentRueList.models,function(rue,i,lst){
+              var rueId = rue.get('id');
+              var rueName = rue.get('name');
+              var group = data.collection.getObsByRueId(rueId);
           %>   
-	    <div class="accordion-group" id='taxonList-div-<%=i %>'>
-	      <div class="accordion-heading">
-		<a class="accordion-toggle" data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
-		<span class="glyphicon glyphicon-plus"></span>
-		  <b><%= rueName %></b><span class="badge pull-right"><%= group.length %></span>
-		</a>
-	      </div>
-	      <div id="collapse<%= i %>" class="accordion-body collapse">
-		<div class="accordion-inner">
-		    <ul>
-			<%  
-			    _.each(group,function(item,key,list){
-			%>
-			    <li>
-				<div class="">
-				    <img class="taxon-img-thumb img-rounded" style ="width:50px;" src="<%= item.get('photo') %>">
-				    <p><%= item.get('name_taxon') %> - <%= item.get('milieu') %></p>
-				</div>
-			    </li>
-			<% });%>
-		    </ul>
-		</div>
-	      </div>
-	    </div>
-	    <% }); %>
+            <div class="accordion-group" id='taxonList-div-<%=i %>'>
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
+                <span class="glyphicon glyphicon-plus"></span>
+                <b><%= rueName %></b><span class="badge pull-right"><%= group.length %></span>
+                </a>
+              </div>
+              <div id="collapse<%= i %>" class="accordion-body collapse">
+                <div class="accordion-inner">
+                <ul>
+                <%  
+                  _.each(group,function(item,key,list){
+                %>
+                  <li>
+                    <div class="">
+                      <img class="taxon-img-thumb img-rounded" style ="width:50px;" src="<%= item.get('photo') %>">
+                      <p><%= item.get('name_taxon') %> - <%= item.get('milieu') %>- <%= item.get('sended') %></p>
+                    </div>
+                  </li>
+                <% });%>
+                </ul>
+                </div>
+              </div>
+            </div>
+          <% }); %>
 	
 	 </div>
     </div>
-            
+  <button id="send-obs">Send</button>
       </div>
 </div>

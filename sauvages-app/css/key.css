@@ -8,6 +8,7 @@ background:#EBECDE;
 #radioCollection ul{
 	margin-left:0;
 	clear:both;
+	-webkit-padding-start: 0px;
 }
 
 .criteria-list-item {

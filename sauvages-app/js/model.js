@@ -46,9 +46,13 @@ Backbone.Collection.prototype.multiValueWhere =  function(attrs, first) {
 
 // -------------------------------------------------- The Models ---------------------------------------------------- //
 // The Taxon Model
+/// !!!!!!!!!!!!!!!  !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!
+///          En cas de modification des modèles taxons/Critères et Picture  
+///         penser à modifier les requêtes écrites et les valeurs récupérées dans le XML
+///             FICHIER : database.js loadXmlTaxa()
+///  !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!
 app.models.Taxon = Backbone.Model.extend({
 
-  
 },{  
   //@TODO reflechir et implémenter aux actions en cascade
   //delete :  true/false
@@ -158,6 +162,13 @@ app.models.Groupe = Backbone.Model.extend({
 });
 
 // The CaracteristiqueDef Model
+
+/// !!!!!!!!!!!!!!!  !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!
+///    En cas de modification des modèles définition Groupes Critères et Valeurs
+///         penser à modifier les données récupérées dans le XML
+///             FICHIER : database.js loadXmlCriteria()
+///  !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!
+
 app.models.CaracteristiqueDef = Backbone.Model.extend({
  
      
@@ -237,6 +248,7 @@ app.models.ContextCollection =Backbone.Collection.extend({
 app.models.OccurenceDataValue = Backbone.Model.extend({
 	defaults: {
 	  milieu:'Mur',
+	  sended:0
 	},
 
 },{
@@ -247,6 +259,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
       longitude: { type: 'hidden', title:'Longitude',sqltype:'REAL', required: true} ,
       fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
       fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
+      sended: { title:'sended',  type:'hidden', sqltype:'INTEGER' ,required: true},
       name_taxon: { title:'Espèce',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
       milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Pelouse', label:'Pelouse'},{val:'Mur', label:'Mur'},{val:'Plate bande', label:'Plate bande'},{val:'Pied d\'arbre', label:'Pied d\'arbre'} ,{val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
@@ -262,7 +275,10 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
 app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
 
   model : app.models.OccurenceDataValue,
-
+  
+  getObsByRueId : function(fkrue) {
+    return this.where({'fk_rue': fkrue});
+  } 
 });
 
 
@@ -270,21 +286,24 @@ app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
 app.models.ParcoursDataValue = Backbone.Model.extend({
 	defaults: {
 		cote:'Pair',
+	  sended:0
 	},
 },{
   table : 'TdataObs_parcours',
    schema: {
-		 //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-			id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+    //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+      id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
       name: { title:'Nom de ma rue', type:'Text'},
-			cote: { title:'Coté', type: 'Select', sqltype:'NVARCHAR(500)', options: [{val:'Pair', label:'Pair'}, {val:'Impair', label:'Impair'}, {val:'Les deux', label:'Les deux'}] },
+      cote: { title:'Coté', type: 'Select', sqltype:'NVARCHAR(500)', options: [{val:'Pair', label:'Pair'}, {val:'Impair', label:'Impair'}, {val:'Les deux', label:'Les deux'}] },
       
       begin_latitude:{ type: 'hidden', sqltype:'REAL',title:'begin_latitude'}, 
       begin_longitude: { type: 'hidden',sqltype:'REAL', title:'begin_longitude'},
-			begin_datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'begin_datetime'}, 
+      begin_datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'begin_datetime'}, 
       end_latitude:{ type: 'hidden', sqltype:'REAL',title:'end_latitude'}, 
       end_longitude: { type: 'hidden',sqltype:'REAL', title:'end_longitude'},
-			end_datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'end_datetime'}, 
+      end_datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'end_datetime'}, 
+      
+      sended: { title:'sended',  type:'hidden', sqltype:'INTEGER' ,required: true},
   }, 
   dao: app.dao.ParcoursDataValueDAO,
   verboseName: 'Parcours'
@@ -299,14 +318,12 @@ app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
   initialize: function() {
   },
   
-   getNameRueById : function(fktaxon) {
+  getNameRueById : function(fktaxon) {
     var selectedRue = this.findWhere( {'id': fktaxon});
     if(typeof(selectedRue) !== 'undefined'){
       return selectedRue.get('name');
     }
-   
   } 
 
 });
-
 

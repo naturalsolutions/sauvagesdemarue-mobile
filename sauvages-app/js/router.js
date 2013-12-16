@@ -98,14 +98,13 @@ app.Router = Backbone.Router.extend({
     var self = this;
     setTimeout(function() {
       app.utils.geolocalisation.getCurrentPosition();
-		  if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
-	var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
-	var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
-	obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
-	obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
-	var currentView = new app.views.AddSauvageOccurenceView({model:obs});
-	
-	self.displayView(currentView);   
+      if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+        var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
+        var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
+        obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
+        obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+        var currentView = new app.views.AddSauvageOccurenceView({model:obs});
+        self.displayView(currentView);   
       }
       else{
 	sauvages.notifications.gpsNotStart();
@@ -148,10 +147,11 @@ app.Router = Backbone.Router.extend({
     console.log('viewTableMyObs');
     var myObsColl = new app.models.OccurenceDataValuesCollection();
     var mesRuesColl = new app.models.ParcoursDataValuesCollection();
+    //@TODO test si la variable  app.globals.currentRueList est à jour
     mesRuesColl.fetch({
-       success: function(data) {
-	app.globals.currentRueList = data;
-        }
+      success: function(data) {
+        app.globals.currentRueList = data;
+      }
     });
     myObsColl.fetch({
        success: function(data) {
