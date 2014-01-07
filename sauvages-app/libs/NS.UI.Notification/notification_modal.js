@@ -50,7 +50,7 @@ NS.UI = (function(ns) {
             });
             this.render();
         },
-
+  
         render: function() {
             var self = this;
             $('#myModal').empty();

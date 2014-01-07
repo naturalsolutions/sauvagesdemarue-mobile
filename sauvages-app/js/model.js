@@ -45,6 +45,21 @@ Backbone.Collection.prototype.multiValueWhere =  function(attrs, first) {
 };
 
 // -------------------------------------------------- The Models ---------------------------------------------------- //
+app.models.User = Backbone.Model.extend({
+
+},{  
+  //@TODO reflechir et implémenter aux actions en cascade
+  //delete :  true/false
+  table : 'Tuser',
+  schema: {
+    userId: { title:'userId',type:'Number', sqltype:'INTEGER', required: true, sqlconstraints:'PRIMARY KEY'},
+    email: { title:'email', stype:'Text', sqltype:'NVARCHAR(50)',  required: true},
+   // pseudo: { title:'commonName', type:'Text', sqltype:'NVARCHAR(50)' },
+     },
+  dao: app.dao.UserDAO,
+});
+
+
 // The Taxon Model
 /// !!!!!!!!!!!!!!!  !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!
 ///          En cas de modification des modèles taxons/Critères et Picture  
@@ -76,10 +91,9 @@ app.models.TaxonCollection = Backbone.Collection.extend({
 });
 
 
-// The Taxon Model
+// The Taxon Model lite
 app.models.TaxonLite = Backbone.Model.extend({
-  
-  
+   
 },{
   //@TODO reflechir et implémenter aux actions en cascade
   //delete :  true/false
@@ -105,7 +119,6 @@ app.models.TaxonLiteCollection = Backbone.Collection.extend({
 // The Picture Model
 app.models.Picture =Backbone.Model.extend({
 
- 
 },{
   table : 'Tpicture',
   schema: {
@@ -124,11 +137,12 @@ app.models.PicturesCollection =Backbone.Collection.extend({
   model : app.models.Picture,
   
 });
+
+
 // The Taxon carac value Model
 app.models.TaxonCaracValue = Backbone.Model.extend({
 
 },{
-  
   table : 'TvalTaxon_Criteria_values',
   schema: {
     id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
@@ -145,11 +159,10 @@ app.models.TaxonCaracValuesCollection =Backbone.Collection.extend({
     
 });
 
+// The Groupe Model
 app.models.Groupe = Backbone.Model.extend({
-  
  
 },{
-
   table : 'Ttaxa_group',
   schema: {
     groupId: { title:'groupId', type:'Number', sqltype:'INTEGER' , sqlconstraints:'PRIMARY KEY'},
@@ -244,7 +257,7 @@ app.models.ContextCollection =Backbone.Collection.extend({
 // -------------------------------------------------- The Data observation Models ---------------------------------------------------- //
 
 
-// The CaracteristiqueDefValue Model
+// The OccurenceDataValue Model
 app.models.OccurenceDataValue = Backbone.Model.extend({
 	defaults: {
 	  milieu:'Mur',
@@ -265,7 +278,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
       photo: { 
 				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: false, 
-				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.FILE_URI'} 
+				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
 			},
   }, 
   dao: app.dao.OccurenceDataValueDAO,
@@ -282,7 +295,7 @@ app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
 });
 
 
-// The CaracteristiqueDefValue Model
+// The ParcoursDataValues Model
 app.models.ParcoursDataValue = Backbone.Model.extend({
 	defaults: {
 		cote:'Pair',
@@ -308,7 +321,7 @@ app.models.ParcoursDataValue = Backbone.Model.extend({
   dao: app.dao.ParcoursDataValueDAO,
   verboseName: 'Parcours'
 });
-// The CaracteristiqueDefValue Collection
+// The ParcoursDataValues Collection
 app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
 
   model : app.models.ParcoursDataValue,
@@ -318,12 +331,12 @@ app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
   initialize: function() {
   },
   
-  getNameRueById : function(fktaxon) {
+  /*getNameRueById : function(fktaxon) {
     var selectedRue = this.findWhere( {'id': fktaxon});
     if(typeof(selectedRue) !== 'undefined'){
       return selectedRue.get('name');
     }
-  } 
+  }*/ 
 
 });
 

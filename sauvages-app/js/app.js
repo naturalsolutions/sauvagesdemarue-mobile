@@ -79,6 +79,7 @@ function initDB(){
   console.log("initBD");
   // Initialisation des données 
   app.db = openDatabase("sauvage-PACA", "1.0", "db sauvage-PACA", 20*1024*1024);
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
@@ -107,6 +108,7 @@ function initDB(){
       return dfd.resolve();
   });
 }
+
 
 //NS.UI.Form customize editors' template
 NS.UI.Form.templateSrc.stacked = 

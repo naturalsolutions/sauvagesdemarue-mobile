@@ -17,6 +17,8 @@ app.Router = Backbone.Router.extend({
   },
 
   initialize: function() {
+    app.globals.currentUser = new app.models.User;
+    //this.currentUser.fetch();
     app.globals.currentFilter = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
     app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;

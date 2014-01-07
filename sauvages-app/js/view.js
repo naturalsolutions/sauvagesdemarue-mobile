@@ -391,7 +391,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
     'click div.accordion-heading': 'changeIcon',
-    'click #send-obs': 'sendObs'
+    'click #send-obs': 'sendObs',
+		//'click #submitEmail':'saveEmail'
   },
   
   tabObsespece: function(event){
@@ -416,18 +417,44 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     //Get current Obs
     var obsTosend ;
     var self = this;
-    app.utils.queryData.getObservationsTelaWSFormated().done(
+    var emailUser =  app.globals.currentUser.get('email');
+    if (typeof(emailUser) !== 'undefined') {
+      app.utils.queryData.getObservationsTelaWSFormated().done(
       function(data) {
+console.log(data)
         //Send to tela via cel ws
-        //@TODO paramétriser les variables et les sortir du code
-        var wstela = new NS.WSTelaAPIClient("http://api-test.tela-botanica.org/service:cel:CelWidgetSaisie", "sauvages", "sauvages", "sauvages-dev");
+				var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
         wstela.sendSauvageObservation(data, self.collection, app.globals.currentRueList).done(function() { 
           alert('notificication OKOKOK')
           self.render();
+					//@TODO trouver mieux !!
           $("#tabObs a[href='#rue']").tab('show');
         });
       }
     );
-  }
+    }
+    else{
+			var msg = _.template(
+								"<form role='form'>"+
+									"<div class='form-group'>"+
+									" <label for='InputEmail'>Adresse email</label>"+
+									"<input type='email' class='form-control' id='InputEmail' placeholder='Enter email'>"+
+									"<button type='submit' id='submitEmail' class='btn btn-default'>Valider</button>"+
+									"</div>"+
+								"</form>"					
+							);
+			sauvages.notifications.email(msg());
+		}
+  },
+	
+	
+	saveEmail: function(event){
+		 var user= app.globals.currentUser;
+                     var currentEmail = $("#InputEmail").val();
+                     console.log(currentEmail);
+                     user.set('userId','1');
+                     user.set('email',currentEmail);
+                     user.save();
+	}
 
 });

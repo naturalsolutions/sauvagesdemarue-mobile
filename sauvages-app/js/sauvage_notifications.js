@@ -4,11 +4,11 @@ var sauvages = window.sauvages|| {};
 sauvages.notifications = (
 function() {
    "use strict";
-		sauvages.messages = {
-			'save': 'Enregistrer',
-			'begin_street': 'Début du parcours',
-			'end_street':'Fin du parcours',
-		},
+         sauvages.messages = {
+                 'save': 'Enregistrer',
+                 'begin_street': 'Début du parcours',
+                 'end_street':'Fin du parcours',
+         },
 		
 	 sauvages.gpsNotStart = function gpsNotStart() {
 		 var myModal = new NS.UI.NotificationModal({
@@ -18,7 +18,7 @@ function() {
 				delay: 1,
 				btnLabel: '',
 			});
-	},
+         },
 	
 	 sauvages.finParcours = function finParcours() {
 			var myModal = new NS.UI.NotificationModal({
@@ -31,7 +31,7 @@ function() {
 					app.route.navigate('addParcours/new', {trigger: true});
 					},
 			});
-	},
+         },
 	
 	sauvages.obsSaveSuccess = function obsSaveSuccess() {
 			new NS.UI.NotificationModal({
@@ -45,8 +45,28 @@ function() {
 					},
 				
 			});
+         },
+   sauvages.email = function email(msg, userData) {
+			new NS.UI.NotificationModal({
+				type: 'error',
+				title: 'Ajouter votre email',
+				message: msg,
+				delay: '',
+				btnLabel: 'Terminer', 
+				onClick: function() {
+                     var user= app.globals.currentUser;
+                     var currentEmail = $("#InputEmail").val();
+                     console.log(currentEmail);
+                     user.set('userId','1');
+                     //user.set('email',currentEmail);
+                     user.set('email',"emailEnDur");
+                     user.save();
+				 },
+         
+				
+			});
 	},
-  sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
+      sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
 			new NS.UI.NotificationModal({
 				type: 'success',
 				title: criteriaName,
@@ -55,7 +75,7 @@ function() {
 				btnLabel: '', 
 				onClose: function() {
 					app.route.navigate('taxonlist', {trigger: true});
-					},
+				 },
 				
 			});
 	}

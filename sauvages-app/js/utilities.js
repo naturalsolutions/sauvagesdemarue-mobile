@@ -366,3 +366,54 @@ app.utils.geolocalisation = {
     console.log("Error: " + errors[error.code]);
   },
 }
+//----------- TELA WEB SERVICES REVERSE GEOLOCALISATION -------------//
+/*function geolocaliser() {
+	$('#geo-infos').html('Calcul en cours...');
+	$('#obs-attente-icone').removeClass('hide');
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(surSuccesGeoloc, surErreurGeoloc);
+	} else {
+		var erreur = { code: '0', message: 'Géolocalisation non supportée par le navigateur.'};
+		surErreurGeoloc(erreur);
+	}
+}
+function surSuccesGeoloc(position) {
+	if (position) {
+		var lat = position.coords.latitude,
+			lng = position.coords.longitude;
+		$('#lat_field').html(lat);
+		$('#lng_field').html(lng);
+		
+		var url_service = SERVICE_NOM_COMMUNE_URL;
+		var urlNomCommuneFormatee = url_service.replace('{lat}', lat).replace('{lon}', lng);
+		$.ajax({
+			url : urlNomCommuneFormatee,
+			type : 'GET',
+			dataType : 'jsonp',
+			success : function(data) {
+				console.log('NOM_COMMUNE found.');
+				$('#location').html(data['nom']);
+				$('#code_insee').val(data['codeINSEE']);
+			},
+			complete : function() { 
+				var texte = ($('#location').html() == '') ? TEXTE_HORS_LIGNE : $('#location').html();
+				$('#location').html(texte);
+			}
+		});
+		
+		$('#geo-infos').html(''); 
+		console.log('Geolocation SUCCESS');
+	} else {
+		$('#geo-infos').addClass('text-error');
+		$('#geo-infos').removeClass('text-info');
+		$('#geo-infos').html('Impossible de continuer l\'enregistrement.'); 
+	}
+	$('#obs-attente-icone').addClass('hide');
+}
+function surErreurGeoloc(error){
+	$('#obs-attente-icone').addClass('hide');
+	$('#geo-infos').addClass('text-error');
+	$('#geo-infos').removeClass('text-info');
+	$('#geo-infos').html('Calcul impossible.');
+	console.log('Echec de la géolocalisation, code: ' + error.code + ' message: '+ error.message);
+}*/

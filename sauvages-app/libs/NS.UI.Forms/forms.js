@@ -30,29 +30,29 @@ NS.UI = (function(ns) {
 
     var validators = {};
 
-	// Declare an exception class for validation errors
-	var ValidationError = function(error) {
-        this.message = error;
-	};
-
-    // FIXME: use cleaner OOP for validators
-	validators.Number = function() {
-		this.msg = 'A number is expected here';
-		this.validate = function(value) {
-			if (typeof value === 'number' || /^-?[0-9]+(.[0-9]*)?$/.test(value))
-				return value;
-			throw new ValidationError(this.msg);
-		};
-	};
-
-	validators.Required = function() {
-		this.msg = 'Blank value not allowed here';
-		this.validate = function(value) {
-			if (typeof value === 'undefined')
-                throw new ValidationError(this.msg);
-            return value;
-		};
-	};
+				// Declare an exception class for validation errors
+				var ValidationError = function(error) {
+								this.message = error;
+				};
+			
+							// FIXME: use cleaner OOP for validators
+				validators.Number = function() {
+								this.msg = 'A number is expected here';
+								this.validate = function(value) {
+								if (typeof value === 'number' || /^-?[0-9]+(.[0-9]*)?$/.test(value))
+												return value;
+												throw new ValidationError(this.msg);
+								};
+				};
+			
+				validators.Required = function() {
+								this.msg = 'Blank value not allowed here';
+								this.validate = function(value) {
+												if (typeof value === 'undefined')
+																throw new ValidationError(this.msg);
+																return value;
+								};
+				};
 
     var editors = {};
 
@@ -62,9 +62,9 @@ NS.UI = (function(ns) {
     var BaseEditor = BaseView.extend({
         validOptions: ['id', 'name', 'initialData', 'label', 'required', 'helpText', 'inline'],
 
-		validators: [],
+								validators: [],
 
-		defaults: {
+								defaults: {
             helpText: '',
             inline: false,
             required: false
@@ -84,9 +84,9 @@ NS.UI = (function(ns) {
         },
 
         getValue: function() {
-			// To be implemented by child classes
-			// must return parsed user input
-			return ;
+												// To be implemented by child classes
+												// must return parsed user input
+												return ;
         },
 
         getLabel: function() {
@@ -94,41 +94,41 @@ NS.UI = (function(ns) {
         },
 
         validate: function() {
-			var value = this.getValue();
-			this.clearValidationErrors();
-			try {
-				_.each(this.validators, function (validator) {
-                    if (this.required || typeof value != 'undefined') {
-                        if (typeof validator === 'string') {
-                            validator = new validators[validator]();
-                        }
-                        value = validator.validate(value);
-                    }
-				}, this);
-			} catch (err) {
-				if (err instanceof ValidationError) {
-					this.handleValidationError(err);
-                    return this.trigger('valid:fail', this.name, err.message);
-				}
-			}
+												var value = this.getValue();
+												this.clearValidationErrors();
+												try {
+																_.each(this.validators, function (validator) {
+																																if (this.required || typeof value != 'undefined') {
+																																			if (typeof validator === 'string') {
+																																							validator = new validators[validator]();
+																																			}
+																																			value = validator.validate(value);
+																															}
+																}, this);
+												} catch (err) {
+																if (err instanceof ValidationError) {
+																				this.handleValidationError(err);
+																				return this.trigger('valid:fail', this.name, err.message);
+																}
+												}
             return this.trigger('valid:pass', this.name, this.postProcessData(value));
-		},
+								},
 
-		clearValidationErrors: function () {
-			// May be implemented by child classes
-			this.$el.removeClass('error');
-		},
-
-		handleValidationError: function (err) {
-			// May be implemented by child classes
-			this.$el.addClass('error');
-		},
-
-		postProcessData: function (rawData) {
-			// May be implemented by child classes
-			// must return formatted data
-			return rawData;
-        },
+								clearValidationErrors: function () {
+									// May be implemented by child classes
+									this.$el.removeClass('error');
+								},
+						
+								handleValidationError: function (err) {
+									// May be implemented by child classes
+									this.$el.addClass('error');
+								},
+						
+								postProcessData: function (rawData) {
+								// May be implemented by child classes
+								// must return formatted data
+												return rawData;
+								},
 
         serialize: function() {
             return _.pick(this, this.validOptions);
@@ -142,15 +142,15 @@ NS.UI = (function(ns) {
             'blur input': function(e) {this.validate();}
         },
 
-		clearValidationErrors: function () {
-			BaseEditor.prototype.clearValidationErrors.apply(this, arguments);
-            this.$el.find('.help-inline').html('');
-		},
-
-		handleValidationError: function (err) {
-			BaseEditor.prototype.handleValidationError.apply(this, arguments);
-            this.$el.find('.help-inline').html(err.message);
-		},
+								clearValidationErrors: function () {
+									BaseEditor.prototype.clearValidationErrors.apply(this, arguments);
+																		this.$el.find('.help-inline').html('');
+								},
+						
+								handleValidationError: function (err) {
+									BaseEditor.prototype.handleValidationError.apply(this, arguments);
+																		this.$el.find('.help-inline').html(err.message);
+								},
 
         getValue: function() {
             if (this.$el) {
@@ -178,28 +178,28 @@ NS.UI = (function(ns) {
     });
 
     editors.Number = editors.Text.extend({
-		validators: [new validators.Number()],
-
-		postProcessData: function (rawData) {
-			return parseFloat(rawData);
-        }
-	});
+								validators: [new validators.Number()],
+						
+								postProcessData: function (rawData) {
+												return parseFloat(rawData);
+								}
+				});
 
     editors.Boolean = BaseEditor.extend({
         templateId: 'editor-boolean',
 
-		value_yes: 'yes',
-		value_no: 'no',
-
-		label_yes: 'Yes',
-		label_no: 'No',
+								value_yes: 'yes',
+								value_no: 'no',
+						
+								label_yes: 'Yes',
+								label_no: 'No',
 
         events: {
             'blur input': function(e) {this.validate();}
         },
 
         initialize: function() {
-			this.validOptions = this.validOptions.concat(['label_yes', 'label_no', 'value_yes', 'value_no']);
+												this.validOptions = this.validOptions.concat(['label_yes', 'label_no', 'value_yes', 'value_no']);
             BaseEditor.prototype.initialize.apply(this, arguments);
         },
 
@@ -216,15 +216,15 @@ NS.UI = (function(ns) {
             }
         },
 
-		clearValidationErrors: function () {
-			BaseEditor.prototype.clearValidationErrors.apply(this, arguments);
-            this.$el.find('.help-inline').html('');
-		},
+				clearValidationErrors: function () {
+								BaseEditor.prototype.clearValidationErrors.apply(this, arguments);
+        this.$el.find('.help-inline').html('');
+				},
 
-		handleValidationError: function (err) {
-			BaseEditor.prototype.handleValidationError.apply(this, arguments);
-            this.$el.find('.help-inline').html(err.message);
-		}
+				handleValidationError: function (err) {
+								BaseEditor.prototype.handleValidationError.apply(this, arguments);
+								this.$el.find('.help-inline').html(err.message);
+				}
     }, {
         templateSrc: {
             stacked:
@@ -266,7 +266,7 @@ NS.UI = (function(ns) {
         nullValue: '',
 
         initialize: function(options) {
-			this.validOptions = this.validOptions.concat(['multiple']);
+												this.validOptions = this.validOptions.concat(['multiple']);
             if (!('initialData' in options) || (typeof(options.initialData) === 'undefined')) {
                 options.initialData = [];
             // Store data in array even when select is not 'multiple'
@@ -332,15 +332,15 @@ NS.UI = (function(ns) {
                 });
             } else {
                 _.each(optionConfig, function(item) {
-					if (typeof(item) == 'object') {
-						options.push(item);
-					} else {
-						options.push({val: item, label: item});
-					}
+																				if (typeof(item) == 'object') {
+																								options.push(item);
+																				} else {
+																								options.push({val: item, label: item});
+																				}
                 });
             }
             if (!this.required && !this.multiple) options.unshift({val: '', label: '--'});
-            viewData.options = [{label: '', options: options}];
+												viewData.options = [{label: '', options: options}];
             return viewData;
         }
     }, {
@@ -376,74 +376,74 @@ NS.UI = (function(ns) {
         }
     });
 
-	editors._Composite = BaseEditor.extend({
+				editors._Composite = BaseEditor.extend({
         // Selector for field area (an element in the template where items will be placed)
         fieldRegion: '',
 
         initialize: function(options) {
-			this.validOptions = this.validOptions.concat(['fieldRegion']);
+												this.validOptions = this.validOptions.concat(['fieldRegion']);
             BaseEditor.prototype.initialize.apply(this, arguments);
 
-			this.childNamePrefix = (!this.childNamePrefix && this.name) ? this.name + '_' : '';
+												this.childNamePrefix = (!this.childNamePrefix && this.name) ? this.name + '_' : '';
             this.data = {};
             this.errors = {};
             this.names = {};
 
-			_.each(this.getFields(), function(fieldDefinition) {
-				this.addEditor.apply(this, _.values(fieldDefinition));
-			}, this);
-		},
+												_.each(this.getFields(), function(fieldDefinition) {
+													this.addEditor.apply(this, _.values(fieldDefinition));
+												}, this);
+								},
 
-		getFields: function () {
-			// To be implemented by child classes
-			// must return a list of field definition: [{name: '', editor: Editor, options: {}}]
-			return [];
-		},
+								getFields: function () {
+									// To be implemented by child classes
+									// must return a list of field definition: [{name: '', editor: Editor, options: {}}]
+									return [];
+								},
+				
+								addEditor: function (name, Editor, options) {
+												// Do not proceed for readonly fields
+												if ('editable' in options && !options.editable ) return;
+												// Instantiate a subview for this editor + make names/identifiers unique
+												var view = new Editor(_.extend({}, options, {
+																id: this.id + '_' + name,
+																name: this.childNamePrefix + name,
+																label: options.title || name
+												}));
+												this.insertView(this.fieldRegion, view);
+												// Keep original name in a hash
+												this.names[view.name] = name;
+																// Bind MultiSchema fields to their selector
+																if (Editor == editors.MultiSchema) {
+																				var selector = this.getViews(this.fieldRegion).find(function(v) {
+																								return this.selector == v.name;
+																				}, view).value();
+																				if (selector)
+																								view.setSelector(selector);
+																}
+																// Handle validation success and error
+																this.listenTo(view, 'valid:pass', this.onFieldValidate);
+																this.listenTo(view, 'valid:fail', this.onFieldError);
+									
+												return view;
+								},
 
-		addEditor: function (name, Editor, options) {
-			// Do not proceed for readonly fields
-			if ('editable' in options && !options.editable ) return;
-			// Instantiate a subview for this editor + make names/identifiers unique
-			var view = new Editor(_.extend({}, options, {
-				id: this.id + '_' + name,
-				name: this.childNamePrefix + name,
-				label: options.title || name
-			}));
-			this.insertView(this.fieldRegion, view);
-			// Keep original name in a hash
-			this.names[view.name] = name;
-            // Bind MultiSchema fields to their selector
-            if (Editor == editors.MultiSchema) {
-                var selector = this.getViews(this.fieldRegion).find(function(v) {
-                    return this.selector == v.name;
-                }, view).value();
-                if (selector)
-                    view.setSelector(selector);
-            }
-            // Handle validation success and error
-            this.listenTo(view, 'valid:pass', this.onFieldValidate);
-            this.listenTo(view, 'valid:fail', this.onFieldError);
-
-			return view;
-		},
-
-        onFieldValidate: function(fieldName, data) {
-            if (fieldName in this.names) { // BB does not support controlling event propagation, use explicit filtering instead
-                var idx = this.names[fieldName];
-                this.data[idx] = data;
-                // forget previous validation errors if any
-                delete this.errors[fieldName];
-                if ($.isEmptyObject(this.errors))
-                    this.trigger('valid:pass', this.name, this.postProcessData(this.data));
-            }
-        },
-
-        onFieldError: function(fieldName, error) {
-            if (fieldName in this.names) { // BB does not support controlling event propagation, use explicit filtering instead
-                this.errors[fieldName] = error;
-                return this.trigger('valid:fail', this.name, this.errors);
-            }
-		},
+								onFieldValidate: function(fieldName, data) {
+												if (fieldName in this.names) { // BB does not support controlling event propagation, use explicit filtering instead
+																var idx = this.names[fieldName];
+																this.data[idx] = data;
+																// forget previous validation errors if any
+																delete this.errors[fieldName];
+																if ($.isEmptyObject(this.errors))
+																				this.trigger('valid:pass', this.name, this.postProcessData(this.data));
+												}
+								},
+				
+								onFieldError: function(fieldName, error) {
+												if (fieldName in this.names) { // BB does not support controlling event propagation, use explicit filtering instead
+																this.errors[fieldName] = error;
+																return this.trigger('valid:fail', this.name, this.errors);
+												}
+								},
 
         validate: function() {
             // Relay validation to each subfield
@@ -460,83 +460,83 @@ NS.UI = (function(ns) {
                     view.clearValidationErrors(); // Relay to subview
             });
         }
-	});
+				});
 
     editors.NestedModel = editors._Composite.extend({
         templateId: 'subform',
 
         initialize: function(options) {
-			// Initialize schema+initialData depending on provided input (model instance? model class? raw schema/data)
-			if (options.initialData && options.initialData instanceof Backbone.Model) {
-				// /!\ Should we check whether initialData is actually a model instance ?
-				this.instance = options.initialData;
-				this.schema = this.instance.constructor.schema;
-				options.initialData = options.initialData.attributes;
-			} else if (options.model) {
-				this.Model = options.model;
-				options.initialData = (options.initialData) ? options.initialData : {};
-				this.instance = new this.Model(options.initialData);
-				this.schema = this.instance.constructor.schema;
-			} else {
-				this.schema = options.schema;
-				options.initialData = (options.initialData) ? options.initialData : {};
-			}
-
-            // Ensure we have a model class before going further
-            if (typeof this.schema === 'undefined')
-				throw new Error('Could not find a schema for form');
-
-            // Use all fields if fields are not explicitly set
-			this.fields = (options.fields) ? options.fields : _.keys(this.schema);
-
-            editors._Composite.prototype.initialize.apply(this, arguments);
-        },
-
-		getFields: function () {
-			var fields = [];
-			_.each(this.fields, function(name) {
-				var field = this.schema[name];
-				field.initialData = this.initialData[name];
-				field.inline = field.inline || this.inline;
-
-				var editor = editors[field.type];
-				if (editor)
-					fields.push({name: name, editor: editor, options: field});
-			}, this);
-			return fields;
-		},
-
-        getLabel: function() {
-            var labels = [];
-            this.getViews(this.fieldRegion).each(function(view) {
-                if (view instanceof BaseEditor) {
-                    labels.push(view.getLabel());
-                }
-            });
-            return labels;
-        },
-
-		postProcessData: function (rawData) {
-			if (this.instance) {
-				this.instance.set(rawData);
-				return this.instance;
-			} else {
-				return rawData;
-			}
-		},
-
-        serialize: function() {
-            return {title: this.label, helpText: this.helpText, inline: this.inline};
-        }
-    }, {
-        templateSrc: {
-            stacked:
-                '<fieldset>' +
-                '    <legend><%- data.title %></legend>' +
-                '    <div class="help-block"><% if (data.helpText) { %><span class="label label-info">Note:</span> <%- data.helpText %><% } %></div>' +
-                '</fieldset>',
-            inline: '<tr></tr>'
-        }
+												// Initialize schema+initialData depending on provided input (model instance? model class? raw schema/data)
+												if (options.initialData && options.initialData instanceof Backbone.Model) {
+																// /!\ Should we check whether initialData is actually a model instance ?
+																this.instance = options.initialData;
+																this.schema = this.instance.constructor.schema;
+																options.initialData = options.initialData.attributes;
+												} else if (options.model) {
+																this.Model = options.model;
+																options.initialData = (options.initialData) ? options.initialData : {};
+																this.instance = new this.Model(options.initialData);
+																this.schema = this.instance.constructor.schema;
+												} else {
+																this.schema = options.schema;
+																options.initialData = (options.initialData) ? options.initialData : {};
+												}
+	
+													// Ensure we have a model class before going further
+													if (typeof this.schema === 'undefined')
+																throw new Error('Could not find a schema for form');
+	
+													// Use all fields if fields are not explicitly set
+												this.fields = (options.fields) ? options.fields : _.keys(this.schema);
+	
+												editors._Composite.prototype.initialize.apply(this, arguments);
+								},
+	
+								getFields: function () {
+												var fields = [];
+												_.each(this.fields, function(name) {
+																var field = this.schema[name];
+																field.initialData = this.initialData[name];
+																field.inline = field.inline || this.inline;
+												
+																var editor = editors[field.type];
+																if (editor)
+																				fields.push({name: name, editor: editor, options: field});
+												}, this);
+												return fields;
+								},
+	
+								getLabel: function() {
+												var labels = [];
+												this.getViews(this.fieldRegion).each(function(view) {
+																if (view instanceof BaseEditor) {
+																				labels.push(view.getLabel());
+																}
+												});
+												return labels;
+								},
+	
+								postProcessData: function (rawData) {
+												if (this.instance) {
+																this.instance.set(rawData);
+																return this.instance;
+												} else {
+																return rawData;
+												}
+								},
+	
+								serialize: function() {
+												return {title: this.label, helpText: this.helpText, inline: this.inline};
+								}
+					}, {
+								templateSrc: {
+												stacked:
+																'<fieldset>' +
+																'    <legend><%- data.title %></legend>' +
+																'    <div class="help-block"><% if (data.helpText) { %><span class="label label-info">Note:</span> <%- data.helpText %><% } %></div>' +
+																'</fieldset>',
+												inline: '<tr></tr>'
+								}
     });
 
     editors.List = editors._Composite.extend({
@@ -551,11 +551,11 @@ NS.UI = (function(ns) {
         initialize: function(options) {
             // Ensure we have a model class before going further
             if (typeof options.model === 'undefined')
-				throw new Error('Could not find model class for List form');
+												throw new Error('Could not find model class for List form');
 
             this.validOptions = this.validOptions.concat(['headRegion']);
 
-			// Initialize specific options
+												// Initialize specific options
             this.defaults = _.extend({}, this.defaults, {
                 inline: true,
                 initialData: []
@@ -577,18 +577,18 @@ NS.UI = (function(ns) {
         },
 
 		getFields: function () {
-			var fields = [];
-			_.each(this.initialData, function(instance) {
-				var options = this.getItemOptions();
-				options.initialData = instance;
-
-				fields.push({
-					name: this._counter++,
-					editor: editors.NestedModel,
-					options: options
-				});
-			}, this);
-			return fields;
+								var fields = [];
+								_.each(this.initialData, function(instance) {
+												var options = this.getItemOptions();
+												options.initialData = instance;
+								
+												fields.push({
+																name: this._counter++,
+																editor: editors.NestedModel,
+																options: options
+												});
+								}, this);
+								return fields;
         },
 
         getItemOptions: function() {
@@ -596,10 +596,10 @@ NS.UI = (function(ns) {
         },
 
         addItem: function(e) {
-			var view = this.addEditor(
-							this._counter++,
-							editors.NestedModel,
-							this.getItemOptions());
+												var view = this.addEditor(
+												this._counter++,
+												editors.NestedModel,
+												this.getItemOptions());
 
             // If item is the first item, also display labels as an header row
             if (this._counter == 1) {
@@ -607,7 +607,7 @@ NS.UI = (function(ns) {
                 this.headerView.render();
             }
 
-			// Render the new editor
+								// Render the new editor
             var doneCallback = $.proxy(function(view) {
                 // Call LM internal method to attach a rendered subview (known as "partially render the view")
                 this.options.partial(this.$el, view.$el, this.__manager__, view.__manager__);
@@ -722,7 +722,7 @@ NS.UI = (function(ns) {
     });
 
     ns.Form = editors.NestedModel.extend({
-		templateId: 'form',
+				templateId: 'form',
 
         events: {
             'submit': 'onSubmit',
@@ -800,16 +800,16 @@ NS.UI = (function(ns) {
         editors: editors  // Keep a reference to editor classes in order to allow templateSrc customization
     });
 		
-		editors.Picture = BaseEditor.extend({
-        templateId: 'editor-picture',
+				editors.Picture = BaseEditor.extend({
+								templateId: 'editor-picture',
 
         getValue: function() {
-					if (this.$el) {
-							var val = this.$el.find('img').attr('src');
-							if (val === this.nullValue || val === null) return undefined;
-							if (! this.multiple) return [val];
-							return val;
-					}
+												if (this.$el) {
+																var val = this.$el.find('img').attr('src');
+																if (val === this.nullValue || val === null) return undefined;
+																if (! this.multiple) return [val];
+																return val;
+												}
         },
 
         postProcessData: function (rawData) {
@@ -824,55 +824,70 @@ NS.UI = (function(ns) {
             // Unpack data when multiple selection is not allowed
             return (this.multiple) ? rawData : rawData[0];
         },
-				events: {
-							'click #take-picture': 'capturePhoto',
-							'change #input-picture': 'loadPhoto'
-					},
+								events: {
+											'click #take-picture': 'capturePhoto',
+											'change #input-picture': 'loadPhoto'
+								},
 
 			initialize : function() {
-				BaseEditor.prototype.initialize.apply(this, arguments);	
-				this.optCamera = _.defaults(this.options.optCamera || {}, {
-					quality: 50,
-					correctOrientation: false,
-					encodingType: 'navigator.camera.EncodingType.JPEG',
-					source: 'navigator.camera.PictureSourceType.CAMERA',
-					targetWidth: 1024,
-					destinationType: 'navigator.camera.DestinationType.FILE_URI'
-				});
-			},
+								BaseEditor.prototype.initialize.apply(this, arguments);	
+								this.optCamera = _.defaults(this.options.optCamera || {}, {
+												quality: 50,
+												correctOrientation: false,
+												encodingType: 'navigator.camera.EncodingType.JPEG',
+												source: 'navigator.camera.PictureSourceType.CAMERA',
+												destinationType: 'navigator.camera.DestinationType.FILE_URI'
+								});
+				},
 
-			loadPhoto : function () {
-				var input = document.querySelector('input[type=file]');
-				var file = input.files[0];
-				var imgURL = URL.createObjectURL(file);
-				this.onSuccess(imgURL) 
-			},
+				loadPhoto : function () {
+								var input = document.querySelector('input[type=file]');
+								var file = input.files[0];
+								var imgURL = URL.createObjectURL(file);
+								this.onSuccess(imgURL) 
+				},
 
-			capturePhoto: function() {
-				var self = this;
-					// Take picture using device camera and retrieve image as a local path
-					navigator.camera.getPicture(
-							_.bind(this.onSuccess, this),
-							_.bind(this.onFail, this), {
-									quality: window[self.optCamera.quality],
-									correctOrientation: window[self.optCamera.correctOrientation],
-									encodingType: window[self.optCamera.encodingType],
-									source:window[self.optCamera.source],
-									targetWidth:window[self.optCamera.targetWidth],
-									destinationType: window[self.optCamera.destinationType],
-							});
-			},
+				capturePhoto: function() {
+								var self = this;
+								// Take picture using device camera and retrieve image as a local path
+								navigator.camera.getPicture(
+												_.bind(this.onSuccess, this),
+												_.bind(this.onFail, this), {
+																quality: window[self.optCamera.quality],
+																correctOrientation: window[self.optCamera.correctOrientation],
+																encodingType: window[self.optCamera.encodingType],
+																source:window[self.optCamera.source],
+																destinationType: window[self.optCamera.destinationType],
+												}
+								);
+				},
 
-			onSuccess: function(imageURI) {
-          console.log(imageURI);
-					this.$el.find('.img-preview img.editor-picture-img').attr('src', imageURI);
-			},
-
-			onFail: function(message) {
-					this.$el.find('.img-preview').hide();
-					this.$el.find('.img-error').show();
-					this.$el.find('#img-error-msg').html(message);
-			},
+				onSuccess: function(imageURI) {
+								var fsFail =  function(error) {
+												console.log("failed with error code: " + error.code);
+								};
+								var copiedFile = function(fileEntry){
+												$('.editor-picture-img').attr('src', 'file://localhost' + fileEntry.fullPath);
+								}
+								var gotFileEntry = function(fileEntry) {
+												console.log("got image file entry: " + fileEntry.fullPath);
+												var gotFileSystem = function(fileSystem){
+																// move the file
+																fileEntry.moveTo(fileSystem.root, null, copiedFile, fsFail);
+												};
+												// get file system to copy or move image file to 
+												window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFileSystem, fsFail); 
+								};
+								//resolve file system for image 
+								window.resolveLocalFileSystemURI(imageURI, gotFileEntry, fsFail); 
+				},
+      
+                                         
+				onFail: function(message) {
+								this.$el.find('.img-preview').hide();
+								this.$el.find('.img-error').show();
+								this.$el.find('#img-error-msg').html(message);
+				},
 	
     }, {
         templateSrc: {

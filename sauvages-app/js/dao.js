@@ -46,6 +46,9 @@ Backbone.sync = function(method, model, options) {
 
 // -------------------------------------------------- DAO ---------------------------------------------------- //
 // The Taxon Data Access Object (DAO). Encapsulates logic (in this case SQL statements) to access data.
+app.dao.UserDAO = function(db) {
+    this.db = db;
+};
 app.dao.TaxonDAO = function(db) {
     this.db = db;
 };
@@ -75,7 +78,7 @@ app.dao.ParcoursDataValueDAO = function(db) {
     this.db = db;
 };
 
-
+_.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
@@ -85,6 +88,7 @@ _.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ParcoursDataValueDAO.prototype, app.dao.baseDAOBD);
+
 
 _.extend(app.dao.ParcoursDataValueDAO.prototype , {
 
