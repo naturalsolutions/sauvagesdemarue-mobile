@@ -30,6 +30,7 @@ NS.WSTelaAPIClient = (function() {
         var dfdObs= [];
         var nbSavePerObs = new Array();
         var nbObsSent;
+        var nbObsTheorique;
         for (var idp in obsPerParcours) {
             nbSavePerObs[idp] = {'nbObsTheorique' : obsPerParcours[idp].length, 'nbObsSent': 0};
             for (var id in obsPerParcours[idp]) {
