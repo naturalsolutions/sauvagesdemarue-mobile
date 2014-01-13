@@ -33,40 +33,56 @@ function() {
 			});
          },
 	
-	sauvages.obsSaveSuccess = function obsSaveSuccess() {
-			new NS.UI.NotificationModal({
-				type: 'success',
-				title: 'Observation sauvegardée',
-				message: 'Félicitations !',
-				delay: 1,
-				btnLabel: '', 
-				onClose: function() {
-					app.route.navigate('taxonlist/:all', {trigger: true});
-					},
-				
-			});
-         },
+   sauvages.obsSaveSuccess = function obsSaveSuccess() {
+     new NS.UI.NotificationModal({
+      type: 'success',
+      title: 'Observation sauvegardée',
+      message: 'Félicitations !',
+      delay: 1,
+      btnLabel: '', 
+      onClose: function() {
+       app.route.navigate('taxonlist/:all', {trigger: true});
+       },
+      
+     });
+   },
+   sauvages.sendToTelaWSSuccess = function email() {
+      new NS.UI.NotificationModal({
+         type: 'success',
+         title: 'Observation envoyée',
+         message: 'L\'envoi des observations s\'est bien déroulé.',
+         delay: 1,
+         btnLabel: ''
+      });
+   },
+   sauvages.sendToTelaWSFail = function email() {
+      new NS.UI.NotificationModal({
+         type: 'error',
+         title: 'Observation envoyée',
+         message: 'Une erreur s\'est produite, les observations n\'ont pu être envoyées',
+         delay: 2,
+         btnLabel: ''
+      });
+   },
    sauvages.email = function email(msg, userData) {
-			new NS.UI.NotificationModal({
-				type: 'error',
-				title: 'Ajouter votre email',
-				message: msg,
-				delay: '',
-				btnLabel: 'Terminer', 
-				onClick: function() {
-                     var user= app.globals.currentUser;
-                     var currentEmail = $("#InputEmail").val();
-                     console.log(currentEmail);
-                     user.set('userId','1');
-                     //user.set('email',currentEmail);
-                     user.set('email',"emailEnDur");
-                     user.save();
-				 },
-         
-				
-			});
-	},
-      sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
+      new NS.UI.NotificationModal({
+         type: 'error',
+         title: 'Ajouter votre email',
+         message: msg,
+         delay: '',
+         btnLabel: 'Terminer', 
+         onClick: function() {
+            var user= app.globals.currentUser;
+            var currentEmail = $("#InputEmail").val();
+            console.log(currentEmail);
+            user.set('userId','1');
+            //user.set('email',currentEmail);
+            user.set('email',"emailEnDur");
+            user.save();
+          },
+      });
+   },
+   sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
 			new NS.UI.NotificationModal({
 				type: 'success',
 				title: criteriaName,

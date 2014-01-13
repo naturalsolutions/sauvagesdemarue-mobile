@@ -11,7 +11,6 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
     this.model.bind("reset", this.render, this);
   },
 
-//TEST PHOTOS
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
   },
@@ -425,9 +424,8 @@ console.log(data)
         //Send to tela via cel ws
 				var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
         wstela.sendSauvageObservation(data, self.collection, app.globals.currentRueList).done(function() { 
-          alert('notificication OKOKOK')
           self.render();
-					//@TODO trouver mieux !!
+								//@TODO trouver mieux !!
           $("#tabObs a[href='#rue']").tab('show');
         });
       }

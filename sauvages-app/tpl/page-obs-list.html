@@ -37,7 +37,6 @@
       <div class="tab-pane" id="rue">
 	<div class="accordion" id="mesObsParRue">
           <%
-          console.log(app.globals.currentRueList.models);
             _.each(app.globals.currentRueList.models,function(rue,i,lst){
               var rueId = rue.get('id');
               var rueName = rue.get('name');

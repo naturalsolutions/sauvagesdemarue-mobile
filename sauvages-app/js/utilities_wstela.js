@@ -41,7 +41,9 @@ NS.WSTelaAPIClient = (function() {
                 if(obs.img === null || obs.img === ""){
                     var observations = this.formatObsToSend(obs);
                     dfdImage.resolve(observations);
-                }else{                 
+                }else{
+                    if (navigator.camera) {
+                    //mobile
                     var imageURI = obs.img;
                     var failSystem = function(error) {
                     console.log("failed with error code: " + error.code);
@@ -66,6 +68,12 @@ NS.WSTelaAPIClient = (function() {
                         }, failFile);
                     };
                     window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
+                    }else{
+                        obs.image_b64 = obs.img;
+                        obs.image_nom = 'image-obs' + id;
+                        var observations = this.formatObsToSend(obs);
+                        dfdImage.resolve(observations);
+                    }                
                 }
     
                 var self = this;
@@ -162,12 +170,16 @@ NS.WSTelaAPIClient = (function() {
             //Ajout des champs images
             json.image_nom = obs.image_nom;
             json.image_b64 = obs.image_b64;
+            //Ajout des champs images dans l'objet obs par défaut
+            this.defaultObs.image_nom = obs.image_nom;
+            this.defaultObs.image_b64 = obs.image_b64;
+            console.log('defaultObs : ' + this.defaultObs);
         }
         
         obs = _.omit(obs, 'ido');
         obs = _.omit(obs, 'idp');
-      
-        console.log(json);
+        obs = _.omit(obs, 'img');
+        
         //Ajout des données supplémentaires associées à sauvages
         //@TODO gestion des undefined
         var additionalValues = _.difference(_.keys(obs), _.keys(this.defaultObs));
@@ -191,6 +203,7 @@ NS.WSTelaAPIClient = (function() {
             'nom': null,
             'courriel':'test@nsdev.com'
         }
+        console.dir(observations)
         return observations;   
     };
     
@@ -198,13 +211,34 @@ NS.WSTelaAPIClient = (function() {
     * Fonction génère la requete  POST d'envoie d'une obs aux services de tela
     * ***/
     wsTelaApiClient.prototype.sendToTelaWS= function (obs, id_obs) {
-     /* return $.ajax({
-        url : this.basePath,
-        type : 'POST',
-        data : obs,
-        dataType : 'json'
-      });*/
-      return $.Deferred().resolve();
+        var msg = '';
+        var erreurMsg = '';
+        return $.ajax({
+            url : this.basePath,
+            type : 'POST',
+            data : obs,
+            dataType : 'json',
+            success : function(data,textStatus,jqXHR){
+                sauvages.notifications.sendToTelaWSSuccess(data);
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
+                msg = 'Erreur indéterminée. Merci de contacter le responsable.';
+                erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
+                try {
+                 var reponse = jQuery.parseJSON(jqXHR.responseText);
+                 if (reponse != null) {
+                  $.each(reponse, function (cle, valeur) {
+                   erreurMsg += valeur + '\n';
+                  });
+                 }
+                } catch(e) {
+                 erreurMsg += 'L\'erreur n\'était pas en JSON.';
+                }
+                console.log(erreurMsg);
+               }
+      });
+      //return $.Deferred().resolve();
     }
 
     return wsTelaApiClient;

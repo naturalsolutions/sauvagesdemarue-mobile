@@ -829,100 +829,110 @@ NS.UI = (function(ns) {
 											'change #input-picture': 'loadPhoto'
 								},
 
-			initialize : function() {
-								BaseEditor.prototype.initialize.apply(this, arguments);	
-								this.optCamera = _.defaults(this.options.optCamera || {}, {
-												quality: 50,
-												correctOrientation: false,
-												encodingType: 'navigator.camera.EncodingType.JPEG',
-												source: 'navigator.camera.PictureSourceType.CAMERA',
-												destinationType: 'navigator.camera.DestinationType.FILE_URI'
-								});
-				},
+								initialize : function() {
+													BaseEditor.prototype.initialize.apply(this, arguments);	
+													this.optCamera = _.defaults(this.options.optCamera || {}, {
+																	quality: 50,
+																	correctOrientation: false,
+																	encodingType: 'navigator.camera.EncodingType.JPEG',
+																	source: 'navigator.camera.PictureSourceType.CAMERA',
+																	destinationType: 'navigator.camera.DestinationType.FILE_URI'
+													});
+									},
 
-				loadPhoto : function () {
-								var input = document.querySelector('input[type=file]');
-								var file = input.files[0];
-								var imgURL = URL.createObjectURL(file);
-								this.onSuccess(imgURL) 
-				},
-
-				capturePhoto: function() {
-								var self = this;
-								// Take picture using device camera and retrieve image as a local path
-								navigator.camera.getPicture(
-												_.bind(this.onSuccess, this),
-												_.bind(this.onFail, this), {
-																quality: window[self.optCamera.quality],
-																correctOrientation: window[self.optCamera.correctOrientation],
-																encodingType: window[self.optCamera.encodingType],
-																source:window[self.optCamera.source],
-																destinationType: window[self.optCamera.destinationType],
+								loadPhoto : function () {
+												var input = document.querySelector('input[type=file]');
+												var file = readfile(input.files[0]);
+												var self = this;
+												function readfile(f) {
+																var reader = new FileReader();  
+																reader.readAsDataURL(f);           
+																reader.onload = function() {   
+																				var data = reader.result; 
+																				self.$el.find('.img-preview img.editor-picture-img').attr('src', data);
+																}
+																reader.onerror = function(e) { 
+																				console.log("Error", e); 
+																};
 												}
-								);
-				},
+								},
+				
+								capturePhoto: function() {
+												var self = this;
+												// Take picture using device camera and retrieve image as a local path
+												navigator.camera.getPicture(
+																_.bind(this.onSuccess, this),
+																_.bind(this.onFail, this), {
+																				quality: window[self.optCamera.quality],
+																				correctOrientation: window[self.optCamera.correctOrientation],
+																				encodingType: window[self.optCamera.encodingType],
+																				source:window[self.optCamera.source],
+																				destinationType: window[self.optCamera.destinationType],
+																}
+												);
+								},
 
-				onSuccess: function(imageURI) {
-								var fsFail =  function(error) {
-												console.log("failed with error code: " + error.code);
-								};
-								var copiedFile = function(fileEntry){
-												$('.editor-picture-img').attr('src', 'file://localhost' + fileEntry.fullPath);
-								}
-								var gotFileEntry = function(fileEntry) {
-												console.log("got image file entry: " + fileEntry.fullPath);
-												var gotFileSystem = function(fileSystem){
-																// move the file
-																fileEntry.moveTo(fileSystem.root, null, copiedFile, fsFail);
+								onSuccess: function(imageURI) {
+												var fsFail =  function(error) {
+																console.log("failed with error code: " + error.code);
 												};
-												// get file system to copy or move image file to 
-												window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFileSystem, fsFail); 
-								};
-								//resolve file system for image 
-								window.resolveLocalFileSystemURI(imageURI, gotFileEntry, fsFail); 
-				},
-      
-                                         
-				onFail: function(message) {
-								this.$el.find('.img-preview').hide();
-								this.$el.find('.img-error').show();
-								this.$el.find('#img-error-msg').html(message);
-				},
+												var copiedFile = function(fileEntry){
+																$('.editor-picture-img').attr('src', 'file://localhost' + fileEntry.fullPath);
+												}
+												var gotFileEntry = function(fileEntry) {
+																console.log("got image file entry: " + fileEntry.fullPath);
+																var gotFileSystem = function(fileSystem){
+																				// move the file
+																				fileEntry.moveTo(fileSystem.root, null, copiedFile, fsFail);
+																};
+																// get file system to copy or move image file to 
+																window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFileSystem, fsFail); 
+												};
+												//resolve file system for image 
+												window.resolveLocalFileSystemURI(imageURI, gotFileEntry, fsFail); 
+								},
+
+																																													
+								onFail: function(message) {
+												this.$el.find('.img-preview').hide();
+												this.$el.find('.img-error').show();
+												this.$el.find('#img-error-msg').html(message);
+								},
 	
-    }, {
-        templateSrc: {
-          stacked: '<div class="control-group">' +
-                '    <label class="control-label"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-                '    <div class="controls">' +
-                '	<div class="row-fluid img-preview">'+
-								'		<img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
-								'		<% if (navigator.camera) { %> '+
-								'			<button class="btn btn-camera" id="take-picture" type="button"><img src="css/images/btn_camera.png"/></button>'+
-								'		<%} else {%>'+
-								'			<input type="file" accept="image/*" capture  id="input-picture" >'+
-								'		<%} %>'+
-								'	</div>'+                
-                '        <div class="help-inline"></div>' +
-                '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
-                '    </div>' +
-                '</div>',
-          inline:
-                 '<div class="control-group">' +
-                '    <label class="control-label"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-                '    <div class="controls">' +
-                '	<div class="row-fluid img-preview">'+
-								'		<img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
-								'		<% if (navigator.camera) { %> '+
-								'			<button class="btn btn-camera" id="take-picture" type="button"><img src="css/images/btn_camera.png"/></button>'+
-								'		<%} else {%>'+
-								'			<input type="file" accept="image/*" capture  id="input-picture" >'+
-								'		<%} %>'+
-								'	</div>'+                
-                '        <div class="help-inline"></div>' +
-                '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
-                '    </div>' +
-                '</div>'
-        }
+								}, {
+												templateSrc: {
+														stacked: '<div class="control-group">' +
+																				'    <label class="control-label"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+																				'    <div class="controls">' +
+																				'	<div class="row-fluid img-preview">'+
+												'		<img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
+												'		<% if (navigator.camera) { %> '+
+												'			<button class="btn btn-camera" id="take-picture" type="button"><img src="css/images/btn_camera.png"/></button>'+
+												'		<%} else {%>'+
+												'			<input type="file" accept="image/*" capture  id="input-picture" >'+
+												'		<%} %>'+
+												'	</div>'+                
+																				'        <div class="help-inline"></div>' +
+																				'        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+																				'    </div>' +
+																				'</div>',
+														inline:
+																					'<div class="control-group">' +
+																				'    <label class="control-label"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+																				'    <div class="controls">' +
+																				'	<div class="row-fluid img-preview">'+
+												'		<img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
+												'		<% if (navigator.camera) { %> '+
+												'			<button class="btn btn-camera" id="take-picture" type="button"><img src="css/images/btn_camera.png"/></button>'+
+												'		<%} else {%>'+
+												'			<input type="file" accept="image/*" capture  id="input-picture" >'+
+												'		<%} %>'+
+												'	</div>'+                
+																				'        <div class="help-inline"></div>' +
+																				'        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+																				'    </div>' +
+																				'</div>'
+												}
     });
     return ns;
 })(NS.UI || {});

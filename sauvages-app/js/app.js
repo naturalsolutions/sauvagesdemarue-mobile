@@ -54,11 +54,16 @@ function init(){
   // Customize Underscore templates behaviour: 'with' statement is prohibited in JS strict mode
   _.templateSettings['variable'] = 'data';
   window.deferreds = [];
-  
+		
+		//Request file system API FILE html5
+		window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+		var fs = null;  
+
+
   $("body").find("a").addClass("disabled");
   $("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
-  
-  initDB();
+   
+		initDB();
 
   $.when.apply(null, deferreds).done(function() {
     console.log ('all deferreds finished');
