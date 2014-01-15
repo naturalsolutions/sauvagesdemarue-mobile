@@ -63,7 +63,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
       this.collection = options.collection;
       
       var self = this;
-    this.on('submit:valid', function(instance) {
+						this.on('submit:valid', function(instance) {
       //Get value for hidden fields
       var prefix = 'end_';
       if (self.isNew) prefix = 'begin_';
@@ -74,19 +74,19 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
       instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
 		       
       instance.save().done( function(model, response, options) {
-	//On refetch le model pour récupérer le PK
-	instance.fetch({
-	  success: function(data) {
-	    if (!self.isNew) {
-	      delete app.globals.currentrue;
-	      sauvages.notifications.finParcours();
-	    }
-	    else {
-	      app.globals.currentrue =	data;
-	      app.route.navigate('taxonlist/:all', {trigger: true});
-	    }
-	  }
-	});
+								//On refetch le model pour récupérer le PK
+								instance.fetch({
+										success: function(data) {
+												if (!self.isNew) {
+														delete app.globals.currentrue;
+														sauvages.notifications.finParcours();
+												}
+												else {
+														app.globals.currentrue =	data;
+														app.route.navigate('taxonlist/:all', {trigger: true});
+												}
+										}
+								});
       });
     });
   },
@@ -207,15 +207,15 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
   },
-	events: {
+		events: {
     "click .help": "helpShow"
   },
   afterRender:function() {
    if (app.globals.currentFilter.length > 0) { 
       _.each(app.globals.currentFilter,function(l){ 
-	var currentInput = 'defCaracValue-'+l ;
-	$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
-	$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+								var currentInput = 'defCaracValue-'+l ;
+								$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
+								$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
       });
     }
   },
@@ -230,14 +230,8 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 									'<% }); %></ul>'+
 								'</div>'					
 							);
-		
-	
-		
-		//var criteriaValues = this.model.get('defCaracValues').models;
 		sauvages.notifications.helpKey(criteriaName,msg({criteriaName : criteriaName,criteriaDescription:this.model.get('description'), criteriaValues: this.model.get('defCaracValues').models}));
 	}
-
-	
 });
 
 	
@@ -267,17 +261,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 
 
 });
-//sert à quelque chose ??
-/*app.views.TaxonItemView =  app.utils.BaseView.extend({
-
-  template: 'items-list-taxon',
-
-  initialize: function() {
-    this.model.bind("reset", this.render, this);
-    this.model.bind("change", this.render, this);
-  },
-});*/
-
 
 app.views.TaxonDetailView=  app.utils.BaseView.extend({
 
@@ -391,7 +374,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     "click #tabObs a[href='#rue']": "tabObrue",
     'click div.accordion-heading': 'changeIcon',
     'click #send-obs': 'sendObs',
-		//'click #submitEmail':'saveEmail'
+				'click #submitEmail':'setEmail'
   },
   
   tabObsespece: function(event){
@@ -418,41 +401,47 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     var self = this;
     var emailUser =  app.globals.currentUser.get('email');
     if (typeof(emailUser) !== 'undefined') {
+						var dfd = $.Deferred();
       app.utils.queryData.getObservationsTelaWSFormated().done(
       function(data) {
-console.log(data)
         //Send to tela via cel ws
-				var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
+								var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
         wstela.sendSauvageObservation(data, self.collection, app.globals.currentRueList).done(function() { 
           self.render();
-								//@TODO trouver mieux !!
+										//@TODO trouver mieux !!
           $("#tabObs a[href='#rue']").tab('show');
         });
       }
     );
     }
     else{
-			var msg = _.template(
-								"<form role='form'>"+
-									"<div class='form-group'>"+
-									" <label for='InputEmail'>Adresse email</label>"+
-									"<input type='email' class='form-control' id='InputEmail' placeholder='Enter email'>"+
-									"<button type='submit' id='submitEmail' class='btn btn-default'>Valider</button>"+
-									"</div>"+
-								"</form>"					
-							);
-			sauvages.notifications.email(msg());
-		}
+				var msg = _.template(
+									"<form role='form'>"+
+										"<div class='form-group'>"+
+										" <label for='InputEmail'>Adresse email</label>"+
+										"<input type='email' class='form-control' id='InputEmail' placeholder='Enter email'>"+
+										"<button type='submit' id='submitEmail' class='btn btn-default'>Valider</button>"+
+										"</div>"+
+									"</form>"					
+								);
+				sauvages.notifications.email(msg());
+			}
   },
 	
 	
-	saveEmail: function(event){
-		 var user= app.globals.currentUser;
-                     var currentEmail = $("#InputEmail").val();
-                     console.log(currentEmail);
-                     user.set('userId','1');
-                     user.set('email',currentEmail);
-                     user.save();
-	}
+		setEmail: function(event){
+					var user= app.globals.currentUser;
+					var currentEmail = $("#InputEmail").val();
+							console.log(currentEmail);
+						return currentEmail ;
+						dfd.resolve(saveMail);
+		},
+		saveEmail: function(ce){
+					dfd.done(function(observations){
+						user.set('userId','1');
+							user.set('email',ce);
+							user.save();				
+				} );		
+		}
 
 });
