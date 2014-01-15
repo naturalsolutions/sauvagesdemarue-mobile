@@ -20,9 +20,14 @@
     <ul class="slides">
       <% 
       _.each(data.pictures.models,function(item,key,list){
+        console.log(item)
+        var picture = item.get('path')
+        if(key === 0){
+           picture = picture.replace("http://www.tela-botanica.org/appli:cel-img:","./data/images/images_full/")
+        }       
       %>
       <li class="loading-slideshow">
-       <img src = "<%= item.get('path')%>" alt = "<%= data.commonName %> image <%= key %>" />
+       <img src = "<%= picture %>" alt = "<%= data.commonName %> image <%= key %>" />
       </li>
       <%
       });
