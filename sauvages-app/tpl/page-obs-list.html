@@ -46,14 +46,24 @@
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
                 <span class="glyphicon glyphicon-plus"></span>
-                <b><%= rueName %></b> <i>status de la rue : <%= rue.get('sended') %></i><span class="badge pull-right"><%= group.length %></span>
+                <b><%= rueName %></b>
+																<i>status de la rue : <%= rue.get('sended') %></i>
+																<i>Fin du parcours: <%= rue.get('end_datetime') %></i>
+																<span class="badge pull-right"><%= group.length %></span>
                 </a>
               </div>
               <div id="collapse<%= i %>" class="accordion-body collapse">
                 <div class="accordion-inner">
                 <ul>
+																<% if (group.length === 0){ %>
+																				 <li>
+                    <div class="">
+                      <p>la rue ne contient pas d'observations.</p>
+                    </div>
+                  </li>
+																<% } %>
                 <%  
-                  _.each(group,function(item,key,list){
+																 _.each(group,function(item,key,list){
                 %>
                   <li>
                     <div class="">

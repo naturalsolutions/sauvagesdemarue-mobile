@@ -27,7 +27,6 @@ app.Router = Backbone.Router.extend({
 		app.utils.geolocalisation.watchCurrentPosition();
 
     var self = this;
-
       // Keep track of the history of pages (we only store the page URL). Used to identify the direction
       // (left or right) of the sliding transition between pages.
       this.pageHistory = [];
@@ -51,8 +50,6 @@ app.Router = Backbone.Router.extend({
   
   viewIdentKey : function() {
     console.log('viewIdentKey viewIdentKey');
-		console.log(app.globals.currentFilter);
-		
     var self = this;
 		
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();

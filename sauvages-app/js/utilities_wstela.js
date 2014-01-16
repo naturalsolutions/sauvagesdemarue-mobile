@@ -27,6 +27,7 @@ NS.WSTelaAPIClient = (function() {
         var observations =new Object();
         //Traitement parcours par parcours
         var obsPerParcours = _.groupBy(obsToSend,function(item,key,list){
+            console.log(item.idp);   
             return item.idp;
         });
         var dfdObs= [];
@@ -90,7 +91,6 @@ NS.WSTelaAPIClient = (function() {
                             this.dfdObs.push(this.cObservation.get(this.ido).save());
                         }
                         else {
-                            var dfdParcours= [];
                             this.dfdObs.push(new $.Deferred().resolve());
                         }
                         dfdObservation.resolve();
@@ -102,7 +102,7 @@ NS.WSTelaAPIClient = (function() {
                     .fail(function() {
                         dfdObservation.reject();
                         console.log( "error" );
-                        console.log (nbObsSent + '/' + nbObsTheorique);
+                        console.log (this.nbSavePerObs[this.idp]['nbObsSent']  + '/' + this.nbSavePerObs[this.idp]['nbObsSent'] );
                     });
                     }).fail(function() {
                         dfdObservation.reject();
@@ -129,7 +129,10 @@ NS.WSTelaAPIClient = (function() {
                 }
               );
             },
+            
             function (status) {
+                $('#dataloader-img').remove();
+                $("body").find("a,button").removeClass("disabled");
                 return dfd.reject();
             }
         );
