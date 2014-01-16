@@ -404,14 +404,18 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						var dfd = $.Deferred();
       app.utils.queryData.getObservationsTelaWSFormated().done(
       function(data) {
-        //Send to tela via cel ws
-								var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-        wstela.sendSauvageObservation(data, self.collection, app.globals.currentRueList).done(function() { 
-          self.render();
-										//@TODO trouver mieux !!
-          $("#tabObs a[href='#rue']").tab('show');
-        });
-      }
+								if (data.length !== 0) {
+										//Send to tela via cel ws
+										var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
+										wstela.sendSauvageObservation(data, self.collection, app.globals.currentRueList).done(function() { 
+												self.render();
+												//@TODO trouver mieux !!
+												$("#tabObs a[href='#rue']").tab('show');
+										});
+								}else{
+										alert("Il n'y a pas d'observations à envoyer.");		
+								}		
+						}
     );
     }
     else{

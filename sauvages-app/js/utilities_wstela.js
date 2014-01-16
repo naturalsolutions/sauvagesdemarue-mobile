@@ -20,7 +20,9 @@ NS.WSTelaAPIClient = (function() {
      *  formate les données de l'observation pour le POST
      ****/
      //@TODO catcher les erreurs ajax
-    wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours){    
+    wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours){
+        $("body").find("a,button").addClass("disabled");
+        $("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
         var dfd = $.Deferred();
         var observations =new Object();
         //Traitement parcours par parcours
@@ -45,9 +47,9 @@ NS.WSTelaAPIClient = (function() {
                 }else{
                     if (navigator.camera) {
                     //mobile
-                    var imageURI = obs.img;
-                    var failSystem = function(error) {
-                    console.log("failed with error code: " + error.code);
+                        var imageURI = obs.img;
+                        var failSystem = function(error) {
+                        console.log("failed with error code: " + error.code);
                     };
                     var failFile = function(error) {
                     console.log("failed with error code: " + error.code);
@@ -88,6 +90,7 @@ NS.WSTelaAPIClient = (function() {
                             this.dfdObs.push(this.cObservation.get(this.ido).save());
                         }
                         else {
+                            var dfdParcours= [];
                             this.dfdObs.push(new $.Deferred().resolve());
                         }
                         dfdObservation.resolve();
@@ -118,6 +121,8 @@ NS.WSTelaAPIClient = (function() {
                     dfdParcours.push(cParcours.get(obsPerParcours[idp][0].idp).save());
                 }   
               }
+                $('#dataloader-img').remove();
+                $("body").find("a,button").removeClass("disabled");
               $.when.apply(this, dfdParcours).then(
                 function (a) {
                     return dfd.resolve();
@@ -134,8 +139,8 @@ NS.WSTelaAPIClient = (function() {
     /***
      *  Fonction qui encode en base64 une image
      * ***/
-    wsTelaApiClient.prototype.encodeImg= function (obsimg){
-                         };
+    wsTelaApiClient.prototype.encodeImg= function (){
+    };
     
      /***
      * Fonction qui formate une observation en vue de son envoie vers tela

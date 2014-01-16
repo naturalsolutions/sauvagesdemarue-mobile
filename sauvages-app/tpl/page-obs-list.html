@@ -46,7 +46,7 @@
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
                 <span class="glyphicon glyphicon-plus"></span>
-                <b><%= rueName %></b><span class="badge pull-right"><%= group.length %></span>
+                <b><%= rueName %></b> <i>status de la rue : <%= rue.get('sended') %></i><span class="badge pull-right"><%= group.length %></span>
                 </a>
               </div>
               <div id="collapse<%= i %>" class="accordion-body collapse">
@@ -70,6 +70,6 @@
 	
 	 </div>
     <div>
-								<button id="send-obs">Send</button>
+								<button id="send-obs" type="button" class="btn btn-lg">Send</button>
     </div>
 </div>
