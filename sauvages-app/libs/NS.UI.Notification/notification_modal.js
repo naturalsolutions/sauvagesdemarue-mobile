@@ -45,12 +45,19 @@ NS.UI = (function(ns) {
                 type: 'error',
                 title: 'Error',
                 message: 'An error occured',
-								btnLabel : 'close',
+                btnLabel : 'close',
                 delay: 7
             });
             this.render();
         },
-  
+        
+        events: {
+            'click #modal-close':'optionClick'
+        },
+        optionClick: function(evt){
+            var self = this;
+            self.options.onClick();
+        },   
         render: function() {
             var self = this;
             $('#myModal').empty();
@@ -58,18 +65,14 @@ NS.UI = (function(ns) {
             var $html = $(_.template(this.templateSrc, data, {variable: 'data'}));
             this.setElement($html);
             $('div.notification-modal').append(this.el);
-						//Add callback yo btn
-						if (self.options.onClick) { 
-							$('#modal-close').click(self.options.onClick());
-						}
-						$('#nodal').modal('show');
-            if (typeof(this.options.delay) === 'number' && this.options.delay > 0) {
-							setTimeout(function() {
-								$('#nodal').modal('hide');
-								if (self.options.onClose) self.options.onClose();
-							}, self.options.delay*1000);
-						}
-        }
+            $('#nodal').modal('show');
+                  if (typeof(this.options.delay) === 'number' && this.options.delay > 0) {
+                      setTimeout(function() {
+                          $('#nodal').modal('hide');
+                          if (self.options.onClose) self.options.onClose();
+                      }, self.options.delay*1000);
+                  }
+              }
     });
 
     return ns;

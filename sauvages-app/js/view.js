@@ -296,7 +296,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
    },
    events: {
         'click div.accordion-heading': 'changeIcon',
-	'click .moreInfo':'tooltipIucn'
+								'click .moreInfo':'tooltipIucn'
     },
       
     changeIcon: function(event){

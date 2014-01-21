@@ -7,7 +7,7 @@ function() {
          sauvages.messages = {
                  'save': 'Enregistrer',
                  'begin_street': 'Début du parcours',
-                 'end_street':' du parcours',
+                 'end_street':'Fin du parcours',
          },
 		
 	 sauvages.gpsNotStart = function gpsNotStart() {
