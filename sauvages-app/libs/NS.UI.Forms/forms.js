@@ -877,18 +877,18 @@ NS.UI = (function(ns) {
 																console.log("failed with error code: " + error.code);
 												};
 												var copiedFile = function(fileEntry){
-																$('.editor-picture-img').attr('src', 'file://localhost' + fileEntry.fullPath);
+                console.log(fileEntry.fullPath);
+                $('.editor-picture-img').attr('src', fileEntry.fullPath);
 												}
 												var gotFileEntry = function(fileEntry) {
 																console.log("got image file entry: " + fileEntry.fullPath);
 																var gotFileSystem = function(fileSystem){
-																				// move the file
-																				fileEntry.moveTo(fileSystem.root, null, copiedFile, fsFail);
+                    fileSystem.root.getDirectory(TAG_PROJET, { create: true, exclusive: false }, function(dossier) {
+                        fileEntry.moveTo(dossier, (new Date()).getTime()+'_'+TAG_PROJET+'.jpg', copiedFile, fsFail);
+                    }, fsFail);
 																};
-																// get file system to copy or move image file to 
 																window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFileSystem, fsFail); 
 												};
-												//resolve file system for image 
 												window.resolveLocalFileSystemURI(imageURI, gotFileEntry, fsFail); 
 								},
 
@@ -897,6 +897,7 @@ NS.UI = (function(ns) {
 												this.$el.find('.img-preview').hide();
 												this.$el.find('.img-error').show();
 												this.$el.find('#img-error-msg').html(message);
+            alert(message);
 								},
 	
 								}, {

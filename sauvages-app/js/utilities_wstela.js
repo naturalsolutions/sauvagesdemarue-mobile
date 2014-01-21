@@ -22,7 +22,7 @@ NS.WSTelaAPIClient = (function() {
      //@TODO catcher les erreurs ajax
     wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours){
         $("body").find("a,button").addClass("disabled");
-        $("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
+        $("#content").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
         var dfd = $.Deferred();
         var observations =new Object();
         //Traitement parcours par parcours
@@ -49,13 +49,17 @@ NS.WSTelaAPIClient = (function() {
                     if (navigator.camera) {
                     //mobile
                         var imageURI = obs.img;
+                        if(device.platform === 'iOS'){var imageURI = 'file://' + obs.img;}
+                        console.log(imageURI);
                         var failSystem = function(error) {
-                        console.log("failed with error code: " + error.code);
+                            console.log("failed with error code: " + error.code);
+                            dfdImage.reject();
                         };
                         var failFile = function(error) {
-                        console.log("failed with error code: " + error.code);
+                            console.log("failed with error code: " + error.code);
+                            dfdImage.reject();
                         };
-                    
+                        
                         var self = this;
                         var gotFileEntry = function(fileEntry) {
                             console.log("got image file entry: " +  fileEntry.fullPath);
@@ -182,7 +186,6 @@ NS.WSTelaAPIClient = (function() {
             //Ajout des champs images dans l'objet obs par défaut
             this.defaultObs.image_nom = obs.image_nom;
             this.defaultObs.image_b64 = obs.image_b64;
-            console.log('defaultObs : ' + this.defaultObs);
         }
         
         obs = _.omit(obs, 'ido');
@@ -224,12 +227,11 @@ NS.WSTelaAPIClient = (function() {
         var erreurMsg = '';
         return $.ajax({
             url : this.basePath,
-            //url :"../proxy.php" ,
             type : 'POST',
             data : obs,
             dataType : 'json',
             success : function(data,textStatus,jqXHR){
-                sauvages.notifications.sendToTelaWSSuccess(data);
+                sauvages.notifications.sendToTelaWSSuccess();
             },
             error : function(jqXHR, textStatus, errorThrown) {
                 sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
