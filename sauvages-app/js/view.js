@@ -431,21 +431,4 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				sauvages.notifications.email(msg());
 			}
   },
-	
-	
-		setEmail: function(event){
-					var user= app.globals.currentUser;
-					var currentEmail = $("#InputEmail").val();
-							console.log(currentEmail);
-						return currentEmail ;
-						dfd.resolve(saveMail);
-		},
-		saveEmail: function(ce){
-					dfd.done(function(observations){
-						user.set('userId','1');
-							user.set('email',ce);
-							user.save();				
-				} );		
-		}
-
 });

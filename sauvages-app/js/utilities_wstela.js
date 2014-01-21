@@ -51,33 +51,33 @@ NS.WSTelaAPIClient = (function() {
                         var imageURI = obs.img;
                         var failSystem = function(error) {
                         console.log("failed with error code: " + error.code);
-                    };
-                    var failFile = function(error) {
-                    console.log("failed with error code: " + error.code);
-                    };
+                        };
+                        var failFile = function(error) {
+                        console.log("failed with error code: " + error.code);
+                        };
                     
-                    var self = this;
-                    var gotFileEntry = function(fileEntry) {
-                        console.log("got image file entry: " +  fileEntry.fullPath);
-                        fileEntry.file( function(file) {
-                            var reader = new FileReader();
-                            reader.onloadend = function(evt) {
-                               console.log("Read complete!");
-                               obs.image_b64 = evt.target.result;
-                               obs.image_nom = file.name;
-                               var observations = self.formatObsToSend(obs);
-                               dfdImage.resolve(observations);
-                            };
-                            reader.readAsDataURL(file);
-                        }, failFile);
-                    };
-                    window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
-                    }else{
-                        obs.image_b64 = obs.img;
-                        obs.image_nom = 'image-obs' + id;
-                        var observations = this.formatObsToSend(obs);
-                        dfdImage.resolve(observations);
-                    }                
+                        var self = this;
+                        var gotFileEntry = function(fileEntry) {
+                            console.log("got image file entry: " +  fileEntry.fullPath);
+                            fileEntry.file( function(file) {
+                                var reader = new FileReader();
+                                reader.onloadend = function(evt) {
+                                   console.log("Read complete!");
+                                   obs.image_b64 = evt.target.result;
+                                   obs.image_nom = file.name;
+                                   var observations = self.formatObsToSend(obs);
+                                   dfdImage.resolve(observations);
+                                };
+                                reader.readAsDataURL(file);
+                            }, failFile);
+                        };
+                        window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
+                        }else{
+                            obs.image_b64 = obs.img;
+                            obs.image_nom = 'image-obs' + id;
+                            var observations = this.formatObsToSend(obs);
+                            dfdImage.resolve(observations);
+                        }                
                 }
     
                 var self = this;
@@ -210,7 +210,7 @@ NS.WSTelaAPIClient = (function() {
             'id_utilisateur': null,
             'prenom': null,
             'nom': null,
-            'courriel':'test@nsdev.com'
+            'courriel': app.globals.currentUser.get('email')
         }
         console.dir(observations)
         return observations;   
@@ -224,6 +224,7 @@ NS.WSTelaAPIClient = (function() {
         var erreurMsg = '';
         return $.ajax({
             url : this.basePath,
+            //url :"../proxy.php" ,
             type : 'POST',
             data : obs,
             dataType : 'json',
