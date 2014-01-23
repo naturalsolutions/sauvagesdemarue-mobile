@@ -56,8 +56,8 @@ function init(){
   window.deferreds = [];
 		
 		//Request file system API FILE html5
-		window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-		var fs = null;  
+	/*	window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+		var fs = null;  */
 
 
   $("body").find("a").addClass("disabled");

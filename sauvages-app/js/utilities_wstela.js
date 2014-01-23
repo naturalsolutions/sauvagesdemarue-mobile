@@ -35,57 +35,60 @@ NS.WSTelaAPIClient = (function() {
         var nbObsSent;
         var nbObsTheorique;
         for (var idp in obsPerParcours) {
-            nbSavePerObs[idp] = {'nbObsTheorique' : obsPerParcours[idp].length, 'nbObsSent': 0};
-            for (var id in obsPerParcours[idp]) {
-                var obs = _.defaults(obsPerParcours[idp][id], this.defaultObs);
-                var dfdImage = $.Deferred(),
-                dfdObservation = $.Deferred();
-                dfdObs.push(dfdObservation);
-    
-                if(obs.img === null || obs.img === ""){
-                    var observations = this.formatObsToSend(obs);
-                    dfdImage.resolve(observations);
-                }else{
-                    if (navigator.camera) {
-                    //mobile
-                        var imageURI = obs.img;
-                        if(device.platform === 'iOS'){var imageURI = 'file://' + obs.img;}
-                        console.log(imageURI);
-                        var failSystem = function(error) {
-                            console.log("failed with error code: " + error.code);
-                            dfdImage.reject();
-                        };
-                        var failFile = function(error) {
-                            console.log("failed with error code: " + error.code);
-                            dfdImage.reject();
-                        };
-                        
-                        var self = this;
-                        var gotFileEntry = function(fileEntry) {
-                            console.log("got image file entry: " +  fileEntry.fullPath);
-                            fileEntry.file( function(file) {
-                                var reader = new FileReader();
-                                reader.onloadend = function(evt) {
-                                   console.log("Read complete!");
-                                   obs.image_b64 = evt.target.result;
-                                   obs.image_nom = file.name;
-                                   var observations = self.formatObsToSend(obs);
-                                   dfdImage.resolve(observations);
-                                };
-                                reader.readAsDataURL(file);
-                            }, failFile);
-                        };
-                        window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
-                        }else{
-                            obs.image_b64 = obs.img;
-                            obs.image_nom = 'image-obs' + id;
-                            var observations = this.formatObsToSend(obs);
-                            dfdImage.resolve(observations);
-                        }                
-                }
-    
-                var self = this;
-                dfdImage.done(function(observations) {
+            //Test si les rues sont vides, modifier la requete si confirmation de Tela de ne pas les envoyer
+            if(obsPerParcours[idp][0].ido !== -1){
+                if(obsPerParcours[idp][0].longitudeFinRue !== "undefined" && obsPerParcours[idp][0].latitudeFinRue !== "undefined"){
+                nbSavePerObs[idp] = {'nbObsTheorique' : obsPerParcours[idp].length, 'nbObsSent': 0};
+                for (var id in obsPerParcours[idp]) {
+                    var obs = _.defaults(obsPerParcours[idp][id], this.defaultObs);
+                    var dfdImage = $.Deferred(),
+                    dfdObservation = $.Deferred();
+                    dfdObs.push(dfdObservation);
+        
+                    if(obs.img === null || obs.img === ""){
+                        var observations = this.formatObsToSend(obs);
+                        dfdImage.resolve(observations);
+                    }else{
+                        if (navigator.camera) {
+                        //mobile
+                            var imageURI = obs.img;
+                            if(device.platform === 'iOS'){var imageURI = 'file://' + obs.img;}
+                            console.log(imageURI);
+                            var failSystem = function(error) {
+                                console.log("failed with error code: " + error.code);
+                                dfdImage.reject();
+                            };
+                            var failFile = function(error) {
+                                console.log("failed with error code: " + error.code);
+                                dfdImage.reject();
+                            };
+                            
+                            var self = this;
+                            var gotFileEntry = function(fileEntry) {
+                                console.log("got image file entry: " +  fileEntry.fullPath);
+                                fileEntry.file( function(file) {
+                                    var reader = new FileReader();
+                                    reader.onloadend = function(evt) {
+                                       console.log("Read complete!");
+                                       obs.image_b64 = evt.target.result;
+                                       obs.image_nom = file.name;
+                                       var observations = self.formatObsToSend(obs);
+                                       dfdImage.resolve(observations);
+                                    };
+                                    reader.readAsDataURL(file);
+                                }, failFile);
+                            };
+                            window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
+                            }else{
+                                obs.image_b64 = obs.img;
+                                obs.image_nom = 'image-obs' + id;
+                                var observations = this.formatObsToSend(obs);
+                                dfdImage.resolve(observations);
+                            }                
+                    }
+        
+                    var self = this;
+                    dfdImage.done(function(observations) {
                   self.sendToTelaWS(observations, obsPerParcours[idp][id].ido)
                     .done(_.bind(function() {
                         // Mise a jour de l'obs sended = 1
@@ -104,14 +107,22 @@ NS.WSTelaAPIClient = (function() {
                         }
                     ))
                     .fail(function() {
+                        var self = this;
                         dfdObservation.reject();
                         console.log( "error" );
-                        console.log (this.nbSavePerObs[this.idp]['nbObsSent']  + '/' + this.nbSavePerObs[this.idp]['nbObsSent'] );
+                        console.log (self.nbSavePerObs[this.idp]['nbObsSent']  + '/' + self.nbSavePerObs[this.idp]['nbObsSent'] );
                     });
                     }).fail(function() {
                         dfdObservation.reject();
                     });
             }
+                }else{
+                    alert("La rue " + obsPerParcours[idp][0].lieudit + " n'est pas terminée.");
+                    app.route.navigate('addParcours', {trigger: true}); 
+                }
+            }else{
+                alert("La rue " + obsPerParcours[idp][0].lieudit + " ne contient pas d'observation à partager.");   
+            }       
         }
         //Quand toutes les données sont envoyées et les obs MAJ (sended == 1) alors
         // MAJ des parcours et resolve du deferred
@@ -215,7 +226,7 @@ NS.WSTelaAPIClient = (function() {
             'nom': null,
             'courriel': app.globals.currentUser.get('email')
         }
-        console.dir(observations)
+        console.log(app.globals.currentUser.get('email'));
         return observations;   
     };
     

@@ -41,6 +41,18 @@ Backbone.sync = function(method, model, options) {
       options.success(data);
     });
 	}
+  else if (method === "delete") {
+    if (model.attributes.id) {
+      dfd = dao.destroyObs(model.attributes.id, function(data) {
+        options.success(data);
+      });  
+    }else{
+      dfd = dao.delete(model, function(data) {
+        options.success(data);
+      });
+    }
+    
+  }
   return dfd;
 };
 
@@ -78,7 +90,19 @@ app.dao.ParcoursDataValueDAO = function(db) {
     this.db = db;
 };
 
-_.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{
+  /*updateEmailTuser: function(model, callback) {
+        this.db.transaction(
+            function(tx) {
+                var sql = "UPDATE Tuser SET email= ? WHERE userId = ? ";
+                tx.executeSql(sql, [model.get('email'), model.get('Tuser')]);
+            },
+            function(tx, error) {
+                console.log(tx);
+            }
+        );
+    }*/
+});
 _.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
@@ -86,7 +110,21 @@ _.extend(app.dao.GroupeDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
-_.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD,{
+   destroyObs: function(id,callback) {
+        this.db.transaction(
+            function(tx) {
+                var sql = "delete from TdataObs_occurences where id= ? " ;
+              tx.executeSql(sql, [id], function(tx, results) {
+                callback(id,results);
+              });
+            },
+            function(tx, error) {
+                console.log(tx);
+            }
+        );
+    }
+});
 _.extend(app.dao.ParcoursDataValueDAO.prototype, app.dao.baseDAOBD);
 
 
@@ -106,7 +144,7 @@ _.extend(app.dao.ParcoursDataValueDAO.prototype , {
 _.extend(
 app.dao.TaxonDAO.prototype, {
     
-  findByName: function(key, callback) {
+  /*findByName: function(key, callback) {
       this.db.transaction(
           function(tx) {
 
@@ -170,7 +208,7 @@ app.dao.TaxonDAO.prototype, {
                 alert("Transaction Error: " + error);
             }
         );
-    },     
+    }*/    
 });
 
 

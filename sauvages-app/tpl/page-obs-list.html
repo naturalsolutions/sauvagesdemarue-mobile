@@ -43,12 +43,14 @@
               var group = data.collection.getObsByRueId(rueId);
           %>   
             <div class="accordion-group" id='taxonList-div-<%=i %>'>
-              <div class="accordion-heading">
+              <div class="accordion-heading <% if(rue.get('end_datetime') === 'undefined'){%> rueEnCours <% }%>">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
-                <span class="glyphicon glyphicon-plus"></span>
+                <span class="glyphicon glyphicon-plus glyph-collpase"></span>
                 <b><%= rueName %></b>
-																<i>status de la rue : <%= rue.get('sended') %></i>
 																<i>Fin du parcours: <%= rue.get('end_datetime') %></i>
+																	<% if(rue.get('sended') === 0){%>
+																												<span class="glyphicon glyphicon-share"></span>
+																<%	} %>
 																<span class="badge pull-right"><%= group.length %></span>
                 </a>
               </div>
@@ -67,8 +69,12 @@
                 %>
                   <li>
                     <div class="">
+																				<% if(item.get('photo') !== ""){%>
                       <img class="taxon-img-thumb img-rounded" style ="width:50px;" id="<%= item.get('photo') %>" src="<%= item.get('photo') %>">
-                      <p><%= item.get('name_taxon') %> - <%= item.get('milieu') %>- <%= item.get('sended') %></p>
+																				<% } %>				
+																				<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %>
+																								<button type="button" class="destroyObs btn btn-default pull-right" id="<%= item.get('id') %>"><span class="glyphicon glyphicon-trash"></span></button>
+																				</p>
                     </div>
                   </li>
                 <% });%>

@@ -74,26 +74,48 @@ function() {
       });
       v.$el.on('submit', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         var user = app.globals.currentUser;
-         var currentEmail = this.$el.find('input[type="email"]').val();
-         user.get('userId','1');
-         user.set('email',currentEmail).save;
+           var currentEmail = this.$el.find('input[type="email"]').val();
+            var currentUser = new app.models.User({
+               'userId': 1,
+               'email':currentEmail
+            });
+            currentUser.save();
       }, v))
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
-			new NS.UI.NotificationModal({
-				type: 'success',
-				title: criteriaName,
-				message: criteriaValues,
+      new NS.UI.NotificationModal({
+         type: 'success',
+         title: criteriaName,
+         message: criteriaValues,
+         delay: '',
+         btnLabel: '', 
+         onClose: function() {
+          app.route.navigate('taxonlist', {trigger: true});
+          }
+      });
+	},
+   sauvages.finDeProtocol = function finDeProtocol(msg) {
+			var v = new NS.UI.NotificationModal({
+				type: 'warning',
+				title: 'Voulez-vous terminer votre parcours ?',
+				message:  msg,
 				delay: '',
 				btnLabel: '', 
-				onClose: function() {
-					app.route.navigate('taxonlist', {trigger: true});
-				 },
-				
 			});
+   v.$el.on('submit', 'form', _.bind(function(evt) {
+      evt.preventDefault();
+      $('#nodal').modal('hide');
+      $('#nodal').remove();
+      $('.modal-backdrop').remove();
+   }, v))
+   v.$el.on('reset', 'form', _.bind(function(evt) {
+      evt.preventDefault();
+      $('#nodal').modal('hide');
+      $('#nodal').remove();
+      $('.modal-backdrop').remove();
+      app.route.navigate('taxonlist', {trigger: true});
+   }, v))
 	}
-  
   
   return sauvages;
 })(sauvages.notifications|| {});

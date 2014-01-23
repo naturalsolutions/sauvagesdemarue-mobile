@@ -17,8 +17,6 @@ app.Router = Backbone.Router.extend({
   },
 
   initialize: function() {
-    app.globals.currentUser = new app.models.User;
-    //this.currentUser.fetch();
     app.globals.currentFilter = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
     app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;
@@ -126,13 +124,13 @@ app.Router = Backbone.Router.extend({
 	      });
       }
       else {
-	var collObs = new app.models.OccurenceDataValuesCollection;
-	collObs.fetch({
-	  success: function(data) {
-	    var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
-	    self.displayView(currentView);
-	  }
-	});
+        var collObs = new app.models.OccurenceDataValuesCollection;
+        collObs.fetch({
+          success: function(data) {
+            var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
+            self.displayView(currentView);
+          }
+        });
       }       
     }
     else{

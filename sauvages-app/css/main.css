@@ -433,7 +433,12 @@ background:#EBECDE;
 #obs-list-content .loc-container {
 margin: 73px 0px 40px;
 }
-
+.rueEnCours{
+		background-color: tomato;
+}
+#mesObsParRue .accordion-heading{
+		padding:10px;
+}
 /**********carousel-container*************/
 #taxon-detail-content .flexslider{
 	margin:0 0 35px;

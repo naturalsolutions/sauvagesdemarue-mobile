@@ -58,7 +58,10 @@ app.models.User = Backbone.Model.extend({
      },
   dao: app.dao.UserDAO,
 });
-
+// The TaxonCollection Model
+app.models.UserCollection = Backbone.Collection.extend({
+  model: app.models.User,
+});
 
 // The Taxon Model
 /// !!!!!!!!!!!!!!!  !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!
@@ -231,7 +234,7 @@ app.models.CaracteristiqueDefValuesCollection =Backbone.Collection.extend({
 });
 
 
-// The CaracteristiqueDefValue Model
+// The Context Model
 app.models.Context = Backbone.Model.extend({
 
 },{
@@ -246,7 +249,7 @@ app.models.Context = Backbone.Model.extend({
   dao: app.dao.ContextDAO,
 });
 
-// The CaracteristiqueDefValue Collection
+// The Context collection Collection
 app.models.ContextCollection =Backbone.Collection.extend({
  
   model : app.models.Context,
