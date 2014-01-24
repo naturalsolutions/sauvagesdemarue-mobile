@@ -48,8 +48,6 @@ Backbone.Collection.prototype.multiValueWhere =  function(attrs, first) {
 app.models.User = Backbone.Model.extend({
 
 },{  
-  //@TODO reflechir et implémenter aux actions en cascade
-  //delete :  true/false
   table : 'Tuser',
   schema: {
     userId: { title:'userId',type:'Number', sqltype:'INTEGER', required: true, sqlconstraints:'PRIMARY KEY'},
@@ -58,7 +56,7 @@ app.models.User = Backbone.Model.extend({
      },
   dao: app.dao.UserDAO,
 });
-// The TaxonCollection Model
+// The User Collection Model
 app.models.UserCollection = Backbone.Collection.extend({
   model: app.models.User,
 });

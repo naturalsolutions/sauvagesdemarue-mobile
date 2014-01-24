@@ -43,7 +43,7 @@ Backbone.sync = function(method, model, options) {
 	}
   else if (method === "delete") {
     if (model.attributes.id) {
-      dfd = dao.destroyObs(model.attributes.id, function(data) {
+      dfd = dao.destroy(model.attributes.id, function(data) {
         options.success(data);
       });  
     }else{
@@ -111,7 +111,7 @@ _.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD,{
-   destroyObs: function(id,callback) {
+   destroy: function(id,callback) {
         this.db.transaction(
             function(tx) {
                 var sql = "delete from TdataObs_occurences where id= ? " ;
@@ -138,7 +138,21 @@ _.extend(app.dao.ParcoursDataValueDAO.prototype , {
 			return  dfd.resolve(defaultStreetName);
 		});
      return  dfd.promise();     
-	}
+	},
+
+  destroy: function(id,callback) {
+        this.db.transaction(
+            function(tx) {
+                var sql = "delete from TdataObs_parcours where id= ? " ;
+              tx.executeSql(sql, [id], function(tx, results) {
+                callback(id,results);
+              });
+            },
+            function(tx, error) {
+                console.log(tx);
+            }
+        );
+    }
 });
 
 _.extend(

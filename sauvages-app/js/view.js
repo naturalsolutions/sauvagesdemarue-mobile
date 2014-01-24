@@ -98,7 +98,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 																	"<form role='form'>"+
 																		"<div class='form-group'>"+
 																		"<button type='reset'  class='btn btn-default btn-primary'>Annuler</button>"+
-																		"<button type='submit'  class='btn btn-default btn-danger'>Valider</button>"+
+																		"<button type='submit'  class='btn btn-default btn-danger pull-right'>Valider</button>"+
 																		"</div>"+
 																	"</form>"					
 																);
@@ -370,6 +370,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   
   initialize: function() {
     this.collection.bind("reset", this.render, this);
+				app.globals.currentRueList.bind("change", this.render, this);
   },
   
   serialize: function() {
@@ -441,6 +442,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																	"</form>"					
 																);
 												sauvages.notifications.email(msg());
+												self.render();
 												}
 										}
 				});
@@ -449,11 +451,22 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						var self = this;
 						var ctarget = $(event.currentTarget);
 						var obsToDestroy = this.collection.findWhere({'id': parseInt(ctarget.context.id)});
-						obsToDestroy.destroy({success: function(id, results) {
+						obsToDestroy.destroy({success: function(obs, results) {
 								alert("identifiant destruction obs" + results);
 								self.render();
 								$("#tabObs a[href='#rue']").tab('show');
+								var nbObs = self.collection.length;
+								if (parseInt(nbObs) === 0) {
+										var obsFkRue = obs.get('fk_rue');
+										var rueToDestroy = app.globals.currentRueList.findWhere({'id' : parseInt(obsFkRue)});
+										rueToDestroy.destroy({success: function(rue, results) {
+												self.render();
+												$("#tabObs a[href='#rue']").tab('show');
+										}});
 								}
-						});
+							
+						
+						}
+				});
 		}
 });

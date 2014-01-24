@@ -35,6 +35,9 @@ NS.WSTelaAPIClient = (function() {
         var nbObsSent;
         var nbObsTheorique;
         for (var idp in obsPerParcours) {
+            
+           
+
             //Test si les rues sont vides, modifier la requete si confirmation de Tela de ne pas les envoyer
             if(obsPerParcours[idp][0].ido !== -1){
                 if(obsPerParcours[idp][0].longitudeFinRue !== "undefined" && obsPerParcours[idp][0].latitudeFinRue !== "undefined"){
@@ -107,18 +110,31 @@ NS.WSTelaAPIClient = (function() {
                         }
                     ))
                     .fail(function() {
-                        var self = this;
+                        //var self = this;
                         dfdObservation.reject();
                         console.log( "error" );
-                        console.log (self.nbSavePerObs[this.idp]['nbObsSent']  + '/' + self.nbSavePerObs[this.idp]['nbObsSent'] );
+                        //console.log (self.nbSavePerObs[this.idp]['nbObsSent']  + '/' + self.nbSavePerObs[this.idp]['nbObsSent'] );
                     });
                     }).fail(function() {
                         dfdObservation.reject();
                     });
             }
                 }else{
-                    alert("La rue " + obsPerParcours[idp][0].lieudit + " n'est pas terminée.");
-                    app.route.navigate('addParcours', {trigger: true}); 
+                    var self = this;
+                    var nbObsPerParcours = obsPerParcours[idp].length;
+                    var idDerObs = nbObsPerParcours -1;
+                    var derObsLong = obsPerParcours[idp][idDerObs].longitude;
+                    var derObsLat = obsPerParcours[idp][idDerObs].latitude;
+                    var idParcoursNonFini = cParcours.get(obsPerParcours[idp][0].idp)
+                    var msg = _.template(
+                        "<form role='form'>"+
+                         "<div class='form-group'>"+
+                         "<button type='reset'  class='btn btn-default btn-primary'>Annuler</button>"+
+                         "<button type='submit'  class='btn btn-default btn-danger pull-right'>Valider</button>"+
+                         "</div>"+
+                        "</form>"					
+                       );
+                    sauvages.notifications.finDeProtocolHorsParcours(msg(),derObsLat,derObsLong, idParcoursNonFini);
                 }
             }else{
                 alert("La rue " + obsPerParcours[idp][0].lieudit + " ne contient pas d'observation à partager.");   
@@ -213,20 +229,20 @@ NS.WSTelaAPIClient = (function() {
         }
              
         observations['obsId1'] = json;
-             
+            
         //@TODO traiter la réponse
         //Gestion des defereds
         observations['projet'] = this.tagprojet;
         observations['tag-obs'] = this.tagobs;
         observations['tag-img'] = this.tagimg;
-        //@TODO gestion des données utilisateurs
+        
+        if(typeof(app.globals.currentUser) !== 'undefined') { var email = app.globals.currentUser.get('email')}else{email = 'test@sauvages.fr'}; 
         observations['utilisateur'] = {
             'id_utilisateur': null,
             'prenom': null,
             'nom': null,
-            'courriel': app.globals.currentUser.get('email')
+            'courriel': email
         }
-        console.log(app.globals.currentUser.get('email'));
         return observations;   
     };
     

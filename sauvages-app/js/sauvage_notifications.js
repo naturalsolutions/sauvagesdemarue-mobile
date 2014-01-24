@@ -115,7 +115,34 @@ function() {
       $('.modal-backdrop').remove();
       app.route.navigate('taxonlist', {trigger: true});
    }, v))
+	},
+   sauvages.finDeProtocolHorsParcours = function finDeProtocol(msg, derObsLat, derObslong , parcours) {
+			var v = new NS.UI.NotificationModal({
+				type: 'warning',
+				title: 'Pour envoyer vos observations, vous devez avoir terminé votre parcours. Voulez-vous terminer votre parcours ?',
+				message:  msg,
+				delay: '',
+				btnLabel: '', 
+			});
+   v.$el.on('submit', 'form', _.bind(function(evt) {
+      evt.preventDefault();
+      parcours.set('end_latitude' , derObsLat );
+      parcours.set('end_longitude' , derObslong);
+      parcours.set('end_datetime' ,  new Date().format("yyyy-MM-dd h:mm:ss"));
+      parcours.save();
+      $('#nodal').modal('hide');
+      $('#nodal').remove();
+      $('.modal-backdrop').remove();
+      
+   }, v))
+   v.$el.on('reset', 'form', _.bind(function(evt) {
+      evt.preventDefault();
+      $('#nodal').modal('hide');
+      $('#nodal').remove();
+      $('.modal-backdrop').remove();
+   }, v))
 	}
+
   
   return sauvages;
 })(sauvages.notifications|| {});
