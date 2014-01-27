@@ -141,14 +141,14 @@ NS.WSTelaAPIClient = (function() {
             }       
         }
         //Quand toutes les données sont envoyées et les obs MAJ (sended == 1) alors
-        // MAJ des parcours et resolve du deferred
+        // MAJ des parcours (state == 2) et resolve du deferred
         $.when.apply(this, dfdObs).then(
             function (status) {
               var dfdParcours= [];
               console.log('when finished dfd.resolve obser per rue');
               for (var idp in nbSavePerObs) {
                 if (nbSavePerObs[idp]['nbObsSent'] == nbSavePerObs[idp]['nbObsTheorique']) {
-                    cParcours.get(obsPerParcours[idp][0].idp).set('sended',1);
+                    cParcours.get(obsPerParcours[idp][0].idp).set('state',2);
                     dfdParcours.push(cParcours.get(obsPerParcours[idp][0].idp).save());
                 }   
               }
@@ -167,6 +167,8 @@ NS.WSTelaAPIClient = (function() {
                 return dfd.reject();
             }
         );
+        $('#dataloader-img').remove();
+        $("body").find("a,button").removeClass("disabled");
         return dfd.promise();
     };
 

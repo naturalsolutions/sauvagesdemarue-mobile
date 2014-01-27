@@ -144,18 +144,17 @@ app.Router = Backbone.Router.extend({
     console.log('viewTableMyObs');
     var myObsColl = new app.models.OccurenceDataValuesCollection();
     var mesRuesColl = new app.models.ParcoursDataValuesCollection();
-    //@TODO test si la variable  app.globals.currentRueList est à jour
-    mesRuesColl.fetch({
+    myObsColl.fetch({
       success: function(data) {
-        app.globals.currentRueList = data;
+        mesRuesColl.fetch({
+          success: function(parcours) {
+              var currentView = new app.views.ObservationListView({collection: data, parcours : parcours});
+              self.displayView(currentView);
+          }
+        });
       }
     });
-    myObsColl.fetch({
-       success: function(data) {
-          var currentView = new app.views.ObservationListView({collection: data});
-          self.displayView(currentView);
-        }
-    }); 
+   
   },
   
 

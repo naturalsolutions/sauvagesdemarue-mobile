@@ -300,7 +300,7 @@ app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
 app.models.ParcoursDataValue = Backbone.Model.extend({
 	defaults: {
 		cote:'Pair',
-	  sended:0
+	 state:0
 	},
 },{
   table : 'TdataObs_parcours',
@@ -317,7 +317,7 @@ app.models.ParcoursDataValue = Backbone.Model.extend({
       end_longitude: { type: 'hidden',sqltype:'REAL', title:'end_longitude'},
       end_datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'end_datetime'}, 
       
-      sended: { title:'sended',  type:'hidden', sqltype:'INTEGER' ,required: true},
+      state: { title:'state',  type:'hidden', sqltype:'INTEGER' ,required: true},
   }, 
   dao: app.dao.ParcoursDataValueDAO,
   verboseName: 'Parcours'

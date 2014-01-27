@@ -77,10 +77,13 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 								instance.fetch({
 										success: function(data) {
 												if (!self.isNew) {
+														// TODO enlever les globales
 														delete app.globals.currentrue;
+														data.set('state',1).save();
 														sauvages.notifications.finParcours();
 												}
 												else {
+														// TODO enlever les globales
 														app.globals.currentrue =	data;
 														app.route.navigate('taxonlist/:all', {trigger: true});
 												}
@@ -94,16 +97,6 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
     if (this.isNew)  {
       $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');}
     else{
-						var msg = _.template(
-																	"<form role='form'>"+
-																		"<div class='form-group'>"+
-																		"<button type='reset'  class='btn btn-default btn-primary'>Annuler</button>"+
-																		"<button type='submit'  class='btn btn-default btn-danger pull-right'>Valider</button>"+
-																		"</div>"+
-																	"</form>"					
-																);
-						sauvages.notifications.finDeProtocol(msg());
-
       $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');    
@@ -289,15 +282,14 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 			
         criM.fetch({
           success: function(data) {
-	    $('.flexslider').flexslider({
-	      animation: "slide",  
-	      slideshow: false,
-	      touch: true,  
-
-	      start: function(slider) {
-		$('.flexImages').show();
-	      }
-	    });
+												$('.flexslider').flexslider({
+														animation: "slide",  
+														slideshow: false,
+														touch: true,  
+														start: function(slider) {
+															$('.flexImages').show();
+														}
+												});
             self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
           }
         });
@@ -369,12 +361,13 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   template: 'page-obs-list',
   
   initialize: function() {
+				this.parcours = this.options.parcours;
     this.collection.bind("reset", this.render, this);
-				app.globals.currentRueList.bind("change", this.render, this);
+				this.parcours.bind("change", this.render, this);
   },
   
   serialize: function() {
-    if (this.collection) return {collection : this.collection};
+    if (this.collection) return {collection : this.collection, parcours : this.parcours};
     return true;
   },
   
@@ -415,21 +408,30 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
             var emailUser = data.get('email'); 
 												if (typeof(emailUser) !== 'undefined') {
 														var dfd = $.Deferred();
-														app.utils.queryData.getObservationsTelaWSFormated().done(
-														function(data) {
-																if (data.length !== 0 ) {
-																		//Send to tela via cel ws
-																		var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-																		wstela.sendSauvageObservation(data, self.collection, app.globals.currentRueList).done(function() { 
-																				self.render();
-																				//@TODO trouver mieux !!
-																				$("#tabObs a[href='#rue']").tab('show');
-																		});
-																}else{
-																		alert("Il n'y a pas d'observations à envoyer.");		
-																}		
-														}
-												);
+														//var collectionRueFinie = parcours;
+
+														app.utils.queryData.getObservationsTelaWSFormated()
+																.done(
+																		function(data) {
+																				console.log(data);
+																				if (data.length !== 0 ) {
+																						//Send to tela via cel ws
+																						var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
+																						wstela.sendSauvageObservation(data, self.collection, self.parcours).done(function() { 
+																								self.render();
+																								//@TODO trouver mieux !!
+																								$("#tabObs a[href='#rue']").tab('show');
+																								$('#dataloader-img').remove();
+																								$("body").find("a,button").removeClass("disabled");	
+																						});
+																				}else{
+																						alert("Il n'y a pas d'observations à envoyer.");		
+																				}		
+																		}
+																)
+																.fail(function(msg) {
+																		console.log(msg);
+																});
 												}
 												else{
 												var msg = _.template(
@@ -450,22 +452,22 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		destroyObs : function(event){
 						var self = this;
 						var ctarget = $(event.currentTarget);
-						var obsToDestroy = this.collection.findWhere({'id': parseInt(ctarget.context.id)});
+						var obsToDestroy = self.collection.findWhere({'id': parseInt(ctarget.context.id)});
+						//var rueObsToDestroy = self.collection.get('fk_rue');
 						obsToDestroy.destroy({success: function(obs, results) {
 								alert("identifiant destruction obs" + results);
 								self.render();
 								$("#tabObs a[href='#rue']").tab('show');
 								var nbObs = self.collection.length;
-								if (parseInt(nbObs) === 0) {
-										var obsFkRue = obs.get('fk_rue');
-										var rueToDestroy = app.globals.currentRueList.findWhere({'id' : parseInt(obsFkRue)});
-										rueToDestroy.destroy({success: function(rue, results) {
+								var obsFkRue = obs.get('fk_rue');
+								var parcoursObs = self.parcours.findWhere({'id' : parseInt(obsFkRue)});
+								var parcoursState =	parcoursObs.get('state');
+								if (parseInt(nbObs) <= 0 && parcoursState !==  0) {
+										parcoursObs.destroy({success: function(rue, results) {
 												self.render();
 												$("#tabObs a[href='#rue']").tab('show');
 										}});
 								}
-							
-						
 						}
 				});
 		}

@@ -52,7 +52,12 @@ function() {
          title: 'Observation envoyée',
          message: 'L\'envoi des observations s\'est bien déroulé.',
          delay: 1,
-         btnLabel: ''
+         btnLabel: '',
+          onClose: function() {
+            $('#nodal').modal('hide');
+            $('#nodal').remove();
+            $('.modal-backdrop').remove();
+         }
       });
    },
    sauvages.sendToTelaWSFail = function email() {
@@ -61,7 +66,12 @@ function() {
          title: 'Observation envoyée',
          message: 'Une erreur s\'est produite, les observations n\'ont pu être envoyées',
          delay: 2,
-         btnLabel: ''
+         btnLabel: '',
+         onClose: function() {
+            $('#nodal').modal('hide');
+            $('#nodal').remove();
+            $('.modal-backdrop').remove();
+         }
       });
    },
    sauvages.email = function email(msg) {
@@ -94,7 +104,7 @@ function() {
           }
       });
 	},
-   sauvages.finDeProtocol = function finDeProtocol(msg) {
+  /* sauvages.finDeProtocol = function finDeProtocol(msg) {
 			var v = new NS.UI.NotificationModal({
 				type: 'warning',
 				title: 'Voulez-vous terminer votre parcours ?',
@@ -115,7 +125,7 @@ function() {
       $('.modal-backdrop').remove();
       app.route.navigate('taxonlist', {trigger: true});
    }, v))
-	},
+	},*/
    sauvages.finDeProtocolHorsParcours = function finDeProtocol(msg, derObsLat, derObslong , parcours) {
 			var v = new NS.UI.NotificationModal({
 				type: 'warning',

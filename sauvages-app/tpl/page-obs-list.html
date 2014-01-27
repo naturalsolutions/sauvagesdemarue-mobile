@@ -37,7 +37,8 @@
       <div class="tab-pane active" id="rue">
 	<div class="accordion" id="mesObsParRue">
           <%
-            _.each(app.globals.currentRueList.models,function(rue,i,lst){
+            _.each(data.parcours.models,function(rue,i,lst){
+																console.log(data);
               var rueId = rue.get('id');
               var rueName = rue.get('name');
               var group = data.collection.getObsByRueId(rueId);
@@ -48,7 +49,7 @@
                 <span class="glyphicon glyphicon-plus glyph-collpase"></span>
                 <b><%= rueName %></b>
 																<i>Fin du parcours: <%= rue.get('end_datetime') %></i>
-																	<% if(rue.get('sended') === 0){%>
+																	<% if(rue.get('state') === 1){%>
 																												<span class="glyphicon glyphicon-share"></span>
 																<%	} %>
 																<span class="badge pull-right"><%= group.length %></span>
@@ -86,6 +87,6 @@
 	
 	 </div>
     <div>
-								<button id="send-obs" type="button" class="btn btn-lg">Send</button>
+								<button id="send-obs" type="button" class="btn btn-lg">Partager</button>
     </div>
 </div>
