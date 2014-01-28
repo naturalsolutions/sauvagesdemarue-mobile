@@ -453,15 +453,18 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						var self = this;
 						var ctarget = $(event.currentTarget);
 						var obsToDestroy = self.collection.findWhere({'id': parseInt(ctarget.context.id)});
-						obsToDestroy.destroy({success: function(obs, results) {
-								alert("identifiant destruction obs" + results);
+						obsToDestroy.destroy({success: function(obs, idObs) {
+								alert("Destruction de l'observation : " + idObs);
 								self.render();
 								$("#tabObs a[href='#rue']").tab('show');
-								var nbObs = self.collection.length;
+								
 								var obsFkRue = obs.get('fk_rue');
+								var ObsWhereRueTarget = self.collection.where({'fk_rue' : parseInt(obsFkRue)})
+								var nbObs = ObsWhereRueTarget.length;
+								
 								var parcoursObs = self.parcours.findWhere({'id' : parseInt(obsFkRue)});
 								var parcoursState =	parcoursObs.get('state');
-								if (parseInt(nbObs) <= 0 && parcoursState !==  0) {
+								if (parseInt(nbObs) === 0 && parcoursState !==  0) {
 										parcoursObs.destroy({success: function(rue, results) {
 												self.render();
 												$("#tabObs a[href='#rue']").tab('show');

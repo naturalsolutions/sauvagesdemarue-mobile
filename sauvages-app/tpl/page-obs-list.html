@@ -17,7 +17,7 @@
     </ul>
 
     <div class="tab-content">
-      <div class="tab-pane " id="espece">
+      <div class="tab-pane active" id="espece">
         <ul id="values-list" class="list-group">
 	<%
             var groups = _.groupBy(data.collection.models,function(item,key,list){
@@ -34,7 +34,7 @@
         </ul>
       </div>
       
-      <div class="tab-pane active" id="rue">
+      <div class="tab-pane" id="rue">
 	<div class="accordion" id="mesObsParRue">
           <%
             _.each(data.parcours.models,function(rue,i,lst){
