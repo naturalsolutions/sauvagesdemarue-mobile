@@ -453,7 +453,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						var self = this;
 						var ctarget = $(event.currentTarget);
 						var obsToDestroy = self.collection.findWhere({'id': parseInt(ctarget.context.id)});
-						//var rueObsToDestroy = self.collection.get('fk_rue');
 						obsToDestroy.destroy({success: function(obs, results) {
 								alert("identifiant destruction obs" + results);
 								self.render();
