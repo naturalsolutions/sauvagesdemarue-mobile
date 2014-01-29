@@ -1,15 +1,26 @@
-<div id="table-obs-rue">
-<% console.log(data.collection)%>
+<div>
     <ul id="values-list" class="list-group">
-	<%
-            _.each(data.collection,function(group,i,list){
-            console.log(group.get('name_taxon'));
-                var nameTaxon = group.get('name_taxon');	
-          %>    
-            <li class="list-group-item">
-		<span class="badge"><%= group.length %></span>
-		<p><%= nameTaxon %></p>
-            </li>
-        <% }); %>
+   <% var groups = _.groupBy(data.collection,function(item,key,list){
+                return item.get('name_taxon');
+            });
+    %>
+    <%
+    _.each(groups,function(group){
+    console.log(groups);
+    %>    
+        <li class="list-group-item">
+            <span class="badge"><%= group.length %></span>
+            <p><%= group[0].get('name_taxon') %></p>
+            <ul>
+           <% _.each(group,function(item){
+            console.log(item);    
+            %>
+                <li>
+                    <p><%= item.get('name_taxon') %> - <%= item.get('milieu') %> </p>
+                </li>
+            <% }); %>
+            </ul>
+        </li>
+    <% }); %>
     </ul>
 </div>

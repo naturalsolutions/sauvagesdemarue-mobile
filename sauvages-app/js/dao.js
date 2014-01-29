@@ -153,26 +153,6 @@ _.extend(app.dao.ParcoursDataValueDAO.prototype , {
             }
         );
     },
-  //get parcours to sends
- /* getParcoursTelaWS: function() {
-    var dfd = $.Deferred();
-    var parameters = new Array();
-    var sql = "SELECT * "
-         +"FROM TdataObs_parcours "
-         +"WHERE o.sended=1 ";
-    runQuery(sql, parameters).done(
-      function(results){
-          var len = results.rows.length,
-            data = [],
-            i = 0;
-          for (; i < len; i = i + 1) {
-            data[i] = results.rows.item(i);
-          }
-          return dfd.resolve(data);
-      }
-    );
-    return dfd.promise();
-  }*/ 
 });
 
 _.extend(

@@ -46,12 +46,28 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
     this.model.bind("reset", this.render, this);
     this.collection = options.collection; 
   },
+				serialize: function() {
+    if (this.collection) {
+						return {collection:this.collection};
+				};
+		return true;
+  },
+
+		events:{ 
+		'click .annuler-fin-saisie': 'annulerTerminer'
+  },
+
+		annulerTerminer : function(evt){
+				app.route.navigate('taxonlist/:all', {trigger: true});	
+		},
 
   beforeRender: function() {
-    var self = this;
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model, collection: this.collection}));
-		
+				if (this.collection) {
+						this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
+				}
   },
+		
 });
 app.views.FormAddSauvageRue = NS.UI.Form.extend({
 
@@ -83,7 +99,6 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 														sauvages.notifications.finParcours();
 												}
 												else {
-														// TODO enlever les globales
 														app.globals.currentrue =	data;
 														app.route.navigate('taxonlist/:all', {trigger: true});
 												}
@@ -92,42 +107,33 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
       });
     });
   },
-	      
+ 
   afterRender: function () {
     if (this.isNew)  {
       $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');}
     else{
       $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
       $('input:text', this.$el).addClass('disabled');
-      $('select', this.$el).addClass('disabled');    
+      $('select', this.$el).addClass('disabled');
      }
     $('input:reset', this.$el).attr('style', 'display:none');
     $('h3', this.$el).attr('style', 'display:none');
-  },
-  beforeRender: function(){
-    if (this.collection) {
-      this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
-    }
   }
 });
 
 app.views.ObsRueView=  app.utils.BaseView.extend({
-
   template: 'table-obs-rue',
 
   initialize: function() {
     this.collection.bind('reset', this.render, this);
   },
   
-  events:{
-  },
-  
-  serialize: function() {
+ serialize: function() {
     return {collection:this.obsCurrentRue};
   },
   
   beforeRender: function(){
-    this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});   
+    this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});
   }
   
 });
@@ -377,8 +383,10 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     'click div.accordion-heading': 'changeIcon',
     'click #send-obs': 'sendObs',
 				'click #submitEmail':'setEmail',
-				'click .destroyObs':'destroyObs'
-  },
+				'click .destroyObs':'destroyObs',
+				'click .back-rue-en-cours':'backRueEnCours',
+				'click .back-home' : 'backHome'  
+		},
   
   tabObsespece: function(event){
     $("#tabObs a[href='#espece']").tab('show');
@@ -472,5 +480,12 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 								}
 						}
 				});
+		},
+		backRueEnCours : function(event){
+				app.globals.currentrue =	this.parcours.findWhere({'state': 0});
+				app.route.navigate('taxonlist/:all', {trigger: true});
+		},
+		backHome : function(event){
+				app.route.navigate('', {trigger: true});
 		}
 });

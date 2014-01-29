@@ -148,8 +148,8 @@ app.Router = Backbone.Router.extend({
       success: function(data) {
         mesRuesColl.fetch({
           success: function(parcours) {
-              var currentView = new app.views.ObservationListView({collection: data, parcours : parcours});
-              self.displayView(currentView);
+            var currentView = new app.views.ObservationListView({collection: data, parcours : parcours});
+            self.displayView(currentView);
           }
         });
       }

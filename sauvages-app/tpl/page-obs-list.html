@@ -1,6 +1,5 @@
 <div id="obs-list-content" class="container">
     <div  class="navbar navbar-fixed-top loc-header">
-        <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
         <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
         <div class="page-block-title">
             <div class="span page-title">Mes observations</div>
@@ -38,7 +37,6 @@
 	<div class="accordion" id="mesObsParRue">
           <%
             _.each(data.parcours.models,function(rue,i,lst){
-																console.log(data);
               var rueId = rue.get('id');
               var rueName = rue.get('name');
               var group = data.collection.getObsByRueId(rueId);
@@ -50,7 +48,7 @@
                 <b><%= rueName %></b>
 																<i>Fin du parcours: <%= rue.get('end_datetime') %></i>
 																	<% if(rue.get('state') === 1){%>
-																												<span class="glyphicon glyphicon-share"></span>
+																				<span class="glyphicon glyphicon-share"></span>
 																<%	} %>
 																<span class="badge pull-right"><%= group.length %></span>
                 </a>
@@ -84,9 +82,15 @@
               </div>
             </div>
           <% }); %>
-	
+
 	 </div>
     <div>
-								<button id="send-obs" type="button" class="btn btn-lg">Partager</button>
+								<% var rueEnCours = data.parcours.findWhere({'state': 0});
+												var rueAPartager = data.parcours.findWhere({'state': 1});			
+								%>
+								<button id="send-obs" type="button" class="btn btn-lg btn-primary <% if(typeof(rueAPartager) === 'undefined'){%>disabled<%}%>">Partager</button>
+								<% if(typeof(rueEnCours) !== 'undefined'){ %><button id="" type="button" class="btn btn-lg btn-succes back-rue-en-cours">Retour à la saisie</button>
+								<% }else{ %><button id="" type="button" class="btn btn-lg btn-succes back-home">Nouvelle rue</button><% };%>
+
     </div>
 </div>

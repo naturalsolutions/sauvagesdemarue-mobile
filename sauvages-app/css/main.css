@@ -102,7 +102,7 @@ outline-color: green;
 */
 /****** NS_UI-Form****************/
 
-.form-actions .btn{
+.form-actions .btn, .btn-long{
   margin:0px auto;
   display: block;
   width:65%;
