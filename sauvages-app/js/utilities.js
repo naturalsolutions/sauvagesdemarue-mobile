@@ -366,6 +366,19 @@ app.utils.geolocalisation = {
     console.log("Error: " + errors[error.code]);
   },
 }
+
+//-----------Menu slide left------------//
+$('[data-toggle=offcanvas]').click(function() {
+    $('.row-offcanvas').toggleClass('active');
+    $('body').toggleClass('pad-bottom-top');
+    $('.top-navbar').toggleClass('navbar-fixed-top');  
+});
+
+$('.list-group-item').click(function() {
+    $('.row-offcanvas').toggleClass('active');
+    $('body').toggleClass('pad-bottom-top');
+    $('.top-navbar').toggleClass('navbar-fixed-top'); 
+});
 //----------- TELA WEB SERVICES REVERSE GEOLOCALISATION -------------//
 /*function geolocaliser() {
 	$('#geo-infos').html('Calcul en cours...');

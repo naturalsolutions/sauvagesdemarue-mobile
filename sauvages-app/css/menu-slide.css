@@ -1,0 +1,129 @@
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+html {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+body {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+body .container {
+  margin-right: auto;
+  margin-left: auto;
+  height: 100%;
+  position: relative;
+}
+.container>.navbar-header, .container>.navbar-collapse {
+  margin-left: 0px;
+}
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+/*@media screen and (max-width: 767px) {*/
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all 0.25s ease-out;
+    -moz-transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
+    height: 100%;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+    height: 100%;
+  }
+  .row-offcanvas-left.active .btn-group-justified {
+    left: 33.3%;
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+    height: 100%;
+    background: #333;
+  }
+  .sidebar-offcanvas .list-group-item:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .sidebar-offcanvas .list-group-item:first-child {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+/*  .row-offcanvas-left .sidebar-offcanvas .list-group {
+    padding-left: 10px;
+  }*/
+  .row-offcanvas-right .sidebar-offcanvas .list-group {
+    padding-right: 10px;
+  }
+  .navbar-toggle {
+    float: left;
+    margin-right: 0px;
+    padding: 9px 10px;
+    border-radius: 0px;
+    background-color: #666;
+    border: 1px solid #666;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+  .menu-header{
+    padding:15px;  
+  }
+/*}*/
+/******************************GRAND ECRAN*********************************/
+@media (min-width: 768px){
+  .sidebar-offcanvas {
+    width: 33.33333333333%; /* 4 columns */
+  }
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -33.33333333333%; /* 8 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 66.6666666666%; /* 8 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 33.33333333333%; /* 4 columns */
+  }
+
+  .navbar-toggle {
+    display: block;
+    float: left;
+    margin-right: 0px;
+    padding: 9px 10px;
+  }
+  .container>.navbar-header, .container>.navbar-collapse {
+    margin-right: inherit;
+    margin-left: inherit;
+  }
+  .navbar-header {
+    float: none;
+  }
+  .navbar {
+    border : none;
+    margin-bottom: 0px;
+  }
+}

@@ -8,35 +8,53 @@
     
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/> 
     
-   <!-- <link rel="stylesheet" href="libs/bootstrap_2.3.1/css/bootstrap.css" />
-    <link href="libs/bootstrap_2.3.1/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />-->
-    <link href="libs/bootstrap_3.0.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+   <!-- <link rel="stylesheet" href="libs/bootstrap_2.3.1/css/bootstrap.css" />-->
+   <!-- <link href="libs/bootstrap_2.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />-->
+				<link href="libs/bootstrap_3.0.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="libs/NS.UI.Notification/notification.css" rel="stylesheet" type="text/css" />
     
     
     <link href="css/main.css" rel="stylesheet" type="text/css" />
     <link href="css/key.css" rel="stylesheet" type="text/css" />
+				<link href="css/menu-slide.css" rel="stylesheet" type="text/css" />
     <link href="libs/flexslider/flexslider.css" rel="stylesheet" type="text/css" />
         
   </head>
 
-  <body>
-   
-    <div id="header"></div>
-    <div id="content"></div>
-    <footer class="white">
-        <div class="row">
-          <div class="footer-el">
-            <a href="" ><span class="sprite-sauvages sprite-map"></span><p>Carte</p></a>
-          </div>
-          <div class="footer-el">
-            <a href="#myObservation"><span class="sprite-sauvages sprite-obs"></span><p>Observations</p></a>
-          </div>
-          <div class="footer-el">
-            <a href=""><span class="sprite-sauvages sprite-parameter"></span><p>Paramètres</p></a>
-          </div>
-        </div>
-    </footer>
+  <body class="pad-bottom-top">
+				<div class="row row-offcanvas row-offcanvas-left">
+						<div class="navbar top-navbar navbar-fixed-top" role="navigation">
+								<div class="container">
+										<div class="navbar-header">
+												<button type="button" class="navbar-toggle" data-toggle="offcanvas">
+														<span class="sr-only">Toggle navigation</span>
+														<span class="glyphicon glyphicon-chevron-right"></span>
+												</button>
+												<div class="page-block-title">
+																<div class="span page-title">Ma nouvelle rue</div>
+												</div>
+												<div class="elem-right-header pull-right"></div>
+												<div class="page-block-sub-title">
+																<h1 class="page-sub-title">Créer une nouvelle rue</h1>
+												</div>
+											<!-- <a class="navbar-brand" href="#"><img src="./css/images/logo_sauvages_38px.png"/></a>-->
+										</div>
+								</div><!-- /.container -->
+						</div><!-- /.navbar -->
+      
+						<div class="col-xs-6 col-md-4 sidebar-offcanvas" id="sidebar" role="navigation">
+								<div class="menu-header" href="#"><img src="./css/images/logo_sauvages_38px.png"/></div>
+								<div class="list-group">
+										<a href="#" class="list-group-item active">Accueil</a>
+										<a href="#myObservation" class="list-group-item">Mes Sauvages</a>
+										<a href="#" class="list-group-item">Mes paramètres</a>
+								</div>
+						</div><!--/sidebar-offcanvas-->
+						
+						<div class="col-12" id="content">
+						</div><!--/content-->
+    </div><!--/row-->
+
 
     <!-- Scripts -->
     

@@ -1,3 +1,7 @@
+.pad-bottom-top {
+		/*padding-bottom: 34px;*/
+		padding-top: 85px;
+}
 .disabled{
 	z-index: 1;
 	filter: Alpha(Opacity=30);
@@ -207,13 +211,17 @@ right: 0;
   margin-top:6px;
 }
 /******SVG*******/
-#home-page-content{
+/*#home-page-content{
   background-image:url(images/map-home.svg);
   background-repeat: no-repeat;
   background-position: bottom;
   width:100%;
-}
+}*/
 /***Footer***/
+.navbar-fixed-bottom {
+		min-height: 34px;
+		background-color: #333;
+}
 footer{
   height: 43px;
   width: 100%;
@@ -253,7 +261,9 @@ border-right: 1px solid #6B6B6B;
 border-left: 1px solid #6B6B6B;
 }
 /******************/
-
+.navbar.navbar-fixed-top.loc-header {
+		margin-left: 60px;
+}
 /*.loc-header{
   height:60px;
 }*/
@@ -271,6 +281,9 @@ border-left: 1px solid #6B6B6B;
 .page-title{
  /* font-size:200%;*/
  font-weight:bold;
+		margin: 4px 20px 0px;
+font-size: xx-large;
+float: left;
 }
 .page-title, .page-subtitle{
 	width: auto;
@@ -282,15 +295,18 @@ border-left: 1px solid #6B6B6B;
 }
 
 .loc-container{
-  margin:80px 2% 40px ;
+  margin:10px 2% 40px ;
 }
 #identification-list-content .loc-container{
-  margin:75px 0px 40px ;
+  margin:0px 0px 40px ;
 }
 #taxon-list-content .loc-container{
-  margin: 73px 16px 40px 2px;
+  margin: 0px 0px 70px 0px ;
 }
-
+.row {
+margin-left: 0px;
+margin-right: 0px;
+}
 .sci-taxon-name{
   font-style: italic;
 }
@@ -324,8 +340,7 @@ border-left: 1px solid #6B6B6B;
 /**********KEY Header************/
 #taxonNb {
 color: white;
-text-align: inherit;
-margin-left: 12px;
+margin-left: 20px;
 font-weight: normal;
 font-size: 13px;
 }
@@ -374,11 +389,10 @@ border-bottom: 0px;
   text-align:center;
   background-color:#A0CA10;
   font-weight: bold;
-  position: fixed;
-top: 43px;
-width: 100%;
-z-index:1000;
-right: 0;
+		top: 43px;
+		width: 100%;
+		z-index:1000;
+		float:left;
 }
 h1.page-sub-title {
 font-size: 20px;
@@ -424,7 +438,9 @@ background:#EBECDE;
 ul.nav-list ul {
   padding-left: 0;
 }
-
+.item-alphabetique-taxon-list {
+margin-right: 16px;
+}
 /*****LIST OBS*****/
 
 .list-group li:nth-child(even){
@@ -486,7 +502,10 @@ margin-bottom: 60px;
 list-style: none;
 margin: 10px;
 }
-/*********MEDIA QUERIE***/
+
+
+	
+/***********MEDIA QUERIE**********/
 @media (min-width: 768px){
   #carousel-container {
   width: 100%;
@@ -537,6 +556,13 @@ margin: 10px;
 		right: 0px !important;
 		background: whitesmoke;
 }
+
+a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+		z-index: 2;
+		color: #ffffff;
+		background-color: #008D00;
+		border-color: #008D00;
+}
 .internal-anchor {
 		border: 0;
 		font-size: xx-small !important;
@@ -558,11 +584,11 @@ margin: 10px;
 		top                         : 0;*/
 	 height: 80%;  /* uncomment if desktop */
 	}
-        #home-page-content {
+/* #home-page-content {
 		overflow                    : hidden;
 		position                    : fixed;
 		display                     : block;
 		top                         : 0;
-          height: 95%;  /* uncomment if desktop */
-	}
+  height: 95%;  /* uncomment if desktop */
+	}*/
 }

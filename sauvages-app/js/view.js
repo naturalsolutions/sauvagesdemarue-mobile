@@ -13,17 +13,22 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
+				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'> Nouvelle observation : "+ this.model.get("name_taxon")+"</h1>");
   },
-  
-	
+		events:{ 
+		'click .annuler-enregistrement-obs': 'annulerTerminer'
+  },
+  annulerTerminer : function(evt){
+				app.route.navigate('taxonlist/:all', {trigger: true});	
+		}
 });
 
 app.views.FormAddOccurenceView = NS.UI.Form.extend({
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
       this.on('submit:valid', function(instance) {
-	//Get value for hidden fields
-	instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+								//Get value for hidden fields
+								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
         instance.save().done( function(model, response, options) {
           sauvages.notifications.obsSaveSuccess();
         });
@@ -43,6 +48,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   template: 'form-add-sauvagerue',
   
   initialize: function(options) {
+				$('.navbar').show();
     this.model.bind("reset", this.render, this);
     this.collection = options.collection; 
   },
@@ -62,9 +68,15 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 		},
 
   beforeRender: function() {
-    this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model, collection: this.collection}));
-				if (this.collection) {
+    this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
+				if (typeof(this.collection) !== 'undefined') {
 						this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
+				}
+				if (typeof(this.model) !== 'undefined') {
+						$('.page-title').empty();
+						$('.page-sub-title').empty();
+						$('.page-title').append(this.model.get('name')+' - '+this.model.get('cote'));
+						$('.page-sub-title').append('Ma rue en cours');
 				}
   },
 		
@@ -75,7 +87,6 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
     NS.UI.Form.prototype.initialize.apply(this, arguments);
       //Test if new instance
       this.isNew = this.instance.isNew();
-      this.collection = options.collection;
       
       var self = this;
 						this.on('submit:valid', function(instance) {
@@ -96,11 +107,11 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 														// TODO enlever les globales
 														delete app.globals.currentrue;
 														data.set('state',1).save();
-														sauvages.notifications.finParcours();
+														sauvages.notifications.finParcours();				
 												}
 												else {
 														app.globals.currentrue =	data;
-														app.route.navigate('taxonlist/:all', {trigger: true});
+														app.route.navigate('choixOutils', {trigger: true});
 												}
 										}
 								});
@@ -110,7 +121,9 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
  
   afterRender: function () {
     if (this.isNew)  {
-      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');}
+      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');
+						
+				}
     else{
       $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
       $('input:text', this.$el).addClass('disabled');
@@ -134,6 +147,7 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
   
   beforeRender: function(){
     this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});
+				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Mes Sauvages</h1>");
   }
   
 });
@@ -141,6 +155,21 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 
   template: 'page-home',
 
+		initialize: function() { 		
+    $('.navbar').hide();
+  }
+});
+
+app.views.pageChoixOutils=  app.utils.BaseView.extend({
+
+  template: 'page-choix-outils',
+
+		initialize: function() { 		
+  },
+	
+		beforeRender : function(event) {
+										$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisissez votre outil</h1>");
+		}
 });
 
 app.views.IdentificationKeyView =  app.utils.BaseView.extend({
@@ -159,6 +188,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     this.collection.each(function(criteria) {
       this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
     }, this);
+				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Assistant d'identification</h1>");
+				$('.elem-right-header').append("<a href='#taxonlist/all' class='sprite-sauvages sprite-list-fond'></a><a href='#taxonlist' class='sprite-sauvages sprite-btn-resultat'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a>");
   },
   
   filterTaxon : function(event) {
@@ -205,8 +236,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   }
 });
 
-
-
 app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 
   template: 'items-list-criteria-picto',
@@ -242,7 +271,6 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 	}
 });
 
-	
 app.views.TaxonListView =  app.utils.BaseView.extend({
 
   template: 'page-taxon-list',
@@ -259,7 +287,12 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 
     });
-    
+				if(app.globals.currentFilterTaxonIdList.length === 0){
+						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Liste des Sauvages</h1>");
+				}else{
+						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</h1>");
+				};	
+				$('.elem-right-header').append("<a class='pull-right sprite-sauvages sprite-btn-assistant' href='#identification'></a>");
   },
   
   serialize: function() {
@@ -285,7 +318,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
     var self = this;
     self.model.get('caracValues').each(function(model) {
       var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
-			
         criM.fetch({
           success: function(data) {
 												$('.flexslider').flexslider({
@@ -300,6 +332,8 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
           }
         });
     }, this);
+				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+ this.model.get('commonName')+"</h1><em>"+ this.model.get('scientificName')+"</em>");
+				$('.elem-right-header').append("<a href='#taxonlist/all' class='pull-right sprite-sauvages sprite-list-fond'></a>");
    },
    events: {
         'click div.accordion-heading': 'changeIcon',
@@ -359,8 +393,6 @@ app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
   },
 
 });
-
-/********/
 
 app.views.ObservationListView =  app.utils.BaseView.extend({
 

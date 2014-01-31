@@ -3,7 +3,6 @@
 // ----------------------------------------------- The Application Router ------------------------------------------ //
 
 app.Router = Backbone.Router.extend({
-  //currentProfil : app.models.ProfilsCollection,
   
   routes: {
    'identification' : 'viewIdentKey',
@@ -13,6 +12,7 @@ app.Router = Backbone.Router.extend({
    'addObs/:taxonId' : 'viewFormAddObs',
    'addParcours(/:state)' : 'viewFormAddParcours',
    'myObservation' : 'viewTableMyObs',
+    'choixOutils' : 'viewChoixOutils',
    '' : 'viewHomePage',
   },
 
@@ -21,10 +21,8 @@ app.Router = Backbone.Router.extend({
     app.globals.currentFilterTaxonIdList = new Array();
     app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;
     
-		//Démarrage de l'écoute GPS
-		app.utils.geolocalisation.watchCurrentPosition();
-
-    var self = this;
+    //Démarrage de l'écoute GPS
+    app.utils.geolocalisation.watchCurrentPosition();
       // Keep track of the history of pages (we only store the page URL). Used to identify the direction
       // (left or right) of the sliding transition between pages.
       this.pageHistory = [];
@@ -34,7 +32,6 @@ app.Router = Backbone.Router.extend({
           window.history.back();
           return false;
       });
-
   },
 	
   goToLastPage: function() {
@@ -45,11 +42,17 @@ app.Router = Backbone.Router.extend({
     var currentView = new app.views.HomePageView();
     this.displayView(currentView);
   },
-  
+  viewChoixOutils: function() {
+    var currentView = new app.views.pageChoixOutils();
+    this.displayView(currentView);
+  },
   viewIdentKey : function() {
+    if (typeof(app.globals.currentrue) === 'undefined') {
+	    alert('Rue non initialisée');
+	    return false;
+    }
     console.log('viewIdentKey viewIdentKey');
     var self = this;
-		
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
     cListAllCriterias.fetch({
         success: function(data) {
@@ -60,9 +63,13 @@ app.Router = Backbone.Router.extend({
   },
 
   viewTaxonlist : function(all) {
+    if (typeof(app.globals.currentrue) === 'undefined') {
+	    alert('Rue non initialisée');
+      return false;
+    }
     console.log('viewTaxonlist');
     var taxons;
-    if( all || app.globals.currentFilterTaxonIdList.length == 0  ){
+    if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
       taxons = app.globals.cListAllTaxons;    
     }
     else {
@@ -74,6 +81,10 @@ app.Router = Backbone.Router.extend({
   },
   
   viewTaxonDetail : function(id) {
+    if (typeof(app.globals.currentrue) === 'undefined') {
+	    alert('Rue non initialisée');
+	    return false;
+    }
     console.log('viewTaxonDetail');
     var self = this;
     var taxon= new app.models.Taxon({"taxonId": id});
@@ -85,7 +96,6 @@ app.Router = Backbone.Router.extend({
           }
       });
   },
-
 
   viewFormAddObs : function(taxonI) {
     if (typeof(app.globals.currentrue) === 'undefined') {
@@ -104,13 +114,12 @@ app.Router = Backbone.Router.extend({
         self.displayView(currentView);   
       }
       else{
-	sauvages.notifications.gpsNotStart();
-	this.goToLastPage();
+        sauvages.notifications.gpsNotStart();
+        this.goToLastPage();
       }
     },500);
     
   },
-  
 
   viewFormAddParcours : function(state) {
 		var self = this;
@@ -138,7 +147,7 @@ app.Router = Backbone.Router.extend({
 			this.goToLastPage();
     }
   },
-/**************/
+
   viewTableMyObs : function() {
     var self = this;
     console.log('viewTableMyObs');
@@ -157,16 +166,16 @@ app.Router = Backbone.Router.extend({
    
   },
   
-
   displayView : function (view) {
     if (this._currentView) {
         this._currentView.remove();
         this._currentView.off();
+        $('.elem-right-header').empty();
     }
     this._currentView = view;
     // Render is asynchronous with LayoutManager
     view.render().done(function(view) {
-        $('#content').append(view.el);
+        $('#content').append(view.el);   
     });
   },
 

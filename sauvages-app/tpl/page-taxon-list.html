@@ -1,22 +1,4 @@
-<div id="taxon-list-content" class="container">
-    <div  class="navbar navbar-fixed-top loc-header">
-        <a href="#" class="header-button header-button-left header-back-button sprite-sauvages sprite-back"></a>
-        <a href="#" class="header-logo"><img src="./css/images/logo_sauvages_38px.png"/></a>
-        <div class="page-block-title">
-            <div class="span page-title">Ma rue</div>
-            <% if (typeof(app.globals.currentrue !== 'undefined')) { %>
-              <div class="span page-subtitle sci-rue-name"><%= app.globals.currentrue.get('name') %> - <%= app.globals.currentrue.get('cote') %></div>
-            <% } %>
-        </div>
-        
-        <a class='pull-right sprite-sauvages sprite-btn-assistant' href="#identification"></a>
-        
-    </div>
-    <div class="page-block-sub-title">
-        <a class='sprite-sauvages sprite-btn-stop' href="#addParcours"></a>
-        <h1 class="page-sub-title">Espèces</h1>
-    </div>
-   
+<div id="taxon-list-content" class="container"> 
    <%
     var col = _.groupBy(data.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
    %>
@@ -60,5 +42,11 @@
         <% }); %>
         </ul>
       </fieldset>
-    </div>
+    <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <div class="btn-group btn-group-justified">
+            <a class='btn btn-danger' href="#addParcours" role="button">Fin de parcours</a>
+            <a class='btn btn-default disabled' href="" role="button">Pas reconnue</a>
+            <a class='btn btn-default disabled' href="" role="button">Pas dans la liste</a>
+        </div>
+    </nav>
 </div>
