@@ -447,14 +447,17 @@ margin-right: 16px;
 background:#EBECDE;
 }
 #obs-list-content .loc-container {
-margin: 73px 0px 40px;
+margin: 10px 0px 40px;
 }
-.rueEnCours{
-		background-color: tomato;
+#obs-list-content .panel-default>.panel-heading.rueEnCours{
+		background-color: #A0CA10;
 }
-#mesObsParRue .accordion-heading{
+#obs-list-content .panel-default>.panel-heading{
+		background-color: lightgray;
+}
+/*#mesObsParRue .accordion-heading{
 		padding:10px;
-}
+}*/
 /**********carousel-container*************/
 #taxon-detail-content .flexslider{
 	margin:0 0 35px;

@@ -2,77 +2,81 @@
   
   <div class="loc-container" >
     <ul class="nav nav-tabs" id="tabObs" >
-	<li class="active"><a href="#espece">Mes espèces</a></li>
-	<li><a href="#rue">Mes rues</a></li>
+								<li class="active"><a href="#rue">Mes rues</a></li>
+								<li ><a href="#espece">Mes espèces</a></li>
     </ul>
-
     <div class="tab-content">
-      <div class="tab-pane active" id="espece">
-        <ul id="values-list" class="list-group">
-	<%
-            var groups = _.groupBy(data.collection.models,function(item,key,list){
-                return item.get('name_taxon');
-            });
-            _.each(groups,function(group,i,list){
-                var nameTaxon = group[0].get('name_taxon');	
-          %>    
-            <li class="list-group-item">
-              <span class="badge"><%= group.length %></span>
-              <p><%= nameTaxon %></p>
-            </li>
-        <% }); %>
-        </ul>
-      </div>
-      
-      <div class="tab-pane" id="rue">
-	<div class="accordion" id="mesObsParRue">
-          <%
-            _.each(data.parcours.models,function(rue,i,lst){
-              var rueId = rue.get('id');
-              var rueName = rue.get('name');
-              var group = data.collection.getObsByRueId(rueId);
-          %>   
-            <div class="accordion-group" id='taxonList-div-<%=i %>'>
-              <div class="accordion-heading <% if(rue.get('end_datetime') === 'undefined'){%> rueEnCours <% }%>">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
-                <span class="glyphicon glyphicon-plus glyph-collpase"></span>
-                <b><%= rueName %></b>
-																<i>Fin du parcours: <%= rue.get('end_datetime') %></i>
-																	<% if(rue.get('state') === 1){%>
-																				<span class="glyphicon glyphicon-share"></span>
-																<%	} %>
-																<span class="badge pull-right"><%= group.length %></span>
-                </a>
-              </div>
-              <div id="collapse<%= i %>" class="accordion-body collapse">
-                <div class="accordion-inner">
-                <ul>
-																<% if (group.length === 0){ %>
-																				 <li>
-                    <div class="">
-                      <p>la rue ne contient pas d'observations.</p>
-                    </div>
-                  </li>
-																<% } %>
-                <%  
-																 _.each(group,function(item,key,list){
-                %>
-                  <li>
-                    <div class="">
-																				<% if(item.get('photo') !== ""){%>
-                      <img class="taxon-img-thumb img-rounded" style ="width:50px;" id="<%= item.get('photo') %>" src="<%= item.get('photo') %>">
-																				<% } %>				
-																				<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %>
-																								<button type="button" class="destroyObs btn btn-default pull-right" id="<%= item.get('id') %>"><span class="glyphicon glyphicon-trash"></span></button>
-																				</p>
-                    </div>
-                  </li>
-                <% });%>
-                </ul>
-                </div>
-              </div>
-            </div>
-          <% }); %>
+								<div class="tab-pane active" id="rue">
+												<div class="panel-group" id="mesObsParRue">
+														<%
+																_.each(data.parcours.models,function(rue,i,lst){
+																		var rueId = rue.get('id');
+																		var rueName = rue.get('name');
+																		var group = data.collection.getObsByRueId(rueId);
+														%>   
+																<div class="panel panel-default" id='taxonList-div-<%=i %>' >
+																				<div class="panel-heading <% if(rue.get('end_datetime') === 'undefined'){ %> rueEnCours <% } %>" >
+																								<a data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
+																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
+																												<b><%= rueName %></b>
+																												<i>Fin du parcours: <%= rue.get('end_datetime') %></i>
+																													<% if(rue.get('state') === 1) { %>
+																																<span class="glyphicon glyphicon-share"></span>
+																												<%	} %>
+																												<span class="badge pull-right"><%= group.length %></span>
+																								</a>
+																				</div>
+																				<div id="collapse<%= i %>" class="panel-collapse collapse" >
+																								<div class="panel-body">
+																												<ul>
+																												<% if (group.length === 0){ %>
+																																<li>
+																																				<div>
+																																						<p>la rue ne contient pas d'observations.</p>
+																																				</div>
+																																</li>
+																												<% }else{ %>
+																																<%  
+																																	_.each(group,function(item,key,list){
+																																%>
+																																<li>
+																																				<div class="">
+																																				<% if(item.get('photo') !== "") { %>
+																																								<img class="taxon-img-thumb img-rounded" style ="width:50px;" id="<%= item.get('photo') %>" src="<%= item.get('photo') %>">
+																																				<% } %>				
+																																								<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %>
+																																												<button type="button" class="destroyObs btn btn-default pull-right" id="<%= item.get('id') %>"><span class="glyphicon glyphicon-trash"></span></button>
+																																								</p>
+																																				</div>
+																																</li>
+																																<% });%>
+																												<% } %>
+																												</ul>
+																								</div><!--panel-body-->
+																				</div><!--panel-collapse-->
+																				
+																</div><!--panel-default-->
+																<% }); %>
+												</div><!--panel-group-->
+								</div><!--tab-rue-->
+								<div class="tab-pane" id="espece">
+												<ul id="values-list" class="list-group">
+												<%
+																var groups = _.groupBy(data.collection.models,function(item,key,list){
+																				return item.get('name_taxon');
+																});
+																_.each(groups,function(group,i,list){
+																				var nameTaxon = group[0].get('name_taxon');	
+														%>    
+																<li class="list-group-item">
+																		<span class="badge"><%= group.length %></span>
+																		<p><%= nameTaxon %></p>
+																</li>
+																<% }); %>
+												</ul>
+								</div>
+    </div>
+    
 
 	 </div>
     <div>
@@ -84,4 +88,5 @@
 								<% }else{ %><button id="" type="button" class="btn btn-lg btn-succes back-home">Nouvelle rue</button><% };%>
 
     </div>
+				</div>
 </div>
