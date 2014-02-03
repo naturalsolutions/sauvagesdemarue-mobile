@@ -45,7 +45,7 @@ NS.UI = (function(ns) {
                 type: 'error',
                 title: 'Error',
                 message: 'An error occured',
-								btnLabel : 'close',
+                btnLabel : 'close',
                 delay: 7
             });
             this.render();
@@ -54,6 +54,7 @@ NS.UI = (function(ns) {
         render: function() {
             var self = this;
             $('#myModal').empty();
+            
             var data = _.pick(this.options, 'type', 'title', 'message', 'btnLabel');
             var $html = $(_.template(this.templateSrc, data, {variable: 'data'}));
             this.setElement($html);

@@ -445,11 +445,10 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				var currentUser = new app.models.User({'userId': 1});
 				currentUser.fetch({
           success: function(data) {
-            var emailUser = data.get('email'); 
-												if (typeof(emailUser) !== 'undefined') {
+            var emailUser = data.get('email');
+												if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 ) {
 														var dfd = $.Deferred();
 														//var collectionRueFinie = parcours;
-
 														app.utils.queryData.getObservationsTelaWSFormated()
 																.done(
 																		function(data) {
@@ -474,16 +473,19 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																});
 												}
 												else{
+												
 												var msg = _.template(
-																	"<form role='form'>"+
+																	"<form role='form form-inline'>"+
 																		"<div class='form-group'>"+
-																		" <label for='InputEmail'>Adresse email</label>"+
-																		"<input type='email' class='form-control' id='InputEmail' placeholder='Enter email'>"+
-																		"<button type='submit' id='submitEmail' class='btn btn-default'>Valider</button>"+
+																		"<label for='InputEmail'>Adresse email</label>"+
+																		"<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
 																		"</div>"+
+																		"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
 																	"</form>"					
 																);
 												sauvages.notifications.email(msg());
+												$('.modal-footer').addClass("hide");
+												//$('#modal-close').addClass("pull-left btn-primary").removeClass('btn-default');
 												self.render();
 												}
 										}

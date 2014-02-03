@@ -76,13 +76,13 @@ function() {
    },
    sauvages.email = function email(msg) {
       var v = new NS.UI.NotificationModal({
-         type: 'error',
+         type: 'warning',
          title: 'Ajouter votre email',
          message: msg,
          delay: '',
-         btnLabel: 'Terminer'
+         btnLabel: 'Annuler'
       });
-      v.$el.on('submit', 'form', _.bind(function(evt) {
+      v.$el.on('submit', _.bind(function(evt) {
          evt.preventDefault();
            var currentEmail = this.$el.find('input[type="email"]').val();
             var currentUser = new app.models.User({
@@ -90,6 +90,9 @@ function() {
                'email':currentEmail
             });
             currentUser.save();
+            $('#nodal').modal('hide');
+            $('#nodal').remove();
+            $('.modal-backdrop').remove();
       }, v))
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
