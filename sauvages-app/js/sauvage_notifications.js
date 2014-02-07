@@ -107,7 +107,7 @@ function() {
           }
       });
 	},
-  /* sauvages.finDeProtocol = function finDeProtocol(msg) {
+  sauvages.finDeProtocol = function finDeProtocol(msg) {
 			var v = new NS.UI.NotificationModal({
 				type: 'warning',
 				title: 'Voulez-vous terminer votre parcours ?',
@@ -128,7 +128,7 @@ function() {
       $('.modal-backdrop').remove();
       app.route.navigate('taxonlist', {trigger: true});
    }, v))
-	},*/
+	},
    sauvages.finDeProtocolHorsParcours = function finDeProtocol(msg, derObsLat, derObslong , parcours) {
 			var v = new NS.UI.NotificationModal({
 				type: 'warning',

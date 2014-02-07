@@ -464,7 +464,7 @@ margin: 10px 0px 40px;
 	min-height: 50px;
 }
 #taxon-detail-content .flex-control-nav{
-	bottom:-25px;
+	bottom:-30px;
 }
 #taxon-detail-content .flex-control-paging li a{
   width:5px;
@@ -474,7 +474,7 @@ margin: 10px 0px 40px;
 
 /***DETAIL TAXON***/
 #taxon-detail-content .loc-container{
-  margin:90px 10px 40px;
+  margin:20px 10px 40px;
 }
 .btnObs{
   width:25%;
