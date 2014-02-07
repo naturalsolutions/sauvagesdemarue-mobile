@@ -77,7 +77,7 @@ function() {
    sauvages.email = function email(msg) {
       var v = new NS.UI.NotificationModal({
          type: 'warning',
-         title: 'Ajouter votre email',
+         title: 'Ajouter votre email.',
          message: msg,
          delay: '',
          btnLabel: 'Annuler'

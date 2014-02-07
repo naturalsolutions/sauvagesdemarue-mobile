@@ -122,7 +122,6 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
   afterRender: function () {
     if (this.isNew)  {
       $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');
-						
 				}
     else{
       $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
@@ -288,8 +287,10 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
       return taxon.get("commonName").toUpperCase(); 
     });
 				if(app.globals.currentFilterTaxonIdList.length === 0){
+						$('.page-block-sub-title em').remove();
 						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Liste des Sauvages</h1>");
 				}else{
+						$('.page-block-sub-title em').remove();
 						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</h1>");
 				};	
 				$('.elem-right-header').append("<a class='pull-right sprite-sauvages sprite-btn-assistant' href='#identification'></a>");
@@ -314,12 +315,14 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   
   
   beforeRender: function() {
+					
     console.log(this.model.get('caracValues').models);
     var self = this;
+
     self.model.get('caracValues').each(function(model) {
       var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
         criM.fetch({
-          success: function(data) {
+          success: function(data) {	
 												$('.flexslider').flexslider({
 														animation: "slide",  
 														slideshow: false,
@@ -331,12 +334,13 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
             self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
           }
         });
-    }, this);
+    });
 				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+ this.model.get('commonName')+"</h1><em>"+ this.model.get('scientificName')+"</em>");
 				$('.elem-right-header').append("<a href='#taxonlist/all' class='pull-right sprite-sauvages sprite-list-fond'></a>");
    },
+		
    events: {
-        'click div.accordion-heading': 'changeIcon',
+      'click div.accordion-heading': 'changeIcon',
     },
       
     changeIcon: function(event){
@@ -412,12 +416,12 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
-    'click div.accordion-heading': 'changeIcon',
     'click #send-obs': 'sendObs',
 				'click #submitEmail':'setEmail',
 				'click .destroyObs':'destroyObs',
 				'click .back-rue-en-cours':'backRueEnCours',
-				'click .back-home' : 'backHome'  
+				'click .back-home' : 'backHome',
+				'click div.panel-heading': 'changeIcon'
 		},
   
   tabObsespece: function(event){
@@ -427,16 +431,16 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     $("#tabObs a[href='#rue']").tab('show');
   },
   
-  changeIcon: function(event){
-    $('.accordion-group').on('hide.bs.collapse', function () {
-      $(this).children().children().children(".glyph-collpase").removeClass('glyphicon-minus');
-      $(this).children().children().children(".glyph-collpase").addClass('glyphicon-plus');
-    });
-    $('.accordion-group').on('show.bs.collapse', function () {
-      $(this).children().children().children(".glyph-collpase").removeClass('glyphicon-plus');
-      $(this).children().children().children(".glyph-collpase").addClass('glyphicon-minus');
-    });
-  },
+		changeIcon: function(event){
+				$('#mesObsParRue').on('hide.bs.collapse', function () {
+						$(this).children().children().children().children('.glyph-collpase').removeClass('glyphicon-minus');
+						$(this).children().children().children().children('.glyph-collpase').addClass('glyphicon-plus');
+				});
+				$('#mesObsParRues').on('show.bs.collapse',  function () {
+						$(this).children().children().children().children(".glyph-collpase").removeClass('glyphicon-plus');
+						$(this).children().children().children().children(".glyph-collpase").addClass('glyphicon-minus');
+				});
+		},
   
   sendObs: function (event) {
     //Get current Obs
@@ -477,6 +481,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 												var msg = _.template(
 																	"<form role='form form-inline'>"+
 																		"<div class='form-group'>"+
+																		"<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
 																		"<label for='InputEmail'>Adresse email</label>"+
 																		"<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
 																		"</div>"+

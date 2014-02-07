@@ -35,9 +35,7 @@ NS.WSTelaAPIClient = (function() {
         var nbObsSent;
         var nbObsTheorique;
         for (var idp in obsPerParcours) {
-            
-           
-
+              
             //Test si les rues sont vides, modifier la requete si confirmation de Tela de ne pas les envoyer
             if(obsPerParcours[idp][0].ido !== -1){
                 if(obsPerParcours[idp][0].longitudeFinRue !== "undefined" && obsPerParcours[idp][0].latitudeFinRue !== "undefined"){

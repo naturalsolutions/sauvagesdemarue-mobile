@@ -47,10 +47,10 @@ app.Router = Backbone.Router.extend({
     this.displayView(currentView);
   },
   viewIdentKey : function() {
-    if (typeof(app.globals.currentrue) === 'undefined') {
-	    alert('Rue non initialisée');
-	    return false;
-    }
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//	    return false;
+//    }
     console.log('viewIdentKey viewIdentKey');
     var self = this;
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
@@ -63,10 +63,10 @@ app.Router = Backbone.Router.extend({
   },
 
   viewTaxonlist : function(all) {
-    if (typeof(app.globals.currentrue) === 'undefined') {
-	    alert('Rue non initialisée');
-      return false;
-    }
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//      return false;
+//    }
     console.log('viewTaxonlist');
     var taxons;
     if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
@@ -81,10 +81,10 @@ app.Router = Backbone.Router.extend({
   },
   
   viewTaxonDetail : function(id) {
-    if (typeof(app.globals.currentrue) === 'undefined') {
-	    alert('Rue non initialisée');
-	    return false;
-    }
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//	    return false;
+//    }
     console.log('viewTaxonDetail');
     var self = this;
     var taxon= new app.models.Taxon({"taxonId": id});
@@ -98,10 +98,10 @@ app.Router = Backbone.Router.extend({
   },
 
   viewFormAddObs : function(taxonI) {
-    if (typeof(app.globals.currentrue) === 'undefined') {
-	    alert('Rue non initialisée');
-	    return false;
-    }
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//	    return false;
+//    }
     var self = this;
     setTimeout(function() {
       app.utils.geolocalisation.getCurrentPosition();

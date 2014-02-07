@@ -470,7 +470,7 @@ margin: 10px 0px 40px;
   width:5px;
   height:5px;
 }
-
+.flexslider .slides > li:first-child {display: list-item;}
 
 /***DETAIL TAXON***/
 #taxon-detail-content .loc-container{
