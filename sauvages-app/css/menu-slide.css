@@ -16,6 +16,9 @@ body .container {
   height: 100%;
   position: relative;
 }
+.no-scroll{
+  overflow: hidden;
+}
 .container>.navbar-header, .container>.navbar-collapse {
   margin-left: 0px;
 }
@@ -53,13 +56,13 @@ body .container {
     height: 100%;
   }
   .row-offcanvas-left.active .btn-group-justified {
-    left: 25%;
+    left: 75%;
   }
 
   .sidebar-offcanvas {
     position: absolute;
     top: 0;
-    width: 25%; /* 6 columns */
+    width: 75%; /* 6 columns */
     height: 100%;
     background: #333;
   }

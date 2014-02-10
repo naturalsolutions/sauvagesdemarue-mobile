@@ -368,22 +368,42 @@ app.utils.geolocalisation = {
 }
 
 //-----------Menu slide left------------//
+//gestion du menu au clique sur bouton placé sur la barre de navigation
 $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
     $('.top-navbar').toggleClass('navbar-fixed-top disabled');
     $('.bottom-navbar').toggleClass('navbar-fixed-bottom');
-    $('body').toggleClass('pad-bottom-top');
+    $('body').toggleClass('pad-bottom-top no-scroll');
     $('#content').toggleClass('disabled');
-     navbar-fixed-bottom
-});
-
-$('.list-group-item').click(function() {
-    $('.row-offcanvas').toggleClass('active');
-    $('.top-navbar').toggleClass('navbar-fixed-top');
-    $('.bottom-navbar').toggleClass('navbar-fixed-bottom');
-    $('body').toggleClass('pad-bottom-top');
     
 });
+//gestion du menu au clique sur les items du menu
+$('.list-group-item').click(function() {
+    $('.row-offcanvas').toggleClass('active');
+    $('.top-navbar').toggleClass('navbar-fixed-top disabled');
+    $('.bottom-navbar').toggleClass('navbar-fixed-bottom');
+    $('body').toggleClass('pad-bottom-top no-scroll');
+    $('#content').toggleClass('disabled');
+});
+//gestion du menu au scroll
+var lastScrollLeft = 0;
+$(window).scroll(function(event){
+   var st = $(this).scrollLeft();
+   if (st > lastScrollLeft){
+       // leftscroll code
+       $('.row-offcanvas').toggleClass('active');
+    $('.top-navbar').toggleClass('navbar-fixed-top disabled');
+    $('.bottom-navbar').toggleClass('navbar-fixed-bottom');
+    $('body').toggleClass('pad-bottom-top no-scroll');
+    $('#content').toggleClass('disabled');
+      console.log('st > lastScrollLeft:'+st);
+   } else {
+      // rightscroll code
+      console.log('st < lastScrollLeft:'+st);
+   }
+   lastScrollLeft = st;
+});
+
 //----------- TELA WEB SERVICES REVERSE GEOLOCALISATION -------------//
 /*function geolocaliser() {
 	$('#geo-infos').html('Calcul en cours...');
