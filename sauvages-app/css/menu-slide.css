@@ -34,32 +34,32 @@ body .container {
 
   .row-offcanvas-right
   .sidebar-offcanvas {
-    right: -50%; /* 6 columns */
+    right: -75%; /* 6 columns */
   }
 
   .row-offcanvas-left
   .sidebar-offcanvas {
-    left: -50%; /* 6 columns */
+    left: -75%; /* 6 columns */
     padding-right: 0;
     padding-left: 0;
   }
 
   .row-offcanvas-right.active {
-    right: 50%; /* 6 columns */
+    right: 75%; /* 6 columns */
   }
 
   .row-offcanvas-left.active {
-    left: 50%; /* 6 columns */
+    left: 75%; /* 6 columns */
     height: 100%;
   }
   .row-offcanvas-left.active .btn-group-justified {
-    left: 33.3%;
+    left: 25%;
   }
 
   .sidebar-offcanvas {
     position: absolute;
     top: 0;
-    width: 50%; /* 6 columns */
+    width: 25%; /* 6 columns */
     height: 100%;
     background: #333;
   }

@@ -370,14 +370,19 @@ app.utils.geolocalisation = {
 //-----------Menu slide left------------//
 $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
+    $('.top-navbar').toggleClass('navbar-fixed-top disabled');
+    $('.bottom-navbar').toggleClass('navbar-fixed-bottom');
     $('body').toggleClass('pad-bottom-top');
-    $('.top-navbar').toggleClass('navbar-fixed-top');  
+    $('#content').toggleClass('disabled');
+     navbar-fixed-bottom
 });
 
 $('.list-group-item').click(function() {
     $('.row-offcanvas').toggleClass('active');
+    $('.top-navbar').toggleClass('navbar-fixed-top');
+    $('.bottom-navbar').toggleClass('navbar-fixed-bottom');
     $('body').toggleClass('pad-bottom-top');
-    $('.top-navbar').toggleClass('navbar-fixed-top'); 
+    
 });
 //----------- TELA WEB SERVICES REVERSE GEOLOCALISATION -------------//
 /*function geolocaliser() {

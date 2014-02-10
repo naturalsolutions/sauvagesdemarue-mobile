@@ -1,5 +1,44 @@
+/*------------@font-face--------------*/
+@font-face {
+	font-family: 'sauvages';
+	src:url('fonts/sauvages.eot?waq3bm');
+	src:url('fonts/sauvages.eot?#iefixwaq3bm') format('embedded-opentype'),
+		url('fonts/sauvages.woff?waq3bm') format('woff'),
+		url('fonts/sauvages.ttf?waq3bm') format('truetype'),
+		url('fonts/sauvages.svg?waq3bm#sauvages') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'sauvages';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-francegras-simple:before {
+	content: "\e600";
+}
+.icon-profil-visage-sauvages:before {
+	content: "\e601";
+}
+.icon-profil-sauvages:before {
+	content: "\e602";
+}
+.icon-fleurgrasse-sauvages:before {
+	content: "\e603";
+}
+
+/*-----------------------------*/
 .pad-bottom-top {
-		/*padding-bottom: 34px;*/
 		padding-top: 85px;
 }
 .disabled{
