@@ -58,7 +58,9 @@ function init(){
 
   $("body").find("a").addClass("disabled");
   $("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
-   
+  
+  
+
 		initDB();
 
   $.when.apply(null, deferreds).done(function() {
@@ -68,6 +70,10 @@ function init(){
        success: function(data) {
           app.route = new app.Router();
           Backbone.history.start();
+          $("#menu").mmenu({
+            classes: "mm-slide",
+            dragOpen: true
+          });
           $('#dataloader-img').remove();
           $("body").find("a").removeClass("disabled");
         }

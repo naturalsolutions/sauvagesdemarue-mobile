@@ -18,47 +18,33 @@
     <link href="css/key.css" rel="stylesheet" type="text/css" />
 				<link href="css/menu-slide.css" rel="stylesheet" type="text/css" />
     <link href="libs/flexslider/flexslider.css" rel="stylesheet" type="text/css" />
+				<link type="text/css" rel="stylesheet" media="all" href="libs/jQuery.mmenu-master/src/css/jquery.mmenu.all.css" />
         
   </head>
 
-  <body class="pad-bottom-top">
-				<div class="row row-offcanvas row-offcanvas-left">
-						<div class="navbar top-navbar navbar-fixed-top" role="navigation">
-								<div class="container">
-										<div class="navbar-header">
-												<button type="button" class="navbar-toggle" data-toggle="offcanvas">
-														<span class="sr-only">Toggle navigation</span>
-														<span class="glyphicon glyphicon-chevron-right"></span>
-												</button>
-												<div class="page-block-title">
-																<div class="span page-title">Ma nouvelle rue</div>
-												</div>
-												<div class="elem-right-header pull-right"></div>
-												<div class="page-block-sub-title">
-																<h1 class="page-sub-title">Créer une nouvelle rue</h1>
-												</div>
-											<!-- <a class="navbar-brand" href="#"><img src="./css/images/logo_sauvages_38px.png"/></a>-->
-										</div>
-								</div><!-- /.container -->
-						</div><!-- /.navbar -->
-      
-						<div class="col-xs-6 col-md-4 sidebar-offcanvas" id="sidebar" role="navigation">
-								<div class="menu-header" href="#"><img src="./css/images/logo_sauvages_38px.png"/></div>
-								<div class="list-group">
-										<a href="#" class="list-group-item active"><span class="glyphicon glyphicon-home"></span> Accueil</a>
-										<a href="#" class="list-group-item"><span class="icon-fleurgrasse-sauvages"></span> Je participe</a>
-										<a href="#" class="list-group-item"><span class="icon-francegras-simple"></span> Mes régions</a>	
-										<a href="#myObservation" class="list-group-item"><span class="glyphicon glyphicon-list"></span> Mes Sauvages</a>
-										<a href="#" class="list-group-item"><span class="glyphicon glyphicon-map-marker"></span> Carte</a>	
-										<a href="#" class="list-group-item"><span class="glyphicon glyphicon-user"></span> Mon profil</a>
-										<a href="#" class="list-group-item"><span class="glyphicon glyphicon-question-sign"></span> Aide</a>
-										<a href="#" class="list-group-item"><span class="glyphicon glyphicon-copyright-mark"></span> Crédits</a>
-								</div>
-						</div><!--/sidebar-offcanvas-->
-						
-						<div class="col-12" id="content">
+  <body>
+     <div>
+								<nav id="menu">
+										<ul>
+												<li class="Selected"><a href="#"><span class="glyphicon glyphicon-home"></span> Accueil</a></li>
+												<li><a href="#"><span class="icon-fleurgrasse-sauvages"></span> Je participe</a></li>
+												<li><a href="#"><span class="icon-francegras-simple"></span> Mes régions</a></li>
+												<li><a href="#myObservation"><span class="glyphicon glyphicon-list"></span> Mes Sauvages</a></li>
+												<li><a href="#"><span class="glyphicon glyphicon-map-marker"></span> Carte</a></li>
+												<li><a href="#"><span class="glyphicon glyphicon-user"></span> Mon profil</a></li>
+												<li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> Aide</a></li>
+												<li><a href="#"><span class="glyphicon glyphicon-copyright-mark"></span> Crédits</a></li>
+										</ul>
+								</nav>
+						<div id="header" class="mm-fixed-top">
+								<a href="#menu">Menu</a>
+								Le header
+						</div>
+
+      <div class="col-12" id="content">
 						</div><!--/content-->
-    </div><!--/row-->
+      <div id="footer" class="mm-fixed-bottom">Le footer</div>	
+    </div><!--/wrapper-->
 
 
     <!-- Scripts -->
@@ -98,9 +84,10 @@
     <script type="text/javascript" src="cordova.js"></script>
 
     <script type="text/javascript" src="libs/flexslider/jquery.flexslider-min.js"></script>
-    
-   <!-- <script type="text/javascript" src="libs/bootstrap_2.3.1/bootstrap.js"></script>-->
-   <script type="text/javascript" src="libs/bootstrap_3.0.2/js/bootstrap.js"></script>
+				<script type="text/javascript" src="libs/jquery.hammer.js-master/jquery.hammer-full.js"></script>
+				<script type="text/javascript" src="libs/jQuery.mmenu-master/src/js/jquery.mmenu.min.all.js"></script>
+
+				<script type="text/javascript" src="libs/bootstrap_3.0.2/js/bootstrap.js"></script>
     <script type="text/javascript" src="libs/NS.UI.Notification/notification.js"></script>
     <script type="text/javascript" src="libs/NS.UI.Notification/notification_modal.js"></script>
     
