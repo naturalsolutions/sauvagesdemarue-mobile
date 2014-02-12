@@ -299,7 +299,7 @@ footer a:active,footer a:hover,footer a:focus{
 border-right: 1px solid #6B6B6B;
 border-left: 1px solid #6B6B6B;
 }
-/******************/
+/******** HEADER **********/
 .navbar.navbar-fixed-top.loc-header {
 		margin-left: 60px;
 }
@@ -348,6 +348,10 @@ margin-right: 0px;
 }
 .sci-taxon-name{
   font-style: italic;
+}
+/******** CONTENT *********/
+.add-margin-top{
+		margin-top: 85px;
 }
 
 /********HOME*********/

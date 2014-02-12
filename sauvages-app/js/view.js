@@ -43,7 +43,6 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 
 });
 
-
 app.views.AddSauvageRueView = app.utils.BaseView.extend({
   template: 'form-add-sauvagerue',
   
