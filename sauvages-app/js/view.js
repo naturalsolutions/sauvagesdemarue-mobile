@@ -9,18 +9,21 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 
   initialize: function() {
     this.model.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
 				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'> Nouvelle observation : "+ this.model.get("name_taxon")+"</h1>");
   },
+	
 		events:{ 
 		'click .annuler-enregistrement-obs': 'annulerTerminer'
   },
   annulerTerminer : function(evt){
 				app.route.navigate('taxonlist/:all', {trigger: true});	
-		}
+		},
+	
 });
 
 app.views.FormAddOccurenceView = NS.UI.Form.extend({
@@ -40,7 +43,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
       $('input:reset', this.$el).attr('style', 'display:none');
       $('h3', this.$el).attr('style', 'display:none');
     },
-
+		
 });
 
 app.views.AddSauvageRueView = app.utils.BaseView.extend({
@@ -49,9 +52,10 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   initialize: function(options) {
 				$('.navbar').show();
     this.model.bind("reset", this.render, this);
-    this.collection = options.collection; 
+    this.collection = options.collection;
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
-				serialize: function() {
+		serialize: function() {
     if (this.collection) {
 						return {collection:this.collection};
 				};
@@ -59,13 +63,33 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   },
 
 		events:{ 
-		'click .annuler-fin-saisie': 'annulerTerminer'
+		'click .annuler-fin-saisie': 'annulerTerminer',
   },
-
+	 hammerEvents: {
+				'drag body' : 'onDrag',
+				'touch #content' : 'onTouch',
+				'swipe #content' : 'onSwipe'	
+		},
+		hammerOptions: {
+    tap: true
+  },
 		annulerTerminer : function(evt){
 				app.route.navigate('taxonlist/:all', {trigger: true});	
 		},
-
+		onSwipe :function(evt){
+			//	evt.gesture.preventDefault();
+				alert('swipe');
+				console.log('swipe'+evt.gesture.direction)
+		},
+		onDrag :function(evt){
+			//	evt.gesture.preventDefault();
+				alert('drag');
+				console.log('drag'+evt.gesture.direction)
+		},
+		onTouch :function(evt){
+				alert('touch');
+				console.log('touch')
+		},
   beforeRender: function() {
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
 				if (typeof(this.collection) !== 'undefined') {
@@ -76,10 +100,13 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 						$('.page-sub-title').empty();
 						$('.page-title').append(this.model.get('name')+' - '+this.model.get('cote'));
 						$('.page-sub-title').append('Ma rue en cours');
+					//	this.$el.hammer();
 				}
   },
 		
 });
+
+
 app.views.FormAddSauvageRue = NS.UI.Form.extend({
 
   initialize: function(options) {
@@ -137,6 +164,7 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
 
   initialize: function() {
     this.collection.bind('reset', this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
  serialize: function() {
@@ -155,6 +183,7 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 
 		initialize: function() { 		
     $('.navbar').hide();
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   }
 });
 
@@ -162,7 +191,8 @@ app.views.pageChoixOutils=  app.utils.BaseView.extend({
 
   template: 'page-choix-outils',
 
-		initialize: function() { 		
+		initialize: function() {
+						app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 	
 		beforeRender : function(event) {
@@ -176,6 +206,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   
   initialize: function() { 		
     this.collection.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
   events: {
@@ -241,6 +272,8 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
   initialize: function() {
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+
   },
 		events: {
     "click .help": "helpShow"
@@ -275,6 +308,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   
   initialize: function() {
     this.collection.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
   beforeRender: function() {
@@ -310,6 +344,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   initialize: function() {
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
   
@@ -361,6 +396,7 @@ app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
   initialize: function() {
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 });
 
@@ -372,6 +408,7 @@ app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
     this.anchorBaseName = this.options['anchorBaseName'];
     this.navheight = this.options['navheight'];
     this.activeBtn = this.options['activeBtn'];
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
   events: {
@@ -405,6 +442,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				this.parcours = this.options.parcours;
     this.collection.bind("reset", this.render, this);
 				this.parcours.bind("change", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
   serialize: function() {

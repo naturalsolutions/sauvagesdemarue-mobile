@@ -115,7 +115,7 @@ app.Router = Backbone.Router.extend({
       }
       else{
         sauvages.notifications.gpsNotStart();
-        this.goToLastPage();
+        self.goToLastPage();
       }
     },500);
     
@@ -165,18 +165,16 @@ app.Router = Backbone.Router.extend({
     });
    
   },
-  
-  displayView : function (view) {
-    if (this._currentView) {
-        this._currentView.remove();
-        this._currentView.off();
-        $('.elem-right-header').empty();
-    }
-    this._currentView = view;
-    // Render is asynchronous with LayoutManager
-    view.render().done(function(view) {
-        $('#content').append(view.el);   
-    });
-  },
+  _currentView: null,
+
+  displayView: function (view) {
+      if (this._currentView) {
+          this._currentView.remove();
+          this._currentView.off();
+      }
+      this._currentView = view;
+      $('#content').append(view.el);
+      view.render();
+  }
 
 });

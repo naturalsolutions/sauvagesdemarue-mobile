@@ -8,23 +8,16 @@ NS.UI = (function(ns) {
         stacked: {}
     };
 
-    var BaseView = Backbone.Layout.extend({
-        manage: true, // Enable LM
-        el: false, // LM will use template's root node
-
-        initialize: function() {
-            // Ensure LM will execute template() with an appriate context
-            this.template = _.bind(this.template, this);
-            Backbone.Layout.prototype.initialize.apply(this, arguments);
-        },
-
-        // Note: we can not rely an LM fetch/cache mechanism because we have two alternative templates for each view
+    var BaseView = app.utils.BaseView.extend({
         templateId: '',
-        template: function(data) {
-            var mode = data.inline ? 'inline' : 'stacked';
-            if (!(this.templateId in cache[mode]))
-                cache[mode][this.templateId] = _.template(this.constructor.templateSrc[mode], null, {variable: 'data'});
-            return cache[mode][this.templateId](data);
+        getTemplate: function() {
+            var dfd = $.Deferred();
+            return dfd.resolve(_.bind(function(data) {
+                var mode = data.inline ? 'inline' : 'stacked';
+                if (!(this.templateId in cache[mode]))
+                    cache[mode][this.templateId] = _.template(this.constructor.templateSrc[mode], null, {variable: 'data'});
+                return cache[mode][this.templateId](data);
+            }, this));
         }
     });
 
@@ -414,7 +407,7 @@ NS.UI = (function(ns) {
 												this.names[view.name] = name;
 																// Bind MultiSchema fields to their selector
 																if (Editor == editors.MultiSchema) {
-																				var selector = this.getViews(this.fieldRegion).find(function(v) {
+																				var selector = _.find(this.getViews(this.fieldRegion), function(v) {
 																								return this.selector == v.name;
 																				}, view).value();
 																				if (selector)
@@ -447,7 +440,7 @@ NS.UI = (function(ns) {
 
         validate: function() {
             // Relay validation to each subfield
-            this.getViews(this.fieldRegion).each(function(view) {
+            _.each(this.getViews(this.fieldRegion),function(view) {
                 if (view instanceof BaseEditor)
                     view.validate();
             });
@@ -455,7 +448,7 @@ NS.UI = (function(ns) {
 
         clearValidationErrors: function () {
             BaseEditor.prototype.clearValidationErrors.apply(this, arguments);
-            this.getViews(this.fieldRegion).each(function(view) {
+            _.each(this.getViews(this.fieldRegion),function(view) {
                 if (view instanceof BaseEditor)
                     view.clearValidationErrors(); // Relay to subview
             });
@@ -508,7 +501,7 @@ NS.UI = (function(ns) {
 	
 								getLabel: function() {
 												var labels = [];
-												this.getViews(this.fieldRegion).each(function(view) {
+												_.each(this.getViews(this.fieldRegion),function(view) {
 																if (view instanceof BaseEditor) {
 																				labels.push(view.getLabel());
 																}
@@ -700,7 +693,7 @@ NS.UI = (function(ns) {
                 this.cache[id] = {data: {}, names: {}, errors: {}};
 
             // Blank fields from the previous schema
-            this.getViews(this.fieldRegion).each(function(view) {
+            _.each(this.getViews(this.fieldRegion),function(view) {
                 if (view instanceof BaseEditor) {
                     view.remove();
                 }

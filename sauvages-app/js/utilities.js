@@ -369,23 +369,20 @@ app.utils.geolocalisation = {
 //-----------MMenu slide------------//
 //Ajoute un icon refresh si il y a une rue terminée qui contient des obs non envoyées.
 $('#menu').mmenu().on('opening.mm',function(){
-    $('#content').addClass('disabled  add-margin-top');
-    $('.navbar-header').children().not('.open-menu').addClass('disabled');
-    app.utils.queryData.getObservationsTelaWSFormated()
-																.done(function(data) {
-																				console.log(data);
-																				if (data.length !== 0 && !$('#menu #menuItemMyObs').has('#flagObs')) {
-                      $('#menu #menuItemMyObs .glyphicon').after("<span id='flagObs' class='glyphicon glyphicon-refresh'></span>");  
-                    }
+  $('#content').addClass('disabled  add-margin-top');
+  $('.navbar-header').children().not('.open-menu').addClass('disabled');
+  app.utils.queryData.getObservationsTelaWSFormated()
+    .done(function(data) {
+        if (data.length !== 0 && $('#menu #menu-item-my-obs').has('#flagObs').length === 0) {
+          $('#menu #menu-item-my-obs .glyphicon').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-right'></span>");  
+        }
     });
-  }
-);
+});
 $('#menu').mmenu().on('closed.mm',function(){
     $('#content').removeClass('disabled add-margin-top');
     $('.navbar-header').children().not('.open-menu').removeClass('disabled');
   }
 );
-
 $('.open-menu').click(function(){
     $("#menu").trigger("open");
   }
@@ -403,6 +400,7 @@ $('#menu-item-je-participe').click(function(){
   app.route.navigate('addParcours', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
+
 //----------- TELA WEB SERVICES REVERSE GEOLOCALISATION -------------//
 /*function geolocaliser() {
 	$('#geo-infos').html('Calcul en cours...');
