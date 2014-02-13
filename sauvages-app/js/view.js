@@ -83,7 +83,6 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   },	
 });
 
-
 app.views.FormAddSauvageRue = NS.UI.Form.extend({
 
   initialize: function(options) {
@@ -154,6 +153,7 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
   }
   
 });
+
 app.views.HomePageView=  app.utils.BaseView.extend({
 
   template: 'page-home',
@@ -187,7 +187,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   },
   
   events: {
-    "click input[type=checkbox]": "filterTaxon"
+    "click input[type=checkbox]": "filterTaxon",
+				"dragleft" : "dragTaxonList"
   },
 
   beforeRender: function() {
@@ -196,7 +197,14 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     }, this);
 				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Assistant d'identification</h1>");
 				$('.elem-right-header').append("<a href='#taxonlist/all' class='sprite-sauvages sprite-list-fond'></a><a href='#taxonlist' class='sprite-sauvages sprite-btn-resultat'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a>");
-  },
+				this.$el.hammer();
+		},
+		
+		
+		dragTaxonList : function(event){
+				app.route.navigate('taxonlist', {trigger: true, replace: true});
+    console.log("event gesture"+event.gesture);
+		},
   
   filterTaxon : function(event) {
     var objCurrentTarget=$(event.currentTarget);

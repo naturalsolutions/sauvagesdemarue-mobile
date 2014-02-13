@@ -368,8 +368,9 @@ app.utils.geolocalisation = {
 }
 //-----------MMenu slide------------//
 $("#menu").mmenu({
-            dragOpen: true
-          });
+  classes: "mm-slide",
+  dragOpen: true
+});
 //Ajoute un icon refresh si il y a une rue terminée qui contient des obs non envoyées.
 $('#menu').mmenu().on('opening.mm',function(){
   $('#content').addClass('disabled  add-margin-top');

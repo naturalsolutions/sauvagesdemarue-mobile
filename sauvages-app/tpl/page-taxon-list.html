@@ -8,40 +8,40 @@
     
    </div>
    
-      <fieldset>
-        <ul id="values-list" class="taxonList nav-list">
-          <%  _.each(col,function(item,key,list){%>
-        <% if(key != ""){%>
-          <li id="anchor-taxon-<%= key %>" class="item-list-alphabetique"><p><%= key %></p></li>
-          <ul class="item-alphabetique-taxon-list"> 
-          <% _.each(item,function(taxon,k){%>
-            <li>
-              <div id='taxonList-div-<%= taxon.get('taxonId') %>' class="taxon-list-item pad-right">
-                <div>
-                    <div class="taxonName">
-                      <a href="#taxondetail/<%= taxon.get('taxonId') %>">
-                        <% if ((typeof(taxon.get('picture')) !== "undefined")  &&  (taxon.get('picture') !== "undefined")){ %>
-                        <% var picture = taxon.get('picture')
-                        picture = picture.replace("http://www.tela-botanica.org/appli:cel-img:","./data/images/images_formated/")%>
-                          <img class="taxon-img-thumb" id="taxonList-img-<%= taxon.get('taxonId') %>" src="<%=picture%>" alt="image : <%= taxon.get('scientificName') %>"/>
-                        <% } %> 
-                        <p><b><%= taxon.get('commonName') %></b></br><em><%= taxon.get('scientificName') %></em></p>
-                        <span class="sprite-sauvages sprite-arrow-div-list-transparent"></span>
-                      </a>
-                    </div>
-                    <div class="btnAddObsList pull-right">
-                      <a href="#addObs/<%= taxon.get('taxonId') %>" class="sprite-sauvages sprite-btn-list-add"></i></a>
-                    </div>
-                    
-                </div>
+    <fieldset>
+      <ul id="values-list" class="taxonList nav-list">
+        <%  _.each(col,function(item,key,list){%>
+      <% if(key != ""){%>
+        <li id="anchor-taxon-<%= key %>" class="item-list-alphabetique"><p><%= key %></p></li>
+        <ul class="item-alphabetique-taxon-list"> 
+        <% _.each(item,function(taxon,k){%>
+          <li>
+            <div id='taxonList-div-<%= taxon.get('taxonId') %>' class="taxon-list-item pad-right">
+              <div>
+                  <div class="taxonName">
+                    <a href="#taxondetail/<%= taxon.get('taxonId') %>">
+                      <% if ((typeof(taxon.get('picture')) !== "undefined")  &&  (taxon.get('picture') !== "undefined")){ %>
+                      <% var picture = taxon.get('picture')
+                      picture = picture.replace("http://www.tela-botanica.org/appli:cel-img:","./data/images/images_formated/")%>
+                        <img class="taxon-img-thumb" id="taxonList-img-<%= taxon.get('taxonId') %>" src="<%=picture%>" alt="image : <%= taxon.get('scientificName') %>"/>
+                      <% } %> 
+                      <p><b><%= taxon.get('commonName') %></b></br><em><%= taxon.get('scientificName') %></em></p>
+                      <span class="sprite-sauvages sprite-arrow-div-list-transparent"></span>
+                    </a>
+                  </div>
+                  <div class="btnAddObsList pull-right">
+                    <a href="#addObs/<%= taxon.get('taxonId') %>" class="sprite-sauvages sprite-btn-list-add"></i></a>
+                  </div>
+                  
               </div>
-            </li>
-          <% }); %>
-          </ul>
-        <%}%>
+            </div>
+          </li>
         <% }); %>
         </ul>
-      </fieldset>
+      <%}%>
+      <% }); %>
+      </ul>
+    </fieldset>
     <nav class="navbar bottom-navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="btn-group btn-group-justified">
             <a class='btn btn-danger' href="#addParcours" role="button">Fin de parcours</a>

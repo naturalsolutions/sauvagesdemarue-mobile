@@ -169,8 +169,9 @@ app.Router = Backbone.Router.extend({
 
   displayView: function (view) {
       if (this._currentView) {
-          this._currentView.remove();
-          this._currentView.off();
+        this._currentView.remove();
+        this._currentView.off();
+        $('.elem-right-header').empty();
       }
       this._currentView = view;
       $('#content').append(view.el);
