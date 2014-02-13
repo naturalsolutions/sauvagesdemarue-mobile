@@ -64,31 +64,11 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
   },
-	 hammerEvents: {
-				'drag body' : 'onDrag',
-				'touch #content' : 'onTouch',
-				'swipe #content' : 'onSwipe'	
-		},
-		hammerOptions: {
-    tap: true
-  },
+
 		annulerTerminer : function(evt){
 				app.route.navigate('taxonlist/:all', {trigger: true});	
 		},
-		onSwipe :function(evt){
-			//	evt.gesture.preventDefault();
-				alert('swipe');
-				console.log('swipe'+evt.gesture.direction)
-		},
-		onDrag :function(evt){
-			//	evt.gesture.preventDefault();
-				alert('drag');
-				console.log('drag'+evt.gesture.direction)
-		},
-		onTouch :function(evt){
-				alert('touch');
-				console.log('touch')
-		},
+
   beforeRender: function() {
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
 				if (typeof(this.collection) !== 'undefined') {
@@ -99,7 +79,6 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 						$('.page-sub-title').empty();
 						$('.page-title').append(this.model.get('name')+' - '+this.model.get('cote'));
 						$('.page-sub-title').append('Ma rue en cours');
-					//	this.$el.hammer();
 				}
   },	
 });
