@@ -61,7 +61,6 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				};
 		return true;
   },
-
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
   },
@@ -102,8 +101,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 						$('.page-sub-title').append('Ma rue en cours');
 					//	this.$el.hammer();
 				}
-  },
-		
+  },	
 });
 
 
