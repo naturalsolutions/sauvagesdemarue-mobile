@@ -300,7 +300,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   beforeRender: function() {
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
-    this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
+    //this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
     
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 
@@ -312,7 +312,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 						$('.page-block-sub-title em').remove();
 						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</h1>");
 				};	
-				$('.elem-right-header').append("<a class='pull-right sprite-sauvages sprite-btn-assistant' href='#identification'></a>");
+				$('.elem-right-header').append("<a class='pull-right btn btn-default' href='#identification'><span class='icon-fleurgrasse-sauvages'></span></a>");
   },
   
   serialize: function() {

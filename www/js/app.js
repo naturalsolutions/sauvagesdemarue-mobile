@@ -196,6 +196,7 @@ function init(){
           Backbone.history.start();
           $("#menu").mmenu({
             classes: "mm-slide",
+            header      : true
           });
           $('#dataloader-img').remove();
           $("body").find("a").removeClass("disabled");
