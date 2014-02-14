@@ -369,7 +369,7 @@ app.utils.geolocalisation = {
 //-----------MMenu slide------------//
 $("#menu").mmenu({
   classes: "mm-slide",
-  dragOpen: true
+  //dragOpen: true
 });
 //Ajoute un icon refresh si il y a une rue terminée qui contient des obs non envoyées.
 $('#menu').mmenu().on('opening.mm',function(){
@@ -404,6 +404,16 @@ $('#menu-item-je-participe').click(function(){
   app.route.navigate('addParcours', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
+var event='click';
+console.log(document.documentElement.hasOwnProperty('ontouchstart'));
+//if ('ontouchstart' in document.documentElement) event = 'touchstart';
+  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+$("#content").hammer({ /* options */ }).on(event, function(ev) { 
+    console.dir("hamme"+ev); 
+}); 
+$("#content").on(event, { /* options */ }, function(ev) {
+    console.log("on"+ev); 
+}); 
 
 //----------- TELA WEB SERVICES REVERSE GEOLOCALISATION -------------//
 /*function geolocaliser() {

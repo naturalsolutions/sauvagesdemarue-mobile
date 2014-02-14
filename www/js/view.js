@@ -113,7 +113,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 												}
 												else {
 														app.globals.currentrue =	data;
-														app.route.navigate('choixOutils', {trigger: true});
+														app.route.navigate('identification', {trigger: true});
 												}
 										}
 								});
@@ -164,18 +164,18 @@ app.views.HomePageView=  app.utils.BaseView.extend({
   }
 });
 
-app.views.pageChoixOutils=  app.utils.BaseView.extend({
-
-  template: 'page-choix-outils',
-
-		initialize: function() {
-						app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
-	
-		beforeRender : function(event) {
-										$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisissez votre outil</h1>");
-		}
-});
+//app.views.pageChoixOutils=  app.utils.BaseView.extend({
+//
+//  template: 'page-choix-outils',
+//
+//		initialize: function() {
+//						app.utils.BaseView.prototype.initialize.apply(this, arguments);
+//  },
+//	
+//		beforeRender : function(event) {
+//										$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisissez votre outil</h1>");
+//		}
+//});
 
 app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
@@ -188,7 +188,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   
   events: {
     "click input[type=checkbox]": "filterTaxon",
-				"dragleft" : "dragTaxonList"
+				"drag" : "dragTaxonList"
   },
 
   beforeRender: function() {
@@ -204,6 +204,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 		dragTaxonList : function(event){
 				app.route.navigate('taxonlist', {trigger: true, replace: true});
     console.log("event gesture"+event.gesture);
+				event.preventDefault();
 		},
   
   filterTaxon : function(event) {
@@ -318,7 +319,15 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
     if (this.collection) return {collection : this.collection};
     return true;
   },
-
+		events: {
+				"drag" : "dragIdentification"
+  },
+		dragIdentification : function(event){
+				app.route.navigate('identification', {trigger: true, replace: true});
+    console.log("event gesture"+event.gesture);
+				event.preventDefault();
+		
+		}
 
 });
 
@@ -353,7 +362,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
             self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
           }
         });
-    });
+    },this);
 				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+ this.model.get('commonName')+"</h1><em>"+ this.model.get('scientificName')+"</em>");
 				$('.elem-right-header').append("<a href='#taxonlist/all' class='pull-right sprite-sauvages sprite-list-fond'></a>");
    },

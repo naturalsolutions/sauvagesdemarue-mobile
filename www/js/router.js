@@ -12,7 +12,7 @@ app.Router = Backbone.Router.extend({
    'addObs/:taxonId' : 'viewFormAddObs',
    'addParcours(/:state)' : 'viewFormAddParcours',
    'myObservation' : 'viewTableMyObs',
-    'choixOutils' : 'viewChoixOutils',
+    //'choixOutils' : 'viewChoixOutils',
    '' : 'viewHomePage',
   },
 
@@ -42,10 +42,10 @@ app.Router = Backbone.Router.extend({
     var currentView = new app.views.HomePageView();
     this.displayView(currentView);
   },
-  viewChoixOutils: function() {
-    var currentView = new app.views.pageChoixOutils();
-    this.displayView(currentView);
-  },
+  //viewChoixOutils: function() {
+  //  var currentView = new app.views.pageChoixOutils();
+  //  this.displayView(currentView);
+  //},
   viewIdentKey : function() {
 //    if (typeof(app.globals.currentrue) === 'undefined') {
 //	    alert('Rue non initialisée');

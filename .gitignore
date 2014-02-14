@@ -1,1 +1,5 @@
 .DS_Store
+.cordova
+merge
+platforms
+plugins
