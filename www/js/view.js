@@ -164,19 +164,6 @@ app.views.HomePageView=  app.utils.BaseView.extend({
   }
 });
 
-//app.views.pageChoixOutils=  app.utils.BaseView.extend({
-//
-//  template: 'page-choix-outils',
-//
-//		initialize: function() {
-//						app.utils.BaseView.prototype.initialize.apply(this, arguments);
-//  },
-//	
-//		beforeRender : function(event) {
-//										$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisissez votre outil</h1>");
-//		}
-//});
-
 app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
   template: 'page-identification-key',
@@ -188,7 +175,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   
   events: {
     "click input[type=checkbox]": "filterTaxon",
-				"drag" : "dragTaxonList"
+				"swipeleft" : "swipeTaxonList"
   },
 
   beforeRender: function() {
@@ -201,10 +188,10 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 		},
 		
 		
-		dragTaxonList : function(event){
+		swipeTaxonList : function(event){
 				app.route.navigate('taxonlist', {trigger: true, replace: true});
     console.log("event gesture"+event.gesture);
-				event.preventDefault();
+				event.gesture.preventDefault();
 		},
   
   filterTaxon : function(event) {
@@ -320,13 +307,12 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
     return true;
   },
 		events: {
-				"drag" : "dragIdentification"
+				"swiperight" : "swipeIdentification"
   },
-		dragIdentification : function(event){
+		swipeIdentification : function(event){
 				app.route.navigate('identification', {trigger: true, replace: true});
     console.log("event gesture"+event.gesture);
-				event.preventDefault();
-		
+				event.gesture.preventDefault;
 		}
 
 });
