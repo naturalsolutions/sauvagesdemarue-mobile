@@ -175,15 +175,17 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   
   events: {
     "click input[type=checkbox]": "filterTaxon",
-				"swipeleft" : "swipeTaxonList"
+				"swipeleft" : "swipeTaxonList",
   },
 
   beforeRender: function() {
     this.collection.each(function(criteria) {
       this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
     }, this);
+				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
+				$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a></div>");
 				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Assistant d'identification</h1>");
-				$('.elem-right-header').append("<a href='#taxonlist/all' class='sprite-sauvages sprite-list-fond'></a><a href='#taxonlist' class='sprite-sauvages sprite-btn-resultat'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a>");
+				$('.elem-right-header').append("<a href='#taxonlist/all' class='btn btn-default'><span class='glyphicon glyphicon-align-justify'></span><a href='' class='btn btn-default disabled'><span class='glyphicon glyphicon-question-sign'></span></a>");		
 				this.$el.hammer();
 		},
 		
@@ -285,6 +287,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
+				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste liste');
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
     //this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
@@ -380,39 +383,39 @@ app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
   },
 });
 
-app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
-
-  template: 'subview-alphabetic-anchor',
-
-  initialize: function() {
-    this.anchorBaseName = this.options['anchorBaseName'];
-    this.navheight = this.options['navheight'];
-    this.activeBtn = this.options['activeBtn'];
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
-
-  events: {
-    "click input[type=button].internal-anchor": "goToAnchor"  
-  },
-
-  afterRender:function() {
-    var self = this;
-    $(this.el).find('.internal-anchor').attr('disabled','disabled');
-    _.each(this.activeBtn,function(l){ 
-      $(self.el).find('#anc-'+l).removeAttr('disabled');
-    });
-  },
-  
-  goToAnchor : function(event){
-    var el = $(event.currentTarget).attr('value');
-    var elWrapped = $('#'+this.anchorBaseName+el);
-    if (elWrapped.length !== 0) {
-      var totalScroll = elWrapped.offset().top-this.navheight;
-      $("html,body").animate({ scrollTop: totalScroll }, "slow");
-    }
-  },
-
-});
+//app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
+//
+//  template: 'subview-alphabetic-anchor',
+//
+//  initialize: function() {
+//    this.anchorBaseName = this.options['anchorBaseName'];
+//    this.navheight = this.options['navheight'];
+//    this.activeBtn = this.options['activeBtn'];
+//				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+//  },
+//
+//  events: {
+//    "click input[type=button].internal-anchor": "goToAnchor"  
+//  },
+//
+//  afterRender:function() {
+//    var self = this;
+//    $(this.el).find('.internal-anchor').attr('disabled','disabled');
+//    _.each(this.activeBtn,function(l){ 
+//      $(self.el).find('#anc-'+l).removeAttr('disabled');
+//    });
+//  },
+//  
+//  goToAnchor : function(event){
+//    var el = $(event.currentTarget).attr('value');
+//    var elWrapped = $('#'+this.anchorBaseName+el);
+//    if (elWrapped.length !== 0) {
+//      var totalScroll = elWrapped.offset().top-this.navheight;
+//      $("html,body").animate({ scrollTop: totalScroll }, "slow");
+//    }
+//  },
+//
+//});
 
 app.views.ObservationListView =  app.utils.BaseView.extend({
 

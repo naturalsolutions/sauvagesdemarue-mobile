@@ -406,8 +406,8 @@ $('#menu-item-je-participe').click(function(){
 });
 var event='click';
 console.log(document.documentElement.hasOwnProperty('ontouchstart'));
-//if ('ontouchstart' in document.documentElement) event = 'touchstart';
-  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+ // if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'onmouseup' }else{ event = 'click'};
 $("#content").hammer({ /* options */ }).on(event, function(ev) { 
     console.dir("hamme"+ev); 
 }); 

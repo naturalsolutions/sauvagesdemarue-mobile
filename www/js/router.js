@@ -172,6 +172,9 @@ app.Router = Backbone.Router.extend({
         this._currentView.remove();
         this._currentView.off();
         $('.elem-right-header').empty();
+        $('body').removeClass('cleliste cle liste');
+        $('#impressionContinue').remove();
+        $('#languette').remove();
       }
       this._currentView = view;
       $('#content').append(view.el);

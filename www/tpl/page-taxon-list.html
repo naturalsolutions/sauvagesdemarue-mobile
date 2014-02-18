@@ -1,4 +1,4 @@
-<div id="taxon-list-content" class="container"> 
+<div id="taxon-list-content" class="container">
    <%
     var col = _.groupBy(data.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
    %>
@@ -30,7 +30,7 @@
                     </a>
                   </div>
                   <div class="btnAddObsList pull-right">
-                    <a href="#addObs/<%= taxon.get('taxonId') %>" class="sprite-sauvages sprite-btn-list-add"></i></a>
+                    <a href="#addObs/<%= taxon.get('taxonId') %>" class="btn btn-default"><span class='glyphicon glyphicon-plus'></span></a>
                   </div>
                   
               </div>
