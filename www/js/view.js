@@ -185,7 +185,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
 				$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a></div>");
 				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Assistant d'identification</h1>");
-				$('.elem-right-header').append("<a href='#taxonlist/all' class='btn btn-default'><span class='glyphicon glyphicon-align-justify'></span><a href='' class='btn btn-default disabled'><span class='glyphicon glyphicon-question-sign'></span></a>");		
+				$('.elem-right-header').append("<a href='' class='btn btn-default disabled'><span class='glyphicon glyphicon-question-sign'></span></a>");		
 				this.$el.hammer();
 		},
 		
@@ -302,7 +302,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 						$('.page-block-sub-title em').remove();
 						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</h1>");
 				};	
-				$('.elem-right-header').append("<a class='pull-right btn btn-default' href='#identification'><span class='icon-fleurgrasse-sauvages'></span></a>");
+			//	$('.elem-right-header').append("<a class='pull-right btn btn-default' href='#identification'><span class='icon-fleurgrasse-sauvages'></span></a>");
   },
   
   serialize: function() {

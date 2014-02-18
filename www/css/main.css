@@ -668,8 +668,14 @@ margin: 10px;
 .notification-list{
 	margin-top : 10%;
 }
+/******MODAL********/
+.notification-modal{
+		color:black;
+}
+
+
 /****Annuaire****/
-.btn-group-vertical > .btn:first-child {
+/*.btn-group-vertical > .btn:first-child {
 		-webkit-border-radius: 0;
 		-moz-border-radius: 0;
 		border-radius: 0;
@@ -697,7 +703,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 		background-color: transparent;
 		background-image: none;
 		height: 4%;
-}
+}*/
 @media all {
 	#aphabetic-list-el {
 		overflow                    : hidden;

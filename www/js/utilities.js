@@ -373,6 +373,7 @@ $("#menu").mmenu({
 });
 //Ajoute un icon refresh si il y a une rue terminée qui contient des obs non envoyées.
 $('#menu').mmenu().on('opening.mm',function(){
+  $('body').removeClass('pad-bottom-top');
   $('#content').addClass('disabled  add-margin-top');
   $('.navbar-header').children().not('.open-menu').addClass('disabled');
   app.utils.queryData.getObservationsTelaWSFormated()
@@ -383,6 +384,7 @@ $('#menu').mmenu().on('opening.mm',function(){
     });
 });
 $('#menu').mmenu().on('closed.mm',function(){
+    $('body').addClass('pad-bottom-top');
     $('#content').removeClass('disabled add-margin-top');
     $('.navbar-header').children().not('.open-menu').removeClass('disabled');
   }
