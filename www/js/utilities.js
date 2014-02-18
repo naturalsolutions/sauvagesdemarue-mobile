@@ -406,10 +406,10 @@ $('#menu-item-je-participe').click(function(){
   app.route.navigate('addParcours', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
-var event='click';
-console.log(document.documentElement.hasOwnProperty('ontouchstart'));
- // if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
-  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'onmouseup' }else{ event = 'click'};
+//var event='click';
+//console.log(document.documentElement.hasOwnProperty('ontouchstart'));
+  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+ // if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'onmouseup' }else{ event = 'click'};
 $("#content").hammer({ /* options */ }).on(event, function(ev) { 
     console.dir("hamme"+ev); 
 }); 

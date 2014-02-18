@@ -166,12 +166,18 @@ ul{
 outline-color: green;
 }
 */
+.btn:focus {
+outline-width: 0px;
+}
 /****** NS_UI-Form****************/
 
 .form-actions .btn, .btn-long{
   margin:0px auto;
   display: block;
   width:65%;
+}
+.form-control{
+		border-radius: 2px;
 }
 .form-actions {
 padding: 19px 5px 20px;
@@ -328,10 +334,20 @@ border-left: 1px solid #6B6B6B;
 }
 .navbar-header{
 		float:none;
+		height: 75px;
 }
 #header {
 		border-bottom: 1px solid;
 		background: #28717E;
+}
+.btn-header{
+		background: transparent;
+		padding-left: 0;
+		height: 100%;
+		color: white;	
+}
+.elem-right-header {
+		height: 100%;
 }
 /*.loc-header{
   height:60px;
@@ -353,6 +369,7 @@ border-left: 1px solid #6B6B6B;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		line-height: 1em;
 }
 
 .page-subtitle{

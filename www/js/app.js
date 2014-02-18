@@ -196,7 +196,6 @@ function init(){
           Backbone.history.start();
           $("#menu").mmenu({
             classes: "mm-slide",
-            header      : true
           });
           $('#dataloader-img').remove();
           $("body").find("a").removeClass("disabled");
@@ -246,7 +245,15 @@ NS.UI.Form.templateSrc.stacked =
                 '<form>' +
                 '    <div class="form-content"></div>' +
                 '    <div class="form-actions">' +
-                '      <input type="submit" class="btn"/> <input type="reset" class="btn" />' +
+                '      <div id="footer" class="mm-fixed-bottom">'+
+                '       <nav class="navbar bottom-navbar navbar-default navbar-fixed-bottom" role="navigation">'+
+                '        <div class="btn-group btn-group-justified">'+
+                '           <input type="submit" class="btn btn-default btn-footer btn-footer-left"/>'+
+                '           <input type="reset" class="btn btn-default btn-footer btn-footer-right"/>'+
+                '     </div>'+
+                '  </nav>'+
+                '</div>	'+
+                '       ' +
                 '    </div>' +
                 '</form>';
 NS.UI.Form.editors.Text.templateSrc.stacked =

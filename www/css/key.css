@@ -44,20 +44,20 @@ background:#EBECDE;
   background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-8 */
   float:left;
-  border-right: 1px solid black;
-border-top: 1px solid black;
-border-left: 3px solid black;
-border-bottom-width: 3px;
-border-bottom-color: black;
-border-bottom-style: solid;
-margin: 2px 3px 5px;
-border-radius: 4px;
-box-shadow: -2px 2px 4px gray;
+  border-right: 3px solid #1E515A;
+		border-top: 1px solid #1E515A;
+		border-left: 1px solid #1E515A;
+		border-bottom-width: 3px;
+		border-bottom-color: #1E515A;
+		border-bottom-style: solid;
+		margin: 2px 3px 5px;
+		border-radius: 3px;
+		box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
 }
 .RadioCustomOn{
   background:#BFE639;
   border-top-width:3px;
-  border-right-width:3px;
+  border-left-width:3px;
   margin-top:0px;
   box-shadow: -1px -1px 2px #BFE639,1px 1px 2px #BFE639;
 }

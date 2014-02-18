@@ -14,7 +14,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
-				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'> Nouvelle observation : "+ this.model.get("name_taxon")+"</h1>");
+				$('.page-title').replaceWith("<div class='page-title'> Nouvelle observation : "+ this.model.get("name_taxon")+"</div>");
   },
 	
 		events:{ 
@@ -39,7 +39,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
     },
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-      $('input:submit', this.$el).addClass('btn-lg btn-success');
+      $('input:submit', this.$el).addClass('btn-lg btn-default');
       $('input:reset', this.$el).attr('style', 'display:none');
       $('h3', this.$el).attr('style', 'display:none');
     },
@@ -77,8 +77,8 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				if (typeof(this.model) !== 'undefined') {
 						$('.page-title').empty();
 						$('.page-sub-title').empty();
-						$('.page-title').append(this.model.get('name')+' - '+this.model.get('cote'));
-						$('.page-sub-title').append('Ma rue en cours');
+						$('.page-sub-title').append(this.model.get('name')+' - '+this.model.get('cote'));
+						$('.page-title').append('Ma rue en cours');
 				}
   },	
 });
@@ -123,14 +123,14 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
  
   afterRender: function () {
     if (this.isNew)  {
-      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-success');
+      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-default');
 				}
     else{
       $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');
      }
-    $('input:reset', this.$el).attr('style', 'display:none');
+    //$('input:reset', this.$el).attr('style', 'display:none');
     $('h3', this.$el).attr('style', 'display:none');
   }
 });
@@ -149,7 +149,7 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
   
   beforeRender: function(){
     this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});
-				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Mes Sauvages</h1>");
+				$('.page-title').replaceWith("<div class='page-title'>Fin de parcours</div>");
   }
   
 });
@@ -184,8 +184,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     }, this);
 				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
 				$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a></div>");
-				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Assistant d'identification</h1>");
-				$('.elem-right-header').append("<a href='' class='btn btn-default disabled'><span class='glyphicon glyphicon-question-sign'></span></a>");		
+				$('.page-title').replaceWith("<div class='page-title'>Assistant d'identification</div>");
+				$('.elem-right-header').append("<button href='' class='btn btn-header btn-lg disabled'><span class='glyphicon glyphicon-question-sign'></span></button>");		
 				this.$el.hammer();
 		},
 		
@@ -288,6 +288,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 
   beforeRender: function() {
 				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste liste');
+				
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
     //this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
@@ -295,12 +296,11 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 
     });
+				$('.page-block-title em').remove();
 				if(app.globals.currentFilterTaxonIdList.length === 0){
-						$('.page-block-sub-title em').remove();
-						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>Liste des Sauvages</h1>");
+						$('.page-title').replaceWith("<div class='page-title'>Liste des Sauvages</div>");
 				}else{
-						$('.page-block-sub-title em').remove();
-						$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</h1>");
+						$('.page-title').replaceWith("<div class='page-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</div>");
 				};	
 			//	$('.elem-right-header').append("<a class='pull-right btn btn-default' href='#identification'><span class='icon-fleurgrasse-sauvages'></span></a>");
   },
@@ -352,7 +352,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
           }
         });
     },this);
-				$('h1.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+ this.model.get('commonName')+"</h1><em>"+ this.model.get('scientificName')+"</em>");
+				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('commonName')+"</div><em>"+ this.model.get('scientificName')+"</em>");
 				$('.elem-right-header').append("<a href='#taxonlist/all' class='pull-right sprite-sauvages sprite-list-fond'></a>");
    },
 		
@@ -383,39 +383,6 @@ app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
   },
 });
 
-//app.views.AlphabeticAnchorView =  app.utils.BaseView.extend({
-//
-//  template: 'subview-alphabetic-anchor',
-//
-//  initialize: function() {
-//    this.anchorBaseName = this.options['anchorBaseName'];
-//    this.navheight = this.options['navheight'];
-//    this.activeBtn = this.options['activeBtn'];
-//				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-//  },
-//
-//  events: {
-//    "click input[type=button].internal-anchor": "goToAnchor"  
-//  },
-//
-//  afterRender:function() {
-//    var self = this;
-//    $(this.el).find('.internal-anchor').attr('disabled','disabled');
-//    _.each(this.activeBtn,function(l){ 
-//      $(self.el).find('#anc-'+l).removeAttr('disabled');
-//    });
-//  },
-//  
-//  goToAnchor : function(event){
-//    var el = $(event.currentTarget).attr('value');
-//    var elWrapped = $('#'+this.anchorBaseName+el);
-//    if (elWrapped.length !== 0) {
-//      var totalScroll = elWrapped.offset().top-this.navheight;
-//      $("html,body").animate({ scrollTop: totalScroll }, "slow");
-//    }
-//  },
-//
-//});
 
 app.views.ObservationListView =  app.utils.BaseView.extend({
 
