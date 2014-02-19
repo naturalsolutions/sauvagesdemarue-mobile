@@ -409,13 +409,13 @@ $('#menu-item-je-participe').click(function(){
   $("#menu").trigger("close");
 });
 
-if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
-$(".mm-page").hammer({ /* options */ }).on(event, function(ev) { 
+//if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+$(".mm-page").hammer({ /* options */ }).on('swipeleft', function(ev) { 
     console.dir("hamme"+ev); 
 }); 
-$(".mm-page").on(event, { /* options */ }, function(ev) {
-    console.log("on"+ev); 
-}); 
+//$(".mm-page").on(event, { /* options */ }, function(ev) {
+//    console.log("on"+ev); 
+//}); 
 
 //----------- TELA WEB SERVICES REVERSE GEOLOCALISATION -------------//
 /*function geolocaliser() {
