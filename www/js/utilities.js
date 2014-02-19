@@ -371,11 +371,13 @@ $("#menu").mmenu({
   classes: "mm-slide",
   //dragOpen: true
 });
-//Ajoute un icon refresh si il y a une rue terminée qui contient des obs non envoyées.
 $('#menu').mmenu().on('opening.mm',function(){
   $('body').removeClass('pad-bottom-top');
   $('#content').addClass('disabled  add-margin-top');
   $('.navbar-header').children().not('.open-menu').addClass('disabled');
+});
+//Ajoute un icon refresh si il y a une rue terminée qui contient des obs non envoyées.
+$('#menu').mmenu().on('opened.mm',function(){
   app.utils.queryData.getObservationsTelaWSFormated()
     .done(function(data) {
         if (data.length !== 0 && $('#menu #menu-item-my-obs').has('#flagObs').length === 0) {
@@ -406,14 +408,12 @@ $('#menu-item-je-participe').click(function(){
   app.route.navigate('addParcours', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
-//var event='click';
-//console.log(document.documentElement.hasOwnProperty('ontouchstart'));
-  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
- // if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'onmouseup' }else{ event = 'click'};
-$("#content").hammer({ /* options */ }).on(event, function(ev) { 
+
+if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+$(".mm-page").hammer({ /* options */ }).on(event, function(ev) { 
     console.dir("hamme"+ev); 
 }); 
-$("#content").on(event, { /* options */ }, function(ev) {
+$(".mm-page").on(event, { /* options */ }, function(ev) {
     console.log("on"+ev); 
 }); 
 
