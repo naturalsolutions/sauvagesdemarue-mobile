@@ -30,7 +30,7 @@
                     </a>
                   </div>
                   <div class="btnAddObsList pull-right">
-                    <a href="#addObs/<%= taxon.get('taxonId') %>" class="btn btn-default"><span class='glyphicon glyphicon-plus'></span></a>
+                    <a href="#addObs/<%= taxon.get('taxonId') %>" class="btn btn-primary"><span class='glyphicon glyphicon-plus'></span></a>
                   </div>
                   
               </div>
@@ -42,11 +42,5 @@
       <% }); %>
       </ul>
     </fieldset>
-    <nav class="navbar bottom-navbar navbar-default navbar-fixed-bottom" role="navigation">
-        <div class="btn-group btn-group-justified">
-            <a class='btn btn-danger' href="#addParcours" role="button">Fin de parcours</a>
-            <a class='btn btn-default disabled' href="" role="button">Pas reconnue</a>
-            <a class='btn btn-default disabled' href="" role="button">Pas dans la liste</a>
-        </div>
-    </nav>
+   <div id="wrapper-footer"></div>
 </div>

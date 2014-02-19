@@ -8,6 +8,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   template: 'form-add-obs',
 
   initialize: function() {
+				$('.footer-default').hide();
     this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -16,12 +17,17 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
 				$('.page-title').replaceWith("<div class='page-title'> Nouvelle observation : "+ this.model.get("name_taxon")+"</div>");
   },
+		
+		remove : function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('.footer-default').show();		
+		},
 	
 		events:{ 
 		'click .annuler-enregistrement-obs': 'annulerTerminer'
   },
   annulerTerminer : function(evt){
-				app.route.navigate('taxonlist/:all', {trigger: true});	
+				app.route.navigate('taxonlist', {trigger: true});	
 		},
 	
 });
@@ -39,8 +45,8 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
     },
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-      $('input:submit', this.$el).addClass('btn-lg btn-default');
-      $('input:reset', this.$el).attr('style', 'display:none');
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
+      //$('input:reset', this.$el).attr('style', 'display:none');
       $('h3', this.$el).attr('style', 'display:none');
     },
 		
@@ -50,7 +56,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   template: 'form-add-sauvagerue',
   
   initialize: function(options) {
-				$('.navbar').show();
+				$('.footer-default').hide();
     this.model.bind("reset", this.render, this);
     this.collection = options.collection;
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
@@ -61,12 +67,20 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				};
 		return true;
   },
+		remove : function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('.footer-default').show();		
+		},
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
+		'click .annuler-retour': 'annulerParcours',
   },
 
 		annulerTerminer : function(evt){
-				app.route.navigate('taxonlist/:all', {trigger: true});	
+				app.route.navigate('identification', {trigger: true});	
+		},
+		annulerParcours : function(evt){
+				app.route.navigate('', {trigger: true});	
 		},
 
   beforeRender: function() {
@@ -123,12 +137,14 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
  
   afterRender: function () {
     if (this.isNew)  {
-      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street).addClass('btn-lg btn-default');
+      $('input:submit', this.$el).attr('value', sauvages.messages.begin_street);
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' >Annuler</button>");
 				}
     else{
-      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).addClass('btn-lg btn-danger');
+      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).removeClass('btn-primary').addClass('btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' >Annuler</button>");
      }
     //$('input:reset', this.$el).attr('style', 'display:none');
     $('h3', this.$el).attr('style', 'display:none');
@@ -158,17 +174,31 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 
   template: 'page-home',
 
-		initialize: function() { 		
-    $('.navbar').hide();
+		initialize: function() {
+				$('.navbar').hide();
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  }
+  },
+		remove : function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('.navbar').show();		
+		},
+});
+
+app.views.FooterView=  app.utils.BaseView.extend({
+
+  template: 'footer',
+
+		initialize: function() {
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
 });
 
 app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
   template: 'page-identification-key',
   
-  initialize: function() { 		
+  initialize: function() {
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -176,26 +206,46 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   events: {
     "click input[type=checkbox]": "filterTaxon",
 				"swipeleft" : "swipeTaxonList",
+				"click #supprimer-filtre" : "suppFiltre"
   },
 
   beforeRender: function() {
+				this.insertView("#wrapper-footer", new app.views.FooterView());
     this.collection.each(function(criteria) {
       this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
     }, this);
 				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
 				$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a></div>");
-				$('.page-title').replaceWith("<div class='page-title'>Assistant d'identification</div>");
+				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				$('.elem-right-header').append("<button href='' class='btn btn-header btn-lg disabled'><span class='glyphicon glyphicon-question-sign'></span></button>");		
 				this.$el.hammer();
 		},
+		afterRender: function(){
+				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-danger btn-footer btn-footer-left' href='#addParcours' role='button'>Fin de parcours</a>");
+				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-default btn-footer btn-footer-right' id='supprimer-filtre'>Supprimer les filtres</a>");
+		},
 		
+		remove: function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				console.log('remove identification');
+				$('.navbar-fixed-bottom .btn-group .btn-footer');
+				$('body').removeClass('cleliste cle');
+				$('#impressionContinue').remove();
+    $('#languette').remove();
+		},
 		
 		swipeTaxonList : function(event){
 				app.route.navigate('taxonlist', {trigger: true, replace: true});
     console.log("event gesture"+event.gesture);
 				event.gesture.preventDefault();
 		},
-  
+
+  suppFiltre :function(event){
+				app.globals.currentFilter.length = 0;
+				$("#taxonNb").html(app.globals.cListAllTaxons.length);
+				$('.RadioCustom').removeClass('RadioCustomOn');
+		},
+
   filterTaxon : function(event) {
     var objCurrentTarget=$(event.currentTarget);
     var idCurrentTarget= objCurrentTarget['context']['id'];
@@ -222,7 +272,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     else { //if uncheked
       $('input[name="'+idCurrentTarget+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
       var index =  app.globals.currentFilter.indexOf($(event.currentTarget).val());
-       app.globals.currentFilter.splice(index, 1);
+      app.globals.currentFilter.splice(index, 1);
     }
     //Select Taxon Id; for the moment exact matching (must contain all the selected criteria)
     if (app.globals.currentFilter.length > 0) {
@@ -287,6 +337,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
+				this.insertView("#wrapper-footer", new app.views.FooterView());
 				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste liste');
 				
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
@@ -302,13 +353,23 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				}else{
 						$('.page-title').replaceWith("<div class='page-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</div>");
 				};	
-			//	$('.elem-right-header').append("<a class='pull-right btn btn-default' href='#identification'><span class='icon-fleurgrasse-sauvages'></span></a>");
   },
+		afterRender: function(){
+				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-left' href='#addNonIdentifiee' role='button'>Pas identifié</a>");
+				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addNonIdentifiee''>Pas dans la liste</a>");
+		},
   
   serialize: function() {
     if (this.collection) return {collection : this.collection};
     return true;
   },
+		remove: function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				console.log('remove liste');
+				$('body').removeClass('cleliste liste');
+				$('#impressionContinue').remove();
+    $('#languette').remove();
+		},
 		events: {
 				"swiperight" : "swipeIdentification"
   },
@@ -317,7 +378,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
     console.log("event gesture"+event.gesture);
 				event.gesture.preventDefault;
 		}
-
 });
 
 app.views.TaxonDetailView=  app.utils.BaseView.extend({
@@ -332,7 +392,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   
   
   beforeRender: function() {
-					
+				this.insertView("#wrapper-footer", new app.views.FooterView());
     console.log(this.model.get('caracValues').models);
     var self = this;
 
@@ -353,23 +413,34 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
         });
     },this);
 				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('commonName')+"</div><em>"+ this.model.get('scientificName')+"</em>");
-				$('.elem-right-header').append("<a href='#taxonlist/all' class='pull-right sprite-sauvages sprite-list-fond'></a>");
-   },
+  },
 		
-   events: {
-      'click div.accordion-heading': 'changeIcon',
-    },
-      
-    changeIcon: function(event){
-      $('.accordion-group').on('hide.bs.collapse', function () {
-				$(this).children().children().children(".glyphicon").removeClass('glyphicon-minus');
-				$(this).children().children().children(".glyphicon").addClass('glyphicon-plus');
-      });
-      $('.accordion-group').on('show.bs.collapse', function () {
-				$(this).children().children().children(".glyphicon").removeClass('glyphicon-plus');
-				$(this).children().children().children(".glyphicon").addClass('glyphicon-minus');
-      });
-    },
+		afterRender: function(){
+				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-default btn-footer btn-footer-left' href='#taxonlist' role='button'>Retour aux résultats</a>");
+				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addObs/"+ this.model.get('taxonId') +"' role='button'>Ajouter une obs</a>");
+		},
+		
+		remove: function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				console.log('remove détail taxon')
+				$('.page-block-title em').remove();
+				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
+		},
+		
+//   events: {
+//      'click div.accordion-heading': 'changeIcon',
+//    },
+//      
+//    changeIcon: function(event){
+//      $('.accordion-group').on('hide.bs.collapse', function () {
+//				$(this).children().children().children(".glyphicon").removeClass('glyphicon-minus');
+//				$(this).children().children().children(".glyphicon").addClass('glyphicon-plus');
+//      });
+//      $('.accordion-group').on('show.bs.collapse', function () {
+//				$(this).children().children().children(".glyphicon").removeClass('glyphicon-plus');
+//				$(this).children().children().children(".glyphicon").addClass('glyphicon-minus');
+//      });
+//    },
 });
 
 app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
@@ -399,6 +470,21 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     if (this.collection) return {collection : this.collection, parcours : this.parcours};
     return true;
   },
+		beforeRender: function(){
+				this.insertView("#wrapper-footer", new app.views.FooterView());
+		},
+
+		afterRender: function(){
+				var rueEnCours = this.parcours.findWhere({'state': 0});
+				var rueAPartager = this.parcours.findWhere({'state': 1});
+				$('.navbar-fixed-bottom .btn-group').append("<button id='send-obs' type='button' class='btn btn-footer btn-warning'>Partager</button>");
+				if(typeof(rueAPartager) === 'undefined'){$('#send-obs').addClass('disabled')};
+				if(typeof(rueEnCours) !== 'undefined'){
+						$('.navbar-fixed-bottom .btn-group').append("<button  type='button' class='btn btn-footer btn-default back-rue-en-cours'>Retour à la saisie</button>");
+				}else{
+						$('.navbar-fixed-bottom .btn-group').append("<button type='button' class='btn btn-footer btn-primary back-home'>Nouvelle rue</button>");
+				}
+		},
   
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
@@ -509,7 +595,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		},
 		backRueEnCours : function(event){
 				app.globals.currentrue =	this.parcours.findWhere({'state': 0});
-				app.route.navigate('taxonlist/:all', {trigger: true});
+				app.route.navigate('identification', {trigger: true});
 		},
 		backHome : function(event){
 				app.route.navigate('', {trigger: true});

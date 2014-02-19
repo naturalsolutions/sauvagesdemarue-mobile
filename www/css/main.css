@@ -92,15 +92,20 @@ a:hover, a:active {
 .btn{
 		border-radius: 1px;
 }
-.btn-default {
+.btn-primary {
 		color: white;
 		background-color: #008D00;
 		border:none;
 }
-.btn-default:hover,.btn-default:active,.btn-default:focus  {
+.btn-primary:hover,.btn-primary:active,.btn-primary:focus  {
 		background-color: #00C000;
 		border:none;
 		color: white;
+}
+.btn-default {
+		color: #000;
+		background-color: gray;
+		border: none;
 }
 ul{
 	margin:0;
@@ -286,48 +291,19 @@ right: 0;
   width:100%;
 }*/
 /***Footer***/
+input.btn.btn-footer, button.btn.btn-footer {
+		width: 50%;
+		display: inline;
+		border: none;
+}
+a.btn.btn-footer{
+		width:50%;
+}
 .navbar-fixed-bottom {
 		min-height: 34px;
 		background-color: #333;
 }
-footer{
-  height: 43px;
-  width: 100%;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  position: fixed !important;
-  z-index: 1000 !important;
-}
 
-footer a{
-  color: white;
-  height: 43px;
-  width: 100%;
-  float: left;
- 
-}
-
-footer a:active,footer a:hover,footer a:focus{
-  color: white;
-  background:#27A22D;
-  text-decoration: none;
-}
-
-.footer-el{
-  box-sizing: border-box;
-  width: 33.33333%;
-  float: left;
-  text-align: center;
-  height: 43px;
-  background:gray;
-  border-top: 2px solid #6B6B6B
-  font-size:12px;
-}
-.footer-el:nth-child(2){
-border-right: 1px solid #6B6B6B;
-border-left: 1px solid #6B6B6B;
-}
 /******** HEADER **********/
 .navbar.navbar-fixed-top.loc-header {
 		margin-left: 60px;
@@ -361,7 +337,7 @@ border-left: 1px solid #6B6B6B;
 }*/
 
 .page-title{
-		font-size: xx-large;
+		font-size: x-large;
 
 }
 .page-title, .page-subtitle{
@@ -369,7 +345,7 @@ border-left: 1px solid #6B6B6B;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		line-height: 1em;
+		line-height: 1.2em;
 }
 
 .page-subtitle{
@@ -386,8 +362,8 @@ border-left: 1px solid #6B6B6B;
   margin: 0px 0px 70px 0px ;
 }
 .row {
-margin-left: 0px;
-margin-right: 0px;
+		margin-left: 0px;
+		margin-right: 0px;
 }
 .sci-taxon-name{
   font-style: italic;
@@ -442,13 +418,13 @@ top: 0;
 background: red;
 }
 #languette{
-		position: absolute;
+		position: fixed;
 		right: 4%;
 		top: 33%;
 		background: red;
 		text-align: center;
 		padding: 1%;
-/*		box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.5);*/
+	box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 #languette a{
 		color:white;
@@ -531,12 +507,11 @@ body.pad-bottom-top.cleliste.cle, .cleliste.cle .mm-page #header {
   background-color:white;   
 }
 .page-block-sub-title{
-  text-align:center;
-  font-weight: bold;
+  
 }
 h1.page-sub-title {
-		font-size: 20px;
-		line-height: 24px;
+		font-size: 12px;
+		line-height: 16px;
 		margin-top: 0.2em;
 		margin-bottom: 0.1em;
 		-webkit-margin-before: 0.2em;
@@ -686,7 +661,7 @@ margin: 10px;
 	margin-top : 10%;
 }
 /******MODAL********/
-.notification-modal{
+.notification-modal,.modal{
 		color:black;
 }
 
