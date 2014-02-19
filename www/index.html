@@ -53,11 +53,10 @@
 
       <div class="col-12" id="content">
 						</div><!--/content-->
-<!--      <div id="footer" class="mm-fixed-bottom">
+<!--						<div id="footer" class="mm-fixed-bottom footer-default">
 								<nav class="navbar bottom-navbar navbar-default navbar-fixed-bottom" role="navigation">
 										<div class="btn-group btn-group-justified">
-														<a class='btn btn-default btn-footer btn-footer-left' href="" role="button"></a>
-														<a class='btn btn-default btn-footer btn-footer-right' href="" role="button"></a>
+									
 										</div>
 								</nav>
 						</div>	-->
@@ -67,6 +66,9 @@
     <!-- Scripts -->
     
     <script type="text/javascript">
+				window.addEventListener('load', function() {
+						FastClick.attach(document.body);
+				}, false);
 		//<![CDATA[
 			// Mot-clé du widget/projet
 			var TAG_PROJET = "sauvages-dev";
@@ -98,6 +100,8 @@
     <script type="text/javascript" src="libs/backbone_1.0.0/backbone.js"></script>
     
     <script type="text/javascript" src="cordova.js"></script>
+				
+				<script type="text/javascript" src="libs/fastclick.js"></script>
 
     <script type="text/javascript" src="libs/flexslider/jquery.flexslider-min.js"></script>
 				<script type="text/javascript" src="libs/jquery.hammer.js-master/jquery.hammer-full.js"></script>
