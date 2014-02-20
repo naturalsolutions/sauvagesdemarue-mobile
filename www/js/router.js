@@ -41,6 +41,7 @@ app.Router = Backbone.Router.extend({
   viewHomePage: function() {
     var currentView = new app.views.HomePageView();
     this.displayView(currentView);
+    $('.navbar').hide();
   },
   //viewChoixOutils: function() {
   //  var currentView = new app.views.pageChoixOutils();

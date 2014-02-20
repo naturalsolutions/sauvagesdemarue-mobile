@@ -150,22 +150,33 @@ ul{
 .vert-anis{
   color:#DEDB00;
 }
-
 .vert-anis-bg{
   background:#DEDB00;
 }
-
 .white {
   color: white;
 }
-
 .red{
   color:#E2001A;
 }
-
 .vert-logo{
   color:#27A22D;
 }
+.btn-vert-clair{
+		background:#A0CA10;
+		color:#333;
+}
+.btn-vert-clair:hover,.btn-vert-clair:focus,.btn-vert-clair:active{
+		background:#DEDB00;
+}
+.btn-bleu{
+		background:#28717E;
+		color:white;
+}
+.btn-bleu:hover,.btn-bleu:focus,.btn-bleu:active{
+		background:#9FBEDE;
+}
+
 /****************/
 /*:focus,select:focus {
 outline-color: green;
@@ -374,10 +385,17 @@ a.btn.btn-footer{
 }
 
 /********HOME*********/
-.container-home .row{
-  margin:10px;
+.container-home .row {
+		margin: 0px -15px;
 }
-
+.first a img{
+		margin-left:50%;
+		display: block;
+}
+.container-home .btn{
+  width:100%;
+		border-bottom: 3px solid rgba(0,0,0,0.5);
+}
 #home-bonhomme {
   margin: 25% 5px 5px 60%;  
 }

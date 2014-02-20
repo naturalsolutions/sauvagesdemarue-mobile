@@ -56,7 +56,8 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   template: 'form-add-sauvagerue',
   
   initialize: function(options) {
-				$('.footer-default').hide();
+				//$('.footer-default').hide();
+				$('#header').show();
     this.model.bind("reset", this.render, this);
     this.collection = options.collection;
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
@@ -67,10 +68,10 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				};
 		return true;
   },
-		remove : function(){
-				app.utils.BaseView.prototype.remove.apply(this, arguments);
-				$('.footer-default').show();		
-		},
+		//remove : function(){
+		//		app.utils.BaseView.prototype.remove.apply(this, arguments);
+		//		$('.footer-default').show();		
+		//},
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
 		'click .annuler-retour': 'annulerParcours',
@@ -175,11 +176,12 @@ app.views.HomePageView=  app.utils.BaseView.extend({
   template: 'page-home',
 
 		initialize: function() {
-				$('.navbar').hide();
+				$('body').removeClass('pad-bottom-top');
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
+					$('body').addClass('pad-bottom-top');
 				$('.navbar').show();		
 		},
 });
@@ -208,7 +210,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				"swipeleft" : "swipeTaxonList",
 				"click #supprimer-filtre" : "suppFiltre"
   },
-
+		
   beforeRender: function() {
 				this.insertView("#wrapper-footer", new app.views.FooterView());
     this.collection.each(function(criteria) {
@@ -390,7 +392,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
-  
+
   beforeRender: function() {
 				this.insertView("#wrapper-footer", new app.views.FooterView());
     console.log(this.model.get('caracValues').models);
@@ -408,7 +410,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 															$('.flexImages').show();
 														}
 												});
-            self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
+            self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data}));
           }
         });
     },this);
@@ -453,7 +455,6 @@ app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 });
-
 
 app.views.ObservationListView =  app.utils.BaseView.extend({
 
