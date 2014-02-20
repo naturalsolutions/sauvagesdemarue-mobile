@@ -127,7 +127,8 @@ app.utils.BaseView = Backbone.View.extend({
 
             var data = this.serialize(),
                 rawHtml = tpl(data),
-                rendered;
+                rendered,
+                subviewsDfd = [];
 
             // Re-use nice "noel" trick from LayoutManager
             rendered = this.$el.html(rawHtml).children();
@@ -139,13 +140,17 @@ app.utils.BaseView = Backbone.View.extend({
                 var base = selector ? this.$el.find(selector) : this.$el;
                 _.each(viewList, function (view) {
                     view.render().$el.appendTo(this);
+                    subviewsDfd.push(view.promise());
                 }, base);
             }, this);
 
             // Give a chance to child classes to do something after render
             try {
-                this.afterRender();
-                this._dfd.resolve(this);
+                var self = this;
+                $.when.apply($, subviewsDfd).always(function() {
+                  self.afterRender();
+                  self._dfd.resolve(this);
+                });
             } catch (e) {
                 if (console && console.error) {
                     console.error(e);
