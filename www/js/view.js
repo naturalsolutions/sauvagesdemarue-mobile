@@ -27,7 +27,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 		'click .annuler-enregistrement-obs': 'annulerTerminer'
   },
   annulerTerminer : function(evt){
-				app.route.navigate('taxonlist', {trigger: true});	
+				app.route.navigate('identification', {trigger: true});	
 		},
 	
 });
@@ -470,13 +470,14 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     return true;
   },
 		beforeRender: function(){
+				$('.page-title').replaceWith("<div class='page-title'>Mes sauvages</div>");
 				this.insertView("#wrapper-footer", new app.views.FooterView());
 		},
 
 		afterRender: function(){
 				var rueEnCours = this.parcours.findWhere({'state': 0});
 				var rueAPartager = this.parcours.findWhere({'state': 1});
-				$('.navbar-fixed-bottom .btn-group').append("<button id='send-obs' type='button' class='btn btn-footer btn-warning'>Partager</button>");
+				$('.bottom-navbar .btn-group').append("<button id='send-obs' type='button' class='btn btn-footer btn-warning'>Partager</button>");
 				if(typeof(rueAPartager) === 'undefined'){$('#send-obs').addClass('disabled')};
 				if(typeof(rueEnCours) !== 'undefined'){
 						$('.bottom-navbar .btn-group').append("<button  type='button' class='btn btn-footer btn-default back-rue-en-cours'>Retour à la saisie</button>");

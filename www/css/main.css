@@ -245,6 +245,34 @@ background-color: #007600;
 .panel-group a, .panel-group {
 		color: #333;
 }
+/*****tab*****/
+.nav-tabs {
+		width: 100%;
+}
+.nav-tabs li {
+		width: 50%;
+}
+.tab-content>.active {
+		background: white;
+		padding-bottom: 10px;
+}
+.nav-tabs>li>a {
+		margin-right: 2px;
+		line-height: 1.428571429;
+		border: 1px solid white;
+		border-radius: 2px 2px 0 0;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+		color: #333;
+		background-color: white;
+		border: 1px solid #dddddd;
+		border-bottom-color: transparent;
+		cursor: default;
+}
+/*****label********/
+label {
+		font-weight: 200;
+}
 /*****SPRITE*******/
 .sprite-arrow-div-list-transparent{ background-position: 0 0; width: 29px; height: 67px; } 
 .sprite-arrow-div-list{ background-position: 0 -117px; width: 29px; height: 67px; } 

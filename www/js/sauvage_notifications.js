@@ -41,7 +41,7 @@ function() {
       delay: 1,
       btnLabel: '', 
       onClose: function() {
-       app.route.navigate('taxonlist/:all', {trigger: true});
+       app.route.navigate('identification', {trigger: true});
        },
       
      });
