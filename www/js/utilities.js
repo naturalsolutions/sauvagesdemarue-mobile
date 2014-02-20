@@ -386,7 +386,10 @@ $('#menu').mmenu().on('opened.mm',function(){
     });
 });
 $('#menu').mmenu().on('closed.mm',function(){
-    $('body').addClass('pad-bottom-top');
+    var pageHome = $('#content').children().is('#home-page-content');
+    if (! pageHome) {
+      $('body').addClass('pad-bottom-top');
+    }
     $('#content').removeClass('disabled add-margin-top');
     $('.navbar-header').children().not('.open-menu').removeClass('disabled');
   }

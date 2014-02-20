@@ -251,7 +251,7 @@ NS.UI.Form.templateSrc.stacked =
                 '    <div class="form-content"></div>' +
                 '    <div class="form-actions">' +
                 '      <div id="footer" class="mm-fixed-bottom">'+
-                '       <nav class="navbar bottom-navbar navbar-default navbar-fixed-bottom" role="navigation">'+
+                '       <nav class="bottom-navbar" role="navigation">'+
                 '        <div class="btn-group btn-group-justified">'+
                 '           <input type="reset" class="btn btn-default btn-footer btn-footer-left"/>'+
                 '           <input type="submit" class="btn btn-primary btn-footer btn-footer-right"/>'+

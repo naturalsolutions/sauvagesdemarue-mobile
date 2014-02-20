@@ -56,7 +56,6 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   template: 'form-add-sauvagerue',
   
   initialize: function(options) {
-				//$('.footer-default').hide();
 				$('#header').show();
     this.model.bind("reset", this.render, this);
     this.collection = options.collection;
@@ -68,10 +67,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				};
 		return true;
   },
-		//remove : function(){
-		//		app.utils.BaseView.prototype.remove.apply(this, arguments);
-		//		$('.footer-default').show();		
-		//},
+
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
 		'click .annuler-retour': 'annulerParcours',
@@ -176,14 +172,16 @@ app.views.HomePageView=  app.utils.BaseView.extend({
   template: 'page-home',
 
 		initialize: function() {
-				$('body').removeClass('pad-bottom-top');
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
-					$('body').addClass('pad-bottom-top');
+				$('body').addClass('pad-bottom-top');
 				$('.navbar').show();		
 		},
+		afterRender: function(){
+    $('body').removeClass('pad-bottom-top');
+  }
 });
 
 app.views.FooterView=  app.utils.BaseView.extend({
@@ -223,8 +221,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				this.$el.hammer();
 		},
 		afterRender: function(){
-				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-danger btn-footer btn-footer-left' href='#addParcours' role='button'>Fin de parcours</a>");
-				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-default btn-footer btn-footer-right' id='supprimer-filtre'>Supprimer les filtres</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-danger btn-footer btn-footer-left' href='#addParcours' role='button'>Fin de parcours</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-default btn-footer btn-footer-right' id='supprimer-filtre'>Supprimer les filtres</a>");
 		},
 		
 		remove: function(){
@@ -357,8 +355,8 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				};	
   },
 		afterRender: function(){
-				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-left' href='#addNonIdentifiee' role='button'>Pas identifié</a>");
-				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addNonIdentifiee''>Pas dans la liste</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-left' href='#addNonIdentifiee' role='button'>Pas identifié</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addNonIdentifiee''>Pas dans la liste</a>");
 		},
   
   serialize: function() {
@@ -418,8 +416,8 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   },
 		
 		afterRender: function(){
-				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-default btn-footer btn-footer-left' href='#taxonlist' role='button'>Retour aux résultats</a>");
-				$('.navbar-fixed-bottom .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addObs/"+ this.model.get('taxonId') +"' role='button'>Ajouter une obs</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-default btn-footer btn-footer-left' href='#taxonlist' role='button'>Retour aux résultats</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addObs/"+ this.model.get('taxonId') +"' role='button'>Ajouter une obs</a>");
 		},
 		
 		remove: function(){
@@ -481,9 +479,9 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				$('.navbar-fixed-bottom .btn-group').append("<button id='send-obs' type='button' class='btn btn-footer btn-warning'>Partager</button>");
 				if(typeof(rueAPartager) === 'undefined'){$('#send-obs').addClass('disabled')};
 				if(typeof(rueEnCours) !== 'undefined'){
-						$('.navbar-fixed-bottom .btn-group').append("<button  type='button' class='btn btn-footer btn-default back-rue-en-cours'>Retour à la saisie</button>");
+						$('.bottom-navbar .btn-group').append("<button  type='button' class='btn btn-footer btn-default back-rue-en-cours'>Retour à la saisie</button>");
 				}else{
-						$('.navbar-fixed-bottom .btn-group').append("<button type='button' class='btn btn-footer btn-primary back-home'>Nouvelle rue</button>");
+						$('.bottom-navbar .btn-group').append("<button type='button' class='btn btn-footer btn-primary back-home'>Nouvelle rue</button>");
 				}
 		},
   

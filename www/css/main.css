@@ -238,7 +238,13 @@ filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 color: #ffffff;
 background-color: #007600;
 }
-
+/*****panel******/
+.panel-group .panel,.panel-heading{
+		border-radius:1px;
+}
+.panel-group a, .panel-group {
+		color: #333;
+}
 /*****SPRITE*******/
 .sprite-arrow-div-list-transparent{ background-position: 0 0; width: 29px; height: 67px; } 
 .sprite-arrow-div-list{ background-position: 0 -117px; width: 29px; height: 67px; } 
@@ -349,7 +355,6 @@ a.btn.btn-footer{
 
 .page-title{
 		font-size: x-large;
-
 }
 .page-title, .page-subtitle{
 		width: auto;
