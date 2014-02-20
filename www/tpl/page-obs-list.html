@@ -40,13 +40,13 @@
 																																	_.each(group,function(item,key,list){
 																																%>
 																																<li>
-																																				<div class="">
+																																				<div class="clearfix">
 																																				<% if(item.get('photo') !== "") { %>
 																																								<img class="taxon-img-thumb img-rounded" style ="width:50px;" id="<%= item.get('photo') %>" src="<%= item.get('photo') %>">
 																																				<% } %>				
-																																								<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %>
+																																								<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %></p>
 																																												<button type="button" class="destroyObs btn btn-default pull-right" id="<%= item.get('id') %>"><span class="glyphicon glyphicon-trash"></span></button>
-																																								</p>
+																																								
 																																				</div>
 																																</li>
 																																<% });%>
@@ -70,7 +70,7 @@
 														%>    
 																<li class="list-group-item">
 																		<span class="badge"><%= group.length %></span>
-																		<p><%= nameTaxon %></p>
+																		<span><%= nameTaxon %></span>
 																</li>
 																<% }); %>
 												</ul>
@@ -79,14 +79,6 @@
     
 		<div id="wrapper-footer"></div>
 	 </div>
-    <!--<div>
-								<% var rueEnCours = data.parcours.findWhere({'state': 0});
-												var rueAPartager = data.parcours.findWhere({'state': 1});			
-								%>
-								<button id="send-obs" type="button" class="btn btn-lg btn-primary <% if(typeof(rueAPartager) === 'undefined'){%>disabled<%}%>">Partager</button>
-								<% if(typeof(rueEnCours) !== 'undefined'){ %><button id="" type="button" class="btn btn-lg btn-succes back-rue-en-cours">Retour à la saisie</button>
-								<% }else{ %><button id="" type="button" class="btn btn-lg btn-succes back-home">Nouvelle rue</button><% };%>
-    </div>-->
 				</div>
 		
 </div>

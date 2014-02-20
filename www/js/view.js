@@ -15,7 +15,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
-				$('.page-title').replaceWith("<div class='page-title'> Nouvelle observation : "+ this.model.get("name_taxon")+"</div>");
+				$('.page-title').replaceWith("<div class='page-title'> Nouvelle observation</div>");
   },
 		
 		remove : function(){
@@ -44,6 +44,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
       });
     },
     afterRender: function () {
+						$('input:text', this.$el).addClass('disabled');
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
       //$('input:reset', this.$el).attr('style', 'display:none');
@@ -242,6 +243,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
   suppFiltre :function(event){
 				app.globals.currentFilter.length = 0;
+				app.globals.currentFilterTaxonIdList = 0;
 				$("#taxonNb").html(app.globals.cListAllTaxons.length);
 				$('.RadioCustom').removeClass('RadioCustomOn');
 		},

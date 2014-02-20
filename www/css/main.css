@@ -198,8 +198,9 @@ outline-width: 0px;
 .form-actions {
 padding: 19px 5px 20px;
 }
-#rue-form .disabled {
-opacity: .6;
+.form-content .disabled {
+		opacity: .6;
+		color: #333;
 }
 /**surcharge du focus bootstrap couleur verte**/
 /*textarea:focus,
@@ -245,6 +246,27 @@ background-color: #007600;
 .panel-group a, .panel-group {
 		color: #333;
 }
+.panel-group a {
+		text-decoration:none;
+}
+.panel ul{
+		padding-left:5px;
+		list-style: none;
+}
+.panel .btn-default {
+color: white;
+border: 1px solid gray;
+}
+.panel .btn-default:hover,.panel .btn-default:focus, .panel .btn-default:active {
+		color: gray;
+}
+/****list-group****/
+.list-group-item:last-child,.list-group-item:first-child  {
+		border-radius: 1px;
+}
+.list-group {
+		color:#333;
+}
 /*****tab*****/
 .nav-tabs {
 		width: 100%;
@@ -255,6 +277,7 @@ background-color: #007600;
 .tab-content>.active {
 		background: white;
 		padding-bottom: 10px;
+		color: #333;
 }
 .nav-tabs>li>a {
 		margin-right: 2px;
@@ -550,7 +573,7 @@ body.pad-bottom-top.cleliste.cle, .cleliste.cle .mm-page #header {
   border-radius:4px;
 }
 .taxonList li {
- padding: 0;
+		padding: 0;
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -618,7 +641,14 @@ margin: 10px 0px 40px;
 		height:86px;
 }
 .btnAddObsList .btn .glyphicon {
-margin-top: 28px;
+		margin-top: 28px;
+}
+#obs-list-content .panel-body p{
+		width: 80%;
+		float:left;
+}
+#obs-list-content .panel-body li{
+		margin-bottom:4px;
 }
 /*#mesObsParRue .accordion-heading{
 		padding:10px;
@@ -628,9 +658,7 @@ margin-top: 28px;
 	margin:0 0 35px;
 	min-height: 50px;
 }
-#taxon-detail-content .flex-control-nav{
-	bottom:-30px;
-}
+
 #taxon-detail-content .flex-control-paging li a{
   width:5px;
   height:5px;
