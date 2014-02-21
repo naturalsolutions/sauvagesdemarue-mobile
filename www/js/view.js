@@ -3,7 +3,99 @@
 
 // -------------------------------------------------- The Views ---------------------------------------------------- //
 
+app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
+		  template: 'form-add-obs-non-identifie',
+
+  initialize: function() {
+				$('.footer-default').hide();
+    this.model.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+  beforeRender: function() {
+    this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
+				$('.page-title').replaceWith("<div class='page-title'> Nouvelle observation</div>");
+  },
+		
+		remove : function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('.footer-default').show();		
+		},
 	
+		events:{ 
+		'click .annuler-enregistrement-obs': 'annulerTerminer'
+  },
+  annulerTerminer : function(evt){
+				window.history.back();
+        return false;
+		},
+});
+app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
+    initialize: function(options) {
+      NS.UI.Form.prototype.initialize.apply(this, arguments);
+      this.on('submit:valid', function(instance) {
+								//Get value for hidden fields
+								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+        instance.save().done( function(model, response, options) {
+          sauvages.notifications.obsSaveSuccess();
+        });
+      });
+    },
+    afterRender: function () {
+						$('input:text', this.$el).attr('style', 'display:none');
+      $('input:submit', this.$el).attr('value', sauvages.messages.save);
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
+      $('h3', this.$el).attr('style', 'display:none');
+    },
+		
+});
+
+app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
+		  template: 'form-add-obs-non-identifie',
+
+  initialize: function() {
+				$('.footer-default').hide();
+    this.model.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+  beforeRender: function() {
+    this.insertView("#obs-pl-form", new app.views.FormAddOccurencePasDansListeView({initialData:this.model}));
+				$('.page-title').replaceWith("<div class='page-title'>Espèce non répertoriée</div>");
+  },
+		
+		remove : function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('.footer-default').show();		
+		},
+	
+		events:{ 
+		'click .annuler-enregistrement-obs': 'annulerTerminer'
+  },
+  annulerTerminer : function(evt){
+			window.history.back();
+        return false;
+		},
+});
+app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
+    initialize: function(options) {
+      NS.UI.Form.prototype.initialize.apply(this, arguments);
+      this.on('submit:valid', function(instance) {
+								//Get value for hidden fields
+								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+        instance.save().done( function(model, response, options) {
+          sauvages.notifications.obsSaveSuccess();
+        });
+      });
+    },
+    afterRender: function () {
+      $('input:submit', this.$el).attr('value', sauvages.messages.save);
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
+      $('h3', this.$el).attr('style', 'display:none');
+    },
+		
+});
+
 app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   template: 'form-add-obs',
 
@@ -27,9 +119,9 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 		'click .annuler-enregistrement-obs': 'annulerTerminer'
   },
   annulerTerminer : function(evt){
-				app.route.navigate('identification', {trigger: true});	
+						window.history.back();
+        return false;	
 		},
-	
 });
 
 app.views.FormAddOccurenceView = NS.UI.Form.extend({
@@ -75,11 +167,12 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   },
 
 		annulerTerminer : function(evt){
-				 window.history.back();
+				window.history.back();
         return false;
 		},
 		annulerParcours : function(evt){
-				app.route.navigate('#', {trigger: true});	
+				window.history.back();
+        return false;
 		},
 
   beforeRender: function() {
@@ -359,9 +452,8 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   },
 		afterRender: function(){
 				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-left' href='#addNonIdentifiee' role='button'>Pas identifié</a>");
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addNonIdentifiee''>Pas dans la liste</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addPasListe''>Pas dans la liste</a>");
 		},
-  
   serialize: function() {
     if (this.collection) return {collection : this.collection};
     return true;

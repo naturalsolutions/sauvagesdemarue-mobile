@@ -5,15 +5,17 @@
 app.Router = Backbone.Router.extend({
   
   routes: {
-   'identification' : 'viewIdentKey',
-   'taxonlist' : 'viewTaxonlist',
-   'taxonlist/:all' : 'viewTaxonlist',
-   'taxondetail/:id' : 'viewTaxonDetail',
-   'addObs/:taxonId' : 'viewFormAddObs',
-   'addParcours(/:state)' : 'viewFormAddParcours',
-   'myObservation' : 'viewTableMyObs',
-    //'choixOutils' : 'viewChoixOutils',
-   '' : 'viewHomePage',
+    'identification' : 'viewIdentKey',
+    'taxonlist' : 'viewTaxonlist',
+    'taxonlist/:all' : 'viewTaxonlist',
+    'taxondetail/:id' : 'viewTaxonDetail',
+    'addObs/:taxonId' : 'viewFormAddObs',
+    'addNonIdentifiee'  : 'viewFormNIOnbs',
+    'addPasListe'  : 'viewFormPLOnbs',
+    'addParcours(/:state)' : 'viewFormAddParcours',
+    'myObservation' : 'viewTableMyObs',
+     //'choixOutils' : 'viewChoixOutils',
+    '' : 'viewHomePage',
   },
 
   initialize: function() {
@@ -36,6 +38,7 @@ app.Router = Backbone.Router.extend({
 	
   goToLastPage: function() {
     window.history.back();
+    return false;
   },
 	
   viewHomePage: function() {
@@ -121,17 +124,63 @@ app.Router = Backbone.Router.extend({
     },500);
     
   },
-
+  
+  viewFormNIOnbs  : function() {
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//	    return false;
+//    }
+    var self = this;
+    setTimeout(function() {
+      app.utils.geolocalisation.getCurrentPosition();
+      if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+        var obs = new app.models.OccurenceDataValue({"fk_taxon": -2, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : "Non identifié"});
+        obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
+        obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+        var currentView = new app.views.AddSauvageOccurenceNonIdentifierView({model:obs});
+        self.displayView(currentView);   
+      }
+      else{
+        sauvages.notifications.gpsNotStart();
+        self.goToLastPage();
+      }
+    },500);
+    
+  },
+  viewFormPLOnbs : function() {
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//	    return false;
+//    }
+    var self = this;
+    setTimeout(function() {
+      app.utils.geolocalisation.getCurrentPosition();
+      if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+        var obs = new app.models.OccurenceDataValue({"fk_taxon": -1, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : ""});
+        obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
+        obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+        var currentView = new app.views.AddSauvageOccurencePasDansListeView({model:obs});
+        self.displayView(currentView);   
+      }
+      else{
+        sauvages.notifications.gpsNotStart();
+        self.goToLastPage();
+      }
+    },500);
+    
+  },
+  
   viewFormAddParcours : function(state) {
 		var self = this;
     if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
       if (typeof( app.globals.currentrue) === 'undefined') {
 	      //Get default street Name
-	      var nb= new app.dao.ParcoursDataValueDAO(app.db).getDefaultRueName().done(function(d) { 
-		      app.globals.currentrue = new app.models.ParcoursDataValue({name : d});
+	      //var nb= new app.dao.ParcoursDataValueDAO(app.db).getDefaultRueName().done(function(d) { 
+		      //app.globals.currentrue = new app.models.ParcoursDataValue({name : d});
+        app.globals.currentrue = new app.models.ParcoursDataValue();
 		      var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
 		      self.displayView(currentView);  
-	      });
+	     // });
       }
       else {
         var collObs = new app.models.OccurenceDataValuesCollection;

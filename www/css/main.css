@@ -213,6 +213,9 @@ padding: 19px 5px 20px;
 		opacity: .6;
 		color: #333;
 }
+.help-inline {
+		color: #DEDB00;
+}
 /**surcharge du focus bootstrap couleur verte**/
 /*textarea:focus,
 input[type="text"]:focus,

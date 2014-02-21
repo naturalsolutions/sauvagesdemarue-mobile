@@ -46,7 +46,26 @@ NS.UI = (function(ns) {
 																return value;
 								};
 				};
-
+    validators.NotBlank = function() {
+								this.msg = 'Ce champ ne peut être vide.';
+								this.validate = function(value) {
+												if (typeof value === 'undefined')
+																throw new ValidationError(this.msg);
+																return value;
+								};
+				};
+	
+    validators.Email = function() {
+								this.msg = "Votre email n'est pas correct.";
+        var regex = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+								this.validate = function(value) {
+            var flag = regex.test(value);
+												if (!flag)
+																throw new ValidationError(this.msg);
+																return value;
+								};
+				};
+    
     var editors = {};
 
     /*
@@ -129,6 +148,8 @@ NS.UI = (function(ns) {
     });
 
     editors.Text = BaseEditor.extend({
+        validators: [new validators.NotBlank()],
+
         templateId: 'editor-text',
 
         events: {
@@ -169,6 +190,52 @@ NS.UI = (function(ns) {
                 '</td>'
         }
     });
+    
+    editors.Email = editors.Text.extend({
+								validators: [new validators.Email()]
+				});
+    
+    editors.Textarea = BaseEditor.extend({
+        templateId: 'editor-textarea',
+
+        events: {
+            'blur input': function(e) {this.validate();}
+        },
+
+								clearValidationErrors: function () {
+									BaseEditor.prototype.clearValidationErrors.apply(this, arguments);
+																		this.$el.find('.help-inline').html('');
+								},
+						
+								handleValidationError: function (err) {
+									BaseEditor.prototype.handleValidationError.apply(this, arguments);
+																		this.$el.find('.help-inline').html(err.message);
+								},
+
+        getValue: function() {
+            if (this.$el) {
+                var value = $('textarea',this.$el).val();
+                return (value === '') ? undefined : value;
+            }
+        }
+    },{
+        templateSrc: {
+                stacked:
+                    '<div class="control-group">' +
+                    '    <label class="control-label" for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+                    '    <div class="controls">' +
+                    '        <textarea class="form-control" rows="3"></textarea>' +
+                    '        <div class="help-inline"></div>' +
+                    '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+                    '    </div>' +
+                    '</div>',
+                inline:
+                    '<td<% if (data.helpText) { %> data.title="<%- data.helpText %>"<% } %> class="control-group">' +
+                    '    <textarea class="form-control" rows="3"></textarea>' +
+                    '    <div class="help-inline"></div>' +
+                    '</td>'
+            }
+				});
 
     editors.Number = editors.Text.extend({
 								validators: [new validators.Number()],

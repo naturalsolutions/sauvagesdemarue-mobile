@@ -268,7 +268,7 @@ NS.UI.Form.templateSrc.stacked =
 NS.UI.Form.editors.Text.templateSrc.stacked =
 		'<div class="form-group">' +
                 '    <label  for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-		'   <input class="form-control" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" />' +
+                '   <input class="form-control" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" placeholder="<%- data.label %>"/>' +
                 '    <div class="controls">' +   
                 '        <div class="help-inline"></div>' +
                 '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +

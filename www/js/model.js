@@ -281,6 +281,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
 				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: false, 
 				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
 			},
+    note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)',required: false},
   }, 
   dao: app.dao.OccurenceDataValueDAO,
   verboseName: 'Occurence'
@@ -307,7 +308,7 @@ app.models.ParcoursDataValue = Backbone.Model.extend({
    schema: {
     //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
       id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
-      name: { title:'Nom de ma rue', type:'Text'},
+      name: { title:'Nom de ma rue', type:'Text',required: true},
       cote: { title:'Coté', type: 'Select', sqltype:'NVARCHAR(500)', options: [{val:'Pair', label:'Pair'}, {val:'Impair', label:'Impair'}, {val:'Les deux', label:'Les deux'}] },
       
       begin_latitude:{ type: 'hidden', sqltype:'REAL',title:'begin_latitude'}, 
