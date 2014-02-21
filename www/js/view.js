@@ -75,10 +75,11 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   },
 
 		annulerTerminer : function(evt){
-				app.route.navigate('identification', {trigger: true});	
+				 window.history.back();
+        return false;
 		},
 		annulerParcours : function(evt){
-				app.route.navigate('', {trigger: true});	
+				app.route.navigate('#', {trigger: true});	
 		},
 
   beforeRender: function() {
@@ -206,7 +207,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   
   events: {
     "click input[type=checkbox]": "filterTaxon",
-				"swipeleft" : "swipeTaxonList",
+				"dragleft" : "swipeTaxonList",
 				"click #supprimer-filtre" : "suppFiltre"
   },
 		
@@ -222,8 +223,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				this.$el.hammer();
 		},
 		afterRender: function(){
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-danger btn-footer btn-footer-left' href='#addParcours' role='button'>Fin de parcours</a>");
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-default btn-footer btn-footer-right' id='supprimer-filtre'>Supprimer les filtres</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-default btn-footer btn-footer-left' id='supprimer-filtre'>Supprimer les filtres</a>");
+				$('.bottom-navbar .btn-group').append("<a class='btn btn-danger btn-footer btn-footer-right' href='#addParcours' role='button'>Fin de parcours</a>");
 		},
 		
 		remove: function(){
@@ -243,7 +244,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
   suppFiltre :function(event){
 				app.globals.currentFilter.length = 0;
-				app.globals.currentFilterTaxonIdList = 0;
+				app.globals.currentFilterTaxonIdList.length = 0;
 				$("#taxonNb").html(app.globals.cListAllTaxons.length);
 				$('.RadioCustom').removeClass('RadioCustomOn');
 		},
@@ -373,7 +374,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
     $('#languette').remove();
 		},
 		events: {
-				"swiperight" : "swipeIdentification"
+				"dragright" : "swipeIdentification"
   },
 		swipeIdentification : function(event){
 				app.route.navigate('identification', {trigger: true, replace: true});

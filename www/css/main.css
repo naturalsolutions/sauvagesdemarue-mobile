@@ -45,6 +45,17 @@ body{
 }
 
 /*-----------------------------*/
+/**loader**/
+.loading{
+		background-image: url(./images/ajax-loader.gif);
+		background-repeat:no-repeat;
+		background-size: 32px;
+		background-position: center center;
+		width:32px;
+		margin:auto;
+		background-color:rgba(254,254,254,0.7);
+}
+/*********/
 .pad-bottom-top {
 		padding-top: 75px;
 }
@@ -330,6 +341,10 @@ display: block;
 height:24px;
 width:24px;
 margin:1px auto 0px;
+}
+.mm-fixed-bottom {
+
+right: 0;
 }
 
 a.sprite-btn-home,a.sprite-btn-home-initier{

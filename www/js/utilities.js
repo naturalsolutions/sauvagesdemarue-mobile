@@ -52,7 +52,7 @@ app.utils.queryData = {
          +"FROM TdataObs_parcours p "
          +"LEFT OUTER JOIN  TdataObs_occurences o "
          +"ON p.id = o.fk_rue "
-         +"WHERE (o.sended=0 AND latitudeFinRue NOT LIKE 'undefined' AND longitudeFinRue NOT LIKE 'undefined') OR (o.id IS NULL AND p.state = 1)";
+         +"WHERE (o.id != -1 AND p.state = 1) OR (o.id IS NOT NULL AND p.state = 1)";
     runQuery(sql, parameters).done(
       function(results){
           var len = results.rows.length,

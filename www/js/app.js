@@ -185,9 +185,12 @@ function init(){
   window.deferreds = [];
 		 
 
-  $("body").find("a").addClass("disabled");
-  $("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
+  //$("body").find("a").addClass("disabled");
+  //$("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
   
+  // Spinner management (visual feedback for ongoing requests)
+  $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
+  $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
   
 
 		initDB();
@@ -201,9 +204,10 @@ function init(){
           Backbone.history.start();
           $("#menu").mmenu({
             classes: "mm-slide",
+            dragOpen : true ,
           });
-          $('#dataloader-img').remove();
-          $("body").find("a").removeClass("disabled");
+          //$('#dataloader-img').remove();
+          //$("body").find("a").removeClass("disabled");
         }
     });
   });
