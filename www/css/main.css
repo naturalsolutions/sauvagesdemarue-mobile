@@ -47,14 +47,15 @@ body{
 /*-----------------------------*/
 /**loader**/
 .loading{
-		background-image: url(./images/ajax-loader.gif);
+		background-image: url(./images/spinner.gif);
 		background-repeat:no-repeat;
-		background-size: 32px;
+		background-size: 220px;
 		background-position: center center;
-		width:32px;
+		width:220px;
 		margin:auto;
-		background-color:rgba(254,254,254,0.7);
+		background-color:#28717e;
 }
+
 /*********/
 .pad-bottom-top {
 		padding-top: 75px;

@@ -17,12 +17,20 @@
     <link href="css/key.css" rel="stylesheet" type="text/css" />
     <link href="libs/flexslider/flexslider.css" rel="stylesheet" type="text/css" />
 				<link type="text/css" rel="stylesheet" media="all" href="libs/jQuery.mmenu-master/src/css/jquery.mmenu.all.css" />
-  
+				
+		    <script>
+        function onBody(){
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+        function onDeviceReady() {
+            navigator.splashscreen.hide();
+        }
+    </script>
   </head>
 
-  <body class="pad-bottom-top">
+  <body class="pad-bottom-top" onload="onBody()">
     <div>
-								<nav id="menu">
+								<nav id="menu" class="hide">
 										<ul>
 												<li id='menu-item-home'><a ><span class="glyphicon glyphicon-home"></span> Accueil</a></li>
 												<li id='menu-item-je-participe'><a ><span class="icon-fleurgrasse-sauvages"></span> Je participe</a></li>
@@ -35,7 +43,7 @@
 										</ul>
 								</nav>
 						
-								<div id="header" class="navbar top-navbar navbar-fixed-top mm-fixed-top" role="navigation">
+								<div id="header" class="navbar top-navbar navbar-fixed-top mm-fixed-top hide" role="navigation">
 										<div>
 												<div class="navbar-header">
 														<button role="button" class="btn btn-header btn-lg open-menu pull-left"><span class="glyphicon glyphicon-align-justify"></span></button>
@@ -52,6 +60,7 @@
 								</div><!-- /.navbar -->
 
       <div class="col-12" id="content">
+
 						</div><!--/content-->
 
     </div><!--/wrapper-->
@@ -60,10 +69,11 @@
     <!-- Scripts -->
     
     <script type="text/javascript">
+				//<![CDATA[
 				window.addEventListener('load', function() {
 						FastClick.attach(document.body);
 				}, false);
-		//<![CDATA[
+
 			// Mot-clé du widget/projet
 			var TAG_PROJET = "sauvages-dev";
 			// Mots-clés à ajouter aux images
@@ -102,8 +112,7 @@
 				<script type="text/javascript" src="libs/hammer.js-1.0.6/hammer.js"></script>
 				
 				<script type="text/javascript" src="libs/jQuery.mmenu-master/src/js/jquery.mmenu.min.all.js"></script>
-			
-
+					
 				<script type="text/javascript" src="libs/bootstrap_3.0.2/js/bootstrap.js"></script>
     <script type="text/javascript" src="libs/NS.UI.Notification/notification.js"></script>
     <script type="text/javascript" src="libs/NS.UI.Notification/notification_modal.js"></script>

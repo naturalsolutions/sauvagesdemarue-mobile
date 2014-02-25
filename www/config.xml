@@ -9,6 +9,6 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <preference name="orienation" value="portrait" />
+    <preference name="orientation" value="portrait" />
 </widget>
 

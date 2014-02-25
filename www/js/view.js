@@ -381,6 +381,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
       );
     }
     else{
+						app.globals.currentFilterTaxonIdList.length = 0;
       $("#taxonNb").html(app.globals.cListAllTaxons.length);
     }
   }

@@ -175,7 +175,13 @@ $().ready(function() {
 }) ;
 $(document).ready(function() {
     new NS.UI.NotificationList();
-		new NS.UI.NotificationModalList();
+    new NS.UI.NotificationModalList();
+   
+    $("#menu").mmenu({
+            classes: "mm-slide",
+            dragOpen : true ,
+    });
+  navigator.splashscreen.hide();
 });
 
 
@@ -184,9 +190,8 @@ function init(){
   _.templateSettings['variable'] = 'data';
   window.deferreds = [];
 		 
-
-  //$("body").find("a").addClass("disabled");
-  //$("body").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
+  $("body").addClass('loading disabled');
+  
   
   // Spinner management (visual feedback for ongoing requests)
   $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
@@ -202,12 +207,11 @@ function init(){
        success: function(data) {
           app.route = new app.Router();
           Backbone.history.start();
-          $("#menu").mmenu({
-            classes: "mm-slide",
-            dragOpen : true ,
-          });
-          //$('#dataloader-img').remove();
-          //$("body").find("a").removeClass("disabled");
+          
+          $('#header').removeClass('hide');
+          $('#menu').removeClass('hide');
+          $('#loading').hide();
+          $("body").removeClass('loading disabled');
         }
     });
   });
