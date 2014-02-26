@@ -181,7 +181,6 @@ $(document).ready(function() {
             classes: "mm-slide",
             dragOpen : true ,
     });
-  navigator.splashscreen.hide();
 });
 
 
@@ -189,13 +188,8 @@ function init(){
   // Customize Underscore templates behaviour: 'with' statement is prohibited in JS strict mode
   _.templateSettings['variable'] = 'data';
   window.deferreds = [];
-		 
-  $("body").addClass('loading disabled');
+
   
-  
-  // Spinner management (visual feedback for ongoing requests)
-  $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
-  $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
   
 
 		initDB();
@@ -207,11 +201,13 @@ function init(){
        success: function(data) {
           app.route = new app.Router();
           Backbone.history.start();
+          var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
+          if (!FirstLoad ) {
+           // Spinner management (visual feedback for ongoing requests) ici pour eviter superposition avec splash screen spinner
+            $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
+           $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
+          }
           
-          $('#header').removeClass('hide');
-          $('#menu').removeClass('hide');
-          $('#loading').hide();
-          $("body").removeClass('loading disabled');
         }
     });
   });

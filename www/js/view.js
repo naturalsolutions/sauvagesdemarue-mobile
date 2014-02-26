@@ -272,10 +272,14 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('body').addClass('pad-bottom-top');
-				$('.navbar').show();		
+				$('.navbar').show();
+				$('#header').removeClass('hide');
+    $('#menu').removeClass('hide'); 
 		},
 		afterRender: function(){
     $('body').removeClass('pad-bottom-top');
+				$('#header').addClass('hide');
+    $('#menu').addClass('hide'); 
   }
 });
 

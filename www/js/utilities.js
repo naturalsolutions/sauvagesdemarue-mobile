@@ -2,6 +2,9 @@
 
 
 // -------------------------------------------------- Utilities ---------------------------------------------------- //
+    // Spinner management (visual feedback for ongoing requests)
+  $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
+  $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
 
 // Ensemble des méthodes permettant de manipuler les données en dehors des modèles/collection au sens Backbone
 // Correspond à des requêtes SQL customisée et optimisée
