@@ -5,7 +5,8 @@
 app.Router = Backbone.Router.extend({
   
   routes: {
-    'identification' : 'viewIdentKey',
+    //'identification' : 'viewIdentKey',
+    'identification' : 'viewWrapperKeylist',
     'taxonlist' : 'viewTaxonlist',
     'taxonlist/:all' : 'viewTaxonlist',
     'taxondetail/:id' : 'viewTaxonDetail',
@@ -55,10 +56,6 @@ app.Router = Backbone.Router.extend({
   //  this.displayView(currentView);
   //},
   viewIdentKey : function() {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//	    return false;
-//    }
     console.log('viewIdentKey viewIdentKey');
     var self = this;
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
@@ -70,12 +67,22 @@ app.Router = Backbone.Router.extend({
     }) 
   },
 
-  viewTaxonlist : function(all) {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//      return false;
-//    }
-    console.log('viewTaxonlist');
+  //viewTaxonlist : function(all) {
+  //  console.log('viewTaxonlist');
+  //  var taxons;
+  //  if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
+  //    taxons = app.globals.cListAllTaxons;    
+  //  }
+  //  else {
+  //      taxons  = new app.models.TaxonLiteCollection();
+  //      taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
+  //  }
+  //  var currentView = new app.views.TaxonListView({collection: taxons});
+  //  this.displayView(currentView);
+  //},
+
+  viewWrapperKeylist : function(all) {
+    console.log('viewWrapperKeylist');
     var taxons;
     if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
       taxons = app.globals.cListAllTaxons;    
@@ -84,8 +91,14 @@ app.Router = Backbone.Router.extend({
         taxons  = new app.models.TaxonLiteCollection();
         taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
     }
-    var currentView = new app.views.TaxonListView({collection: taxons});
-    this.displayView(currentView);
+    var self = this;
+    var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
+    cListAllCriterias.fetch({
+        success: function(data) {
+          var currentView = new app.views.WrapperKeyList({collection: data,taxons : taxons});
+          self.displayView(currentView);
+        }
+    }) 
   },
   
   viewTaxonDetail : function(id) {
