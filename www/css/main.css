@@ -227,7 +227,12 @@ outline-color: green;
 outline-width: 0px;
 }
 /****** NS_UI-Form****************/
-
+#add-sauvages-rue form {
+		margin-top: 20px;
+}
+.form-group {
+		margin-bottom: 25px;
+}
 .form-actions .btn, .btn-long{
   margin:0px auto;
   display: block;

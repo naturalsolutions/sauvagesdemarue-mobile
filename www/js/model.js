@@ -308,7 +308,7 @@ app.models.ParcoursDataValue = Backbone.Model.extend({
    schema: {
     //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
       id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
-      name: { title:'Nom de ma rue', type:'Text',required: true},
+      name: { title:'Entre le nom de ta rue !', type:'Text',required: true},
       cote: { title:'Coté', type: 'Select', sqltype:'NVARCHAR(500)', options: [{val:'Pair', label:'Pair'}, {val:'Impair', label:'Impair'}, {val:'Les deux', label:'Les deux'}] },
       
       begin_latitude:{ type: 'hidden', sqltype:'REAL',title:'begin_latitude'}, 
