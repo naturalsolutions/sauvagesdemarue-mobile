@@ -310,9 +310,12 @@ NS.UI.Form.templateSrc.stacked =
                 '    </div>' +
                 '</form>';
 NS.UI.Form.editors.Text.templateSrc.stacked =
-		'<div class="form-group">' +
-                '    <label  for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-                '   <input class="form-control" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" placeholder="<%- data.label %>"/>' +
+                '<div class="form-group">' +
+                '<div class="input-group input-group-lg">'+
+                '   <span class="input-group-addon"><span class="glyphicon glyphicon-road"></span></span>'+
+                '   <label  class="sr-only" for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+                '   <input class="form-control input-lg" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" placeholder="<%- data.label %>"/>' +
+                ' </div>'+
                 '    <div class="controls">' +   
                 '        <div class="help-inline"></div>' +
                 '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
@@ -321,8 +324,10 @@ NS.UI.Form.editors.Text.templateSrc.stacked =
 ;
 NS.UI.Form.editors.Select.templateSrc.stacked =
 		'<div class="form-group">' +
-                '    <label ><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-		'	<select class="form-control" id="<%- data.id %>" name="<%- data.name %>" <% if (data.multiple) { %> multiple="multiple"<% } %>>' +
+                ' <div class="input-group input-group-lg">'+
+                '     <span class="input-group-addon"><span class="glyphicon glyphicon-resize-horizontal"></span></span>'+
+                '     <label class="sr-only" ><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+                '	    <select class="form-control input-lg" id="<%- data.id %>" name="<%- data.name %>" <% if (data.multiple) { %> multiple="multiple"<% } %>>' +
                 '            <% _.each(data.options, function(group) {' +
                 '                var isGroup = group.label != "";' +
                 '                if (isGroup) { %><optgroup label="<%- group.label %>"><% }' +
@@ -330,6 +335,7 @@ NS.UI.Form.editors.Select.templateSrc.stacked =
                 '                if (isGroup) { %></optgroup><% }' +
                 '            }); %>' +
                 '        </select>' +
+                ' </div>'+
                 '    <div class="controls">' +     
                 '        <div class="help-inline"></div>' +
                 '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
