@@ -208,6 +208,14 @@ ul{
 }
 .btn-bleu:hover,.btn-bleu:focus,.btn-bleu:active{
 		background:#9FBEDE;
+}/****MENU****/
+#menu{
+		background-image: url('images/ENTETE-menu/entete-480.jpg');
+		background-size: 100%;
+		background-repeat: no-repeat;
+}
+.mm-menu > .mm-panel.mm-opened {
+		padding: 80% 0 40px 0;
 }
 
 /****************/
@@ -530,7 +538,7 @@ a.btn.btn-footer{
 		font-size: 18px;
 		text-shadow: -1px -1px 1px maroon;
 }
-/*********** Transition slide***********/
+/*********** Transition slide ***********/
 .page {
   position: absolute;
   top: 80px;

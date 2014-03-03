@@ -11,5 +11,6 @@
     <access origin="*" />
     <preference name="Orientation" value="portrait"/>
     <preference name="DisallowOverscroll" value="true"/>
+
 </widget>
 
