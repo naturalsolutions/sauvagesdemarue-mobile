@@ -518,7 +518,33 @@ a.btn.btn-footer{
 		font-size: 18px;
 		text-shadow: -1px -1px 1px maroon;
 }
+/*********** Transition slide***********/
+.page {
+  position: absolute;
+  top: 80px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition-property: -webkit-transform;
+		transition-property: transform;
+		-webkit-transition-duration: 0.5s;
+		-webkit-transition-timing-function: ease;
+		-webkit-transform: translate3d(100%, 0, 0);
+		transform: translate3d(100%, 0, 0);
+}
+
+.page.is-visible {
+  transform: translate3d(0, 0, 0);
+		-webkit-transform: translate3d(0, 0, 0);
+}
+
 /***********LIST TAXONS***************/
+#taxon-list-content .loc-container,#taxon-list-content,.cleliste #content,.cleliste > div.mm-page > div,.cleliste .mm-page{
+		height:100%;
+}
+#taxon-list-content fieldset,#identification-list-content {
+min-height: 100%;
+}
 #content.container {
 position: absolute;
 height: 100%;

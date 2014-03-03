@@ -112,11 +112,44 @@ app.utils.BaseView = Backbone.View.extend({
       return true;
     },
 
+
+
+    // transition slide
+
+  transitionIn: function (callback) {
+
+    var view = this;
+
+    var animateIn = function () {
+      view.$el.addClass('is-visible');
+      view.$el.on('transitionend', function () {
+        if (_.isFunction(callback)) {
+          callback();
+        }
+      });
+    };
+
+    _.delay(animateIn, 20);
+
+  },
+
+  transitionOut: function (callback) {
+
+    var view = this;
+
+    view.$el.removeClass('is-visible');
+    view.$el.on('transitionend', function () {
+      if (_.isFunction(callback)) {
+        callback();
+      }
+    });
+
+  },
     // Can be overridden by child classes
     beforeRender: function () {},
     afterRender: function () {},
 
-    render: function () {
+    render: function (options) {
         // Reset promise
         this._dfd = $.Deferred();
 
@@ -128,26 +161,36 @@ app.utils.BaseView = Backbone.View.extend({
             var data = this.serialize(),
                 rawHtml = tpl(data),
                 rendered,
-                subviewsDfd = [];
+                subViewsDfd = [];
 
             // Re-use nice "noel" trick from LayoutManager
             rendered = this.$el.html(rawHtml).children();
             this.$el.replaceWith(rendered);
             this.setElement(rendered);
 
-            // Add sub-views
             _.each(this._views, function (viewList, selector) {
-                var base = selector ? this.$el.find(selector) : this.$el;
-                _.each(viewList, function (view) {
-                    view.render().$el.appendTo(this);
-                    subviewsDfd.push(view.promise());
-                }, base);
-            }, this);
+                    var context = _.pick(this, 'BaseView', 'dfds');
+                    context.base = selector ? this.$el.find(selector) : this.$el;
+                    _.each(viewList, function (view) {
+                        view.render();
+                        view.$el.appendTo(this.base);
+                        if (view instanceof this.BaseView) {
+                            // Sub-view inherit from BaseView, we can safely assume an asynchronous behaviour and a promise method
+                            this.dfds.push(view.promise());
+                        }
+                    }, context);
+                }, {$el: this.$el, BaseView: this.constructor, dfds: this.subViewsDfd});
+
+            //transition slide
+            options = options || {};
+            if (options.page === true) {
+              this.$el.addClass('page');
+            }
 
             // Give a chance to child classes to do something after render
             try {
                 var self = this;
-                $.when.apply($, subviewsDfd).always(function() {
+                $.when.apply($, this.subviewsDfd).always(function() {
                   self.afterRender();
                   self._dfd.resolve(this);
                 });
@@ -179,7 +222,8 @@ $(document).ready(function() {
    
     $("#menu").mmenu({
             classes: "mm-slide",
-            dragOpen : true ,
+            transitionDuration : 0,
+           // dragOpen : true ,
     });
 });
 
@@ -205,7 +249,7 @@ function init(){
           if (!FirstLoad ) {
            // Spinner management (visual feedback for ongoing requests) ici pour eviter superposition avec splash screen spinner
             $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
-           $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
+            $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
           }
           
         }

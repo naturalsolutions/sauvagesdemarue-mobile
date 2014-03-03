@@ -168,11 +168,11 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 
 		annulerTerminer : function(evt){
 				window.history.back();
-    return false;
+        return false;
 		},
 		annulerParcours : function(evt){
 				window.history.back();
-    return false;
+        return false;
 		},
 
   beforeRender: function() {
@@ -183,10 +183,10 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				if (typeof(this.model) !== 'undefined') {
 						$('.page-title').empty();
 						$('.page-sub-title').empty();
-						$('.page-sub-title').append(this.model.get('name')+' - '+this.model.get('cote'));
 						$('.page-title').append('Ma rue en cours');
 				}
-  },	
+  },
+
 });
 
 app.views.FormAddSauvageRue = NS.UI.Form.extend({
@@ -305,8 +305,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   events: {
     "click input[type=checkbox]": "filterTaxon",
 				"dragleft" : "swipeTaxonList",
-				"click #supprimer-filtre" : "suppFiltre",
-			//	"change #taxonNbinput" : 'refreshModel' ,
+				"click #supprimer-filtre" : "suppFiltre"
   },
 		
   beforeRender: function() {
@@ -314,8 +313,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     this.collection.each(function(criteria) {
       this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
     }, this);
-			//	$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
-			//	$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><input type='text' id='taxonNbinput' value='"+ app.globals.cListAllTaxons.length +"'/></a></div>");
+				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
+				$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				$('.elem-right-header').append("<button href='' class='btn btn-header btn-lg disabled'><span class='glyphicon glyphicon-question-sign'></span></button>");		
 				this.$el.hammer();
@@ -335,6 +334,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 		},
 		
 		swipeTaxonList : function(event){
+
+				
 				app.route.navigate('taxonlist', {trigger: true, replace: true});
     console.log("event gesture"+event.gesture);
 				event.gesture.preventDefault();
@@ -380,22 +381,16 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
       app.utils.queryData.getFilterTaxonIdList(app.globals.currentFilter, true).done(
         function(data) {
           app.globals.currentFilterTaxonIdList =  data;
-          //refresh interface
+          //refresh front end
           $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
-										$("#taxonNbinput").val(app.globals.currentFilterTaxonIdList.length).trigger('change');
-										
         }
       );
     }
     else{
 						app.globals.currentFilterTaxonIdList.length = 0;
       $("#taxonNb").html(app.globals.cListAllTaxons.length);
-						$("#taxonNbinput").val(app.globals.cListAllTaxons.length).trigger('change');
     }
-  },
-		//	refreshModel : function(evt){
-		//		alert(evt);
-		//},
+  }
 });
 
 app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
@@ -449,7 +444,9 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste liste');
 				
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
-        
+    
+    //this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
+    
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 
     });
@@ -485,50 +482,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 		}
 });
 
-app.views.WrapperKeyList =  app.utils.BaseView.extend({
-
-  template: 'wrapper-key-list',
-  
-  initialize: function(options) {
-				this.taxons = options.taxons;
-    this.collection.bind("reset", this.render, this);
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
-
-  beforeRender: function() {
-				this.insertView("#key", new app.views.IdentificationKeyView({collection : this.collection}));
-				this.insertView("#list", new app.views.TaxonListView({collection : this.taxons}));
-  },
-		afterRender: function(){
-			
-		},
-  serialize: function() {
-    if (this.collection) return {collection : this.collection};
-    return true;
-  },
-		
-		events: {
-				"change input[type=text]" : 'refreshModel' 
-  },
-		refreshModel : function(evt){
-
-				$("#list").empty();
-				var taxons;
-    if( app.globals.currentFilterTaxonIdList.length === 0 ){
-      taxons = app.globals.cListAllTaxons;    
-    }
-    else {
-        taxons  = new app.models.TaxonLiteCollection();
-        taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
-    }
-    this.insertView("#list", new app.views.TaxonListView({collection : taxons}));
-				$("#list", this.el).append(new app.views.TaxonListView({collection : taxons}).render().el); 
-		}
-		
-
-});
-
-
 app.views.TaxonDetailView=  app.utils.BaseView.extend({
 
   template: 'page-taxon-detail',
@@ -557,7 +510,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 															$('.flexImages').show();
 														}
 												});
-            self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data}));
+            self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
           }
         });
     },this);

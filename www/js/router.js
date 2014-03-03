@@ -5,8 +5,7 @@
 app.Router = Backbone.Router.extend({
   
   routes: {
-    //'identification' : 'viewIdentKey',
-    'identification' : 'viewWrapperKeylist',
+    'identification' : 'viewIdentKey',
     'taxonlist' : 'viewTaxonlist',
     'taxonlist/:all' : 'viewTaxonlist',
     'taxondetail/:id' : 'viewTaxonDetail',
@@ -45,10 +44,10 @@ app.Router = Backbone.Router.extend({
   viewHomePage: function() {
     var self= this;
     setTimeout(function() {
-      $(".loading-splash").hide();
-      $('#splash-screen').hide();
+      $(".loading-splash").remove();
+      $('#splash-screen').remove();
       var currentView = new app.views.HomePageView();
-    self.displayView(currentView);
+      self.displayView(currentView);
     }, 2000);
   },
   //viewChoixOutils: function() {
@@ -56,6 +55,10 @@ app.Router = Backbone.Router.extend({
   //  this.displayView(currentView);
   //},
   viewIdentKey : function() {
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//	    return false;
+//    }
     console.log('viewIdentKey viewIdentKey');
     var self = this;
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
@@ -67,22 +70,12 @@ app.Router = Backbone.Router.extend({
     }) 
   },
 
-  //viewTaxonlist : function(all) {
-  //  console.log('viewTaxonlist');
-  //  var taxons;
-  //  if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
-  //    taxons = app.globals.cListAllTaxons;    
-  //  }
-  //  else {
-  //      taxons  = new app.models.TaxonLiteCollection();
-  //      taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
-  //  }
-  //  var currentView = new app.views.TaxonListView({collection: taxons});
-  //  this.displayView(currentView);
-  //},
-
-  viewWrapperKeylist : function(all) {
-    console.log('viewWrapperKeylist');
+  viewTaxonlist : function(all) {
+//    if (typeof(app.globals.currentrue) === 'undefined') {
+//	    alert('Rue non initialisée');
+//      return false;
+//    }
+    console.log('viewTaxonlist');
     var taxons;
     if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
       taxons = app.globals.cListAllTaxons;    
@@ -91,14 +84,8 @@ app.Router = Backbone.Router.extend({
         taxons  = new app.models.TaxonLiteCollection();
         taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
     }
-    var self = this;
-    var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
-    cListAllCriterias.fetch({
-        success: function(data) {
-          var currentView = new app.views.WrapperKeyList({collection: data,taxons : taxons});
-          self.displayView(currentView);
-        }
-    }) 
+    var currentView = new app.views.TaxonListView({collection: taxons});
+    this.displayView(currentView);
   },
   
   viewTaxonDetail : function(id) {
@@ -236,13 +223,16 @@ app.Router = Backbone.Router.extend({
 
   displayView: function (view) {
       if (this._currentView) {
+        var self = this;
+        this._currentView.transitionOut();
         this._currentView.remove();
         this._currentView.off();
         $('.elem-right-header').empty();
       }
-      this._currentView = view;
+      view.render({ page: true });
       $('#content').append(view.el);
-      view.render();
+      view.transitionIn();
+      this._currentView = view;
   }
 
 });

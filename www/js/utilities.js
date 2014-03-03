@@ -2,7 +2,7 @@
 
 
 // -------------------------------------------------- Utilities ---------------------------------------------------- //
-    // Spinner management (visual feedback for ongoing requests)
+  // Spinner management (visual feedback for ongoing requests)
   $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
   $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
 
@@ -338,13 +338,7 @@ Date.prototype.format = function(format) {
         ("00"+ o[k]).substr((""+ o[k]).length));
   return format;
 }
-//-------Fix warning Android on touchstart-------//
- document.addEventListener( 'touchstart', function(e){ onStart(e); }, false );
-    function onStart ( touchEvent ) {
-      if( navigator.userAgent.match(/Android/i) ) {
-        touchEvent.preventDefault();
-      }
-    }
+
 // -------------------------------------------------- GEOLOCALISATION ---------------------------------------------------- //
 
 app.utils.geolocalisation = {
