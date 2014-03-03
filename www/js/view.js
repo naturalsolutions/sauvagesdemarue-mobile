@@ -181,9 +181,9 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 						this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
 				}
 				if (typeof(this.model) !== 'undefined') {
-						$('.page-title').empty();
-						$('.page-sub-title').empty();
-						$('.page-title').append('Ma rue en cours');
+						$('.page-title').replaceWith("<div class='page-title'>J'enregistre ma rue</div>");
+						//$('.page-sub-title').empty();
+					//	$('.page-title').append('Ma nouvelle rue');
 				}
   },
 
@@ -316,6 +316,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
 				$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
+				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
 				$('.elem-right-header').append("<button href='' class='btn btn-header btn-lg disabled'><span class='glyphicon glyphicon-question-sign'></span></button>");		
 				this.$el.hammer();
 		},

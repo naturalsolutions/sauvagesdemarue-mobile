@@ -178,13 +178,9 @@ app.Router = Backbone.Router.extend({
 		var self = this;
     if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
       if (typeof( app.globals.currentrue) === 'undefined') {
-	      //Get default street Name
-	      //var nb= new app.dao.ParcoursDataValueDAO(app.db).getDefaultRueName().done(function(d) { 
-		      //app.globals.currentrue = new app.models.ParcoursDataValue({name : d});
         app.globals.currentrue = new app.models.ParcoursDataValue();
 		      var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
 		      self.displayView(currentView);  
-	     // });
       }
       else {
         var collObs = new app.models.OccurenceDataValuesCollection;
