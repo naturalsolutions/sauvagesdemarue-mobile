@@ -63,7 +63,7 @@ body{
 		position: relative;
 		z-index: 2000;
 		height: 220px;
-		margin-top: 40%;
+		margin-top: 60%;
 }
 #splash-screen{
 		width: 100%;
@@ -412,6 +412,18 @@ a.btn.btn-footer{
 		background-color: #333;
 }
 
+#footer > nav > div > .btn{
+		height: 60px;
+		background: #DEDB00;
+		color: black;
+}
+#footer > nav > div > .btn:hover {
+		background: #A0CA10;
+
+}
+#footer > nav > .btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){
+		border-right: 3px solid #28717E;
+}
 /******** HEADER **********/
 .navbar.navbar-fixed-top.loc-header {
 		margin-left: 60px;
@@ -537,7 +549,9 @@ a.btn.btn-footer{
   transform: translate3d(0, 0, 0);
 		-webkit-transform: translate3d(0, 0, 0);
 }
-
+#home-page-content {
+		top: 0;
+}
 /***********LIST TAXONS***************/
 #taxon-list-content .loc-container,#taxon-list-content,.cleliste #content,.cleliste > div.mm-page > div,.cleliste .mm-page{
 		height:100%;
@@ -733,7 +747,7 @@ margin: 10px 0px 40px;
 
 /***DETAIL TAXON***/
 #taxon-detail-content .loc-container{
-  margin:20px 10px 40px;
+  margin:20px 10px 0px;
 }
 .btnObs{
   width:25%;
@@ -796,7 +810,7 @@ margin: 10px;
   margin: 0;
 }
 .loading-splash {
-		margin-top:25%;
+		margin-top:50%;
 }
 .loading-splash,.loading {
 		background-size: 110px;
