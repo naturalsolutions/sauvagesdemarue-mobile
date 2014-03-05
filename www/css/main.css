@@ -5,6 +5,11 @@ body{
 		color: white;
 		background-color: #28717E;
 }
+h2 {
+font-size: x-large;
+font-weight: 200;
+}
+
 /*------------@font-face--------------*/
 @font-face {
 	font-family: 'sauvages';
@@ -214,7 +219,7 @@ ul{
 		background:#9FBEDE;
 }/****MENU****/
 #menu{
-		background-image: url('images/ENTETE-menu/entete-480.jpg');
+		background-image: url('images/ENTETE-menu/entete-440.jpg');
 		background-size: 100%;
 		background-repeat: no-repeat;
 }
@@ -229,6 +234,24 @@ outline-color: green;
 */
 .btn:focus {
 outline-width: 0px;
+}
+/****** table des observations fin de parcours ****************/
+.badge{
+		background-color: rgba(0,0,0,0.7);
+}
+#rue-obs h2 {
+		-webkit-margin-before: 0.3em;
+}
+#rue-obs  h3 {
+		font-size: large;
+		-webkit-margin-before: 1em;
+		margin-top: 0px;
+		border-bottom: 1px solid;
+		font-weight: 200;
+		line-height: 1.3em;
+}
+.list-group-item {
+border: 1px solid rgba(0,0,0,0.7);
 }
 /****** NS_UI-Form****************/
 #rue-form {
@@ -296,11 +319,27 @@ color: #ffffff;
 background-color: #007600;
 }
 /*****panel******/
+.panel-group .panel-heading+.panel-collapse .panel-body {
+		border-top: 4px solid rgba(0,0,0,0.4);
+}
 .panel-group .panel,.panel-heading{
 		border-radius:1px;
+		background: rgba(0,0,0,0.2);
+		border-color: rgba(0,0,0,0.4);
+}
+.panel-default>.panel-heading {
+		color: white;
+		background-color: rgba(0,0,0,0.2);
+		border-color: rgba(0,0,0,0.4);
+}
+.panel-heading.rueEnCours {
+		background-color: yellowgreen;
+}
+.panel-heading.rueEnCours > a {
+		color: #0C2125;
 }
 .panel-group a, .panel-group {
-		color: #333;
+		color: white;
 }
 .panel-group a {
 		text-decoration:none;
@@ -310,42 +349,48 @@ background-color: #007600;
 		list-style: none;
 }
 .panel .btn-default {
-color: white;
-border: 1px solid gray;
+		color: white;
+		border: 1px solid rgba(0,0,0,0);
+		background-color: #0C2125;
 }
 .panel .btn-default:hover,.panel .btn-default:focus, .panel .btn-default:active {
-		color: gray;
+		color: white;
+}
+.panel-heading > a > i {
+padding-left: 10px;
 }
 /****list-group****/
 .list-group-item:last-child,.list-group-item:first-child  {
 		border-radius: 1px;
 }
-.list-group {
-		color:#333;
+.panel-group .panel+.panel {
+ margin-top: 0px;
 }
+/*.list-group {
+		color:#333;
+}*/
 /*****tab*****/
+
 .nav-tabs {
 		width: 100%;
+		border-bottom: 1px solid rgba(0,0,0,0.6);
 }
 .nav-tabs li {
 		width: 50%;
 }
 .tab-content>.active {
-		background: white;
 		padding-bottom: 10px;
-		color: #333;
 }
 .nav-tabs>li>a {
 		margin-right: 2px;
 		line-height: 1.428571429;
-		border: 1px solid white;
 		border-radius: 2px 2px 0 0;
 }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
-		color: #333;
-		background-color: white;
-		border: 1px solid #dddddd;
-		border-bottom-color: transparent;
+color: white;
+background-color: rgba(0,0,0,0.5);
+border: 1px solid rgba(0,0,0,0.3);
+border-bottom-color: transparent;
 		cursor: default;
 }
 /*****label********/
@@ -754,10 +799,10 @@ border-bottom: 1px solid rgba(0, 0, 0, 0.25);;
 li.item-list-alphabetique{
   background:rgba(0, 0, 0, 0.25);
 }
-.item-alphabetique-taxon-list li:nth-child(odd){
+li:nth-child(odd){
 		background:transparent;
 }
-.item-alphabetique-taxon-list li:nth-child(even){
+li:nth-child(even){
 		background:rgba(0, 0, 0, 0.25);
 }
 ul.nav-list ul {
@@ -766,18 +811,15 @@ ul.nav-list ul {
 
 /*****LIST OBS*****/
 
-.list-group li:nth-child(even){
-background:#EBECDE;
-}
 #obs-list-content .loc-container {
 margin: 10px 0px 40px;
 }
-#obs-list-content .panel-default>.panel-heading.rueEnCours{
+/*#obs-list-content .panel-default>.panel-heading.rueEnCours{
 		background-color: #A0CA10;
 }
 #obs-list-content .panel-default>.panel-heading{
 		background-color: lightgray;
-}
+}*/
 .btnAddObsList .btn{
 		height:86px;
 }
@@ -787,6 +829,7 @@ margin: 10px 0px 40px;
 #obs-list-content .panel-body p{
 		width: 80%;
 		float:left;
+		padding: 5px 0px 0px 10px; *
 }
 #obs-list-content .panel-body li{
 		margin-bottom:4px;

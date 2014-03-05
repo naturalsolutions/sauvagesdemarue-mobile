@@ -1,4 +1,5 @@
-<div>
+<div class="list-obs-rue">
+    <h2>Mes sauvages</h2>
     <ul id="values-list" class="list-group">
    <% var groups = _.groupBy(data.collection,function(item,key,list){
                 return item.get('name_taxon');
@@ -10,7 +11,7 @@
     %>    
         <li class="list-group-item">
             <span class="badge"><%= group.length %></span>
-            <p><%= group[0].get('name_taxon') %></p>
+            <h3><%= group[0].get('name_taxon') %></h3>
             <ul>
            <% _.each(group,function(item){
             console.log(item);    

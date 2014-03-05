@@ -172,6 +172,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 
 		annulerTerminer : function(evt){
 			app.route.navigate('identification', {trigger: true});
+				return false;
 		},
 		annulerParcours : function(evt){
 				window.history.back();
@@ -260,7 +261,7 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
   
   beforeRender: function(){
     this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});
-				$('.page-title').replaceWith("<div class='page-title'>Fin de parcours</div>");
+				$('.page-title').replaceWith("<div class='page-title vert-anis'>Fin de parcours</div>");
   }
   
 });

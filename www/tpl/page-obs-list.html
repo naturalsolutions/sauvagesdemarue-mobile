@@ -19,9 +19,11 @@
 																								<a data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
 																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
 																												<b><%= rueName %></b>
-																												<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
 																													<% if(rue.get('state') === 1) { %>
 																																<span class="glyphicon glyphicon-share"></span>
+																																<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
+																												<%	}else{ %>
+																																<i> Rue en cours</i>
 																												<%	} %>
 																												<span class="badge pull-right"><%= group.length %></span>
 																								</a>
