@@ -228,6 +228,7 @@ app.Router = Backbone.Router.extend({
       view.render({ page: true });
       $('#content').append(view.el);
       view.transitionIn();
+      $('.page').addClass('transition-none');
       this._currentView = view;
   }
 

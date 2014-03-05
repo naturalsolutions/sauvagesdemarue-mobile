@@ -42,7 +42,8 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
       });
     },
     afterRender: function () {
-						$('input:text', this.$el).attr('style', 'display:none');
+						$('.input-text', this.$el).attr('style', 'display:none');
+						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
       $('h3', this.$el).attr('style', 'display:none');
@@ -91,6 +92,8 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
+						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
+						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
     },
 		
@@ -139,7 +142,8 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 						$('input:text', this.$el).addClass('disabled');
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
-      //$('input:reset', this.$el).attr('style', 'display:none');
+						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
+						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
     },
 		
@@ -167,8 +171,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   },
 
 		annulerTerminer : function(evt){
-				window.history.back();
-        return false;
+			app.route.navigate('identification', {trigger: true});
 		},
 		annulerParcours : function(evt){
 				window.history.back();
@@ -313,16 +316,12 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     this.collection.each(function(criteria) {
       this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
     }, this);
-				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste cle');
-				$('body.cleliste.cle').append("<div id='languette'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span></a></div>");
+				$('body').addClass('cleliste cle');
+				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
 				$('.elem-right-header').append("<button href='' class='btn btn-header btn-lg disabled'><span class='glyphicon glyphicon-question-sign'></span></button>");		
 				this.$el.hammer();
-		},
-		afterRender: function(){
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-default btn-footer btn-footer-left' id='supprimer-filtre'>Supprimer les filtres</a>");
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-danger btn-footer btn-footer-right' href='#addParcours' role='button'>Fin de parcours</a>");
 		},
 		
 		remove: function(){
@@ -330,7 +329,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				console.log('remove identification');
 				$('.navbar-fixed-bottom .btn-group .btn-footer');
 				$('body').removeClass('cleliste cle');
-				$('#impressionContinue').remove();
     $('#languette').remove();
 		},
 		
@@ -442,8 +440,8 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 
   beforeRender: function() {
 				this.insertView("#wrapper-footer", new app.views.FooterView());
-				$('body').append("<div id='impressionContinue'></div>").addClass('cleliste liste');
-				
+				$('body').addClass('cleliste liste');
+				$('body.cleliste.liste').append("<div id='languette' class='languette-left'><a href='#identification'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
     //this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
@@ -458,10 +456,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 						$('.page-title').replaceWith("<div class='page-title'><b>"+ app.globals.currentFilterTaxonIdList.length + "</b> Résultat(s)</div>");
 				};	
   },
-		afterRender: function(){
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-left' href='#addNonIdentifiee' role='button'>Pas identifié</a>");
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addPasListe''>Pas dans la liste</a>");
-		},
   serialize: function() {
     if (this.collection) return {collection : this.collection};
     return true;
@@ -470,7 +464,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				console.log('remove liste');
 				$('body').removeClass('cleliste liste');
-				$('#impressionContinue').remove();
     $('#languette').remove();
 		},
 		events: {
@@ -487,15 +480,16 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 
   template: 'page-taxon-detail',
 
-  initialize: function() {
+   initialize: function() {
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
 
+
   beforeRender: function() {
-				this.insertView("#wrapper-footer", new app.views.FooterView());
+				//this.insertView("#wrapper-footer", new app.views.FooterView());
     console.log(this.model.get('caracValues').models);
     var self = this;
 
@@ -511,39 +505,20 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 															$('.flexImages').show();
 														}
 												});
-            self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data})).render();
+            self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data}));
           }
         });
     },this);
 				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('commonName')+"</div><em>"+ this.model.get('scientificName')+"</em>");
   },
 		
-		afterRender: function(){
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-default btn-footer btn-footer-left' href='#taxonlist' role='button'>Retour aux résultats</a>");
-				$('.bottom-navbar .btn-group').append("<a class='btn btn-primary btn-footer btn-footer-right' href='#addObs/"+ this.model.get('taxonId') +"' role='button'>Ajouter une obs</a>");
-		},
 		
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				console.log('remove détail taxon')
 				$('.page-block-title em').remove();
 				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
-		},
-		
-//   events: {
-//      'click div.accordion-heading': 'changeIcon',
-//    },
-//      
-//    changeIcon: function(event){
-//      $('.accordion-group').on('hide.bs.collapse', function () {
-//				$(this).children().children().children(".glyphicon").removeClass('glyphicon-minus');
-//				$(this).children().children().children(".glyphicon").addClass('glyphicon-plus');
-//      });
-//      $('.accordion-group').on('show.bs.collapse', function () {
-//				$(this).children().children().children(".glyphicon").removeClass('glyphicon-plus');
-//				$(this).children().children().children(".glyphicon").addClass('glyphicon-minus');
-//      });
-//    },
+		}
 });
 
 app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
@@ -577,17 +552,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				this.insertView("#wrapper-footer", new app.views.FooterView());
 		},
 
-		afterRender: function(){
-				var rueEnCours = this.parcours.findWhere({'state': 0});
-				var rueAPartager = this.parcours.findWhere({'state': 1});
-				$('.bottom-navbar .btn-group').append("<button id='send-obs' type='button' class='btn btn-footer btn-warning'>Partager</button>");
-				if(typeof(rueAPartager) === 'undefined'){$('#send-obs').addClass('disabled')};
-				if(typeof(rueEnCours) !== 'undefined'){
-						$('.bottom-navbar .btn-group').append("<button  type='button' class='btn btn-footer btn-default back-rue-en-cours'>Retour à la saisie</button>");
-				}else{
-						$('.bottom-navbar .btn-group').append("<button type='button' class='btn btn-footer btn-primary back-home'>Nouvelle rue</button>");
-				}
-		},
   
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
@@ -657,9 +621,12 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 												var msg = _.template(
 																	"<form role='form form-inline'>"+
 																		"<div class='form-group'>"+
-																		"<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
-																		"<label for='InputEmail'>Adresse email</label>"+
-																		"<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
+																		"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
+																		'	<div class="input-group input-group-lg">'+
+																		'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
+																		"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
+																		"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
+																		"	</div>"+
 																		"</div>"+
 																		"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
 																	"</form>"					

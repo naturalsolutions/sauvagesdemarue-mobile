@@ -629,7 +629,10 @@
 						}
 
 						//	Prevent default / don't follow link. Default: false
-						var preventDefault = that.__valueOrFn( that.opts.onClick.preventDefault, $t, href.slice( 0, 1 ) == '#' );
+      var preventDefault;
+      if (href) {
+        var preventDefault = that.__valueOrFn( that.opts.onClick.preventDefault, $t, href.slice( 0, 1 ) == '#' );
+      }
 						if ( preventDefault )
 						{
 							e.preventDefault();
