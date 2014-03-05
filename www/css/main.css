@@ -67,8 +67,8 @@ font-weight: 200;
 		background-position: center center;
 		position: relative;
 		z-index: 2000;
-		height: 220px;
-		margin-top: 60%;
+		height: 220px !important;
+		margin-top: 33%;
 }
 #splash-screen{
 		width: 100%;
@@ -908,21 +908,23 @@ margin: 10px;
 	float: left;
   }*/
   .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
-	margin-right: 0;
-	margin-left: 0;
+				margin-right: 0;
+				margin-left: 0;
   }
+		.loading-splash {
+				background-size: 110px;
+				height: 110px !important;
+				margin-top: 20%;
+		}
 }
+
+/*********************************************/
 .nav-list {
   padding-right: 0;
   padding-left: 0;
   margin: 0;
 }
-.loading-splash {
-		margin-top:50%;
-}
-.loading-splash,.loading {
-		background-size: 110px;
-}
+
 .navbar-fixed-top{
   position: fixed;
  /* background:whitesmoke;
