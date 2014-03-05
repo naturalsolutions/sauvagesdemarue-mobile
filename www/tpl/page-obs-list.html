@@ -20,7 +20,9 @@
 																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
 																												<b><%= rueName %></b>
 																													<% if(rue.get('state') === 1) { %>
-																																<span class="glyphicon glyphicon-share"></span>
+																																		<% if(group.length >= 1) { %>
+																																				<span class="glyphicon glyphicon-share"></span>
+																																		<%	} %>
 																																<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
 																												<%	}else{ %>
 																																<i> Rue en cours</i>

@@ -250,9 +250,9 @@ outline-width: 0px;
 		font-weight: 200;
 		line-height: 1.3em;
 }
-.list-group-item {
-border: 1px solid rgba(0,0,0,0.7);
-}
+/*.list-group-item {
+		border: 1px solid rgba(0,0,0,0.7);
+}*/
 /****** NS_UI-Form****************/
 #rue-form {
 height: 100%;
@@ -324,7 +324,7 @@ background-color: #007600;
 }
 .panel-group .panel,.panel-heading{
 		border-radius:1px;
-		background: rgba(0,0,0,0.2);
+		background: #28717E;
 		border-color: rgba(0,0,0,0.4);
 }
 .panel-default>.panel-heading {
@@ -358,6 +358,9 @@ background-color: #007600;
 }
 .panel-heading > a > i {
 padding-left: 10px;
+}
+#taxonList-div-3 > div.panel-heading > a > span.glyphicon.glyphicon-share {
+		color: yellowgreen;
 }
 /****list-group****/
 .list-group-item:last-child,.list-group-item:first-child  {
