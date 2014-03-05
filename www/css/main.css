@@ -551,7 +551,6 @@ a.btn.btn-footer{
 /**********KEY Header************/
 #taxonNb {
 		font-size: 18px;
-		text-shadow: -1px -1px 1px maroon;
 		display: table-cell;
 		vertical-align: middle;
 }
