@@ -220,15 +220,16 @@ app.Router = Backbone.Router.extend({
   displayView: function (view) {
       if (this._currentView) {
         var self = this;
-        this._currentView.transitionOut();
+        //this._currentView.transitionOut();
         this._currentView.remove();
         this._currentView.off();
         $('.elem-right-header').empty();
       }
-      view.render({ page: true });
+    //  view.render({ page: true });
+      view.render();
       $('#content').append(view.el);
-      view.transitionIn();
-      $('.page').addClass('transition-none');
+      //view.transitionIn();
+      //$('.page').addClass('transition-none');
       this._currentView = view;
   }
 

@@ -439,7 +439,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
-				this.insertView("#wrapper-footer", new app.views.FooterView());
+			//	this.insertView("#wrapper-footer", new app.views.FooterView());
 				$('body').addClass('cleliste liste');
 				$('body.cleliste.liste').append("<div id='languette' class='languette-left'><a href='#identification'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));

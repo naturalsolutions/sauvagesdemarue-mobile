@@ -582,6 +582,7 @@ a.btn.btn-footer{
 }
 .transition-none{
 		-webkit-transform:none !important;
+		/*height:calc(100% - 80px) !important;*/
 }
 
 /***********LIST TAXONS***************/
@@ -807,9 +808,9 @@ margin: 10px 0px 40px;
 .flexslider .slides > li:first-child {display: list-item;}
 
 /***DETAIL TAXON***/
-#taxon-detail-content .loc-container{
+/*#taxon-detail-content .loc-container{
   margin:20px 10px 0px;
-}
+}*/
 .btnObs{
   width:25%;
   margin:0px 32% 5px;
