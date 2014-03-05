@@ -599,7 +599,7 @@ a.btn.btn-footer{
 /**********KEY Header************/
 #taxonNb {
 		font-size: 18px;
-		display: table-cell;
+		/*display: table-cell;*/
 		vertical-align: middle;
 }
 /*********** Transition slide ***********/
@@ -647,11 +647,11 @@ height: 100%;
 #languette{
 		position: fixed;
 		top: 33%;
-		padding: 3%;
 		box-shadow: 5px 9px 5px rgba(0, 0, 0, 0.4);
 }
 .languette-right{
 		right: 0;
+		padding: 7% 1% 5%;
 		border-top-left-radius: 6px;
 		border-bottom-left-radius: 6px;
 		background: rgba(138,46,30,1);
@@ -667,6 +667,7 @@ height: 100%;
 }
 .languette-left{
 		left:0;
+		padding: 9% 0%;
 		border-top-right-radius: 6px;
 		border-bottom-right-radius: 6px;
 		background: rgba(150,36,28,1);
@@ -682,13 +683,13 @@ height: 100%;
 
 #languette a{
 		color:white;
-		display: table-row;
+		/*display: table-row;*/
 		color: rgba(20,40,40,0.6);
 		text-shadow: 1px 4px 4px red, 0 0 0 #000, 1px 4px 4px red;
 		text-decoration: none;
 }
 #languette .glyphicon{
-		display: table-cell;
+		/*display: table-cell;*/
 		vertical-align: middle;
 		top: initial;
 		font-size: x-large;

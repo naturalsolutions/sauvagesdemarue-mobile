@@ -318,7 +318,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
       this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
     }, this);
 				$('body').addClass('cleliste cle');
-				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
+				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><div><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></div><p>résultats</p></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
 				$('.elem-right-header').append("<button href='' class='btn btn-header btn-lg disabled'><span class='glyphicon glyphicon-question-sign'></span></button>");		
