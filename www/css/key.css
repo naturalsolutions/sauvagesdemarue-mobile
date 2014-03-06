@@ -102,6 +102,17 @@ text-decoration: none;
 }
 
 /*******Modal Help********/
+#identification-list-content > button {
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 76px;
+		z-index: 2000;
+		background-color: transparent;
+		color: white;
+		font-size: 21px;
+}
+
 #nodal li:nth-child(even){
 		background-color: inherit;
 }
