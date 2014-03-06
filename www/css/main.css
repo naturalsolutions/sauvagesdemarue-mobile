@@ -4,6 +4,10 @@ html,body{
 body{
 		color: white;
 		background-color: #28717E;
+		-webkit-font-smoothing: antialiased;	
+}
+#content{
+
 }
 h2 {
 font-size: x-large;
@@ -30,7 +34,7 @@ font-weight: 200;
 		font-variant: normal;
 		text-transform: none;
 		line-height: 1;
-		font-size: 21px;
+		font-size: 24px;
 	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -209,14 +213,36 @@ ul{
 		color:#333;
 }
 .btn-vert-clair:hover,.btn-vert-clair:focus,.btn-vert-clair:active{
+		background:#B5DF27;
+}
+.btn-gris{
+		background:#999;
+		color:#333;
+}
+.btn-gris:hover,.btn-gris:focus,.btn-gris:active{
+		background:#999;
+}
+.btn-blanc{
+		background:white;
+		color:#333;
+}
+.btn-blanc:hover,.btn-blanc:focus,.btn-blanc:active{
+		background:#ccc;
+}
+.btn-jaune{
 		background:#DEDB00;
+		color:#333;
+}
+.btn-jaune:hover,.btn-jaune:focus,.btn-jaune:active{
+		background:#F8F64F;
 }
 .btn-bleu{
 		background:#28717E;
 		color:white;
 }
 .btn-bleu:hover,.btn-bleu:focus,.btn-bleu:active{
-		background:#9FBEDE;
+		background:#228394;
+		color:white;
 }/****MENU ****/
 #menu{
 		background-image: url('images/ENTETE-menu/entete-440.jpg');
@@ -303,16 +329,6 @@ box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(35, 162, 45, 0.6)
 color: #ffffff;
 text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 background-color: #27A22D;
-background-image: -moz-linear-gradient(top, #27A22D, #007600);
-background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#27A22D), to(#007600));
-background-image: -webkit-linear-gradient(top, #27A22D, #007600);
-background-image: -o-linear-gradient(top, #27A22D, #007600);
-background-image: linear-gradient(to bottom, #27A22D, #007600);
-background-repeat: repeat-x;
-border-color: #51a351 #51a351 #387038;
-border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
-filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled] {
 color: #ffffff;
@@ -481,7 +497,7 @@ a.btn.btn-footer{
 }
 
 #footer > nav > div > .btn{
-		height: 60px;
+		height: 80px;
 		background: #DEDB00;
 		color: black;
 		font-size: large;
@@ -529,6 +545,7 @@ a.btn.btn-footer{
 
 .page-title{
 		font-size: xx-large;
+		
 }
 .page-title, .page-subtitle{
 		width: auto;
@@ -536,6 +553,7 @@ a.btn.btn-footer{
 		overflow: hidden;
 		text-overflow: ellipsis;
 		line-height: 1.2em;
+		margin-top: 5px;
 }
 
 .page-subtitle{
@@ -565,9 +583,10 @@ a.btn.btn-footer{
 }
 
 /********HOME*********/
+
 #home-page-content .col-xs-12.col-sm-12 p {
 		display: inline-block;
-		margin-left: 10px;
+		margin-left: 20px;
 }
 #home-page-content .first{
 		background-image: url('images/ENTETE-menu/entete-home-1280.jpg');
@@ -584,6 +603,7 @@ a.btn.btn-footer{
 .container-home .btn{
   width:100%;
 		border-bottom: 3px solid rgba(0,0,0,0.5);
+		font-size: x-large;
 }
 #home-bonhomme {
   margin: 25% 5px 5px 60%;  
@@ -616,11 +636,11 @@ a.btn.btn-footer{
 		min-width: 50px;
 }
 #taxonNb {
-		font-size: 18px;
+font-size: 24px;
 		display: inline-block;
 		vertical-align: middle;
-		min-width: 50%;
 		text-align: right;
+		margin-top: 1px;
 }
 
 /*********** Transition slide ***********/
@@ -672,7 +692,7 @@ height: 100%;
 }
 .languette-right{
 		right: 0;
-		padding: 7% 1% 5%;
+		padding: 8% 1%;
 		border-top-left-radius: 6px;
 		border-bottom-left-radius: 6px;
 		background: rgba(138,46,30,1);
@@ -795,7 +815,7 @@ body.pad-bottom-top.cleliste.cle, .cleliste.cle .mm-page #header {
   
 }
 h1.page-sub-title {
-		font-size: 13px;
+		font-size: 14px;
 		line-height: 16px;
 		margin-top: 0.2em;
 		margin-bottom: 0.1em;
