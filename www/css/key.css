@@ -91,17 +91,20 @@ background:#EBECDE;
   position:relative;
   float:right;
 }
-.help{
+/*.help{
   background-image:url(images/btn-aide.png);
 width: 16px;
 height: 16px;	
 margin-right:6px;
-}
+}*/
 a.sprite-btn-resultat:hover {
 text-decoration: none;
 }
 
 /*******Modal Help********/
+#nodal li:nth-child(even){
+		background-color: inherit;
+}
 .helpKeyDiv li {
 	min-height: 55px;
 	list-style-type: none;

@@ -1,27 +1,29 @@
 <div class="list-obs-rue">
-    <h2>Mes sauvages</h2>
-    <ul id="values-list" class="list-group">
-   <% var groups = _.groupBy(data.collection,function(item,key,list){
-                return item.get('name_taxon');
-            });
-    %>
-    <%
-    _.each(groups,function(group){
-    console.log(groups);
-    %>    
-        <li class="list-group-item">
-            <span class="badge"><%= group.length %></span>
-            <h3><%= group[0].get('name_taxon') %></h3>
-            <ul>
-           <% _.each(group,function(item){
-            console.log(item);    
-            %>
-                <li>
-                    <p><%= item.get('name_taxon') %> - <%= item.get('milieu') %> </p>
-                </li>
-            <% }); %>
-            </ul>
-        </li>
-    <% }); %>
-    </ul>
+    <% if(data.collection !== "undefined"){%>
+        <h2>Mes sauvages</h2>
+        <ul id="values-list" class="list-group">
+       <% var groups = _.groupBy(data.collection,function(item,key,list){
+                    return item.get('name_taxon');
+                });
+        %>
+        <%
+        _.each(groups,function(group){
+        console.log(groups);
+        %>    
+            <li class="list-group-item">
+                <span class="badge"><%= group.length %></span>
+                <h3><%= group[0].get('name_taxon') %></h3>
+                <ul>
+               <% _.each(group,function(item){
+                console.log(item);    
+                %>
+                    <li>
+                        <p><%= item.get('name_taxon') %> - <%= item.get('milieu') %> </p>
+                    </li>
+                <% }); %>
+                </ul>
+            </li>
+        <% }); %>
+        </ul>
+    <% }%>
 </div>

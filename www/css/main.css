@@ -23,14 +23,14 @@ font-weight: 200;
 }
 
 [class^="icon-"], [class*=" icon-"] {
-	font-family: 'sauvages';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-
+		font-family: 'sauvages';
+		speak: none;
+		font-style: normal;
+		font-weight: normal;
+		font-variant: normal;
+		text-transform: none;
+		line-height: 1;
+		font-size: 21px;
 	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -217,7 +217,7 @@ ul{
 }
 .btn-bleu:hover,.btn-bleu:focus,.btn-bleu:active{
 		background:#9FBEDE;
-}/****MENU****/
+}/****MENU ****/
 #menu{
 		background-image: url('images/ENTETE-menu/entete-440.jpg');
 		background-size: 100%;
@@ -484,6 +484,7 @@ a.btn.btn-footer{
 		height: 60px;
 		background: #DEDB00;
 		color: black;
+		font-size: large;
 }
 #footer > nav > div > .btn:hover {
 		background: #A0CA10;
@@ -564,6 +565,15 @@ a.btn.btn-footer{
 }
 
 /********HOME*********/
+#home-page-content .col-xs-12.col-sm-12 p {
+		display: inline-block;
+		margin-left: 10px;
+}
+#home-page-content .first{
+		background-image: url('images/ENTETE-menu/entete-home-1280.jpg');
+		background-size: 100%;
+		background-repeat: no-repeat;
+}
 .container-home .row {
 		margin: 0px -15px;
 }
@@ -582,7 +592,12 @@ a.btn.btn-footer{
   margin:auto;
   display:block;
 }
-
+#home-page-content .first{
+		height: 32%;
+		min-height: 240px;
+		max-height: 655px;
+		max-width: 1280px;
+}
 /****Smartphones (portrait)*****/
 @media only screen and (max-height : 320px){
     #home-bonhomme {
@@ -596,12 +611,18 @@ a.btn.btn-footer{
     margin: 15% 5px 5px 60%;
   }
 }
-/**********KEY Header************/
+/**********KEY résultat************/
+#languette > a > div {
+		min-width: 50px;
+}
 #taxonNb {
 		font-size: 18px;
-		/*display: table-cell;*/
+		display: inline-block;
 		vertical-align: middle;
+		min-width: 50%;
+		text-align: right;
 }
+
 /*********** Transition slide ***********/
 .page {
   position: absolute;
@@ -814,7 +835,9 @@ ul.nav-list ul {
 }
 
 /*****LIST OBS*****/
-
+.panel-body ul li div{
+		padding:5px;
+}
 #obs-list-content .loc-container {
 margin: 10px 0px 40px;
 }
@@ -831,7 +854,7 @@ margin: 10px 0px 40px;
 		margin-top: 28px;
 }
 #obs-list-content .panel-body p{
-		width: 80%;
+		width: 70%;
 		float:left;
 		padding: 5px 0px 0px 10px; *
 }

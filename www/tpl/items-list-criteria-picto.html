@@ -1,10 +1,8 @@
 <li>
-  <% console.log(app.globals.currentFilter); %>
   <div id='<%= data.criteraId %>' class="criteria-list-item pad-right">
     <div>
         <div class="criteria-name">
           <p><b><%= capitaliseFirstLetter(data.name) %></b></p>
-           <a class="<%= data.criteraId %> help" title="aide du critère <%= data.name %>"></a>
         </div>
     </div>
     <% 

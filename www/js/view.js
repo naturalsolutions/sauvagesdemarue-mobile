@@ -37,6 +37,8 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
         instance.save().done( function(model, response, options) {
+										app.globals.currentFilter.length = 0;
+										app.globals.currentFilterTaxonIdList.length = 0;
           sauvages.notifications.obsSaveSuccess();
         });
       });
@@ -85,6 +87,8 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
         instance.save().done( function(model, response, options) {
+										app.globals.currentFilter.length = 0;
+										app.globals.currentFilterTaxonIdList.length = 0;
           sauvages.notifications.obsSaveSuccess();
         });
       });
@@ -134,6 +138,8 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
         instance.save().done( function(model, response, options) {
+										app.globals.currentFilter.length = 0;
+										app.globals.currentFilterTaxonIdList.length = 0;
           sauvages.notifications.obsSaveSuccess();
         });
       });
@@ -182,7 +188,9 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   beforeRender: function() {
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
 				if (typeof(this.collection) !== 'undefined') {
-						this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
+						if (this.collection.length !== 0) {
+								this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
+						}
 				}
 				if (typeof(this.model) !== 'undefined') {
 						$('.page-title').replaceWith("<div class='page-title'>J'enregistre ma rue</div>");
@@ -219,6 +227,8 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 														// TODO enlever les globales
 														delete app.globals.currentrue;
 														data.set('state',1).save();
+														app.globals.currentFilter.length = 0;
+														app.globals.currentFilterTaxonIdList.length = 0;
 														sauvages.notifications.finParcours();				
 												}
 												else {
@@ -309,7 +319,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   events: {
     "click input[type=checkbox]": "filterTaxon",
 				"dragleft" : "swipeTaxonList",
-				"click #supprimer-filtre" : "suppFiltre"
+				"click #supprimer-filtre" : "suppFiltre",
+    "click .help": "helpShow"
   },
 		
   beforeRender: function() {
@@ -321,7 +332,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><div><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></div><p>résultats</p></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
-				$('.elem-right-header').append("<button href='' class='btn btn-header btn-lg disabled'><span class='glyphicon glyphicon-question-sign'></span></button>");		
+				//$('.elem-right-header').append("<button class='btn btn-header help btn-lg'><span class='glyphicon glyphicon-question-sign help'></span></button>");		
 				this.$el.hammer();
 		},
 		
@@ -340,8 +351,27 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     console.log("event gesture"+event.gesture);
 				event.gesture.preventDefault();
 		},
-
-  suppFiltre :function(event){
+		helpShow :function(){
+				var self=this;
+				var criteriaName = "Aide de l'assistant d'identification";
+				var criteriaColl = self.collection;
+				var msg = _.template(
+										"<div class='helpKeyDiv'>"+
+										"	<ul class='list-group'><% _.each(data.models,function(criteriaValueCollItem,i){%>"+
+										"		<li class='list-group-item'>	<h4><%= criteriaValueCollItem.get('name') %></h4> "+
+										"			<ul class='list-group'><% _.each(criteriaValueCollItem.get('defCaracValues').models,function(criteriaValueItem,i){%>"+
+										"				<li class='list-group-item'><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p><%= criteriaValueItem.get('name') %><p></li>"+
+										'			<% }); %>'+
+										'			</ul>'+
+										"		</li>"+
+										'	<% }); %>'+
+										'	</ul>'+
+										'</div>'					
+									);
+				sauvages.notifications.helpKey(criteriaName,msg(criteriaColl));
+	},
+  
+		suppFiltre :function(event){
 				app.globals.currentFilter.length = 0;
 				app.globals.currentFilterTaxonIdList.length = 0;
 				$("#taxonNb").html(app.globals.cListAllTaxons.length);
@@ -403,9 +433,6 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
 
   },
-		events: {
-    "click .help": "helpShow"
-  },
   afterRender:function() {
    if (app.globals.currentFilter.length > 0) { 
       _.each(app.globals.currentFilter,function(l){ 
@@ -415,19 +442,7 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
       });
     }
   },
-	helpShow :function(){
-		var self=this;
-		var criteriaName = capitaliseFirstLetter(self.model.get('name'));
-		var msg = _.template(
-								"<div class='helpKeyDiv'>"+
-									'<p><%= data.criteriaDescription %></p> '+
-									'<ul><% _.each(data.criteriaValues,function(criteriaValueItem,i){%>'+
-										"<li><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p><%= criteriaValueItem.get('name') %><p></li>"+
-									'<% }); %></ul>'+
-								'</div>'					
-							);
-		sauvages.notifications.helpKey(criteriaName,msg({criteriaName : criteriaName,criteriaDescription:this.model.get('description'), criteriaValues: this.model.get('defCaracValues').models}));
-	}
+
 });
 
 app.views.TaxonListView =  app.utils.BaseView.extend({
