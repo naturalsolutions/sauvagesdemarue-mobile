@@ -45,7 +45,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
     },
     afterRender: function () {
 						$('.input-text', this.$el).attr('style', 'display:none');
-						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
+						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
       $('h3', this.$el).attr('style', 'display:none');
@@ -149,7 +149,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
-						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
+						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
     },
 		

@@ -50,10 +50,7 @@ app.Router = Backbone.Router.extend({
       self.displayView(currentView);
     }, 2000);
   },
-  //viewChoixOutils: function() {
-  //  var currentView = new app.views.pageChoixOutils();
-  //  this.displayView(currentView);
-  //},
+
   viewIdentKey : function() {
 //    if (typeof(app.globals.currentrue) === 'undefined') {
 //	    alert('Rue non initialisée');
@@ -115,9 +112,11 @@ app.Router = Backbone.Router.extend({
       app.utils.geolocalisation.getCurrentPosition();
       if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
         var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
-        var obs = new app.models.OccurenceDataValue({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
+        var obs = new app.models.OccurenceDataValueNoRequired({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
+
         obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
         obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+        
         var currentView = new app.views.AddSauvageOccurenceView({model:obs});
         self.displayView(currentView);   
       }

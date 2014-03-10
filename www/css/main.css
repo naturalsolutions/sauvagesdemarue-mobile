@@ -34,7 +34,7 @@ font-weight: 200;
 		font-variant: normal;
 		text-transform: none;
 		line-height: 1;
-		font-size: 24px;
+		font-size: 19px;
 	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -501,6 +501,7 @@ a.btn.btn-footer{
 		background: #DEDB00;
 		color: black;
 		font-size: large;
+		white-space: normal;
 }
 #footer > nav > div > .btn:hover {
 		background: #A0CA10;
@@ -583,7 +584,9 @@ a.btn.btn-footer{
 }
 
 /********HOME*********/
-
+#home-page-content [class^="icon-"], [class*=" icon-"] {
+font-size: 25px;
+}
 #home-page-content .col-xs-12.col-sm-12 p {
 		display: inline-block;
 		margin-left: 20px;

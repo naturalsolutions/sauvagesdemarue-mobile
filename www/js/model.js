@@ -296,6 +296,44 @@ app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
   } 
 });
 
+// The OccurenceDataValue Model picture no required
+app.models.OccurenceDataValueNoRequired = Backbone.Model.extend({
+	defaults: {
+	  milieu:'Mur',
+	  sended:0
+	},
+
+},{
+  table : 'TdataObs_occurences',
+  schema: {
+      id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+      latitude:{ type: 'hidden', title:'Latitude',sqltype:'REAL', required: true}, 
+      longitude: { type: 'hidden', title:'Longitude',sqltype:'REAL', required: true} ,
+      fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
+      fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
+      sended: { title:'sended',  type:'hidden', sqltype:'INTEGER' ,required: true},
+      name_taxon: { title:'Espèce',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
+      milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Pelouse', label:'Pelouse'},{val:'Mur', label:'Mur'},{val:'Plate bande', label:'Plate bande'},{val:'Pied d\'arbre', label:'Pied d\'arbre'} ,{val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
+      datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
+      photo: { 
+				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)',
+				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
+			},
+    note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)',required: false},
+  }, 
+  dao: app.dao.OccurenceDataValueDAO,
+  verboseName: 'Occurence'
+});
+// The CaracteristiqueDefValue Collection
+app.models.OccurenceDataValueNoRequiredCollection =Backbone.Collection.extend({
+
+  model : app.models.OccurenceDataValueNoRequis,
+  
+  getObsByRueId : function(fkrue) {
+    return this.where({'fk_rue': fkrue});
+  } 
+});
+
 
 // The ParcoursDataValues Model
 app.models.ParcoursDataValue = Backbone.Model.extend({
