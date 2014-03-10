@@ -54,7 +54,16 @@ NS.UI = (function(ns) {
 																return value;
 								};
 				};
-	
+    
+    validators.NotFiles = function() {
+								this.msg = 'Ce champ ne peut être vide.';
+								this.validate = function(value) {
+												if (typeof value === 'undefined')
+																throw new ValidationError(this.msg);
+																return value;
+								};
+				};
+
     validators.Email = function() {
 								this.msg = "Votre email n'est pas correct.";
         var regex = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
@@ -318,7 +327,7 @@ NS.UI = (function(ns) {
         }
     });
 
-	editors.Select = BaseEditor.extend({
+    editors.Select = BaseEditor.extend({
         templateId: 'editor-select',
 
         multiple: false,
@@ -861,12 +870,13 @@ NS.UI = (function(ns) {
     });
 		
 				editors.Picture = BaseEditor.extend({
+        validators: [new validators.NotFiles()],
 								templateId: 'editor-picture',
 
         getValue: function() {
 												if (this.$el) {
 																var val = this.$el.find('img').attr('src');
-																if (val === this.nullValue || val === null) return undefined;
+																if (val === this.nullValue || val === null || val === "") return undefined;
 																if (! this.multiple) return [val];
 																return val;
 												}
@@ -888,6 +898,20 @@ NS.UI = (function(ns) {
 											'click #take-picture': 'capturePhoto',
 											'change #input-picture': 'loadPhoto'
 								},
+        
+        clearValidationErrors: function () {
+            BaseEditor.prototype.clearValidationErrors.apply(this, arguments);
+												this.$el.find('.help-inline').html('');
+								},
+						
+								handleValidationError: function (err) {
+            BaseEditor.prototype.handleValidationError.apply(this, arguments);
+												this.$el.find('.help-inline').html(err.message);
+								},
+    
+        toggleSubmit: function(disabled) {
+            $('.form-actions').find('input[type="submit"]').prop('disabled', disabled);
+        },
 
 								initialize : function() {
 													BaseEditor.prototype.initialize.apply(this, arguments);	
@@ -900,7 +924,7 @@ NS.UI = (function(ns) {
 													});
 									},
 
-								loadPhoto : function () {
+								loadPhoto : function () {      
 												var input = document.querySelector('input[type=file]');
 												var file = readfile(input.files[0]);
 												var self = this;
@@ -910,6 +934,8 @@ NS.UI = (function(ns) {
 																reader.onload = function() {   
 																				var data = reader.result; 
 																				self.$el.find('.img-preview img.editor-picture-img').attr('src', data);
+                    self.clearValidationErrors();
+                    self.toggleSubmit(false);
 																}
 																reader.onerror = function(e) { 
 																				console.log("Error", e); 
@@ -933,10 +959,11 @@ NS.UI = (function(ns) {
 								},
 
 								onSuccess: function(imageURI) {
+            var self = this;
 												var fsFail =  function(error) {
 																console.log("failed with error code: " + error.code);
 												};
-												var copiedFile = function(fileEntry){
+												var copiedFile = function(fileEntry){ 
                 console.log(fileEntry.fullPath);
                 $('.editor-picture-img').attr('src', fileEntry.fullPath);
 												}
@@ -949,7 +976,9 @@ NS.UI = (function(ns) {
 																};
 																window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFileSystem, fsFail); 
 												};
-												window.resolveLocalFileSystemURI(imageURI, gotFileEntry, fsFail); 
+												window.resolveLocalFileSystemURI(imageURI, gotFileEntry, fsFail);
+            self.clearValidationErrors();
+            self.toggleSubmit(false);
 								},
 
 																																													

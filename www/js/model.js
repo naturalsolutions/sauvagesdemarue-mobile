@@ -278,7 +278,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
       milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Pelouse', label:'Pelouse'},{val:'Mur', label:'Mur'},{val:'Plate bande', label:'Plate bande'},{val:'Pied d\'arbre', label:'Pied d\'arbre'} ,{val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
       photo: { 
-				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: false, 
+				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)', required: true, 
 				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
 			},
     note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)',required: false},
