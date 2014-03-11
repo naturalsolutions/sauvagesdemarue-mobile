@@ -224,7 +224,8 @@ ul{
 }
 .btn-blanc{
 		background:white;
-		color:#333;
+		color:#555;
+		font-size:18px;
 }
 .btn-blanc:hover,.btn-blanc:focus,.btn-blanc:active{
 		background:#ccc;
@@ -281,13 +282,19 @@ outline-width: 0px;
 }*/
 /****** NS_UI-Form****************/
 #rue-form {
-height: 100%;
+		height: 100%;
 }
-#add-sauvages-rue form {
+#input-picture {
+		display: inline-block;
+}
+#add-sauvages-rue {
+		margin-top: 30px;
+}
+#add-new-obs {
 		margin-top: 20px;
 }
 .form-group {
-		margin-bottom: 25px;
+		margin-bottom: 5px;
 }
 .form-actions .btn, .btn-long{
   margin:0px auto;
@@ -306,29 +313,26 @@ height: 100%;
 }
 .help-inline {
 		color: #DEDB00;
+		min-height: 20px;
 }
-/**surcharge du focus bootstrap couleur verte**/
-/*textarea:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="date"]:focus, input[type="month"]:focus,
-input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus,
-input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="color"]:focus, .uneditable-input:focus {
-border-color: rgba(35, 162, 45, 0.8);
-outline: 0;
-outline: thin dotted \9;
--webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(35, 162, 45, 0.6);
--moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(35, 162, 45, 0.6);
-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(35, 162, 45, 0.6);
-}*/
+.editor-picture-img{
+		max-height: 100px;
+		max-width: 100px;
+		margin-left: 20px;
+		min-height: 100px;
+		background-color: rgba(0,0,0,0.3);
+		min-width: 100px;
+		vertical-align: bottom;
+}
+.btn-camera{
+		font-size: 21px;
+		border-radius:4px;
+}
+
 .btn-success {
-color: #ffffff;
-text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-background-color: #27A22D;
+		color: #ffffff;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+		background-color: #27A22D;
 }
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled] {
 color: #ffffff;
@@ -416,73 +420,16 @@ border-bottom-color: transparent;
 label {
 		font-weight: 200;
 }
-/*****SPRITE*******/
-.sprite-arrow-div-list-transparent{ background-position: 0 0; width: 29px; height: 67px; } 
-.sprite-arrow-div-list{ background-position: 0 -117px; width: 29px; height: 67px; } 
-.sprite-back-hover{ background-position: 0 -234px; width: 55px; height: 30px; } 
-.sprite-back{ background-position: 0 -314px; width: 55px; height: 30px; } 
-.sprite-bonhomme-home{ background-position: 0 -394px; width: 99px; height: 89px; } 
-.sprite-btn-assistant{ background-position: 0 -533px; width: 37px; height: 29px; } 
-.sprite-btn-home-hover{ background-position: 0 -612px; width: 224px; height: 77px; } 
-.sprite-btn-home-initier-hover{ background-position: 0 -739px; width: 227px; height: 78px; } 
-.sprite-btn-home-initier{ background-position: 0 -867px; width: 227px; height: 78px; } 
-.sprite-btn-home{ background-position: 0 -995px; width: 224px; height: 77px; } 
-.sprite-btn-list-add-hover{ background-position: 0 -1122px; width: 54px; height: 73px; } 
-.sprite-btn-list-add{ background-position: 0 -1245px; width: 54px; height: 73px; } 
-.sprite-btn-resultat{ background-position: 0 -1368px; width: 46px; height: 29px; } 
-.sprite-btn-stop{ background-position: 0 -1447px; width: 37px; height: 29px; } 
-.sprite-flower-white{ background-position: 0 -1526px; width: 25px; height: 25px; } 
-.sprite-list-fond{ background-position: 0 -1601px; width: 37px; height: 29px; } 
-.sprite-list{ background-position: 0 -1680px; width: 25px; height: 25px; } 
-.sprite-map{ background-position: 0 -1755px; width: 25px; height: 25px; } 
-.sprite-obs{ background-position: 0 -1830px; width: 25px; height: 25px; } 
-.sprite-parameter{ background-position: 0 -1905px; width: 25px; height: 25px; } 
 
-
-.sprite-sauvages{
-background-image:url(images/sprite-sauvages.png);
-background-repeat:no-repeat;
-position: relative;
-display: block;
-
-}
-.footer-el span.sprite-sauvages{
-height:24px;
-width:24px;
-margin:1px auto 0px;
+/***Footer***/
+#footer .btn[disabled] {
+		opacity: 1;
+		background-color: #9E9E8C;
+		color: #555;
 }
 .mm-fixed-bottom {
-
 right: 0;
 }
-
-a.sprite-btn-home,a.sprite-btn-home-initier{
-  margin: auto;
-}
-a.sprite-btn-home:hover{
-  background-position: 0 -612px;;
-}
-a.sprite-btn-home-initier:hover{
-  background-position: 0 -739px;
-}
-
-.sprite-sauvages.sprite-btn-stop,.sprite-sauvages.sprite-btn-resultat {
-position: absolute;
-}
-.sprite-sauvages.sprite-btn-resultat {
-right: 0;
-}
-.sprite-sauvages.sprite-btn-assistant,.sprite-sauvages.sprite-back,.sprite-sauvages.sprite-list-fond{
-  margin-top:6px;
-}
-/******SVG*******/
-/*#home-page-content{
-  background-image:url(images/map-home.svg);
-  background-repeat: no-repeat;
-  background-position: bottom;
-  width:100%;
-}*/
-/***Footer***/
 input.btn.btn-footer, button.btn.btn-footer {
 		width: 50%;
 		display: inline;
@@ -589,7 +536,6 @@ font-size: 25px;
 }
 #home-page-content .col-xs-12.col-sm-12 p {
 		display: inline-block;
-		margin-left: 20px;
 }
 #home-page-content .first{
 		background-image: url('images/ENTETE-menu/entete-home-1280.jpg');

@@ -14,7 +14,7 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 
   beforeRender: function() {
     this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
-				$('.page-title').replaceWith("<div class='page-title'> Nouvelle observation</div>");
+				$('.page-title').replaceWith("<div class='page-title'>Sauvage non identifiée</div>");
   },
 		
 		remove : function(){
@@ -64,7 +64,7 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 
   beforeRender: function() {
     this.insertView("#obs-pl-form", new app.views.FormAddOccurencePasDansListeView({initialData:this.model}));
-				$('.page-title').replaceWith("<div class='page-title'>Espèce non répertoriée</div>");
+				$('.page-title').replaceWith("<div class='page-title'>Sauvage non répertoriée</div>");
   },
 		
 		remove : function(){
@@ -114,7 +114,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 
   beforeRender: function() {
     this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
-				$('.page-title').replaceWith("<div class='page-title'> Nouvelle observation</div>");
+				$('.page-title').replaceWith("<div class='page-title'> Nouvelle Sauvage</div>");
   },
 		
 		remove : function(){

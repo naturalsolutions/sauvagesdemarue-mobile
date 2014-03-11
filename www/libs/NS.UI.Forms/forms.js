@@ -992,16 +992,16 @@ NS.UI = (function(ns) {
 								}, {
 												templateSrc: {
 														stacked: '<div class="control-group">' +
-																				'    <label class="control-label"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+																				'    <label class="control-label sr-only"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
 																				'    <div class="controls">' +
-																				'	<div class="row-fluid img-preview">'+
-												'		<img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
-												'		<% if (navigator.camera) { %> '+
-												'			<button class="btn btn-camera" id="take-picture" type="button"><img src="css/images/btn_camera.png"/></button>'+
-												'		<%} else {%>'+
-												'			<input type="file" accept="image/*" capture  id="input-picture" >'+
-												'		<%} %>'+
-												'	</div>'+                
+																				'	      <div class="row-fluid img-preview">'+
+                    '		         <% if (navigator.camera) { %> '+
+                    '			            <a class="btn btn-blanc btn-lg btn-camera" id="take-picture" type="button"><span class="glyphicon glyphicon-camera"></span></a>'+
+                    '		         <%} else {%>'+
+                    '			            <input type="file" accept="image/*" capture  id="input-picture" >'+
+                    '		         <%} %>'+
+                    '		         <img class="editor-picture-img" src="" style="max-height: 100px;max-width: 100px;"/>'+
+                    '	      </div>'+                
 																				'        <div class="help-inline"></div>' +
 																				'        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
 																				'    </div>' +
