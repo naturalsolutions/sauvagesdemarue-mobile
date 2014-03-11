@@ -4,34 +4,44 @@ var sauvages = window.sauvages|| {};
 sauvages.notifications = (
 function() {
    "use strict";
-         sauvages.messages = {
-                 'save': 'Enregistrer',
-                 'begin_street': 'Début du parcours',
-                 'end_street':'Fin du parcours',
-         },
+   sauvages.messages = {
+           'save': 'Enregistrer',
+           'begin_street': 'Début du parcours',
+           'end_street':'Fin du parcours',
+   },
 		
-	 sauvages.gpsNotStart = function gpsNotStart() {
-		 var myModal = new NS.UI.NotificationModal({
-				type: 'error',
-				title: 'GPS not start',
-				message: 'wait',
-				delay: 1,
-				btnLabel: '',
-			});
-         },
+   sauvages.gpsNotStart = function gpsNotStart() {
+      var myModal = new NS.UI.NotificationModal({
+       type: 'info',
+       title: "Le GPS n'a pas encore démarré",
+       message: "Patience, le GPS n'a pas encore démarré!",
+       delay: 1,
+       btnLabel: '',
+      });
+   },
+   
+   sauvages.supprimerObs = function supprimerObs(msg) {
+      var myModal = new NS.UI.NotificationModal({
+       type: 'success',
+       title: 'Supprimer une observation',
+       message: msg,
+       delay: 3,
+       btnLabel: '',
+      });
+   },
 	
-	 sauvages.finParcours = function finParcours() {
-			var myModal = new NS.UI.NotificationModal({
-				type: 'success',
-				title: 'Rue sauvegardée',
-				message: 'Retrouver vos données dans "Mes Sauvages"<br/> N\'oublier pas de les partager <br/>',
-				delay: '1',
-				btnLabel: '',
-				onClick: function() {
-					app.route.navigate('addParcours/new', {trigger: true});
-					},
-			});
-         },
+   sauvages.finParcours = function finParcours() {
+      var myModal = new NS.UI.NotificationModal({
+         type: 'success',
+         title: 'Rue sauvegardée',
+         message: 'Retrouver vos données dans "Mes Sauvages"<br/> N\'oublier pas de les partager <br/>',
+         delay: 2,
+         btnLabel: '',
+         onClick: function() {
+          app.route.navigate('addParcours/new', {trigger: true});
+          },
+      });
+   },
 	
    sauvages.obsSaveSuccess = function obsSaveSuccess() {
      new NS.UI.NotificationModal({
@@ -106,7 +116,7 @@ function() {
           app.route.navigate('taxonlist', {trigger: true});
           }
       });
-	},
+   },
   sauvages.finDeProtocol = function finDeProtocol(msg) {
 			var v = new NS.UI.NotificationModal({
 				type: 'warning',

@@ -43,12 +43,17 @@ app.Router = Backbone.Router.extend({
 	
   viewHomePage: function() {
     var self= this;
-    setTimeout(function() {
-      $(".loading-splash").remove();
-      $('#splash-screen').remove();
+    if ($(".loading-splash").length !== 0) {
+      setTimeout(function() {
+        $(".loading-splash").remove();
+        $('#splash-screen').remove();
+        var currentView = new app.views.HomePageView();
+        self.displayView(currentView);
+      }, 2000);
+    }else{
       var currentView = new app.views.HomePageView();
       self.displayView(currentView);
-    }, 2000);
+    }   
   },
 
   viewIdentKey : function() {

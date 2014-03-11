@@ -23,6 +23,7 @@
 																																		<% if(group.length >= 1) { %>
 																																				<span class="glyphicon glyphicon-share"></span>
 																																		<%	} %>
+																																<% 	var obsTime = 	rue.set('end_datetime', new Date().format("dd/MM/yyyy")); %>
 																																<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
 																												<%	}else{ %>
 																																<i> Rue en cours</i>
@@ -46,7 +47,7 @@
 																																<li>
 																																				<div class="clearfix">
 																																						<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %></p>
-																																				<% if(item.get('photo') !== "") { %>
+																																				<% if(item.get('photo') !== "" || typeof(item.get('photo')) != "undefined" ) { %>
 																																								<img class="taxon-img-thumb img-rounded pull-left" style ="width:50px;" id="<%= item.get('photo') %>" src="<%= item.get('photo') %>">
 																																				<% } %>				
 																																				

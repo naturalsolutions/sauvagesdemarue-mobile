@@ -423,7 +423,7 @@ label {
 }
 
 /***Footer***/
-#footer .btn[disabled] {
+#footer .btn[disabled],#footer .btn.disabled {
 		opacity: 1;
 		background-color: #9E9E8C;
 		color: #555;
@@ -454,9 +454,9 @@ a.btn.btn-footer{
 #footer > nav > div > .btn:hover {
 		background: #A0CA10;
 }
-#footer > nav > div > .btn.disabled{
+/*#footer > nav > div > .btn.disabled{
 		background:gray;
-}
+}*/
 #footer > nav > .btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){
 		border-right: 3px solid #28717E;
 }
@@ -809,7 +809,7 @@ ul.nav-list ul {
 		padding:5px;
 }
 #obs-list-content .loc-container {
-margin: 10px 0px 40px;
+		margin: 10px 0px 180px;
 }
 /*#obs-list-content .panel-default>.panel-heading.rueEnCours{
 		background-color: #A0CA10;

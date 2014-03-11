@@ -64,11 +64,11 @@ NS.UI = (function(ns) {
              $('#modal-close').click(self.options.onClick());
             }
             $('#nodal').modal('show');
-                  if (typeof(this.options.delay) === 'number' && this.options.delay > 0) {
-             setTimeout(function() {
-              $('#nodal').modal('hide');
-              if (self.options.onClose) self.options.onClose();
-             }, self.options.delay*1000);
+            if (typeof(this.options.delay) === 'number' && this.options.delay > 0) {
+                setTimeout(function() {
+                    $('#nodal').modal('hide');
+                    if (self.options.onClose) self.options.onClose();
+                }, self.options.delay*1000);
             }
         }
     });

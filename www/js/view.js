@@ -650,7 +650,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																);
 												sauvages.notifications.email(msg());
 												$('.modal-footer').addClass("hide");
-												//$('#modal-close').addClass("pull-left btn-primary").removeClass('btn-default');
 												self.render();
 												}
 										}
@@ -661,7 +660,9 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						var ctarget = $(event.currentTarget);
 						var obsToDestroy = self.collection.findWhere({'id': parseInt(ctarget.context.id)});
 						obsToDestroy.destroy({success: function(obs, idObs) {
-								alert("Destruction de l'observation : " + idObs);
+								var obsTime = 	obs.set('datetime', new Date().format("dd/MM/yyyy"));
+								var msg = "L'observation <i>"+obs.get('name_taxon')+"</i> du "+ obs.get('datetime')+" a été supprimée du mobile." 
+								sauvages.notifications.supprimerObs(msg);
 								self.render();
 								$("#tabObs a[href='#rue']").tab('show');
 								
