@@ -931,7 +931,9 @@ margin: 10px;
 .notification-modal,.modal{
 		color:black;
 }
-
+.alert-success {
+		color: #008D00;
+}
 
 /****Annuaire****/
 /*.btn-group-vertical > .btn:first-child {

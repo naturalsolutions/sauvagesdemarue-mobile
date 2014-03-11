@@ -247,7 +247,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' >Annuler</button>");
 				}
     else{
-      $('input:submit', this.$el).attr('value', sauvages.messages.end_street).removeClass('btn-primary').addClass('btn-danger');
+      $('input:submit', this.$el).attr('value', 'Terminer').removeClass('btn-primary').addClass('btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' >Annuler</button>");
@@ -357,15 +357,15 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				var criteriaColl = self.collection;
 				var msg = _.template(
 										"<div class='helpKeyDiv'>"+
-										"	<ul class='list-group'><% _.each(data.models,function(criteriaValueCollItem,i){%>"+
-										"		<li class='list-group-item'>	<h4><%= criteriaValueCollItem.get('name') %></h4> "+
-										"			<ul class='list-group'><% _.each(criteriaValueCollItem.get('defCaracValues').models,function(criteriaValueItem,i){%>"+
-										"				<li class='list-group-item'><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p><%= criteriaValueItem.get('name') %><p></li>"+
+										"	<div class='row'><% _.each(data.models,function(criteriaValueCollItem,i){%>"+
+										"		<div class='col-xs-12 col-sm-12 col-md-12'>	<h4><%= criteriaValueCollItem.get('name') %></h4> "+
+										"			<div class='row'><% _.each(criteriaValueCollItem.get('defCaracValues').models,function(criteriaValueItem,i){%>"+
+										"				<div class='col-xs-4 col-sm-4 col-md-4'><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p><%= criteriaValueItem.get('name') %><p></div>"+
 										'			<% }); %>'+
-										'			</ul>'+
-										"		</li>"+
+										'			</div>'+
+										"		</div>"+
 										'	<% }); %>'+
-										'	</ul>'+
+										'	</div>'+
 										'</div>'					
 									);
 				sauvages.notifications.helpKey(criteriaName,msg(criteriaColl));

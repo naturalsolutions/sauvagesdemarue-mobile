@@ -91,12 +91,7 @@ background:#EBECDE;
   position:relative;
   float:right;
 }
-/*.help{
-  background-image:url(images/btn-aide.png);
-width: 16px;
-height: 16px;	
-margin-right:6px;
-}*/
+
 a.sprite-btn-resultat:hover {
 		text-decoration: none;
 }
@@ -116,16 +111,31 @@ a.sprite-btn-resultat:hover {
 #nodal li:nth-child(even){
 		background-color: inherit;
 }
+.cle .modal-content {
+		background-color: #28717e;
+		color: white;
+}
+.cle .modal-body{
+		padding:0;
+}
+
 .helpKeyDiv li {
 	min-height: 55px;
 	list-style-type: none;
 	clear:both;
 }
 .helpKeyDiv img {
-	float: left;
+		margin: auto;
+		display: block;
+		background-color: rgba(254,254,254,0.8);
+		padding: 10px;
+		border-radius:2px;
 }
 .helpKeyDiv p{
-	float: left;
-	padding: 10px;
+		padding: 4px;
+		text-align: center;
+}
+.cle .helpKeyDiv .col-xs-12,.cle .helpKeyDiv .col-sm-12,.cle .helpKeyDiv .col-md-12 {
+border-bottom: 3px solid rgba(240,240,240,0.3);
 }
 
