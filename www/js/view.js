@@ -359,8 +359,9 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 										"<div class='helpKeyDiv'>"+
 										"	<div class='row'><% _.each(data.models,function(criteriaValueCollItem,i){%>"+
 										"		<div class='col-xs-12 col-sm-12 col-md-12'>	<h4><%= criteriaValueCollItem.get('name') %></h4> "+
+										"			<p><%= criteriaValueCollItem.get('description') %></p>"+
 										"			<div class='row'><% _.each(criteriaValueCollItem.get('defCaracValues').models,function(criteriaValueItem,i){%>"+
-										"				<div class='col-xs-4 col-sm-4 col-md-4'><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p><%= criteriaValueItem.get('name') %><p></div>"+
+										"				<div class='col-xs-4 col-sm-4 col-md-4'><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p class='nomValeur'><%= criteriaValueItem.get('name') %><p></div>"+
 										'			<% }); %>'+
 										'			</div>'+
 										"		</div>"+

@@ -132,7 +132,9 @@ a.sprite-btn-resultat:hover {
 		border-radius:2px;
 }
 .helpKeyDiv p{
-		padding: 4px;
+
+}
+.helpKeyDiv .nomValeur{
 		text-align: center;
 }
 .cle .helpKeyDiv .col-xs-12,.cle .helpKeyDiv .col-sm-12,.cle .helpKeyDiv .col-md-12 {
