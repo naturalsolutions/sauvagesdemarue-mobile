@@ -24,9 +24,9 @@ function() {
 			var myModal = new NS.UI.NotificationModal({
 				type: 'success',
 				title: 'Rue sauvegardée',
-				message: 'Retrouver vos données dans "Mes observations"<br/> N\'oublier pas de les partager <br/>',
-				delay: '',
-				btnLabel: 'Nouvelle rue',
+				message: 'Retrouver vos données dans "Mes Sauvages"<br/> N\'oublier pas de les partager <br/>',
+				delay: '1',
+				btnLabel: '',
 				onClick: function() {
 					app.route.navigate('addParcours/new', {trigger: true});
 					},
