@@ -113,7 +113,6 @@ app.dao.baseDAOBD = {
     if (!pKisDefined ) sql = sql + 'id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,';
     sql = sql.slice(0, -1);
     sql = sql + ')';
-    console.log (sql);
     return sql;
   },
     

@@ -246,6 +246,8 @@ function init(){
     app.globals.cListAllTaxons.fetch({
        success: function(data) {
           app.route = new app.Router();
+          $(document).on("hashchange", app.route.hashChange); // this will run before backbone's route handler
+          $(document).on("beforeunload", app.route.beforeUnload);
           Backbone.history.start();
           var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
           if (!FirstLoad ) {

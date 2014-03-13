@@ -338,8 +338,8 @@ app.models.OccurenceDataValueNoRequiredCollection =Backbone.Collection.extend({
 // The ParcoursDataValues Model
 app.models.ParcoursDataValue = Backbone.Model.extend({
 	defaults: {
-		cote:'Pair',
-	 state:0
+  cote:'Pair',
+	// state:0
 	},
 },{
   table : 'TdataObs_parcours',

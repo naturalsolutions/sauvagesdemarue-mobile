@@ -4,13 +4,18 @@
 // -------------------------------------------------- The Views ---------------------------------------------------- //
 
 app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
-		  template: 'form-add-obs-non-identifie',
-
+		template: 'form-add-obs-non-identifie',
+		
   initialize: function() {
 				$('.footer-default').hide();
     this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+				var dirty = true;
   },
+
+		dirty: function(){
+				return true;		
+		},		
 
   beforeRender: function() {
     this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
@@ -181,21 +186,24 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				return false;
 		},
 		annulerParcours : function(evt){
-				window.history.back();
-        return false;
+				delete app.globals.currentrue;
+				app.route.navigate('', {trigger: true});
+				return false;
 		},
 
   beforeRender: function() {
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
+				
 				if (typeof(this.collection) !== 'undefined') {
-						if (this.collection.length !== 0) {
+						var currentCollObs = this.collection.findWhere({'fk_rue' : parseInt(this.model.get('id')) });
+						if (this.collection.length !== 0 && typeof(currentCollObs) !== 'undefined') {
 								this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
 						}
 				}
-				if (typeof(this.model) !== 'undefined') {
+				if (typeof(this.model.get('name')) === 'undefined') {
 						$('.page-title').replaceWith("<div class='page-title'>J'enregistre ma rue</div>");
-						//$('.page-sub-title').empty();
-					//	$('.page-title').append('Ma nouvelle rue');
+						$('.page-sub-title').empty();
+						$('.page-sub-title').append('Ma nouvelle rue');
 				}
   },
 
@@ -205,40 +213,44 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 
   initialize: function(options) {
     NS.UI.Form.prototype.initialize.apply(this, arguments);
-      //Test if new instance
-      this.isNew = this.instance.isNew();
-      
-      var self = this;
-						this.on('submit:valid', function(instance) {
-      //Get value for hidden fields
-      var prefix = 'end_';
-      if (self.isNew) prefix = 'begin_';
-      app.utils.geolocalisation.getCurrentPosition();
-      
-      instance.set(prefix+'datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
-      instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
-      instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
-		       
-      instance.save().done( function(model, response, options) {
+				//Test if new instance
+				this.isNew = this.instance.isNew();
+				
+				var self = this;
+				this.on('submit:valid', function(instance) {
+						//Get value for hidden fields
+						var prefix = 'end_';
+						if (self.isNew) prefix = 'begin_';
+						app.utils.geolocalisation.getCurrentPosition();
+						
+						instance.set(prefix+'datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+						instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
+						instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
+									
+						instance.save().done( function(model, response, options) {
 								//On refetch le model pour récupérer le PK
 								instance.fetch({
 										success: function(data) {
+												//fin de parcours
 												if (!self.isNew) {
 														// TODO enlever les globales
 														delete app.globals.currentrue;
 														data.set('state',1).save();
 														app.globals.currentFilter.length = 0;
 														app.globals.currentFilterTaxonIdList.length = 0;
+														$('.page-sub-title').empty();
 														sauvages.notifications.finParcours();				
 												}
+												//nouvelle rue
 												else {
+														data.set('state',0).save();
 														app.globals.currentrue =	data;
 														app.route.navigate('identification', {trigger: true});
 												}
 										}
 								});
-      });
-    });
+						});
+				});
   },
  
   afterRender: function () {
@@ -247,6 +259,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' >Annuler</button>");
 				}
     else{
+						$('.page-title').replaceWith("<div class='page-title'>"+sauvages.messages.end_street+"</div>");
       $('input:submit', this.$el).attr('value', 'Terminer').removeClass('btn-primary').addClass('btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');
@@ -271,7 +284,6 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
   
   beforeRender: function(){
     this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});
-				$('.page-title').replaceWith("<div class='page-title vert-anis'>Fin de parcours</div>");
   }
   
 });
@@ -506,7 +518,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 
 
   beforeRender: function() {
-				//this.insertView("#wrapper-footer", new app.views.FooterView());
     console.log(this.model.get('caracValues').models);
     var self = this;
 
@@ -566,6 +577,11 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   },
 		beforeRender: function(){
 				$('.page-title').replaceWith("<div class='page-title'>Mes sauvages</div>");
+				if (app.globals.currentrue !== undefined) {
+						if (app.globals.currentrue.get('name') !== undefined) {
+								$('.page-sub-title').replaceWith("<div class=page-sub-title'>"+app.globals.currentrue.get('name')+"</div>");
+						}
+				}
 				this.insertView("#wrapper-footer", new app.views.FooterView());
 		},
 
@@ -686,6 +702,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				app.route.navigate('identification', {trigger: true});
 		},
 		backHome : function(event){
-				app.route.navigate('', {trigger: true});
+				app.route.navigate('#addParcours', {trigger: true});
 		}
 });

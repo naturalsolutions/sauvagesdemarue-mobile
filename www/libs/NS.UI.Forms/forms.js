@@ -876,7 +876,7 @@ NS.UI = (function(ns) {
         getValue: function() {
 												if (this.$el) {
 																var val = this.$el.find('img').attr('src');
-																if (val === this.nullValue || val === null || val === "") return undefined;
+																if (val === this.nullValue || val === null || val === "" || val === undefined) return undefined;
 																if (! this.multiple) return [val];
 																return val;
 												}

@@ -45,8 +45,8 @@ NS.WSTelaAPIClient = (function() {
                     var dfdImage = $.Deferred(),
                     dfdObservation = $.Deferred();
                     dfdObs.push(dfdObservation);
-        
-                    if(obs.img === null || obs.img === ""){
+                    console.log("img obs " + typeof obs.img)
+                    if(obs.img === null || obs.img === "" || obs.img === "undefined"){
                         var observations = this.formatObsToSend(obs);
                         dfdImage.resolve(observations);
                     }else{

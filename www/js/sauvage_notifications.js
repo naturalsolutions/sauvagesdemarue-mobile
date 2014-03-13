@@ -44,7 +44,7 @@ function() {
    },
 	
    sauvages.obsSaveSuccess = function obsSaveSuccess() {
-     new NS.UI.NotificationModal({
+     var myModal = new NS.UI.NotificationModal({
       type: 'success',
       title: 'Observation sauvegardée',
       message: 'Félicitations !',
@@ -57,7 +57,7 @@ function() {
      });
    },
    sauvages.sendToTelaWSSuccess = function email() {
-      new NS.UI.NotificationModal({
+      var myModal = new NS.UI.NotificationModal({
          type: 'success',
          title: 'Observation envoyée',
          message: 'L\'envoi des observations s\'est bien déroulé.',
@@ -71,7 +71,7 @@ function() {
       });
    },
    sauvages.sendToTelaWSFail = function email() {
-      new NS.UI.NotificationModal({
+      var myModal = new NS.UI.NotificationModal({
          type: 'error',
          title: 'Observation envoyée',
          message: 'Une erreur s\'est produite, les observations n\'ont pu être envoyées',
@@ -106,7 +106,7 @@ function() {
       }, v))
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
-      new NS.UI.NotificationModal({
+      var myModal = new NS.UI.NotificationModal({
          type: 'success',
          title: criteriaName,
          message: criteriaValues,

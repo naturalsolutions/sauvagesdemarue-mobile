@@ -8,7 +8,7 @@
     <div class="tab-content">
 								<div class="tab-pane active" id="rue">
 												<div class="panel-group" id="mesObsParRue">
-														<%
+														<% var partage = false; 
 																_.each(data.parcours.models,function(rue,i,lst){
 																		var rueId = rue.get('id');
 																		var rueName = rue.get('name');
@@ -20,7 +20,7 @@
 																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
 																												<b><%= rueName %></b>
 																													<% if(rue.get('state') === 1) { %>
-																																		<% if(group.length >= 1) { %>
+																																		<% if(group.length >= 1) { partage = true;%>
 																																				<span class="glyphicon glyphicon-share"></span>
 																																		<%	} %>
 																																<% 	var obsTime = 	rue.set('end_datetime', new Date().format("dd/MM/yyyy")); %>
@@ -87,10 +87,9 @@
 				<div id="footer" class="mm-fixed-bottom footer-default">
 						<nav class="bottom-navbar " role="navigation">
 						<div class="btn-group btn-group-justified">
-								<% 	var rueEnCours = data.parcours.findWhere({'state': 0});
-												var rueAPartager = data.parcours.findWhere({'state': 1});			
+								<% 	var rueEnCours = data.parcours.findWhere({'state': 0});	
 								%>
-								<button id="send-obs" type="button" class="btn btn-footer btn-default <% if(typeof(rueAPartager) === 'undefined'){%>disabled<%}%>">Partager</button>
+								<button id="send-obs" type="button" class="btn btn-footer btn-default <% if(! partage){%>disabled<%}%>">Partager</button>
 								<% if(typeof(rueEnCours) !== 'undefined'){ %><button id="" type="button" class="btn btn-footer btn-default back-rue-en-cours">Retour à la saisie</button>
 								<% }else{ %><button id="" type="button" class="btn btn-footer btn-default back-home">Nouvelle rue</button><% };%>
 			

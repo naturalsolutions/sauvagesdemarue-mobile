@@ -179,7 +179,7 @@ app.Router = Backbone.Router.extend({
   },
   
   viewFormAddParcours : function(state) {
-		var self = this;
+    var self = this;
     if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
       if (typeof( app.globals.currentrue) === 'undefined') {
         app.globals.currentrue = new app.models.ParcoursDataValue();
@@ -187,14 +187,20 @@ app.Router = Backbone.Router.extend({
 		      self.displayView(currentView);  
       }
       else {
+        var currentRueId = app.globals.currentrue.get('id');
         var collObs = new app.models.OccurenceDataValuesCollection;
-        collObs.fetch({
-          success: function(data) {
-            var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
-            self.displayView(currentView);
-          }
-        });
-      }       
+       // var currentCollObs = collObs.findWhere({'fk_rue' : parseInt(currentRueId) })
+       // if (typeof(currentCollObs) !== "undefined") {
+            collObs.fetch({
+              success: function(data) {
+              var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
+              self.displayView(currentView);
+            }
+          });
+        //}
+      }
+     // var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
+      //self.displayView(currentView); 
     }
     else{
       sauvages.notifications.gpsNotStart();
@@ -223,18 +229,41 @@ app.Router = Backbone.Router.extend({
 
   displayView: function (view) {
       if (this._currentView) {
-        var self = this;
         //this._currentView.transitionOut();
         this._currentView.remove();
         this._currentView.off();
         $('.elem-right-header').empty();
       }
-    //  view.render({ page: true });
-      view.render();
-      $('#content').append(view.el);
+      //view.render({ page: true });     
       //view.transitionIn();
       //$('.page').addClass('transition-none');
       this._currentView = view;
+      $('#content').append(view.el);
+      view.render();
+  },
+
+  // add the following function to your router
+  // for any view that may have a dirty condition, set a property named dirty to true, and if the user navigates away, a confirmation dialog will show
+  hashChange : function(evt) {
+   if(this.cancelNavigate) { // cancel out if just reverting the URL
+    evt.stopImmediatePropagation();
+    this.cancelNavigate = false;
+    return;
+   }
+   if(this.view && this.view.dirty) {
+    var dialog = confirm("You have unsaved changes. To stay on the page, press cancel. To discard changes and leave the page, press OK");
+    if(dialog == true)
+     return;
+    else {
+     evt.stopImmediatePropagation();
+     this.cancelNavigate = true;
+     window.location.href = evt.originalEvent.oldURL;
+    }
+   }
+  },
+  beforeUnload : function() {
+   if(this.view && this.view.dirty)
+    return "You have unsaved changes. If you leave or reload this page, your changes will be lost.";
   }
 
 });
