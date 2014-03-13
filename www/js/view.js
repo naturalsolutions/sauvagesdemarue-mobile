@@ -10,12 +10,7 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 				$('.footer-default').hide();
     this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-				var dirty = true;
   },
-
-		dirty: function(){
-				return true;		
-		},		
 
   beforeRender: function() {
     this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
@@ -295,6 +290,7 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
+		dirty : true,
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('body').addClass('pad-bottom-top');

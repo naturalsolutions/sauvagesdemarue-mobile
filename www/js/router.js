@@ -3,7 +3,7 @@
 // ----------------------------------------------- The Application Router ------------------------------------------ //
 
 app.Router = Backbone.Router.extend({
-  
+
   routes: {
     'identification' : 'viewIdentKey',
     'taxonlist' : 'viewTaxonlist',
@@ -23,6 +23,10 @@ app.Router = Backbone.Router.extend({
     app.globals.currentFilterTaxonIdList = new Array();
     app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;
     
+    $(window).on("hashchange", app.Router.hashChange); // this will run before backbone's route handler
+    $(window).on("beforeunload", app.Router.beforeUnload);
+
+
     //Démarrage de l'écoute GPS
     app.utils.geolocalisation.watchCurrentPosition();
     // Keep track of the history of pages (we only store the page URL). Used to identify the direction
@@ -34,6 +38,32 @@ app.Router = Backbone.Router.extend({
         window.history.back();
         return false;
     });
+  },
+
+    
+  // add the following function to your router
+  // for any view that may have a dirty condition, set a property named dirty to true, and if the user navigates away, a confirmation dialog will show
+  hashChange : function(evt) {
+   if(this.cancelNavigate) { // cancel out if just reverting the URL
+    evt.stopImmediatePropagation();
+    this.cancelNavigate = false;
+    return;
+   }
+   if(this.view && this.view.dirty) {
+    var dialog = confirm("You have unsaved changes. To stay on the page, press cancel. To discard changes and leave the page, press OK");
+    if(dialog == true)
+     return;
+    else {
+     evt.stopImmediatePropagation();
+     this.cancelNavigate = true;
+     window.location.href = evt.originalEvent.oldURL;
+    }
+   }
+  },
+
+  beforeUnload : function() {
+   if(this.view && this.view.dirty)
+    return "You have unsaved changes. If you leave or reload this page, your changes will be lost.";
   },
 	
   goToLastPage: function() {
@@ -51,7 +81,7 @@ app.Router = Backbone.Router.extend({
         self.displayView(currentView);
       }, 2000);
     }else{
-      var currentView = new app.views.HomePageView();
+      var currentView = new app.views.HomePageView({dirty : true});
       self.displayView(currentView);
     }   
   },
@@ -242,28 +272,5 @@ app.Router = Backbone.Router.extend({
       view.render();
   },
 
-  // add the following function to your router
-  // for any view that may have a dirty condition, set a property named dirty to true, and if the user navigates away, a confirmation dialog will show
-  hashChange : function(evt) {
-   if(this.cancelNavigate) { // cancel out if just reverting the URL
-    evt.stopImmediatePropagation();
-    this.cancelNavigate = false;
-    return;
-   }
-   if(this.view && this.view.dirty) {
-    var dialog = confirm("You have unsaved changes. To stay on the page, press cancel. To discard changes and leave the page, press OK");
-    if(dialog == true)
-     return;
-    else {
-     evt.stopImmediatePropagation();
-     this.cancelNavigate = true;
-     window.location.href = evt.originalEvent.oldURL;
-    }
-   }
-  },
-  beforeUnload : function() {
-   if(this.view && this.view.dirty)
-    return "You have unsaved changes. If you leave or reload this page, your changes will be lost.";
-  }
 
 });
