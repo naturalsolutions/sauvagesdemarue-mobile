@@ -15,7 +15,7 @@ Backbone.sync = function(method, model, options) {
   var dao = (typeof(model.constructor.dao) === 'undefined') ?  new model.model.dao(app.db) :  new model.constructor.dao(app.db);
   var dfd ;
   if (method === "read") {   
-   if (model.get('FAKE_taxonName')) {
+   if (model.get('commonName')) {
      dao.findByName(model, function(data) {
           options.success(data);
       });
@@ -131,13 +131,13 @@ _.extend(app.dao.ParcoursDataValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ParcoursDataValueDAO.prototype , {
 
   getDefaultRueName: function( callback) {
-		var dfd = $.Deferred();
-		var sql = "SELECT max(id) + 1 as nextStreet FROM TdataObs_parcours ";			
-		runQuery( sql , []).done(function(d) {
-			var defaultStreetName =  (!d.rows.item(0)['nextStreet']) ? 'Rue 1' : 'Rue ' +d.rows.item(0)['nextStreet'];
-			return  dfd.resolve(defaultStreetName);
-		});
-     return  dfd.promise();     
+    var dfd = $.Deferred();
+    var sql = "SELECT max(id) + 1 as nextStreet FROM TdataObs_parcours ";			
+    runQuery( sql , []).done(function(d) {
+      var defaultStreetName =  (!d.rows.item(0)['nextStreet']) ? 'Rue 1' : 'Rue ' +d.rows.item(0)['nextStreet'];
+      return  dfd.resolve(defaultStreetName);
+    });
+    return  dfd.promise();     
 	},
 
   destroy: function(id,callback) {
@@ -158,32 +158,32 @@ _.extend(app.dao.ParcoursDataValueDAO.prototype , {
 _.extend(
 app.dao.TaxonDAO.prototype, {
     
-  /*findByName: function(key, callback) {
-      this.db.transaction(
-          function(tx) {
+  //findByName: function(key, callback) {
+  //    this.db.transaction(
+  //        function(tx) {
+  //
+  //            var sql = "SELECT *" +
+  //                "FROM Ttaxon " +
+  //                "WHERE commonName LIKE ?  LIMIT 20";
+  //
+  //            tx.executeSql(sql, ['%' + key + '%'], function(tx, results) {
+  //                var len = results.rows.length,
+  //                    taxons = [],
+  //                    i = 0;
+  //                for (; i < len; i = i + 1) {
+  //                    taxons[i] = results.rows.item(i);
+  //                }
+  //                callback(taxons);
+  //            });
+  //        },
+  //        function(tx, error) {
+  //            console.log(tx);
+  //            alert("Transaction Error: " + error);
+  //        }
+  //    );
+  //},
 
-              var sql = "SELECT fk_collectionid , pageid , taxonConceptId, taxonName , flathierarchy, preferredCommonNames , textDesc_objectid , textDesc_title , textDesc_credits , textDesc_description, iucnStatus , image_objectid , image_title, image_credits , image_fileName " +
-                  "FROM Ttaxons " +
-                  "WHERE preferredCommonNames || taxonName LIKE ?  LIMIT 20";
-
-              tx.executeSql(sql, ['%' + key + '%'], function(tx, results) {
-                  var len = results.rows.length,
-                      taxons = [],
-                      i = 0;
-                  for (; i < len; i = i + 1) {
-                      taxons[i] = results.rows.item(i);
-                  }
-                  callback(taxons);
-              });
-          },
-          function(tx, error) {
-              console.log(tx);
-              alert("Transaction Error: " + error);
-          }
-      );
-  },
-
-  findByTaxonConceptId: function(id, callback) {
+ /* findByTaxonConceptId: function(id, callback) {
       this.db.transaction(
           function(tx) {
               var sql = "SELECT fk_collectionid , pageid , taxonConceptId, taxonName , flathierarchy, preferredCommonNames , textDesc_objectid , textDesc_title , textDesc_credits , textDesc_description, iucnStatus , image_objectid , image_title, image_credits , image_fileName " +

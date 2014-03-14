@@ -7,6 +7,8 @@ app.Router = Backbone.Router.extend({
   routes: {
     'identification' : 'viewIdentKey',
     'taxonlist' : 'viewTaxonlist',
+    'region' : 'viewRegions',
+    'maregion/:nom' : 'viewMaRegion',
     'taxonlist/:all' : 'viewTaxonlist',
     'taxondetail/:id' : 'viewTaxonDetail',
     'addObs/:taxonId' : 'viewFormAddObs',
@@ -22,7 +24,7 @@ app.Router = Backbone.Router.extend({
     app.globals.currentFilter = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
     app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;
-    
+
     $(window).on("hashchange", app.Router.hashChange); // this will run before backbone's route handler
     $(window).on("beforeunload", app.Router.beforeUnload);
 
@@ -84,6 +86,21 @@ app.Router = Backbone.Router.extend({
       var currentView = new app.views.HomePageView({dirty : true});
       self.displayView(currentView);
     }   
+  },
+
+  viewRegions: function() {
+      var currentView = new app.views.RegionPageView();
+      this.displayView(currentView);  
+  },
+  
+  viewMaRegion : function(name) {
+    var self = this;
+    var taxonsPaca  = new app.models.TaxonLiteCollection();
+    taxonsPaca.models = app.globals.cListAllTaxons.multiValueWhere({'commonName' : LISTE_PACA});
+    console.log(taxonsPaca);
+  //  var currentView = new app.views.maRegionView({collection: taxonPaca});
+  //  self.displayView(currentView);
+
   },
 
   viewIdentKey : function() {

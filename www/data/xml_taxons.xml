@@ -49,7 +49,7 @@ Bois humides et ruisseaux, dans toute la France et la Corse. – Europe; Asie ;
 </PICTURES>
 <CRITERIAS><VALUE code="1.3.0"/><VALUE code="1.5.1"/><VALUE code="1.6.0"/><VALUE code="1.7.0"/><VALUE code="1.8.0"/></CRITERIAS>
 </TAXON>
-<TAXON id="8" value="Ailante " sciName="Ailanthus altissima" groupe="1">
+<TAXON id="8" value="Ailante" sciName="Ailanthus altissima" groupe="1">
 			<DESCRIPTION>Arbre à l'écorce grise et lisse pouvant atteindre à l'age adulte, 25 à 30 mètres de hauteurs. - Ses feuilles sont très grandes (jusqu'à 1 mètre de long) et composées de 11 à 21 folioles brillantes qui émettent une forte odeur; - Ses fleurs sont réunies en grappes de couleur vert-jaune; - Ses fruits sont secs, ailés (samares) et de couleur orangé;</DESCRIPTION>
 			<PICTURES><PICTURE media="http://www.tela-botanica.org/appli:cel-img:000013310CRS.jpg"><author>jpm</author></PICTURE>
 <PICTURE media="http://www.tela-botanica.org/appli:cel-img:000025273CRS.jpg"><author>Mathieu MENAND</author></PICTURE>
@@ -970,7 +970,7 @@ Champs, lieux incultes dans toute la France, Corse. – Presque toute l'Europe, 
 </PICTURES>
 <CRITERIAS><VALUE code="1.3.1"/><VALUE code="1.4.2"/><VALUE code="1.5.0"/><VALUE code="1.6.1"/><VALUE code="1.7.2"/><VALUE code="1.8.5"/></CRITERIAS>
 </TAXON>
-<TAXON id="94" value="Pariétaire de Judée " sciName="Parietaria judaica" groupe="1">
+<TAXON id="94" value="Pariétaire de Judée" sciName="Parietaria judaica" groupe="1">
 			<DESCRIPTION>Formation végétale : hémicryptophytaie; Inflorescence : glomérules; Couleur de la fleur : vert; Sexualité : monoïque; Fruit : akène; Pollinisation : anémogame; Dissémination : épizoochore; Ecologie : parois européennes, eutrophiles – Chorologie : méditerranéen(eury)-atlantique(eury); Floraison :  6-10</DESCRIPTION>
 			<PICTURES><PICTURE media="http://www.tela-botanica.org/appli:cel-img:000021515CRS.jpg"><author>John DE VOS</author></PICTURE>
 <PICTURE media="http://www.tela-botanica.org/appli:cel-img:000021516CRS.jpg"><author>John DE VOS</author></PICTURE>
@@ -2396,7 +2396,7 @@ Lieux cultivés et incultes, dans toute la France et la Corse. – Europe ; Asi
 </PICTURES>
 <CRITERIAS><VALUE code="1.3.2"/><VALUE code="1.4.2"/><VALUE code="1.5.1"/><VALUE code="1.6.0"/><VALUE code="1.7.5"/><VALUE code="1.8.3"/></CRITERIAS>
 </TAXON>
-<TAXON id="227" value="Mercuriale annuelle " sciName="Mercurialis annua" groupe="1">
+<TAXON id="227" value="Mercuriale annuelle" sciName="Mercurialis annua" groupe="1">
 			<DESCRIPTION>Plante annuelle de 10-50 cm, glabrescente, à racine pivotante ; tige herbacée, rameuse et feuillée dès la base ; feuilles d'un vert clair, molles, ciliées, pétiolées, ovales ou ovales-lancéolées, lâchement crénelées-dentées, ordinairement arrondies à la base ; fleurs mâles en glomérules formant un épi assez long, les femelles solitaires et subsessiles ; capsule large de 3-4 mm, hispides à poils épaissis à la base ; graines petites, ovoïdes, gris clair.
 Varie, dans le Midi, à fleurs monoïques, les mâles pédonculées au milieu des femelles subsessiles (M. ambigua L.) ; à plante plus petite, feuilles glabres et à peine dentées, capsule peu hérissée (M. huetii Hanry).
 Lieux cultivés et incultes, dans toute la France et en Corse. – Europe ; Asie occidentale ; Afrique septentrionale. = Avril-novembre. – Plante émolliente et laxative.</DESCRIPTION>

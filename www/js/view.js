@@ -304,7 +304,33 @@ app.views.HomePageView=  app.utils.BaseView.extend({
     $('#menu').addClass('hide'); 
   }
 });
+app.views.RegionPageView= app.utils.BaseView.extend({
 
+  template: 'page-region',
+
+		initialize: function(options) {
+				$('#header').show();
+   // this.model.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+
+		events:{ 
+		'click .retour-home': 'retourHome',
+  },
+
+		retourHome : function(evt){
+				app.route.navigate('', {trigger: true});
+				return false;
+		},
+
+  beforeRender: function() {
+						$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
+						$('.page-sub-title').empty();
+						$('.page-sub-title').append('Ma nouvelle rue');
+				
+  },
+});
 app.views.FooterView=  app.utils.BaseView.extend({
 
   template: 'footer',

@@ -414,7 +414,10 @@ $('#menu-item-je-participe').click(function(){
   app.route.navigate('addParcours', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
-
+$('#menu-item-region').click(function(){
+  app.route.navigate('region', {trigger: true, replace: true});
+  $("#menu").trigger("close");
+});
 if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
 $(".mm-page").hammer({ /* options */ }).on('event', function(ev) { 
     console.dir("hamme"+ev);
