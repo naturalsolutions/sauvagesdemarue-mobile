@@ -80,6 +80,7 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
         return false;
 		},
 });
+
 app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
@@ -327,10 +328,37 @@ app.views.RegionPageView= app.utils.BaseView.extend({
   beforeRender: function() {
 						$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
 						$('.page-sub-title').empty();
-						$('.page-sub-title').append('Ma nouvelle rue');
-				
   },
 });
+
+app.views.MaRegionView= app.utils.BaseView.extend({
+
+  template: 'page-ma-region',
+
+		initialize: function(options) {
+				this.collection.bind("reset", this.render, this);
+				this.region = options.region;
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+		events:{ 
+		'click .retour-home': 'retourHome',
+  },
+
+		retourHome : function(evt){
+				app.route.navigate('', {trigger: true});
+				return false;
+		},
+
+  beforeRender: function() {
+				$('.page-title').replaceWith("<div class='page-title' id="+ this.region +" >Ma région " + this.region + "</div>");
+  },
+
+		afterRender: function() {
+				$('.sauvages-region a', this.$el).attr("href","#identification/"+this.region);
+  }
+}); 
+
 app.views.FooterView=  app.utils.BaseView.extend({
 
   template: 'footer',
@@ -346,6 +374,9 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   template: 'page-identification-key',
   
   initialize: function() {
+				if (this.options !== undefined) {
+						this.filtreRegion = this.options.filtreRegion;
+				}
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -360,12 +391,14 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   beforeRender: function() {
 				this.insertView("#wrapper-footer", new app.views.FooterView());
     this.collection.each(function(criteria) {
-      this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
+      this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria, filtreRegion : this.filtreRegion}));
     }, this);
 				$('body').addClass('cleliste cle');
 				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
-				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
+				if (app.globals.currentrue !== undefined) {
+						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
+				}
 				//$('.elem-right-header').append("<button class='btn btn-header help btn-lg'><span class='glyphicon glyphicon-question-sign help'></span></button>");		
 				this.$el.hammer();
 		},
@@ -463,6 +496,9 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
   template: 'items-list-criteria-picto',
 
   initialize: function() {
+				if (this.options !== undefined) {
+						this.filtreRegion = this.options.filtreRegion;
+				}
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
@@ -476,6 +512,12 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 								$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
       });
     }
+				if (this.filtreRegion.length > 0) { 
+      _.each(this.filtreRegion.models,function(l){ 
+								var currentInput = 'defCaracValue-'+l.get('criteraValueId') ;
+								$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("disabled");
+      },this);
+    }
   },
 
 });
@@ -485,6 +527,11 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   template: 'page-taxon-list',
   
   initialize: function() {
+				this.hrefIdentification = '#identification';
+				if (this.options !== undefined) {
+						this.region = this.options.region;
+						this.hrefIdentification = 	'#identification/'+this.region;
+				}
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -492,7 +539,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   beforeRender: function() {
 			//	this.insertView("#wrapper-footer", new app.views.FooterView());
 				$('body').addClass('cleliste liste');
-				$('body.cleliste.liste').append("<div id='languette' class='languette-left'><a href='#identification'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
+				$('body.cleliste.liste').append("<div id='languette' class='languette-left'><a href='"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
     //this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));

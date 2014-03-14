@@ -5,11 +5,12 @@
 app.Router = Backbone.Router.extend({
 
   routes: {
-    'identification' : 'viewIdentKey',
+    'identification/:name' : 'viewIdentKey',
     'taxonlist' : 'viewTaxonlist',
     'region' : 'viewRegions',
-    'maregion/:nom' : 'viewMaRegion',
+    'maregion/:name' : 'viewMaRegion',
     'taxonlist/:all' : 'viewTaxonlist',
+    'taxonlistRegion/:region' : 'viewTaxonlistRegion',
     'taxondetail/:id' : 'viewTaxonDetail',
     'addObs/:taxonId' : 'viewFormAddObs',
     'addNonIdentifiee'  : 'viewFormNIOnbs',
@@ -17,13 +18,15 @@ app.Router = Backbone.Router.extend({
     'addParcours(/:state)' : 'viewFormAddParcours',
     'myObservation' : 'viewTableMyObs',
      //'choixOutils' : 'viewChoixOutils',
-    '' : 'viewHomePage',
+    '' : 'viewHomePage'
   },
 
   initialize: function() {
     app.globals.currentFilter = new Array();
+    app.globals.regiontaxon = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
     app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;
+    app.globals.cListAllTaxonsRegion = new app.models.TaxonLiteCollection();
 
     $(window).on("hashchange", app.Router.hashChange); // this will run before backbone's route handler
     $(window).on("beforeunload", app.Router.beforeUnload);
@@ -94,16 +97,54 @@ app.Router = Backbone.Router.extend({
   },
   
   viewMaRegion : function(name) {
-    var self = this;
+    var region;
     var taxonsPaca  = new app.models.TaxonLiteCollection();
     taxonsPaca.models = app.globals.cListAllTaxons.multiValueWhere({'commonName' : LISTE_PACA});
-    console.log(taxonsPaca);
-  //  var currentView = new app.views.maRegionView({collection: taxonPaca});
-  //  self.displayView(currentView);
+    //TODO voir si possible utiliser app.globals.cListAllTaxons
+    app.globals.cListAllTaxonsRegion = taxonsPaca;
 
+      //critères région
+    app.globals.regiontaxon = new app.models.CaracteristiqueDefValuesCollection();
+
+    app.globals.cListAllTaxonsRegion.each(function(model){
+      var id = model.get("taxonId");
+      var taxon= new app.models.Taxon({"taxonId": id});
+      taxon.fetch({
+            success: function(data) { 
+              data.get('caracValues').each(function(model) {
+              var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
+                criM.fetch({
+                  success: function(dataCriM) {  
+                    var testAdd =  app.globals.regiontaxon.findWhere({'criteraValueId': dataCriM.get('criteraValueId')}) 
+                    if (testAdd === undefined) {
+                      app.globals.regiontaxon.add(dataCriM);
+                    }
+                  }
+                });
+              },this);
+            }
+        });
+    },this);
+
+    var currentView = new app.views.MaRegionView({collection: app.globals.cListAllTaxonsRegion, region: name});
+    this.displayView(currentView);
+  },
+  
+  viewTaxonlistRegion : function(name) {
+    var region;
+    var taxons;
+    if( app.globals.currentFilterTaxonIdList.length === 0 ){
+      taxons = app.globals.cListAllTaxonsRegion;    
+    }
+    else {
+      taxons  = new app.models.TaxonLiteCollection();
+      taxons.models = app.globals.cListAllTaxonsRegion.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
+    }
+    var currentView = new app.views.TaxonListView({collection: taxons, region: name});
+    this.displayView(currentView);
   },
 
-  viewIdentKey : function() {
+  viewIdentKey : function(name) {
 //    if (typeof(app.globals.currentrue) === 'undefined') {
 //	    alert('Rue non initialisée');
 //	    return false;
@@ -111,9 +152,11 @@ app.Router = Backbone.Router.extend({
     console.log('viewIdentKey viewIdentKey');
     var self = this;
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
+    
+
     cListAllCriterias.fetch({
         success: function(data) {
-          var currentView = new app.views.IdentificationKeyView({collection: data});
+          var currentView = new app.views.IdentificationKeyView({collection: data, filtreRegion : app.globals.regiontaxon});
           self.displayView(currentView);
         }
     }) 
@@ -131,7 +174,7 @@ app.Router = Backbone.Router.extend({
     }
     else {
         taxons  = new app.models.TaxonLiteCollection();
-        taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')}) ;
+        taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')});
     }
     var currentView = new app.views.TaxonListView({collection: taxons});
     this.displayView(currentView);

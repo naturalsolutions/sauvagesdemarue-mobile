@@ -286,7 +286,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
   dao: app.dao.OccurenceDataValueDAO,
   verboseName: 'Occurence'
 });
-// The CaracteristiqueDefValue Collection
+// The OccurenceDataValues Collection
 app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
 
   model : app.models.OccurenceDataValue,
