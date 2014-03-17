@@ -10,7 +10,7 @@
 // Correspond à des requêtes SQL customisée et optimisée
 app.utils.queryData = {
   //count taxon nb
-  getFilterTaxonIdList: function(filters, exact) {
+  getFilterTaxonIdList: function(filters, exact, tag) {
     var dfd = $.Deferred();
     var sqlWere = ' WHERE ';
     var parameters = new Array();
@@ -26,7 +26,12 @@ app.utils.queryData = {
     else {
       sqlGroupBy =  sqlGroupBy + '  ORDER BY count(*) ';
     }
-    var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlGroupBy;
+    if (tag !== undefined) {
+      sqlAnd =  ' AND  tag = '+ tag;
+      var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlGroupBy;
+    }else{
+      var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlGroupBy;
+    } 
     runQuery(sql, parameters).done(
       function(results){
           var len = results.rows.length,

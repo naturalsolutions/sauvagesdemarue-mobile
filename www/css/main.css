@@ -502,7 +502,6 @@ a.btn.btn-footer{
 		overflow: hidden;
 		text-overflow: ellipsis;
 		line-height: 1.2em;
-		margin-top: 5px;
 }
 
 .page-subtitle{
@@ -510,11 +509,11 @@ a.btn.btn-footer{
 }
 
 .loc-container{
-  margin:10px 2% 40px ;
+  margin:10px 2% 80px ;
 		height:100%;
 }
 #identification-list-content .loc-container{
-  margin:0px 0px 40px ;
+  margin:0px 0px 80px ;
 }
 #taxon-list-content .loc-container{
   margin: 0px 0px 70px 0px ;
@@ -630,6 +629,7 @@ font-size: 24px;
 }
 #taxon-list-content fieldset,#identification-list-content {
 		min-height: 100%;
+		padding-bottom: 80px;
 }
 #content.container {
 position: absolute;
@@ -880,8 +880,20 @@ list-style: none;
 margin: 10px;
 }
 
-
-	
+/********** REGION *************/
+#regions-page-content .first{
+		width: 30%;
+		float: left;
+}
+#regions-page-content .first img{
+		width: 100%;
+		margin: 10px;
+}
+#map {
+		position: absolute;
+		top: 120px;
+		width: 100%;
+}
 /***********MEDIA QUERIE**********/
 @media (min-width: 768px){
   #carousel-container {
@@ -934,6 +946,8 @@ margin: 10px;
 .alert-success {
 		color: #008D00;
 }
+/****CARTE SVG******/
+
 
 /****Annuaire****/
 /*.btn-group-vertical > .btn:first-child {

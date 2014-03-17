@@ -315,20 +315,30 @@ app.views.RegionPageView= app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
-
 		events:{ 
 		'click .retour-home': 'retourHome',
+		'click div#map': 'selectRegion',
   },
+
+		selectRegion : function(evt){
+				var objCurrentTarget=$(event.target);
+    var idCurrentTarget= objCurrentTarget['context']['id'];
+				app.route.navigate('#maregion/'+idCurrentTarget+'', {trigger: true});
+				return false;
+		},	
 
 		retourHome : function(evt){
 				app.route.navigate('', {trigger: true});
 				return false;
 		},
 
-  beforeRender: function() {
+  beforeRender: function() {		
 						$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
 						$('.page-sub-title').empty();
   },
+		afterRender: function(){
+					$('#map', this.$el).load('css/map/map_regions.svg');
+		}
 });
 
 app.views.MaRegionView= app.utils.BaseView.extend({
@@ -357,23 +367,15 @@ app.views.MaRegionView= app.utils.BaseView.extend({
 		afterRender: function() {
 				$('.sauvages-region a', this.$el).attr("href","#identification/"+this.region);
   }
-}); 
-
-app.views.FooterView=  app.utils.BaseView.extend({
-
-  template: 'footer',
-
-		initialize: function() {
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
-
 });
 
-app.views.IdentificationKeyView =  app.utils.BaseView.extend({
+app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 
-  template: 'page-identification-key',
+  template: 'page-identification-key-filter',
   
   initialize: function() {
+				this.region = this.options.region;
+			 this.href = '#taxonlistRegion/'+this.region;
 				if (this.options !== undefined) {
 						this.filtreRegion = this.options.filtreRegion;
 				}
@@ -389,17 +391,12 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   },
 		
   beforeRender: function() {
-				this.insertView("#wrapper-footer", new app.views.FooterView());
     this.collection.each(function(criteria) {
-      this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria, filtreRegion : this.filtreRegion}));
+      this.insertView("#values-list", new app.views.IKCriteriaListItemFilterView({model: criteria, filtreRegion : this.filtreRegion}));
     }, this);
 				$('body').addClass('cleliste cle');
-				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
+				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href="+this.href+"><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
-				if (app.globals.currentrue !== undefined) {
-						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
-				}
-				//$('.elem-right-header').append("<button class='btn btn-header help btn-lg'><span class='glyphicon glyphicon-question-sign help'></span></button>");		
 				this.$el.hammer();
 		},
 		
@@ -412,8 +409,119 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 		},
 		
 		swipeTaxonList : function(event){
+				app.route.navigate('taxonlist', {trigger: true, replace: true});
+    console.log("event gesture"+event.gesture);
+				event.gesture.preventDefault();
+		},
+		helpShow :function(){
+				var self=this;
+				var criteriaName = "Aide de l'assistant d'identification";
+				var criteriaColl = self.collection;
+				var msg = _.template(
+										"<div class='helpKeyDiv'>"+
+										"	<div class='row'><% _.each(data.models,function(criteriaValueCollItem,i){%>"+
+										"		<div class='col-xs-12 col-sm-12 col-md-12'>	<h4><%= criteriaValueCollItem.get('name') %></h4> "+
+										"			<p><%= criteriaValueCollItem.get('description') %></p>"+
+										"			<div class='row'><% _.each(criteriaValueCollItem.get('defCaracValues').models,function(criteriaValueItem,i){%>"+
+										"				<div class='col-xs-4 col-sm-4 col-md-4'><img src='./data/images/pictos/<%= criteriaValueItem.get('picture')%>'/><p class='nomValeur'><%= criteriaValueItem.get('name') %><p></div>"+
+										'			<% }); %>'+
+										'			</div>'+
+										"		</div>"+
+										'	<% }); %>'+
+										'	</div>'+
+										'</div>'					
+									);
+				sauvages.notifications.helpKey(criteriaName,msg(criteriaColl));
+	},
+  
+		suppFiltre :function(event){
+				app.globals.currentFilter.length = 0;
+				app.globals.currentFilterTaxonIdList.length = 0;
+				$("#taxonNb").html(app.globals.cListAllTaxons.length);
+				$('.RadioCustom').removeClass('RadioCustomOn');
+		},
 
-				
+  filterTaxon : function(event) {
+    var objCurrentTarget=$(event.currentTarget);
+    var idCurrentTarget= objCurrentTarget['context']['id'];
+    //if checked
+    if ($(event.currentTarget).is(':checked') == true) {
+      //test if a value has a class RadioCustomOn
+      var criteriaValueChecked = $(event.currentTarget).parent().parent().parent().find("span").hasClass('RadioCustomOn');
+      if (criteriaValueChecked == true) {
+        var objcriteriaValueChecked = $(event.currentTarget).parent().parent().parent().children().children(".RadioCustomOn");
+        var valuecriteriaValueChecked = objcriteriaValueChecked.children('input').attr('value');
+        var idcriteriaValueChecked = objcriteriaValueChecked.children('input').attr('id');
+        $('input[name="'+idcriteriaValueChecked+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
+        //remove the old value of the variable app.globals.currentFilter
+        var index =  app.globals.currentFilter.indexOf(valuecriteriaValueChecked);
+        if (index> -1) {
+         var newAppglogal = app.globals.currentFilter.splice(index, 1);
+        }
+      }
+      // add the class radioCustomOn to currentTarget
+      $('input[name="'+idCurrentTarget+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
+      //add the currentTarget to the variable app.globals.currentFilter
+      app.globals.currentFilter.push($(event.currentTarget).val());
+    }
+    else { //if uncheked
+      $('input[name="'+idCurrentTarget+'"]').prop('checked', false).parent().removeClass("RadioCustomOn");
+      var index =  app.globals.currentFilter.indexOf($(event.currentTarget).val());
+      app.globals.currentFilter.splice(index, 1);
+    }
+    //Select Taxon Id; for the moment exact matching (must contain all the selected criteria) in app.globals.cListAllTaxonsRegion
+    if (app.globals.currentFilter.length > 0) {
+						_.each(app.globals.currentFilter,function(f){
+								app.globals.currentFilterTaxonIdList = app.globals.regionTaxonCaracValuesCollection.where({'fk_carac_value': f});
+						});
+						$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+    }
+    else{
+						app.globals.currentFilterTaxonIdList.length = 0;
+      $("#taxonNb").html(app.globals.cListAllTaxonsRegion.models.length);
+    }
+				console.log(app.globals.currentFilterTaxonIdList);
+  }
+});
+
+app.views.IdentificationKeyView =  app.utils.BaseView.extend({
+
+  template: 'page-identification-key',
+  
+  initialize: function() {
+    this.collection.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+  
+  events: {
+    "click input[type=checkbox]": "filterTaxon",
+				"dragleft" : "swipeTaxonList",
+				"click #supprimer-filtre" : "suppFiltre",
+    "click .help": "helpShow"
+  },
+		
+  beforeRender: function() {
+    this.collection.each(function(criteria) {
+      this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
+    }, this);
+				$('body').addClass('cleliste cle');
+				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
+				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
+				if (app.globals.currentrue !== undefined) {
+						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
+				}
+				this.$el.hammer();
+		},
+		
+		remove: function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				console.log('remove identification');
+				$('.navbar-fixed-bottom .btn-group .btn-footer');
+				$('body').removeClass('cleliste cle');
+    $('#languette').remove();
+		},
+		
+		swipeTaxonList : function(event){
 				app.route.navigate('taxonlist', {trigger: true, replace: true});
     console.log("event gesture"+event.gesture);
 				event.gesture.preventDefault();
@@ -496,7 +604,28 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
   template: 'items-list-criteria-picto',
 
   initialize: function() {
-				if (this.options !== undefined) {
+    this.model.bind("reset", this.render, this);
+    this.model.bind("change", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+
+  },
+  afterRender:function() {
+   if (app.globals.currentFilter.length > 0) {
+      _.each(app.globals.currentFilter,function(l){ 
+								var currentInput = 'defCaracValue-'+l ;
+								$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("RadioCustomOn");
+      });
+					$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+    }
+  }
+});
+
+app.views.IKCriteriaListItemFilterView =  app.utils.BaseView.extend({
+
+  template: 'items-list-criteria-picto-filter',
+
+  initialize: function() {
+				if (this.options.filtreRegion !== undefined) {
 						this.filtreRegion = this.options.filtreRegion;
 				}
     this.model.bind("reset", this.render, this);
@@ -512,14 +641,13 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
 								$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
       });
     }
-				if (this.filtreRegion.length > 0) { 
-      _.each(this.filtreRegion.models,function(l){ 
-								var currentInput = 'defCaracValue-'+l.get('criteraValueId') ;
-								$('input[name="'+currentInput+'"]').prop('checked', true).parent().addClass("disabled");
+				if (app.globals.regiontaxon.length > 0) { 
+      _.each(app.globals.regiontaxon,function(l){ 
+								var currentInput = 'defCaracValue-'+l;
+								$('input[name="'+currentInput+'"]').prop('checked', true).parent().removeClass("disabled");
       },this);
     }
   },
-
 });
 
 app.views.TaxonListView =  app.utils.BaseView.extend({
@@ -528,7 +656,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   
   initialize: function() {
 				this.hrefIdentification = '#identification';
-				if (this.options !== undefined) {
+				if (this.options.region !== undefined) {
 						this.region = this.options.region;
 						this.hrefIdentification = 	'#identification/'+this.region;
 				}
@@ -537,12 +665,10 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
-			//	this.insertView("#wrapper-footer", new app.views.FooterView());
 				$('body').addClass('cleliste liste');
 				$('body.cleliste.liste').append("<div id='languette' class='languette-left'><a href='"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
-    //this.insertView("#aphabetic-list", new app.views.AlphabeticAnchorView({anchorBaseName : 'anchor-taxon-', activeBtn: availableLetter, navheight :  72}));
     
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 
@@ -583,8 +709,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
-  
-
 
   beforeRender: function() {
     console.log(this.model.get('caracValues').models);

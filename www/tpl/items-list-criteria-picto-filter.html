@@ -1,0 +1,41 @@
+<li>
+  <div id='<%= data.criteraId %>' class="criteria-list-item pad-right">
+    <div>
+        <div class="criteria-name">
+          <p><b><%= capitaliseFirstLetter(data.name) %></b></p>
+        </div>
+    </div>
+    <% 
+    if (typeof(data.defCaracValues) !== 'undefined') {
+   
+    %>
+      <ul  class="criteria-value-list">
+        <% 
+          _.each(data.defCaracValues.models,function(item,key,list){
+        %><% if (typeof(item.get('criteraValueId')) !== 'undefined') {%>
+          <li>
+          
+            <span class="RadioCustom disabled">
+          
+              <label for="defCaracValue-<%= item.get('criteraValueId') %>">
+              
+                <% if ((typeof(item.get('picture') ) !== "undefined")  &&  (item.get('picture')  !== "undefined")){ %> 
+                  <img src="./data/images/pictos/<%= item.get('picture')  %>" />
+                <%} %>
+                
+              </label>
+              
+              <input type="checkbox" name="defCaracValue-<%= item.get('criteraValueId') %>" id="defCaracValue-<%= item.get('criteraValueId') %>" value="<%= item.get('criteraValueId') %>"/>
+            </span>
+            
+          </li>
+          <% } %>
+        <%
+          });
+        %>
+      </ul> 
+    <% 
+    }   
+    %>
+  </div>
+</li>

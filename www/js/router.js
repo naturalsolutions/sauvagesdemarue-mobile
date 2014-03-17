@@ -5,7 +5,8 @@
 app.Router = Backbone.Router.extend({
 
   routes: {
-    'identification/:name' : 'viewIdentKey',
+    'identification/:name' : 'viewIdentKeyFilter',
+    'identification' : 'viewIdentKey',
     'taxonlist' : 'viewTaxonlist',
     'region' : 'viewRegions',
     'maregion/:name' : 'viewMaRegion',
@@ -27,6 +28,7 @@ app.Router = Backbone.Router.extend({
     app.globals.currentFilterTaxonIdList = new Array();
     app.globals.currentRueList = new app.models.ParcoursDataValuesCollection;
     app.globals.cListAllTaxonsRegion = new app.models.TaxonLiteCollection();
+    app.globals.regionTaxonCaracValuesCollection = new app.models.TaxonCaracValuesCollection();
 
     $(window).on("hashchange", app.Router.hashChange); // this will run before backbone's route handler
     $(window).on("beforeunload", app.Router.beforeUnload);
@@ -44,7 +46,6 @@ app.Router = Backbone.Router.extend({
         return false;
     });
   },
-
     
   // add the following function to your router
   // for any view that may have a dirty condition, set a property named dirty to true, and if the user navigates away, a confirmation dialog will show
@@ -100,11 +101,11 @@ app.Router = Backbone.Router.extend({
     var region;
     var taxonsPaca  = new app.models.TaxonLiteCollection();
     taxonsPaca.models = app.globals.cListAllTaxons.multiValueWhere({'commonName' : LISTE_PACA});
-    //TODO voir si possible utiliser app.globals.cListAllTaxons
     app.globals.cListAllTaxonsRegion = taxonsPaca;
 
-      //critères région
-    app.globals.regiontaxon = new app.models.CaracteristiqueDefValuesCollection();
+    //critères région
+    //app.globals.regiontaxon = new app.models.CaracteristiqueDefValuesCollection();
+    app.globals.regiontaxon = new Array();
 
     app.globals.cListAllTaxonsRegion.each(function(model){
       var id = model.get("taxonId");
@@ -112,20 +113,25 @@ app.Router = Backbone.Router.extend({
       taxon.fetch({
             success: function(data) { 
               data.get('caracValues').each(function(model) {
+              app.globals.regionTaxonCaracValuesCollection  =  app.globals.regionTaxonCaracValuesCollection.add(model);
               var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
                 criM.fetch({
-                  success: function(dataCriM) {  
-                    var testAdd =  app.globals.regiontaxon.findWhere({'criteraValueId': dataCriM.get('criteraValueId')}) 
-                    if (testAdd === undefined) {
-                      app.globals.regiontaxon.add(dataCriM);
+                  success: function(dataCriM) {
+                    var testDataCriM = $.inArray(dataCriM.get('criteraValueId'), app.globals.regiontaxon) > -1;
+                    if (! testDataCriM) {
+                     app.globals.regiontaxon.push(dataCriM.get('criteraValueId'));
                     }
+                    //var testAdd =  app.globals.regiontaxon.findWhere({'criteraValueId': dataCriM.get('criteraValueId')});
+                    //if (testAdd === undefined) {
+                    //  app.globals.regiontaxon.add(dataCriM);
+                    //}
                   }
                 });
               },this);
             }
         });
     },this);
-
+    console.log(app.globals.regionTaxonCaracValuesCollection);
     var currentView = new app.views.MaRegionView({collection: app.globals.cListAllTaxonsRegion, region: name});
     this.displayView(currentView);
   },
@@ -144,19 +150,27 @@ app.Router = Backbone.Router.extend({
     this.displayView(currentView);
   },
 
-  viewIdentKey : function(name) {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//	    return false;
-//    }
+  viewIdentKey : function() {
     console.log('viewIdentKey viewIdentKey');
     var self = this;
     var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
     
-
     cListAllCriterias.fetch({
         success: function(data) {
-          var currentView = new app.views.IdentificationKeyView({collection: data, filtreRegion : app.globals.regiontaxon});
+          var currentView = new app.views.IdentificationKeyView({collection: data});
+          self.displayView(currentView);
+        }
+    }) 
+  },
+
+  viewIdentKeyFilter : function(name) {
+    var region = $.trim(name);
+    var self = this;
+    var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
+    
+    cListAllCriterias.fetch({
+        success: function(data) {
+          var currentView = new app.views.IdentificationKeyFilterView({collection: data, filtreRegion : app.globals.regiontaxon, region:name});
           self.displayView(currentView);
         }
     }) 
