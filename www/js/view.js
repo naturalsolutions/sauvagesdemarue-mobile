@@ -469,12 +469,15 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
       var index =  app.globals.currentFilter.indexOf($(event.currentTarget).val());
       app.globals.currentFilter.splice(index, 1);
     }
-    //Select Taxon Id; for the moment exact matching (must contain all the selected criteria) in app.globals.cListAllTaxonsRegion
+    //Select Taxon Id; for the moment exact matching (must contain all the selected criteria)
     if (app.globals.currentFilter.length > 0) {
-						_.each(app.globals.currentFilter,function(f){
-								app.globals.currentFilterTaxonIdList = app.globals.regionTaxonCaracValuesCollection.where({'fk_carac_value': f});
-						});
-						$("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+      app.utils.queryData.getFilterTaxonIdList(app.globals.currentFilter, true, lISTE_PACA_FKID).done(
+        function(data) {
+          app.globals.currentFilterTaxonIdList =  data;
+          //refresh front end
+          $("#taxonNb").html(app.globals.currentFilterTaxonIdList.length);
+        }
+      );
     }
     else{
 						app.globals.currentFilterTaxonIdList.length = 0;
@@ -482,6 +485,7 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
     }
 				console.log(app.globals.currentFilterTaxonIdList);
   }
+
 });
 
 app.views.IdentificationKeyView =  app.utils.BaseView.extend({
@@ -775,7 +779,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 								$('.page-sub-title').replaceWith("<div class=page-sub-title'>"+app.globals.currentrue.get('name')+"</div>");
 						}
 				}
-				this.insertView("#wrapper-footer", new app.views.FooterView());
+				//this.insertView("#wrapper-footer", new app.views.FooterView());
 		},
 
   

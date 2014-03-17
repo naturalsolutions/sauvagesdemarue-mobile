@@ -27,10 +27,12 @@ app.utils.queryData = {
       sqlGroupBy =  sqlGroupBy + '  ORDER BY count(*) ';
     }
     if (tag !== undefined) {
-      sqlAnd =  ' AND  tag = '+ tag;
-      var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlGroupBy;
+      var sqlIn =  ' AND  fk_taxon IN (8,35,94,110,125,130,136,167,199,202,204,227)';
+      var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlIn + sqlGroupBy;
+      console.log(sql);
     }else{
       var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlGroupBy;
+      console.log(sql);
     } 
     runQuery(sql, parameters).done(
       function(results){
