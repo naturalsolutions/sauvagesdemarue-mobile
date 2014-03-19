@@ -13,7 +13,7 @@ app.Router = Backbone.Router.extend({
     'taxonlist/:all' : 'viewTaxonlist',
     'taxonlistRegion/:region' : 'viewTaxonlistRegion',
     'taxondetail/:id' : 'viewTaxonDetail',
-    'addObs/:taxonId' : 'viewFormAddObs',
+    'addObs/:taxonId/localisation/(:localisation)' : 'viewFormAddObs',
     'addNonIdentifiee'  : 'viewFormNIOnbs',
     'addPasListe'  : 'viewFormPLOnbs',
     'addParcours(/:state)' : 'viewFormAddParcours',
@@ -93,6 +93,10 @@ app.Router = Backbone.Router.extend({
   },
 
   viewRegions: function() {
+    if (typeof(app.globals.currentrue) !== 'undefined') {
+      alert('Rue en cours');
+      return false;
+    }
       var currentView = new app.views.RegionPageView();
       this.displayView(currentView);  
   },
@@ -121,17 +125,12 @@ app.Router = Backbone.Router.extend({
                     if (! testDataCriM) {
                      app.globals.regiontaxon.push(dataCriM.get('criteraValueId'));
                     }
-                    //var testAdd =  app.globals.regiontaxon.findWhere({'criteraValueId': dataCriM.get('criteraValueId')});
-                    //if (testAdd === undefined) {
-                    //  app.globals.regiontaxon.add(dataCriM);
-                    //}
                   }
                 });
               },this);
             }
         });
     },this);
-    console.log(app.globals.regionTaxonCaracValuesCollection);
     var currentView = new app.views.MaRegionView({collection: app.globals.cListAllTaxonsRegion, region: name});
     this.displayView(currentView);
   },
@@ -211,22 +210,26 @@ app.Router = Backbone.Router.extend({
       });
   },
 
-  viewFormAddObs : function(taxonI) {
+  viewFormAddObs : function(taxonI,localisation) {
 //    if (typeof(app.globals.currentrue) === 'undefined') {
 //	    alert('Rue non initialisée');
 //	    return false;
 //    }
+    var idCurrentRue = undefined;
     var self = this;
     setTimeout(function() {
       app.utils.geolocalisation.getCurrentPosition();
       if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
         var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
-        var obs = new app.models.OccurenceDataValueNoRequired({"fk_taxon": taxonI, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : selectedTaxon[0].get('commonName')});
+        if (app.globals.currentrue !== undefined) {
+          var idCurrentRue = app.globals.currentrue.get('id');
+        }
+        var obs = new app.models.OccurenceDataValueNoRequired({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName')});
 
         obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
         obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
         
-        var currentView = new app.views.AddSauvageOccurenceView({model:obs});
+        var currentView = new app.views.AddSauvageOccurenceView({model:obs, localisation : localisation});
         self.displayView(currentView);   
       }
       else{
@@ -260,10 +263,6 @@ app.Router = Backbone.Router.extend({
     
   },
   viewFormPLOnbs : function() {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//	    return false;
-//    }
     var self = this;
     setTimeout(function() {
       app.utils.geolocalisation.getCurrentPosition();
@@ -308,7 +307,7 @@ app.Router = Backbone.Router.extend({
     }
     else{
       sauvages.notifications.gpsNotStart();
-			this.goToLastPage();
+      this.goToLastPage();
     }
   },
 
