@@ -211,10 +211,6 @@ app.Router = Backbone.Router.extend({
   },
 
   viewFormAddObs : function(taxonI,localisation) {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//	    return false;
-//    }
     var idCurrentRue = undefined;
     var self = this;
     setTimeout(function() {
