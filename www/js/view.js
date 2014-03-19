@@ -120,7 +120,12 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 				}
 				$('.page-title').replaceWith("<div class='page-title'> Nouvelle Sauvage</div>");
   },
-		
+		  afterRender: function() {
+				if (this.options.localisation !== null ) {
+						$('.select').hide(); 
+				}
+
+  },
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('.footer-default').show();		
