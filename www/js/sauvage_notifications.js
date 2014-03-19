@@ -43,7 +43,7 @@ function() {
       });
    },
 	
-   sauvages.obsSaveSuccess = function obsSaveSuccess() {
+   sauvages.obsSaveSuccess = function obsSaveSuccess(localisation) {
      var myModal = new NS.UI.NotificationModal({
       type: 'success',
       title: 'Observation sauvegardée',
@@ -51,9 +51,12 @@ function() {
       delay: 1,
       btnLabel: '', 
       onClose: function() {
-       app.route.navigate('identification', {trigger: true});
-       },
-      
+         if (localisation !== null) {
+            app.route.navigate('identification/'+localisation, {trigger: true});
+         }else{
+            app.route.navigate('identification', {trigger: true});
+         }  
+      },
      });
    },
    sauvages.sendToTelaWSSuccess = function email() {
@@ -85,14 +88,14 @@ function() {
       });
    },
    sauvages.email = function email(msg) {
-      var v = new NS.UI.NotificationModal({
+      var myModal = new NS.UI.NotificationModal({
          type: 'warning',
          title: 'Ajouter votre email.',
          message: msg,
          delay: '',
          btnLabel: 'Annuler'
       });
-      v.$el.on('submit', _.bind(function(evt) {
+      myModal.$el.on('submit', _.bind(function(evt) {
          evt.preventDefault();
            var currentEmail = this.$el.find('input[type="email"]').val();
             var currentUser = new app.models.User({
@@ -103,7 +106,7 @@ function() {
             $('#nodal').modal('hide');
             $('#nodal').remove();
             $('.modal-backdrop').remove();
-      }, v))
+      }, myModal))
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
       var myModal = new NS.UI.NotificationModal({
@@ -118,36 +121,36 @@ function() {
       });
    },
   sauvages.finDeProtocol = function finDeProtocol(msg) {
-			var v = new NS.UI.NotificationModal({
+			var myModal = new NS.UI.NotificationModal({
 				type: 'warning',
 				title: 'Voulez-vous terminer votre parcours ?',
 				message:  msg,
 				delay: '',
 				btnLabel: '', 
 			});
-   v.$el.on('submit', 'form', _.bind(function(evt) {
+   myModal.$el.on('submit', 'form', _.bind(function(evt) {
       evt.preventDefault();
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
-   }, v))
-   v.$el.on('reset', 'form', _.bind(function(evt) {
+   }, myModal))
+   myModal.$el.on('reset', 'form', _.bind(function(evt) {
       evt.preventDefault();
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
       app.route.navigate('taxonlist', {trigger: true});
-   }, v))
+   }, myModal))
 	},
    sauvages.finDeProtocolHorsParcours = function finDeProtocol(msg, derObsLat, derObslong , parcours) {
-			var v = new NS.UI.NotificationModal({
+			var myModal = new NS.UI.NotificationModal({
 				type: 'warning',
 				title: 'Pour envoyer vos observations, vous devez avoir terminé votre parcours. Voulez-vous terminer votre parcours ?',
 				message:  msg,
 				delay: '',
 				btnLabel: '', 
 			});
-   v.$el.on('submit', 'form', _.bind(function(evt) {
+   myModal.$el.on('submit', 'form', _.bind(function(evt) {
       evt.preventDefault();
       parcours.set('end_latitude' , derObsLat );
       parcours.set('end_longitude' , derObslong);
@@ -157,13 +160,13 @@ function() {
       $('#nodal').remove();
       $('.modal-backdrop').remove();
       
-   }, v))
-   v.$el.on('reset', 'form', _.bind(function(evt) {
+   }, myModal))
+   myModal.$el.on('reset', 'form', _.bind(function(evt) {
       evt.preventDefault();
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
-   }, v))
+   }, myModal))
 	}
 
   
