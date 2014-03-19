@@ -114,7 +114,10 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
-    this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model}));
+				this.insertView("#obs-form", new app.views.FormAddOccurenceView({initialData:this.model, localisation : this.options.localisation}));
+				if (this.options.localisation !== null ) {
+						$('.select').hide(); 
+				}
 				$('.page-title').replaceWith("<div class='page-title'> Nouvelle Sauvage</div>");
   },
 		
@@ -138,10 +141,11 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+								var self = this;
         instance.save().done( function(model, response, options) {
 										app.globals.currentFilter.length = 0;
 										app.globals.currentFilterTaxonIdList.length = 0;
-          sauvages.notifications.obsSaveSuccess();
+										sauvages.notifications.obsSaveSuccess(self.options.localisation);
         });
       });
     },
@@ -392,7 +396,7 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 		
   beforeRender: function() {
     this.collection.each(function(criteria) {
-      this.insertView("#values-list", new app.views.IKCriteriaListItemFilterView({model: criteria, filtreRegion : this.filtreRegion}));
+      this.insertView("#values-list", new app.views.IKCriteriaListItemFilterView({model: criteria, filtreRegion : this.filtreRegion, region : this.region}));
     }, this);
 				$('body').addClass('cleliste cle');
 				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href="+this.href+"><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
@@ -437,7 +441,7 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 		suppFiltre :function(event){
 				app.globals.currentFilter.length = 0;
 				app.globals.currentFilterTaxonIdList.length = 0;
-				$("#taxonNb").html(app.globals.cListAllTaxons.length);
+				$("#taxonNb").html(app.globals.cListAllTaxonsRegion.models.length);
 				$('.RadioCustom').removeClass('RadioCustomOn');
 		},
 
@@ -672,7 +676,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				$('body').addClass('cleliste liste');
 				$('body.cleliste.liste').append("<div id='languette' class='languette-left'><a href='"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
-    
+
     
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 
@@ -685,9 +689,19 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				};	
   },
   serialize: function() {
-    if (this.collection) return {collection : this.collection};
+				if (this.options.region !== undefined){
+						if (this.collection) return {collection : this.collection,region : this.options.region};
+				}else{
+						if (this.collection) return {collection : this.collection};
+				}	
     return true;
   },
+		
+		afterRender: function() {
+				if (this.options.region !== undefined) {
+						$('.footer-default').remove();
+				}
+		},
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				console.log('remove liste');
