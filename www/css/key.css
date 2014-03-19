@@ -98,7 +98,7 @@ a.sprite-btn-resultat:hover {
 
 /*******Modal Help********/
 #identification-list-content > button {
-		position: absolute;
+		position: fixed;
 		right: 0;
 		top: 0;
 		height: 76px;
@@ -111,7 +111,7 @@ a.sprite-btn-resultat:hover {
 #nodal li:nth-child(even){
 		background-color: inherit;
 }
-.cle .modal-content {
+.modal-content {
 		background-color: #28717e;
 		color: white;
 }
