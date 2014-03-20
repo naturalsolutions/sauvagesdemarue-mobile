@@ -12,8 +12,8 @@ function() {
 		
    sauvages.gpsNotStart = function gpsNotStart() {
       var myModal = new NS.UI.NotificationModal({
-       type: 'info',
-       title: "Le GPS n'a pas encore démarré",
+       type: '',
+       title: "Géolocalisation",
        message: "Patience, le GPS n'a pas encore démarré!",
        delay: 1,
        btnLabel: '',
@@ -22,7 +22,7 @@ function() {
    
    sauvages.supprimerObs = function supprimerObs(msg) {
       var myModal = new NS.UI.NotificationModal({
-       type: 'success',
+       type: '',
        title: 'Supprimer une observation',
        message: msg,
        delay: 3,
@@ -32,7 +32,7 @@ function() {
 	
    sauvages.finParcours = function finParcours() {
       var myModal = new NS.UI.NotificationModal({
-         type: 'success',
+         type: '',
          title: 'Rue sauvegardée',
          message: 'Retrouver vos données dans "Mes Sauvages"<br/> N\'oublier pas de les partager <br/>',
          delay: 2,
@@ -45,7 +45,7 @@ function() {
 	
    sauvages.obsSaveSuccess = function obsSaveSuccess(localisation) {
      var myModal = new NS.UI.NotificationModal({
-      type: 'success',
+      type: '',
       title: 'Observation sauvegardée',
       message: 'Félicitations !',
       delay: 1,
@@ -61,7 +61,7 @@ function() {
    },
    sauvages.sendToTelaWSSuccess = function email() {
       var myModal = new NS.UI.NotificationModal({
-         type: 'success',
+         type: '',
          title: 'Observation envoyée',
          message: 'L\'envoi des observations s\'est bien déroulé.',
          delay: 1,
@@ -75,7 +75,7 @@ function() {
    },
    sauvages.sendToTelaWSFail = function email() {
       var myModal = new NS.UI.NotificationModal({
-         type: 'error',
+         type: '',
          title: 'Observation envoyée',
          message: 'Une erreur s\'est produite, les observations n\'ont pu être envoyées',
          delay: 2,
@@ -89,7 +89,7 @@ function() {
    },
    sauvages.email = function email(msg) {
       var myModal = new NS.UI.NotificationModal({
-         type: 'warning',
+         type: '',
          title: 'Ajouter votre email.',
          message: msg,
          delay: '',
@@ -110,7 +110,7 @@ function() {
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
       var myModal = new NS.UI.NotificationModal({
-         type: 'success',
+         type: '',
          title: criteriaName,
          message: criteriaValues,
          delay: '',
@@ -122,7 +122,7 @@ function() {
    },
   sauvages.finDeProtocol = function finDeProtocol(msg) {
 			var myModal = new NS.UI.NotificationModal({
-				type: 'warning',
+				type: '',
 				title: 'Voulez-vous terminer votre parcours ?',
 				message:  msg,
 				delay: '',
@@ -142,30 +142,28 @@ function() {
       app.route.navigate('taxonlist', {trigger: true});
    }, myModal))
 	},
-   sauvages.finDeProtocolHorsParcours = function finDeProtocol(msg, derObsLat, derObslong , parcours) {
+   sauvages.SortieProtocol = function SortieProtocol(msg) {
 			var myModal = new NS.UI.NotificationModal({
-				type: 'warning',
-				title: 'Pour envoyer vos observations, vous devez avoir terminé votre parcours. Voulez-vous terminer votre parcours ?',
-				message:  msg,
+				type: '',
+				title: 'Rue en cour',
+				message: msg,
 				delay: '',
 				btnLabel: '', 
 			});
    myModal.$el.on('submit', 'form', _.bind(function(evt) {
       evt.preventDefault();
-      parcours.set('end_latitude' , derObsLat );
-      parcours.set('end_longitude' , derObslong);
-      parcours.set('end_datetime' ,  new Date().format("yyyy-MM-dd h:mm:ss"));
-      parcours.save();
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
-      
+      app.route.navigate('addParcours', {trigger: true}); 
    }, myModal))
    myModal.$el.on('reset', 'form', _.bind(function(evt) {
-      evt.preventDefault();
+     // evt.preventDefault();
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
+      window.history.back();
+      return false;
    }, myModal))
 	}
 

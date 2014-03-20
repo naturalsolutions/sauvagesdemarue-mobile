@@ -946,6 +946,12 @@ margin: 10px;
 .alert-success {
 		color: #008D00;
 }
+.modal-body, .modal-body .btn {
+		font-size: 18px;
+}
+.modal-body .btn {
+		margin-top: 20px;
+}
 /****CARTE SVG******/
 
 

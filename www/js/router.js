@@ -94,8 +94,17 @@ app.Router = Backbone.Router.extend({
 
   viewRegions: function() {
     if (typeof(app.globals.currentrue) !== 'undefined') {
-      alert('Rue en cours');
-      return false;
+      //alert('Rue en cours');
+      // return false;
+      	var msg = _.template(
+																	"<form role='form form-inline'>"+
+																		"<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
+																		"<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
+                  "<button type='reset'  class='btn btn-gris'>Annuler</button>"+
+																	"</form>"					
+																);
+      sauvages.notifications.SortieProtocol(msg());
+     
     }
       var currentView = new app.views.RegionPageView();
       this.displayView(currentView);  
@@ -237,10 +246,6 @@ app.Router = Backbone.Router.extend({
   },
   
   viewFormNIOnbs  : function() {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//	    return false;
-//    }
     var self = this;
     setTimeout(function() {
       app.utils.geolocalisation.getCurrentPosition();
