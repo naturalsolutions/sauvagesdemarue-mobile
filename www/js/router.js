@@ -94,17 +94,14 @@ app.Router = Backbone.Router.extend({
 
   viewRegions: function() {
     if (typeof(app.globals.currentrue) !== 'undefined') {
-      //alert('Rue en cours');
-      // return false;
-      	var msg = _.template(
-																	"<form role='form form-inline'>"+
-																		"<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
-																		"<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
-                  "<button type='reset'  class='btn btn-gris'>Annuler</button>"+
-																	"</form>"					
-																);
+      var msg = _.template(
+                "<form role='form form-inline'>"+
+                 "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
+                 "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
+                 "<button type='reset'  class='btn btn-gris'>Annuler</button>"+
+                "</form>"					
+               );
       sauvages.notifications.SortieProtocol(msg());
-     
     }
       var currentView = new app.views.RegionPageView();
       this.displayView(currentView);  
@@ -185,10 +182,6 @@ app.Router = Backbone.Router.extend({
   },
 
   viewTaxonlist : function(all) {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//      return false;
-//    }
     console.log('viewTaxonlist');
     var taxons;
     if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
@@ -203,10 +196,6 @@ app.Router = Backbone.Router.extend({
   },
   
   viewTaxonDetail : function(id) {
-//    if (typeof(app.globals.currentrue) === 'undefined') {
-//	    alert('Rue non initialisée');
-//	    return false;
-//    }
     console.log('viewTaxonDetail');
     var self = this;
     var taxon= new app.models.Taxon({"taxonId": id});
@@ -295,7 +284,7 @@ app.Router = Backbone.Router.extend({
         var collObs = new app.models.OccurenceDataValuesCollection;
        // var currentCollObs = collObs.findWhere({'fk_rue' : parseInt(currentRueId) })
        // if (typeof(currentCollObs) !== "undefined") {
-            collObs.fetch({
+          collObs.fetch({
               success: function(data) {
               var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
               self.displayView(currentView);
