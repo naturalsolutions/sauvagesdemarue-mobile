@@ -93,18 +93,21 @@ app.Router = Backbone.Router.extend({
   },
 
   viewRegions: function() {
-    if (typeof(app.globals.currentrue) !== 'undefined') {
-      var msg = _.template(
-                "<form role='form form-inline'>"+
-                 "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
-                 "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
-                 "<button type='reset'  class='btn btn-gris'>Annuler</button>"+
-                "</form>"					
-               );
-      sauvages.notifications.SortieProtocol(msg());
-    }
+    if (typeof app.globals.currentrue !== 'undefined') {
+      if (app.globals.currentrue.get('name') !== undefined) {
+        var msg = _.template(
+                  "<form role='form form-inline'>"+
+                   "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
+                   "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
+                   "<button type='reset'  class='btn btn-gris'>Annuler</button>"+
+                  "</form>"					
+                 );
+        sauvages.notifications.SortieProtocol(msg());
+      }
+    }else{
       var currentView = new app.views.RegionPageView();
       this.displayView(currentView);  
+    }
   },
   
   viewMaRegion : function(name) {

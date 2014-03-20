@@ -110,7 +110,7 @@ function() {
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
       var myModal = new NS.UI.NotificationModal({
-         type: '',
+         type: 'helpkey',
          title: criteriaName,
          message: criteriaValues,
          delay: '',
@@ -142,28 +142,31 @@ function() {
       app.route.navigate('taxonlist', {trigger: true});
    }, myModal))
 	},
-   sauvages.SortieProtocol = function SortieProtocol(msg) {
+   sauvages.SortieProtocol = function SortieProtocol(msg, route) {
 			var myModal = new NS.UI.NotificationModal({
 				type: '',
-				title: 'Rue en cour',
+				title: 'Rue en cours',
 				message: msg,
 				delay: '',
 				btnLabel: '', 
 			});
    myModal.$el.on('submit', 'form', _.bind(function(evt) {
+     evt.preventDefault();
+      $('#nodal').modal('hide');
+      $('#nodal').remove();
+      $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
+      app.route.navigate('addParcours', {trigger: true}); 
+   }, myModal))
+   myModal.$el.on('reset', 'form', _.bind(function(evt) {
       evt.preventDefault();
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
-      app.route.navigate('addParcours', {trigger: true}); 
-   }, myModal))
-   myModal.$el.on('reset', 'form', _.bind(function(evt) {
-     // evt.preventDefault();
-      $('#nodal').modal('hide');
-      $('#nodal').remove();
-      $('.modal-backdrop').remove();
-      window.history.back();
-      return false;
+      $('body').removeClass('modal-open');
+      app.globals.currentFilter.length = 0;
+						app.globals.currentFilterTaxonIdList.length = 0;
+      app.route.navigate('identification', {trigger: true}); 
    }, myModal))
 	}
 
