@@ -403,7 +403,7 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
       this.insertView("#values-list", new app.views.IKCriteriaListItemFilterView({model: criteria, filtreRegion : this.filtreRegion, region : this.region}));
     }, this);
 				$('body').addClass('cleliste cle');
-				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href="+this.href+"><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
+				$('body.cleliste.cle #content').append("<div id='languette' class='languette-right'><a href="+this.href+"><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				this.$el.hammer();
 		},
@@ -678,7 +678,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 
   beforeRender: function() {
 				$('body').addClass('cleliste liste');
-				$('body.cleliste.liste').append("<div id='languette' class='languette-left'><a href='"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
+				$('body.cleliste.liste #content').append("<div id='languette' class='languette-left'><a href='"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
 
     
