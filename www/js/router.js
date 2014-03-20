@@ -12,7 +12,7 @@ app.Router = Backbone.Router.extend({
     'maregion/:name' : 'viewMaRegion',
     'taxonlist/:all' : 'viewTaxonlist',
     'taxonlistRegion/:region' : 'viewTaxonlistRegion',
-    'taxondetail/:id' : 'viewTaxonDetail',
+    'taxondetail/:id/localisation/(:localisation)' : 'viewTaxonDetail',
     'addObs/:taxonId/localisation/(:localisation)' : 'viewFormAddObs',
     'addNonIdentifiee'  : 'viewFormNIOnbs',
     'addPasListe'  : 'viewFormPLOnbs',
@@ -195,15 +195,14 @@ app.Router = Backbone.Router.extend({
     this.displayView(currentView);
   },
   
-  viewTaxonDetail : function(id) {
+  viewTaxonDetail : function(id,localisation) {
     console.log('viewTaxonDetail');
     var self = this;
     var taxon= new app.models.Taxon({"taxonId": id});
     taxon.fetch({
           success: function(data) {
-            var currentView = new app.views.TaxonDetailView({model: data});
+            var currentView = new app.views.TaxonDetailView({model: data, localisation:localisation});
             self.displayView(currentView);
-            
           }
       });
   },

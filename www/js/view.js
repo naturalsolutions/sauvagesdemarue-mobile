@@ -755,6 +755,14 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('commonName')+"</div><em>"+ this.model.get('scientificName')+"</em>");
   },
 		
+		serialize: function() {
+				if (this.options.localisation !== undefined){
+						if (this.model) return {model : this.model, localisation : this.options.localisation};
+				}else{
+						if (this.model) return {model : this.model};
+				}	
+    return true;
+  },
 		
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);

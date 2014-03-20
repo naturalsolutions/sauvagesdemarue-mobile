@@ -19,7 +19,7 @@
             <div id='taxonList-div-<%= taxon.get('taxonId') %>' class="taxon-list-item pad-right">
               <div>
                   <div class="taxonName">
-                    <a href="#taxondetail/<%= taxon.get('taxonId') %>">
+                    <a href="#taxondetail/<%= taxon.get('taxonId') %>/localisation/<% if(data.region !== undefined){ %><%= data.region %> <%} %>">
                       <% if ((typeof(taxon.get('picture')) !== "undefined")  &&  (taxon.get('picture') !== "undefined")){ %>
                       <% var picture = taxon.get('picture')
                       picture = picture.replace("http://www.tela-botanica.org/appli:cel-img:","./data/images/images_formated/")%>
