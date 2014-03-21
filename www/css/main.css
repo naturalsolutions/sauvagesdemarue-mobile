@@ -58,9 +58,9 @@ font-weight: 200;
 .loading{
 		background-image: url(./images/spinner.gif);
 		background-repeat:no-repeat;
-		background-size: 220px;
-		background-position: center center;
-		width:220px;
+background-size: 120px;
+background-position: center center;
+width: 100%;
 		margin:auto;
 		background-color:#28717e;
 }
@@ -253,7 +253,11 @@ ul{
 .mm-menu > .mm-panel.mm-opened {
 		padding: 80% 0 40px 0;
 }
-
+/******PAGE LOCALISATION******/
+#mapLeaflet {
+		height: 100%;
+		width: 100%;
+}
 /****************/
 /*:focus,select:focus {
 outline-color: green;

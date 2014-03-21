@@ -424,6 +424,10 @@ $('#menu-item-je-participe').click(function(){
   app.route.navigate('addParcours', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
+$('#menu-item-ou-suis-je').click(function(){
+  app.route.navigate('ouSuisJe', {trigger: true, replace: true});
+  $("#menu").trigger("close");
+});
 $('#menu-item-region').click(function(){
   if (typeof app.globals.currentrue !== 'undefined') {
     if (app.globals.currentrue.get('name') !== undefined) {

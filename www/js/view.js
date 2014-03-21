@@ -299,7 +299,7 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
-		dirty : true,
+
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('body').addClass('pad-bottom-top');
@@ -313,6 +313,35 @@ app.views.HomePageView=  app.utils.BaseView.extend({
     $('#menu').addClass('hide'); 
   }
 });
+
+app.views.LocalisationPageView =  app.utils.BaseView.extend({
+
+  template: 'page-localisation',
+
+		initialize: function() {
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+		afterRender: function(){
+				app.utils.geolocalisation.getCurrentPosition();
+				if (typeof app.utils.geolocalisation.currentPosition !== undefined) {
+						var latitudePosition = app.utils.geolocalisation.currentPosition.latitude;
+						var longitudePosition = app.utils.geolocalisation.currentPosition.longitude;
+						
+						this.map = L.map(this.el).setView([latitudePosition, longitudePosition], 13);
+						var marker = L.marker([latitudePosition, longitudePosition]).addTo(this.map);
+						
+						L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+						attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+						maxZoom: 18
+						}).addTo(this.map);
+						return this;
+				}else{
+						sauvages.notifications.gpsNotStart();
+						self.goToLastPage();
+				}
+		}
+});
+
 app.views.RegionPageView= app.utils.BaseView.extend({
 
   template: 'page-region',
@@ -789,7 +818,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
 		}
 });
-
 
 app.views.ObservationListView =  app.utils.BaseView.extend({
 
