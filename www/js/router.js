@@ -19,6 +19,8 @@ app.Router = Backbone.Router.extend({
     'addParcours(/:state)' : 'viewFormAddParcours',
     'myObservation' : 'viewTableMyObs',
     'ouSuisJe' : 'viewLocalisation',
+    'credits' : 'viewCrédits',
+    'utilisateur' : 'viewUtilisateur' ,
      //'choixOutils' : 'viewChoixOutils',
     '' : 'viewHomePage'
   },
@@ -69,6 +71,16 @@ app.Router = Backbone.Router.extend({
   
   viewLocalisation: function() {
     var currentView = new app.views.LocalisationPageView();
+    this.displayView(currentView);  
+  },
+
+  viewCrédits: function() {
+    var currentView = new app.views.CreditsPageView();
+    this.displayView(currentView);  
+  },
+
+  viewUtilisateur: function() {
+    var currentView = new app.views.UtilisateurPageView();
     this.displayView(currentView);  
   },
 

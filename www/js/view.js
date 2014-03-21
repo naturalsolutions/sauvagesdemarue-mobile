@@ -343,6 +343,34 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 		}
 });
 
+app.views.UtilisateurPageView = app.utils.BaseView.extend({
+
+  template: 'page-utilisateur',
+
+		initialize: function() {
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+		afterRender: function(){
+				$('.page-title').replaceWith("<div class='page-title'>Mon profil</div>");
+				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Paramètres </h1>");
+  }
+});
+
+app.views.CreditsPageView =  app.utils.BaseView.extend({
+
+  template: 'page-credits',
+
+		initialize: function() {
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+		afterRender: function(){
+				$('.page-title').replaceWith("<div class='page-title'>Crédits</div>");
+				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Sauvages de Ma Rue Mobile </h1>");
+  }
+});
+
 app.views.RegionPageView= app.utils.BaseView.extend({
 
   template: 'page-region',

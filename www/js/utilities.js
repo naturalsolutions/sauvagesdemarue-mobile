@@ -428,6 +428,14 @@ $('#menu-item-ou-suis-je').click(function(){
   app.route.navigate('ouSuisJe', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
+$('#menu-item-credits').click(function(){
+  app.route.navigate('credits', {trigger: true, replace: true});
+  $("#menu").trigger("close");
+});
+$('#menu-item-utilisateur').click(function(){
+  app.route.navigate('utilisateur', {trigger: true, replace: true});
+  $("#menu").trigger("close");
+});
 $('#menu-item-region').click(function(){
   if (typeof app.globals.currentrue !== 'undefined') {
     if (app.globals.currentrue.get('name') !== undefined) {
