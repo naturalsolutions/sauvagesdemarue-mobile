@@ -225,17 +225,7 @@ $(document).ready(function() {
     $("#menu").mmenu({
             classes: "mm-slide",
             transitionDuration : 0,
-           // dragOpen : true ,
     });
-    
-    $('.flexslider').flexslider({
-														animation: "slide",  
-														slideshow: false,
-														touch: true,  
-														start: function(slider) {
-															$('.flexImages').show();
-														}
-												});
 });
 
 

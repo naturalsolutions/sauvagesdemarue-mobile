@@ -761,6 +761,17 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 						}, this);
 				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('commonName')+"</div><em>"+ this.model.get('scientificName')+"</em>");
   },
+
+		afterRender: function() {
+				$('.flexslider', this.$el).flexslider({
+														animation: "slide",  
+														slideshow: false,
+														touch: true,  
+														start: function(slider) {
+															$('.flexImages').show();
+														}
+				});
+		},
 		
 		serialize: function() {
 				if (this.options.localisation !== null){
