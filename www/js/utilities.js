@@ -435,6 +435,9 @@ $('#menu-item-region').click(function(){
                     "</form>"					
                    );
          sauvages.notifications.SortieProtocol(msg());
+    }else{
+    app.route.navigate('region',{trigger: true, replace: true});
+    $("#menu").trigger("close");
     }
   }else{
     app.route.navigate('region',{trigger: true, replace: true});

@@ -662,6 +662,28 @@ app.views.IKCriteriaListItemFilterView =  app.utils.BaseView.extend({
   },
 });
 
+app.views.IKCriteriaListItemFilterTaxonView =  app.utils.BaseView.extend({
+
+  template: 'items-list-taxondetail-criteria',
+
+  initialize: function() {
+				if (this.options.taxon !== undefined) {
+						this.taxon = this.options.taxon;
+				}
+    this.model.bind("reset", this.render, this);
+    this.model.bind("change", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+  afterRender:function() {
+				if (this.taxon.get('caracValues').length > 0) { 
+      _.each(this.taxon.get('caracValues').models,function(l){ 
+								var currentInput = 'defCaracValue-'+l.get('fk_carac_value');
+								$('input[name="'+currentInput+'"]').prop('checked', true).parent().removeClass("disabled");
+      },this);
+    }
+  },
+});
+
 app.views.TaxonListView =  app.utils.BaseView.extend({
 
   template: 'page-taxon-list',
@@ -680,7 +702,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				$('body').addClass('cleliste liste');
 				$('body.cleliste.liste #content').append("<div id='languette' class='languette-left'><a href='"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
-
     
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
       return taxon.get("commonName").toUpperCase(); 
@@ -727,31 +748,17 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   template: 'page-taxon-detail',
 
    initialize: function() {
+				this.collection.bind("reset", this.render, this);
     this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
   beforeRender: function() {
-    console.log(this.model.get('caracValues').models);
     var self = this;
-
-    self.model.get('caracValues').each(function(model) {
-      var criM = new app.models.CaracteristiqueDefValue({'criteraValueId' : model.get('fk_carac_value')});
-        criM.fetch({
-          success: function(data) {	
-												$('.flexslider').flexslider({
-														animation: "slide",  
-														slideshow: false,
-														touch: true,  
-														start: function(slider) {
-															$('.flexImages').show();
-														}
-												});
-            self.insertView("#criteria-list-container", new app.views.CriteriaValueTaxonView({model: data}));
-          }
-        });
-    },this);
+						this.collection.each(function(criteria) {
+								self.insertView("#values-list", new app.views.IKCriteriaListItemFilterTaxonView({model: criteria, taxon: self.model}));
+						}, this);
 				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('commonName')+"</div><em>"+ this.model.get('scientificName')+"</em>");
   },
 		
@@ -772,16 +779,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 		}
 });
 
-app.views.CriteriaValueTaxonView=  app.utils.BaseView.extend({
-
-  template: 'items-list-taxondetail-criteria',
-
-  initialize: function() {
-    this.model.bind("reset", this.render, this);
-    this.model.bind("change", this.render, this);
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
-});
 
 app.views.ObservationListView =  app.utils.BaseView.extend({
 

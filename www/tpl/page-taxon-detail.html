@@ -2,7 +2,6 @@
   <div class="loc-container" >
   <div class="flexslider ">
     <ul class="slides">
-    <% console.log(data); %>
       <% var pictures = data.model.get('pictures');
       _.each(pictures.models,function(item,key,list){
         var picture = item.get('path')
@@ -20,12 +19,13 @@
   </div>
 
     <div class="">
-      <%= data.description %>
+      <%= data.model.get('description') %>
     </div>
-    <div class="">
-      <div class="" id="criteria-list-container">
-      </div>
-    </div>
+
+      <fieldset id ="radioCollection" class="" >
+        <ul id="values-list" class="criteriaList"></ul>
+      </fieldset>
+    
   </div>
   <div id="wrapper-footer">
     <div id="footer" class="mm-fixed-bottom footer-default">

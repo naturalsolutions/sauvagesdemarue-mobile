@@ -227,6 +227,15 @@ $(document).ready(function() {
             transitionDuration : 0,
            // dragOpen : true ,
     });
+    
+    $('.flexslider').flexslider({
+														animation: "slide",  
+														slideshow: false,
+														touch: true,  
+														start: function(slider) {
+															$('.flexImages').show();
+														}
+												});
 });
 
 

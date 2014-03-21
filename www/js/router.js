@@ -93,14 +93,8 @@ app.Router = Backbone.Router.extend({
   },
 
   viewRegions: function() {
-    if (typeof app.globals.currentrue !== 'undefined') {
-      if (app.globals.currentrue.get('name') !== undefined) {
-        sauvages.notifications.SortieProtocol();
-      }
-    }else{
-      var currentView = new app.views.RegionPageView();
-      this.displayView(currentView);  
-    }
+    var currentView = new app.views.RegionPageView();
+    this.displayView(currentView);  
   },
   
   viewMaRegion : function(name) {
@@ -194,14 +188,27 @@ app.Router = Backbone.Router.extend({
   viewTaxonDetail : function(id,localisation) {
     console.log('viewTaxonDetail');
     var self = this;
+    var critereValeurtaxon = new app.models.CaracteristiqueDefValuesCollection();
+    //Recupération des données du taxon
     var taxon= new app.models.Taxon({"taxonId": id});
     taxon.fetch({
           success: function(data) {
-            var currentView = new app.views.TaxonDetailView({model: data, localisation:localisation});
-            self.displayView(currentView);
+
+        //Recupération de tous les critères de la clé
+           var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
+           
+           cListAllCriterias.fetch({
+               success: function(critAll) {
+                 var currentView = new app.views.TaxonDetailView({model: data, localisation:localisation, collection : critAll});
+                 self.displayView(currentView);
+               }
+           }) 
+
           }
       });
+   
   },
+
 
   viewFormAddObs : function(taxonI,localisation) {
     var idCurrentRue = undefined;
