@@ -322,11 +322,12 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 		afterRender: function(){
+				$('.page-title').replaceWith("<div class='page-title'>Ma localisation</div>");
 				app.utils.geolocalisation.getCurrentPosition();
 				if (typeof app.utils.geolocalisation.currentPosition !== undefined) {
 						var latitudePosition = app.utils.geolocalisation.currentPosition.latitude;
 						var longitudePosition = app.utils.geolocalisation.currentPosition.longitude;
-						
+						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'> latitude : "+latitudePosition +" - longitude : "+longitudePosition+"</h1>");
 						this.map = L.map(this.el).setView([latitudePosition, longitudePosition], 13);
 						var marker = L.marker([latitudePosition, longitudePosition]).addTo(this.map);
 						
