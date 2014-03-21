@@ -763,7 +763,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   },
 		
 		serialize: function() {
-				if (this.options.localisation !== undefined){
+				if (this.options.localisation !== null){
 						if (this.model) return {model : this.model, localisation : this.options.localisation};
 				}else{
 						if (this.model) return {model : this.model};
