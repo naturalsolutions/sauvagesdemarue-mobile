@@ -80,8 +80,20 @@ app.Router = Backbone.Router.extend({
   },
 
   viewUtilisateur: function() {
-    var currentView = new app.views.UtilisateurPageView();
-    this.displayView(currentView);  
+    var currentUser = new app.models.User({'userId': 1});
+    var self = this;
+    if (currentUser !== undefined) {
+      currentUser.fetch({
+          success: function(data) {
+            var currentView = new app.views.UtilisateurPageView({model :data});
+            self.displayView(currentView);
+          }
+      });
+    }else{
+      var newUser = new app.models.User();
+      var currentView = new app.views.UtilisateurPageView({model :newUser});
+      this.displayView(currentView);
+    }
   },
 
   viewRegions: function() {
@@ -201,7 +213,6 @@ app.Router = Backbone.Router.extend({
    
   },
 
-
   viewFormAddObs : function(taxonI,localisation) {
     var idCurrentRue = undefined;
     var self = this;
@@ -267,7 +278,9 @@ app.Router = Backbone.Router.extend({
   
   viewFormAddParcours : function(state) {
     var self = this;
+    //Teste si il ya des données de géolocalisation
     if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+      //teste si il n'y a pas de rue en cours
       if (typeof( app.globals.currentrue) === 'undefined') {
         app.globals.currentrue = new app.models.ParcoursDataValue();
 		      var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
@@ -276,18 +289,18 @@ app.Router = Backbone.Router.extend({
       else {
         var currentRueId = app.globals.currentrue.get('id');
         var collObs = new app.models.OccurenceDataValuesCollection;
-       // var currentCollObs = collObs.findWhere({'fk_rue' : parseInt(currentRueId) })
-       // if (typeof(currentCollObs) !== "undefined") {
           collObs.fetch({
               success: function(data) {
               var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
               self.displayView(currentView);
             }
           });
-        //}
       }
-     // var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
-      //self.displayView(currentView); 
+      //Supprime les filtres de la clé
+      if (app.globals.currentFilter !== undefined) {
+        app.globals.currentFilter.length = 0;
+        app.globals.currentFilterTaxonIdList.length = 0;
+      }
     }
     else{
       sauvages.notifications.gpsNotStart();

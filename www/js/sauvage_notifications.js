@@ -59,7 +59,18 @@ function() {
       },
      });
    },
-   sauvages.sendToTelaWSSuccess = function email() {
+
+   sauvages.emailSaveSuccess= function emailSaveSuccess() {
+     var myModal = new NS.UI.NotificationModal({
+      type: '',
+      title: 'Votre email a été sauvegardé',
+      message: 'Félicitations !',
+      delay: 1,
+      btnLabel: '', 
+     });
+   },
+
+   sauvages.sendToTelaWSSuccess = function sendToTelaWSSuccess() {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Observation envoyée',
@@ -73,7 +84,7 @@ function() {
          }
       });
    },
-   sauvages.sendToTelaWSFail = function email() {
+   sauvages.sendToTelaWSFail = function sendToTelaWSFail() {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Observation envoyée',

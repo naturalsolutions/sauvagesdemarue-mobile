@@ -281,9 +281,7 @@ outline-width: 0px;
 		font-weight: 200;
 		line-height: 1.3em;
 }
-/*.list-group-item {
-		border: 1px solid rgba(0,0,0,0.7);
-}*/
+
 /****** NS_UI-Form****************/
 #rue-form {
 		height: 100%;
@@ -291,7 +289,7 @@ outline-width: 0px;
 #input-picture {
 		display: inline-block;
 }
-#add-sauvages-rue {
+#add-sauvages-rue,#utilisateur {
 		margin-top: 30px;
 }
 #add-new-obs {

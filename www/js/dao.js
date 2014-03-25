@@ -20,8 +20,13 @@ Backbone.sync = function(method, model, options) {
           options.success(data);
       });
   }
-   else if ((model.attributes) || (model.filters)) {
+    else if ((model.get('taxonId')) || (model.filters)) {
       dao.findWithCriteria(model, function(data) {
+          options.success(data);
+      });
+    }
+    else if (model.get('userId')) {
+      dao.findById(model.get('userId'), function(data) {
           options.success(data);
       });
     }
@@ -36,10 +41,17 @@ Backbone.sync = function(method, model, options) {
       options.success(data);
     });
   }
-	else if (method === "update") {
-		 dfd = dao.update(model, function(data) {
+  else if (method === "update") {
+    if (model.attributes.email) {
+      dfd = dao.updateEmailTuser(model.attributes.email, function(data) {
+        options.success(data);
+      });  
+    }
+    else{
+    		 dfd = dao.update(model, function(data) {
       options.success(data);
     });
+  }
 	}
   else if (method === "delete") {
     if (model.attributes.id) {
@@ -91,17 +103,32 @@ app.dao.ParcoursDataValueDAO = function(db) {
 };
 
 _.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{
-  /*updateEmailTuser: function(model, callback) {
-        this.db.transaction(
-            function(tx) {
-                var sql = "UPDATE Tuser SET email= ? WHERE userId = ? ";
-                tx.executeSql(sql, [model.get('email'), model.get('Tuser')]);
-            },
-            function(tx, error) {
-                console.log(tx);
-            }
-        );
-    }*/
+  updateEmailTuser: function(model, callback) {
+    this.db.transaction(
+      function(tx) {
+          var sql = "UPDATE Tuser SET email= ? WHERE userId = ? ";
+          tx.executeSql(sql, [model.get('email'), model.get('Tuser')]);
+      },
+      function(tx, error) {
+          console.log(tx);
+      }
+    );
+  },
+  findById: function(id, callback) {
+      this.db.transaction(
+          function(tx) {
+              var sql =  "SELECT * " +
+                  "FROM Tuser " +
+                  "WHERE userId =?";
+              tx.executeSql(sql, [id], function(tx, results) {
+                  callback(results.rows.length === 1 ? results.rows.item(0) : null);
+              });
+          },
+          function(tx, error) {
+              console.log(tx);
+          }
+      );
+  },
 });
 _.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);

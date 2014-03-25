@@ -348,13 +348,74 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   template: 'page-utilisateur',
 
 		initialize: function() {
+				this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
+
+		events : {
+				//"click #submitEmail"	: "enregistrerEmail",
+				"click .annuler-enregistrement"	: "annuler",
+	},
+		
+		annuler: function(evt){
+				window.history.back();
+    return false;
+		},
+
+
+//		enregistrerEmail: function(evt){
+//				var currentEmail = this.$el.find('input[type="email"]').val();
+//            var currentUser = new app.models.User({
+//               'userId': 1,
+//               'email':currentEmail
+//            });
+//            currentUser.save();
+//		},
+//		
+		beforeRender: function(){
+				this.insertView("#user-form", new app.views.FormUserView({initialData:this.model}));
+		},
 
 		afterRender: function(){
 				$('.page-title').replaceWith("<div class='page-title'>Mon profil</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Paramètres </h1>");
   }
+});
+app.views.FormUserView = NS.UI.Form.extend({
+    initialize: function(options) {
+      NS.UI.Form.prototype.initialize.apply(this, arguments);
+						//Test if new instance
+						this.isNew = this.instance.isNew();
+
+      this.on('submit:valid', function(instance) {
+								var self = this;
+								if (!self.isNew) {
+											instance.set('userId', 1).save().done( function(model, response, options) {
+												instance.fetch({
+														success: function(data) {
+																		sauvages.notifications.emailSaveSuccess();
+														}
+												});
+										});
+										
+								}else{
+										instance.set('userId', 1).save().done( function(model, response, options) {
+												instance.fetch({
+														success: function(data) {
+																		sauvages.notifications.emailSaveSuccess();
+														}
+												});
+										});
+								}
+      });
+    },
+    afterRender: function () {
+      $('input:submit', this.$el).attr('value', sauvages.messages.save);
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' >Annuler</button>");
+						$('.input-text .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-user'></span> ");
+      $('h3', this.$el).attr('style', 'display:none');
+    },
+		
 });
 
 app.views.CreditsPageView =  app.utils.BaseView.extend({
@@ -871,13 +932,12 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						}
 				}
 		},
-
-  
+ 
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
     'click #send-obs': 'sendObs',
-				'click #submitEmail':'setEmail',
+			//	'click #submitEmail':'setEmail',
 				'click .destroyObs':'destroyObs',
 				'click .back-rue-en-cours':'backRueEnCours',
 				'click .back-home' : 'backHome',
@@ -890,7 +950,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   tabObrue: function(event){
     $("#tabObs a[href='#rue']").tab('show');
   },
-  
 		changeIcon: function(event){
 				$('#mesObsParRue').on('hide.bs.collapse', function () {
 						$(this).children().children().children().children('.glyph-collpase').removeClass('glyphicon-minus');
@@ -900,8 +959,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						$(this).children().children().children().children(".glyph-collpase").removeClass('glyphicon-plus');
 						$(this).children().children().children().children(".glyph-collpase").addClass('glyphicon-minus');
 				});
-		},
-  
+		}, 
   sendObs: function (event) {
     //Get current Obs
     var obsTosend ;
@@ -912,7 +970,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
             var emailUser = data.get('email');
 												if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 ) {
 														var dfd = $.Deferred();
-														//var collectionRueFinie = parcours;
 														app.utils.queryData.getObservationsTelaWSFormated()
 																.done(
 																		function(data) {
@@ -936,25 +993,24 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																		console.log(msg);
 																});
 												}
-												else{
-												
-												var msg = _.template(
-																	"<form role='form form-inline'>"+
-																		"<div class='form-group'>"+
-																		"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
-																		'	<div class="input-group input-group-lg">'+
-																		'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
-																		"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
-																		"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
-																		"	</div>"+
-																		"</div>"+
-																		"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
-																	"</form>"					
-																);
-												sauvages.notifications.email(msg());
-												$('.modal-footer').addClass("hide");
-												self.render();
-												}
+												else{		
+														var msg = _.template(
+																			"<form role='form form-inline'>"+
+																				"<div class='form-group'>"+
+																				"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
+																				'	<div class="input-group input-group-lg">'+
+																				'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
+																				"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
+																				"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
+																				"	</div>"+
+																				"</div>"+
+																				"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
+																			"</form>"					
+																		);
+														sauvages.notifications.email(msg());
+														$('.modal-footer').addClass("hide");
+														self.render();
+														}
 										}
 				});
   },
