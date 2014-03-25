@@ -46,15 +46,18 @@ Backbone.Collection.prototype.multiValueWhere =  function(attrs, first) {
 
 // -------------------------------------------------- The Models ---------------------------------------------------- //
 app.models.User = Backbone.Model.extend({
+	defaults: {
 
+	},
 },{  
   table : 'Tuser',
   schema: {
-    userId: { title:'userId',type:'Number', sqltype:'INTEGER', required: true, sqlconstraints:'PRIMARY KEY'},
-    email: { title:'email', stype:'Text', sqltype:'NVARCHAR(50)',  required: true},
+    userId: { title:'userId',type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY'},
+    email: { title:'Ajouter votre email.', type:'Email', sqltype:'NVARCHAR(50)',  required: true},
    // pseudo: { title:'commonName', type:'Text', sqltype:'NVARCHAR(50)' },
      },
   dao: app.dao.UserDAO,
+  verboseName: 'Utilisateur'
 });
 // The User Collection Model
 app.models.UserCollection = Backbone.Collection.extend({
@@ -324,7 +327,7 @@ app.models.OccurenceDataValueNoRequired = Backbone.Model.extend({
   dao: app.dao.OccurenceDataValueDAO,
   verboseName: 'Occurence'
 });
-// The CaracteristiqueDefValue Collection
+// The OccurenceDataValue Collection picture no required
 app.models.OccurenceDataValueNoRequiredCollection =Backbone.Collection.extend({
 
   model : app.models.OccurenceDataValueNoRequis,
@@ -370,13 +373,6 @@ app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
   
   initialize: function() {
   },
-  
-  /*getNameRueById : function(fktaxon) {
-    var selectedRue = this.findWhere( {'id': fktaxon});
-    if(typeof(selectedRue) !== 'undefined'){
-      return selectedRue.get('name');
-    }
-  }*/ 
 
 });
 
