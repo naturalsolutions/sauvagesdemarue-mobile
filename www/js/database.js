@@ -26,7 +26,7 @@ function loadXmlTaxa(){
       $(xml).find('TAXON').each(function(){	
         var oTaxon = new Array();
         oTaxon['taxonId'] = parseInt($(this).attr('id'));
-        oTaxon['commonName'] =$(this).attr('value');
+        oTaxon['commonName'] =$(this).attr('value').trim();
         oTaxon['scientificName']= $(this).attr('sciName');
         if (typeof ($(this).attr('groupe')) === 'undefined') { oTaxon['fk_group']= "";}
         else { 
