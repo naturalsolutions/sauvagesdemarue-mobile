@@ -81,6 +81,7 @@ function() {
             $('#nodal').modal('hide');
             $('#nodal').remove();
             $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
          }
       });
    },
@@ -117,6 +118,7 @@ function() {
             $('#nodal').modal('hide');
             $('#nodal').remove();
             $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
       }, myModal))
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
@@ -131,7 +133,7 @@ function() {
           }
       });
    },
-  sauvages.finDeProtocol = function finDeProtocol(msg) {
+   sauvages.finDeProtocol = function finDeProtocol(msg) {
 			var myModal = new NS.UI.NotificationModal({
 				type: '',
 				title: 'Voulez-vous terminer votre parcours ?',
@@ -144,12 +146,14 @@ function() {
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
    }, myModal))
    myModal.$el.on('reset', 'form', _.bind(function(evt) {
       evt.preventDefault();
       $('#nodal').modal('hide');
       $('#nodal').remove();
       $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
       app.route.navigate('taxonlist', {trigger: true});
    }, myModal))
 	},
