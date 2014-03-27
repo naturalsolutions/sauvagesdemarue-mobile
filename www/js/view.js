@@ -498,7 +498,6 @@ app.views.MaRegionView= app.utils.BaseView.extend({
 		afterRender: function() {
 				$('.sauvages-region a', this.$el).attr("href","#identification/"+this.region);
 				$('#map-region', this.$el).load('css/map/carte-paca.svg');
-			//	$('.elem-right-header').append("<img src='css/region/Provence-Alpes-Cotes_dAzur/icon-region.png'/>");
   }
 });
 
@@ -530,7 +529,6 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 				$('body').addClass('cleliste cle');
 				$('body.cleliste.cle #content').append("<div id='languette' class='languette-right'><a href="+this.href+"><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
-				$('.elem-right-header').append("<img src='css/region/Provence-Alpes-Cotes_dAzur/icon-region.png'/>");
 				this.$el.hammer();
 		},
 		
