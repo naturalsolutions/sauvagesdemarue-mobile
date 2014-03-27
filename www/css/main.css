@@ -896,6 +896,17 @@ margin: 10px;
 		top: 120px;
 		width: 100%;
 }
+/********** MA REGION *************/
+#ma-region-page-content .first{
+		width: 30%;
+		float: left;
+}
+#Provence-Alpes-Cotes-Azur:before{
+		content: url('./region/Provence-Alpes-Cotes-Azur/icon-region.png');
+}
+#map-region > svg {
+height: 250px;
+}
 /***********MEDIA QUERIE**********/
 @media (min-width: 768px){
   #carousel-container {
