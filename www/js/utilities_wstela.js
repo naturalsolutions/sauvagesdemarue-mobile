@@ -101,10 +101,10 @@ NS.WSTelaAPIClient = (function() {
                         else {
                             this.dfdObs.push(new $.Deferred().resolve());
                         }
-                        dfdObservation.resolve();
+                        this.dfdObservation.resolve();
                     }, {
                         'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 
-                        'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs
+                        'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs, 'dfdObservation' : dfdObservation
                         }
                     ))
                     .fail(function() {
