@@ -120,7 +120,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 				}
 				$('.page-title').replaceWith("<div class='page-title'> Nouvelle Sauvage</div>");
   },
-		  afterRender: function() {
+		afterRender: function() {
 						if (this.options.localisation !== null ) {
 								$('.select').hide(); 
 						}
@@ -196,6 +196,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 		},
 
   beforeRender: function() {
+				$('.icone-page-title').hide();
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
 				
 				if (typeof(this.collection) !== 'undefined') {
@@ -372,6 +373,7 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 		},
 		
 		beforeRender: function(){
+				$('.icone-page-title').hide();		
 				this.insertView("#user-form", new app.views.FormUserView({initialData:this.model}));
 		},
 
@@ -420,6 +422,9 @@ app.views.CreditsPageView =  app.utils.BaseView.extend({
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
+		beforeRender: function(){
+		$('.icone-page-title').hide();		
+		},
 
 		afterRender: function(){
 				$('.page-title').replaceWith("<div class='page-title'>Crédits</div>");
@@ -456,7 +461,7 @@ app.views.RegionPageView= app.utils.BaseView.extend({
 
   beforeRender: function() {		
 						$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
-						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisis ta région!</h1>");
+						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisis ta région !</h1>");
   },
 		afterRender: function(){
 					$('#map', this.$el).load('css/map/map_regions.svg');
@@ -484,7 +489,9 @@ app.views.MaRegionView= app.utils.BaseView.extend({
 
   beforeRender: function() {
 				if ( this.region === 'Provence-Alpes-Cotes-Azur') this.regionEditorial = "Provence Alpes Côtes d'Azur" ;
-				$('.page-title').replaceWith("<div class='page-title' id="+this.region+">Ma région</div>");
+				$('.icone-page-title').attr("id", this.region);
+				$('.icone-page-title').show();		
+				$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+this.regionEditorial+"</h1>");
   },
 
@@ -925,6 +932,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     return true;
   },
 		beforeRender: function(){
+				$('.icone-page-title').hide();
 				$('.page-title').replaceWith("<div class='page-title'>Mes sauvages</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Liste de toutes mes sauvages</h1>");
 		},

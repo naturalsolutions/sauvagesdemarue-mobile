@@ -764,8 +764,10 @@ body.pad-bottom-top.cleliste.cle, .cleliste.cle .mm-page #header {
   background-color:white;   
 }
 .page-block-sub-title{
-  
+display: inline-block;
+float: left;
 }
+
 h1.page-sub-title {
 		font-size: 14px;
 		line-height: 16px;
@@ -901,8 +903,14 @@ margin: 10px;
 		width: 30%;
 		float: left;
 }
-#Provence-Alpes-Cotes-Azur:before{
-		content: url('./region/Provence-Alpes-Cotes-Azur/icon-region.png');
+#Provence-Alpes-Cotes-Azur{
+		background-image: url('./region/Provence-Alpes-Cotes-Azur/icon-region.png');
+		background-repeat: no-repeat;
+		width: 32px;
+		height: 35px;
+		display: inline-block;
+		margin: 10px 10px 10px 0px;
+		float:left;
 }
 #map-region > svg {
 height: 250px;
