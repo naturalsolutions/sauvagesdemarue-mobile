@@ -353,7 +353,7 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   },
 
 		events : {
-				//"click #submitEmail"	: "enregistrerEmail",
+				"click .modifier-enregistrement"	: "updateEmail",
 				"click .annuler-enregistrement"	: "annuler",
 	},
 		
@@ -363,15 +363,14 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 		},
 
 
-//		enregistrerEmail: function(evt){
-//				var currentEmail = this.$el.find('input[type="email"]').val();
-//            var currentUser = new app.models.User({
-//               'userId': 1,
-//               'email':currentEmail
-//            });
-//            currentUser.save();
-//		},
-//		
+		updateEmail: function(evt){
+				var currentEmail = this.$el.find('input[type="text"]').val();
+    //var currentUser = new app.models.User();
+				//currentUser.set('userId',1)
+					this.model.set('email',String(currentEmail))
+						.save();
+		},
+		
 		beforeRender: function(){
 				this.insertView("#user-form", new app.views.FormUserView({initialData:this.model}));
 		},
@@ -384,32 +383,28 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 app.views.FormUserView = NS.UI.Form.extend({
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
-						//Test if new instance
-						this.isNew = this.instance.isNew();
-
-      this.on('submit:valid', function(instance) {
-								var self = this;
-								if (!self.isNew) {
-											instance.set('userId', 1).save().done( function(model, response, options) {
-												instance.fetch({
-														success: function(data) {
+						var self = this;
+						if (this.initialData.email !== undefined) {
+								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' >Modifier</button>");
+						}else{
+								this.on('submit:valid', function(instance) {
+										var self = this;
+												instance.set('userId', 1).save().done( function(model, response, options) {
+														instance.fetch({
+																success: function(data) {
+																		$('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' >Modifier</button>");
 																		sauvages.notifications.emailSaveSuccess();
-														}
+																		app.route.navigate('', {trigger: true});
+																}
+														});
 												});
-										});
-										
-								}else{
-										instance.set('userId', 1).save().done( function(model, response, options) {
-												instance.fetch({
-														success: function(data) {
-																		sauvages.notifications.emailSaveSuccess();
-														}
-												});
-										});
-								}
-      });
+								});
+						}
     },
     afterRender: function () {
+						if (this.initialData.email !== undefined) {
+								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' >Modifier</button>");
+						}
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' >Annuler</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-user'></span> ");
@@ -461,7 +456,7 @@ app.views.RegionPageView= app.utils.BaseView.extend({
 
   beforeRender: function() {		
 						$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
-						$('.page-sub-title').empty();
+						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisis ta région!</h1>");
   },
 		afterRender: function(){
 					$('#map', this.$el).load('css/map/map_regions.svg');
@@ -488,11 +483,15 @@ app.views.MaRegionView= app.utils.BaseView.extend({
 		},
 
   beforeRender: function() {
-				$('.page-title').replaceWith("<div class='page-title' id="+ this.region +" >Ma région " + this.region + "</div>");
+				if ( this.region === 'Provence-Alpes-Cotes-Azur') this.regionEditorial = "Provence Alpes Côtes d'Azur" ;
+				$('.page-title').replaceWith("<div class='page-title' id="+this.region+">Ma région</div>");
+				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+this.regionEditorial+"</h1>");
   },
 
 		afterRender: function() {
 				$('.sauvages-region a', this.$el).attr("href","#identification/"+this.region);
+				$('#map-region', this.$el).load('css/map/carte-paca.svg');
+			//	$('.elem-right-header').append("<img src='css/region/Provence-Alpes-Cotes_dAzur/icon-region.png'/>");
   }
 });
 
@@ -524,6 +523,7 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 				$('body').addClass('cleliste cle');
 				$('body.cleliste.cle #content').append("<div id='languette' class='languette-right'><a href="+this.href+"><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
+				$('.elem-right-header').append("<img src='css/region/Provence-Alpes-Cotes_dAzur/icon-region.png'/>");
 				this.$el.hammer();
 		},
 		
@@ -926,11 +926,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   },
 		beforeRender: function(){
 				$('.page-title').replaceWith("<div class='page-title'>Mes sauvages</div>");
-				if (app.globals.currentrue !== undefined) {
-						if (app.globals.currentrue.get('name') !== undefined) {
-								$('.page-sub-title').replaceWith("<div class=page-sub-title'>"+app.globals.currentrue.get('name')+"</div>");
-						}
-				}
+				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Liste de toutes mes sauvages</h1>");
 		},
  
   events: {

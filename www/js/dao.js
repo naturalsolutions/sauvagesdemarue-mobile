@@ -19,14 +19,14 @@ Backbone.sync = function(method, model, options) {
      dao.findByName(model, function(data) {
           options.success(data);
       });
-  }
-    else if ((model.get('taxonId')) || (model.filters)) {
-      dao.findWithCriteria(model, function(data) {
-          options.success(data);
-      });
     }
     else if (model.get('userId')) {
       dao.findById(model.get('userId'), function(data) {
+          options.success(data);
+      });
+    }
+    else if ((model.attributes) || (model.filters)) {
+      dao.findWithCriteria(model, function(data) {
           options.success(data);
       });
     }
@@ -43,12 +43,12 @@ Backbone.sync = function(method, model, options) {
   }
   else if (method === "update") {
     if (model.attributes.email) {
-      dfd = dao.updateEmailTuser(model.attributes.email, function(data) {
+      dfd = dao.updateEmailTuser(model, function(data) {
         options.success(data);
       });  
     }
     else{
-    		 dfd = dao.update(model, function(data) {
+    		dfd = dao.update(model, function(data) {
       options.success(data);
     });
   }
@@ -107,7 +107,7 @@ _.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{
     this.db.transaction(
       function(tx) {
           var sql = "UPDATE Tuser SET email= ? WHERE userId = ? ";
-          tx.executeSql(sql, [model.get('email'), model.get('Tuser')]);
+          tx.executeSql(sql, [model.get('email'), model.get('userId')]);
       },
       function(tx, error) {
           console.log(tx);
@@ -117,7 +117,7 @@ _.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{
   findById: function(id, callback) {
       this.db.transaction(
           function(tx) {
-              var sql =  "SELECT * " +
+              var sql =  "SELECT userId as id, * " +
                   "FROM Tuser " +
                   "WHERE userId =?";
               tx.executeSql(sql, [id], function(tx, results) {

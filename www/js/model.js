@@ -52,7 +52,7 @@ app.models.User = Backbone.Model.extend({
 },{  
   table : 'Tuser',
   schema: {
-    userId: { title:'userId',type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY'},
+    userId: { title:'userId',type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
     email: { title:'Ajouter votre email.', type:'Email', sqltype:'NVARCHAR(50)',  required: true},
    // pseudo: { title:'commonName', type:'Text', sqltype:'NVARCHAR(50)' },
      },

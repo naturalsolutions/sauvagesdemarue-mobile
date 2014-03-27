@@ -237,7 +237,7 @@ app.dao.baseDAOBD = {
     this.db.transaction(
       function(tx) {
         //Récupération des arguments
-        var args = ((model.attributes) ? model.attributes: model.filters); 
+        var args = (((model.attributes) && (! $.isEmptyObject( model.attributes)))  ? model.attributes: model.filters)
         var sqlWere = ' WHERE ';
         var parameters = new Array();
         //Mise en place du filtre WHERE et du tableau des valeurs
