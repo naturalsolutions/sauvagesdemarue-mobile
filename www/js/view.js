@@ -346,6 +346,7 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 
 app.views.UtilisateurPageView = app.utils.BaseView.extend({
 
+
   template: 'page-utilisateur',
 
 		initialize: function() {
@@ -503,11 +504,12 @@ app.views.MaRegionView= app.utils.BaseView.extend({
 
 app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 
+
   template: 'page-identification-key-filter',
   
   initialize: function() {
 				this.region = this.options.region;
-			 this.href = '#taxonlistRegion/'+this.region;
+			 this.href = 'taxonlistRegion/'+this.region;
 				if (this.options !== undefined) {
 						this.filtreRegion = this.options.filtreRegion;
 				}
@@ -527,7 +529,7 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
       this.insertView("#values-list", new app.views.IKCriteriaListItemFilterView({model: criteria, filtreRegion : this.filtreRegion, region : this.region}));
     }, this);
 				$('body').addClass('cleliste cle');
-				$('body.cleliste.cle #content').append("<div id='languette' class='languette-right'><a href="+this.href+"><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
+				$('body.cleliste.cle #content').append("<div id='languette' class='languette-right'><a href='#"+this.href+"'><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				this.$el.hammer();
 		},
@@ -541,10 +543,11 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 		},
 		
 		swipeTaxonList : function(event){
-				app.route.navigate('taxonlist', {trigger: true, replace: true});
+				app.route.navigate(this.href , {trigger: true, replace: true});
     console.log("event gesture"+event.gesture);
 				event.gesture.preventDefault();
 		},
+
 		helpShow :function(){
 				var self=this;
 				var criteriaName = "Aide de l'assistant d'identification";
@@ -813,10 +816,10 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   template: 'page-taxon-list',
   
   initialize: function() {
-				this.hrefIdentification = '#identification';
+				this.hrefIdentification = 'identification';
 				if (this.options.region !== undefined) {
 						this.region = this.options.region;
-						this.hrefIdentification = 	'#identification/'+this.region;
+						this.hrefIdentification = 	'identification/'+this.region;
 				}
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
@@ -824,7 +827,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 
   beforeRender: function() {
 				$('body').addClass('cleliste liste');
-				$('body.cleliste.liste #content').append("<div id='languette' class='languette-left'><a href='"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
+				$('body.cleliste.liste #content').append("<div id='languette' class='languette-left'><a href='#"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
@@ -861,8 +864,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				"dragright" : "swipeIdentification"
   },
 		swipeIdentification : function(event){
-				app.route.navigate('identification', {trigger: true, replace: true});
-    console.log("event gesture"+event.gesture);
+				app.route.navigate(this.hrefIdentification , {trigger: true, replace: true});
 				event.gesture.preventDefault;
 		}
 });
