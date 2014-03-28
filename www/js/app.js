@@ -305,14 +305,13 @@ NS.UI.Form.templateSrc.stacked =
                 '    <div class="form-actions">' +
                 '      <div id="footer" class="mm-fixed-bottom">'+
                 '       <nav class="bottom-navbar" role="navigation">'+
-                '        <div class="btn-group btn-group-justified">'+
+                '         <div class="btn-group btn-group-justified">'+
                 '           <input type="reset" class="btn btn-default btn-footer btn-footer-left"/>'+
                 '           <input type="submit" class="btn btn-primary btn-footer btn-footer-right"/>'+
-                '     </div>'+
-                '  </nav>'+
-                '</div>	'+
-                '       ' +
-                '    </div>' +
+                '         </div>'+
+                '       </nav>'+
+                '     </div>	'+
+                '     </div>' +
                 '</form>';
 NS.UI.Form.editors.Text.templateSrc.stacked =
                 '<div class="form-group input-text">' +

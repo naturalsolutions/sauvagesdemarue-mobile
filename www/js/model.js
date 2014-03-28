@@ -302,8 +302,9 @@ app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
 // The OccurenceDataValue Model picture no required
 app.models.OccurenceDataValueNoRequired = Backbone.Model.extend({
 	defaults: {
-	  milieu:'Mur',
-	  sended:0
+    milieu:'Mur',
+    sended:0,
+    photo:'undefined'
 	},
 
 },{
@@ -319,13 +320,13 @@ app.models.OccurenceDataValueNoRequired = Backbone.Model.extend({
       milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Pelouse', label:'Pelouse'},{val:'Mur', label:'Mur'},{val:'Plate bande', label:'Plate bande'},{val:'Pied d\'arbre', label:'Pied d\'arbre'} ,{val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
       photo: { 
-				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)',
+				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)',required: false,
 				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
 			},
     note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)',required: false},
   }, 
   dao: app.dao.OccurenceDataValueDAO,
-  verboseName: 'Occurence'
+  verboseName: 'OccurencePhotoNoRequired'
 });
 // The OccurenceDataValue Collection picture no required
 app.models.OccurenceDataValueNoRequiredCollection =Backbone.Collection.extend({
@@ -342,7 +343,7 @@ app.models.OccurenceDataValueNoRequiredCollection =Backbone.Collection.extend({
 app.models.ParcoursDataValue = Backbone.Model.extend({
 	defaults: {
   cote:'Pair',
-	// state:0
+  state:6
 	},
 },{
   table : 'TdataObs_parcours',
