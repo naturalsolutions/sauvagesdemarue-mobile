@@ -36,11 +36,14 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
-        instance.save().done( function(model, response, options) {
-										app.globals.currentFilter.length = 0;
-										app.globals.currentFilterTaxonIdList.length = 0;
-          sauvages.notifications.obsSaveSuccess();
-        });
+        instance.save()
+										.done( function(model, response, options) {
+											app.globals.currentFilter.length = 0;
+											app.globals.currentFilterTaxonIdList.length = 0;
+										 sauvages.notifications.obsSaveSuccess();
+										})
+										.fail(function(error){console.log(error)})
+						;
       });
     },
     afterRender: function () {
@@ -87,11 +90,14 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
-        instance.save().done( function(model, response, options) {
-										app.globals.currentFilter.length = 0;
-										app.globals.currentFilterTaxonIdList.length = 0;
+        instance.save()
+										.done( function(model, response, options) {
+												app.globals.currentFilter.length = 0;
+											app.globals.currentFilterTaxonIdList.length = 0;
           sauvages.notifications.obsSaveSuccess();
-        });
+												})
+										.fail(function(error){console.log(error)})
+								;
       });
     },
     afterRender: function () {
@@ -146,11 +152,14 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								var self = this;
-        instance.save().done( function(model, response, options) {
-										app.globals.currentFilter.length = 0;
-										app.globals.currentFilterTaxonIdList.length = 0;
-										sauvages.notifications.obsSaveSuccess(self.options.localisation);
-        });
+        instance.save()
+										.done( function(model, response, options) {
+												app.globals.currentFilter.length = 0;
+												app.globals.currentFilterTaxonIdList.length = 0;
+												sauvages.notifications.obsSaveSuccess(self.options.localisation);
+										})
+										.fail(function(error){console.log(error)})
+										;
       });
     },
     afterRender: function () {
@@ -254,7 +263,9 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 												}
 										}
 								});
-						});
+						})
+						.fail(function(error){console.log(error)})
+						;
 				});
   },
  
@@ -449,8 +460,8 @@ app.views.RegionPageView= app.utils.BaseView.extend({
   },
 
 		selectRegion : function(evt){
-				var objCurrentTarget=$(event.target);
-    var idCurrentTarget= objCurrentTarget['context']['id'];
+				var objCurrentTarget=$(evt.target);
+				var idCurrentTarget= objCurrentTarget['context']['id'];
 				app.route.navigate('#maregion/'+idCurrentTarget+'', {trigger: true});
 				return false;
 		},	
