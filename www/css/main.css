@@ -425,6 +425,9 @@ label {
 }
 
 /***Footer***/
+#footer {
+		z-index: 100;
+}
 #footer .btn[disabled],#footer .btn.disabled {
 		opacity: 1;
 		background-color: #9E9E8C;
