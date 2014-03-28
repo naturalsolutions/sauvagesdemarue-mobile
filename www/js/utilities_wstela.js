@@ -90,31 +90,32 @@ NS.WSTelaAPIClient = (function() {
         
                     var self = this;
                     dfdImage.done(function(observations) {
-                  self.sendToTelaWS(observations, obsPerParcours[idp][id].ido)
-                    .done(_.bind(function() {
-                        // Mise a jour de l'obs sended = 1
-                        this.nbSavePerObs[this.idp]['nbObsSent'] += 1
-                        if (this.ido !== -1 ) {
-                            this.cObservation.get(this.ido).set('sended',1);
-                            this.dfdObs.push(this.cObservation.get(this.ido).save());
-                        }
-                        else {
-                            this.dfdObs.push(new $.Deferred().resolve());
-                        }
-                        this.dfdObservation.resolve();
-                    }, {
-                        'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 
-                        'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs, 'dfdObservation' : dfdObservation
-                        }
-                    ))
-                    .fail(function() {
-                        //var self = this;
+                        self.sendToTelaWS(observations, obsPerParcours[idp][id].ido)
+                          .done(_.bind(function() {
+                              // Mise a jour de l'obs sended = 1
+                              this.nbSavePerObs[this.idp]['nbObsSent'] += 1
+                              if (this.ido !== -1 ) {
+                                  this.cObservation.get(this.ido).set('sended',1);
+                                  this.dfdObs.push(this.cObservation.get(this.ido).save());
+                              }
+                              else {
+                                  this.dfdObs.push(new $.Deferred().resolve());
+                              }
+                              this.dfdObservation.resolve();
+                          }, {
+                              'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 
+                              'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs, 'dfdObservation' : dfdObservation
+                              }
+                          ))
+                          .fail(function() {
+                              //var self = this;
+                              dfdObservation.reject();
+                              console.log( "dfdsendTelaWS"+error );
+                              //console.log (self.nbSavePerObs[this.idp]['nbObsSent']  + '/' + self.nbSavePerObs[this.idp]['nbObsSent'] );
+                          });
+                    }).fail(function(error) {
                         dfdObservation.reject();
-                        console.log( "error" );
-                        //console.log (self.nbSavePerObs[this.idp]['nbObsSent']  + '/' + self.nbSavePerObs[this.idp]['nbObsSent'] );
-                    });
-                    }).fail(function() {
-                        dfdObservation.reject();
+                        console.log('dfdimage'+error);
                     });
             }
                 }else{
