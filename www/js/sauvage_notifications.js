@@ -51,8 +51,8 @@ function() {
       delay: 1,
       btnLabel: '', 
       onClose: function() {
-         if (localisation !== null) {
-            app.route.navigate('identification/'+localisation, {trigger: true});
+         if (localisation) {
+            app.route.navigate('identification/' + localisation, {trigger: true});
          }else{
             app.route.navigate('identification', {trigger: true});
          }  
