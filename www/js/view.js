@@ -13,6 +13,8 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
+		  this.model.set('identified', false);
+				this.model.constructor.schema.photo.validators = [new NS.UI.Form.validators.PictureConditional(this.model)];
     this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
 				$('.page-title').replaceWith("<div class='page-title'>Sauvage non identifiée</div>");
   },
@@ -33,6 +35,7 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
+						
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));

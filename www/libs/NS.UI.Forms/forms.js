@@ -74,6 +74,15 @@ NS.UI = (function(ns) {
 																return value;
 								};
 				};
+
+    validators.PictureConditional = function(instance) {
+								this.msg = "Une photo est requise.";
+        this.instance = instance;
+								this.validate = function(value) {
+												if (!this.instance.identified && (typeof value === 'undefined'))
+																throw new ValidationError(this.msg);
+								};
+				};
     
     var editors = {};
 
@@ -81,9 +90,7 @@ NS.UI = (function(ns) {
      * Base class for all editors
      */
     var BaseEditor = BaseView.extend({
-        validOptions: ['id', 'name', 'initialData', 'label', 'required', 'helpText', 'inline'],
-
-								validators: [],
+        validOptions: ['id', 'name', 'initialData', 'label', 'required', 'validators', 'helpText', 'inline'],
 
 								defaults: {
             helpText: '',
@@ -95,6 +102,9 @@ NS.UI = (function(ns) {
             BaseView.prototype.initialize.apply(this, arguments);
             _.defaults(options, this.defaults);
             _.extend(this, _.pick(options, this.validOptions));
+            if (!('validators' in options)) {
+                this.validators = [];
+            }
             if (this.required) this.validators.push(new validators.Required());
         },
 
@@ -157,12 +167,15 @@ NS.UI = (function(ns) {
     });
 
     editors.Text = BaseEditor.extend({
-        validators: [new validators.NotBlank()],
-
         templateId: 'editor-text',
 
         events: {
             'blur input': function(e) {this.validate();}
+        },
+
+								initialize: function () {
+            BaseEditor.prototype.initialize.apply(this, arguments);
+            this.validators.push(new validators.NotBlank());
         },
 
 								clearValidationErrors: function () {
@@ -201,7 +214,10 @@ NS.UI = (function(ns) {
     });
     
     editors.Email = editors.Text.extend({
-								validators: [new validators.Email()]
+								initialize: function () {
+            editors.Text.prototype.initialize.apply(this, arguments);
+            this.validators.push(new validators.Email());
+        }
 				});
     
     editors.Textarea = BaseEditor.extend({
@@ -247,8 +263,11 @@ NS.UI = (function(ns) {
 				});
 
     editors.Number = editors.Text.extend({
-								validators: [new validators.Number()],
-						
+								initialize: function () {
+            editors.Text.prototype.initialize.apply(this, arguments);
+            this.validators = [new validators.Number()];
+        },
+
 								postProcessData: function (rawData) {
 												return parseFloat(rawData);
 								}
@@ -844,7 +863,6 @@ NS.UI = (function(ns) {
 
         onSubmit: function(e) {
             e.preventDefault();
-
             // /!\ We rely on .trigger() being synchronous here. It feels weak.
             this.validate();
 
@@ -866,11 +884,11 @@ NS.UI = (function(ns) {
                 '</form>',
             inline: ''
         },
+        validators: validators,
         editors: editors  // Keep a reference to editor classes in order to allow templateSrc customization
     });
 		
 				editors.Picture = BaseEditor.extend({
-        validators: [new validators.NotFiles()],
 								templateId: 'editor-picture',
 
         getValue: function() {
@@ -914,7 +932,8 @@ NS.UI = (function(ns) {
         },
 
 								initialize : function() {
-													BaseEditor.prototype.initialize.apply(this, arguments);	
+            BaseEditor.prototype.initialize.apply(this, arguments);
+            this.validators.push(new validators.PictureConditional(arguments));
 													this.optCamera = _.defaults(this.options.optCamera || {}, {
 																	quality: 50,
 																	correctOrientation: false,
@@ -923,6 +942,7 @@ NS.UI = (function(ns) {
 																	destinationType: 'navigator.camera.DestinationType.FILE_URI'
 													});
 									},
+        
 
 								loadPhoto : function () {      
 												var input = document.querySelector('input[type=file]');

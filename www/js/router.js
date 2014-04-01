@@ -223,7 +223,7 @@ app.Router = Backbone.Router.extend({
         if (app.globals.currentrue !== undefined) {
           var idCurrentRue = app.globals.currentrue.get('id');
         }
-        var obs = new app.models.OccurenceDataValueNoRequired({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName')});
+        var obs = new app.models.OccurenceDataValue({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName')});
 
         obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
         obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);

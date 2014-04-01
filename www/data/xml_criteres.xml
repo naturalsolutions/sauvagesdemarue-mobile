@@ -1,25 +1,25 @@
 <keys>
 				<groupe id="1">
 					<nom>Arbres</nom>
-					<media>images/pictos/icone_arbre.png</media>
+					<media>icone_arbre.png</media>
 					<criteres><critere id="1.3">
 							<label>Quelle est la forme des feuilles ? </label>
 							<description>La feuille peut-être composée (formée de folioles) ou simple (lobée ou entière).</description>
-							<valeurs><valeur code="1.3.0" media="images/pictos/forme_de_la_feuille_simple_lobee.png">simple lobée</valeur><valeur code="1.3.1" media="images/pictos/forme_de_la_feuille_composee.png">composée</valeur><valeur code="1.3.2" media="images/pictos/forme_de_la_feuille_simple_entiere.png">simple entière</valeur></valeurs></critere><critere id="1.4">
+							<valeurs><valeur code="1.3.0" media="forme_de_la_feuille_simple_lobee.png">simple lobée</valeur><valeur code="1.3.1" media="forme_de_la_feuille_composee.png">composée</valeur><valeur code="1.3.2" media="forme_de_la_feuille_simple_entiere.png">simple entière</valeur></valeurs></critere><critere id="1.4">
 							<label>Comment est le bord des feuilles ?</label>
 							<description>Le contour de la feuille peut être lisse ou denté.</description>
-							<valeurs><valeur code="1.4.0" media="images/pictos/bord_de_la_feuille_dents.png">dents</valeur><valeur code="1.4.1" media="images/pictos/bord_de_la_feuille_lisse.png">lisse</valeur></valeurs></critere><critere id="1.5">
+							<valeurs><valeur code="1.4.0" media="bord_de_la_feuille_dents.png">dents</valeur><valeur code="1.4.1" media="bord_de_la_feuille_lisse.png">lisse</valeur></valeurs></critere><critere id="1.5">
 							<label>Comment sont disposées les feuilles ?</label>
 							<description>Les feuilles peuvent avoir une disposition alterne, opposée ou verticillée autour de la tige.</description>
-							<valeurs><valeur code="1.5.0" media="images/pictos/disposition_des_feuilles_sur_la_tige_alterne.png">alterne</valeur><valeur code="1.5.1" media="images/pictos/disposition_des_feuilles_sur_la_tige_opposee.png">opposée</valeur><valeur code="1.5.2" media="images/pictos/disposition_des_feuilles_sur_la_tige_verticillee.png">verticillée</valeur></valeurs></critere><critere id="1.6">
+							<valeurs><valeur code="1.5.0" media="disposition_des_feuilles_sur_la_tige_alterne.png">alterne</valeur><valeur code="1.5.1" media="disposition_des_feuilles_sur_la_tige_opposee.png">opposée</valeur><valeur code="1.5.2" media="disposition_des_feuilles_sur_la_tige_verticillee.png">verticillée</valeur></valeurs></critere><critere id="1.6">
 							<label>La plante est-elle poilue ?</label>
 							<description>Les feuilles et la tige peuvent être recouverts de poils.</description>
-							<valeurs><valeur code="1.6.0" media="images/pictos/pilosite_avec.png">avec</valeur><valeur code="1.6.1" media="images/pictos/pilosite_sans.png">sans</valeur></valeurs></critere><critere id="1.7">
+							<valeurs><valeur code="1.6.0" media="pilosite_avec.png">avec</valeur><valeur code="1.6.1" media="pilosite_sans.png">sans</valeur></valeurs></critere><critere id="1.7">
 							<label>Quelle est la couleur des fleurs ?</label>
 							<description>Les fleurs peuvent avoir de nombreuses couleurs : blanche, bleu, jaune, rouge, vert ou rose/violet.</description>
-							<valeurs><valeur code="1.7.0" media="images/pictos/couleur_blanche.png">blanche</valeur><valeur code="1.7.1" media="images/pictos/couleur_jaune.png">jaune</valeur><valeur code="1.7.2" media="images/pictos/couleur_rose.png">rose</valeur><valeur code="1.7.3" media="images/pictos/couleur_violet.png">violet</valeur><valeur code="1.7.4" media="images/pictos/couleur_verte.png">verte</valeur><valeur code="1.7.5" media="images/pictos/couleur_bleu.png">bleu</valeur><valeur code="1.7.7" media="images/pictos/couleur_vert.png">vert</valeur><valeur code="1.7.8" media="images/pictos/couleur_rouge.png">rouge</valeur><valeur code="1.7.9" media="images/pictos/couleur_blanc.png">blanc</valeur></valeurs></critere><critere id="1.8">
+							<valeurs><valeur code="1.7.0" media="couleur_blanche.png">blanche</valeur><valeur code="1.7.1" media="couleur_jaune.png">jaune</valeur><valeur code="1.7.2" media="couleur_rose.png">rose</valeur><valeur code="1.7.3" media="couleur_violet.png">violet</valeur><valeur code="1.7.4" media="couleur_verte.png">verte</valeur><valeur code="1.7.5" media="couleur_bleu.png">bleu</valeur><valeur code="1.7.7" media="couleur_verte.png">vert</valeur><valeur code="1.7.8" media="couleur_rouge.png">rouge</valeur><valeur code="1.7.9" media="couleur_blanche.png">blanc</valeur></valeurs></critere><critere id="1.8">
 							<label>Quelle est la forme des fleurs ? </label>
 							<description>Que voit-on comme forme dès que l'on observe la fleur ? </description>
-							<valeurs><valeur code="1.8.0" media="images/pictos/morphotype_de_fleur_ombelle.png">ombelle</valeur><valeur code="1.8.1" media="images/pictos/morphotype_de_fleur_5_petales.png">5 pétales</valeur><valeur code="1.8.2" media="images/pictos/morphotype_de_fleur_epi.png">épi</valeur><valeur code="1.8.3" media="images/pictos/morphotype_de_fleur_papillonacee.png">papillonacée</valeur><valeur code="1.8.4" media="images/pictos/morphotype_de_fleur_asteracee.png">astéracée</valeur><valeur code="1.8.5" media="images/pictos/morphotype_de_fleur_labiee.png">labiée</valeur><valeur code="1.8.7" media="images/pictos/morphotype_de_fleur_4_petales.png">4 pétales</valeur><valeur code="1.8.8" media="images/pictos/morphotype_de_fleur_asteracee.png">asteracée</valeur></valeurs></critere></criteres>
+							<valeurs><valeur code="1.8.0" media="morphotype_de_fleur_ombelle.png">ombelle</valeur><valeur code="1.8.1" media="morphotype_de_fleur_5_petales.png">5 pétales</valeur><valeur code="1.8.2" media="morphotype_de_fleur_epi.png">épi</valeur><valeur code="1.8.3" media="morphotype_de_fleur_papillonacee.png">papillonacée</valeur><valeur code="1.8.4" media="morphotype_de_fleur_asteracee.png">astéracée</valeur><valeur code="1.8.5" media="morphotype_de_fleur_labiee.png">labiée</valeur><valeur code="1.8.7" media="morphotype_de_fleur_4_petales.png">4 pétales</valeur><valeur code="1.8.8" media="morphotype_de_fleur_asteracee.png">asteracée</valeur></valeurs></critere></criteres>
 			</groupe>
 			</keys>
