@@ -48,7 +48,15 @@ function loadXmlTaxa(){
         
         //Stockage des caractères associés aux taxons
         $(this).find('CRITERIAS VALUE').each(function(){
+          //test si une critère contient plusieurs valeurs séparés par une virgule
+          if ($(this).attr('code').indexOf(',') !== -1) {
+            var multiValeur = $(this).attr('code').split(',');
+            $.each(multiValeur,function (l){
+              arrCriteriaData.push(' SELECT '+oTaxon['taxonId'] +",'"+this+"' ");
+            })
+          }else{
            arrCriteriaData.push(' SELECT '+oTaxon['taxonId'] +",'"+$(this).attr('code')+"' ");
+          }
         });
         arr.push(runQuery(sqlTaxon , [oTaxon['taxonId'],oTaxon['fk_group'],oTaxon['commonName'],
                 oTaxon['scientificName'], oTaxon['description'], oTaxon['picture']]));
