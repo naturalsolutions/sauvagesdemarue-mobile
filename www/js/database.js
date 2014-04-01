@@ -48,7 +48,7 @@ function loadXmlTaxa(){
         
         //Stockage des caractères associés aux taxons
         $(this).find('CRITERIAS VALUE').each(function(){
-          //test si une critère contient plusieurs valeurs séparés par une virgule
+          //test si un critère contient plusieurs valeurs séparées par une virgule
           if ($(this).attr('code').indexOf(',') !== -1) {
             var multiValeur = $(this).attr('code').split(',');
             $.each(multiValeur,function (l){
