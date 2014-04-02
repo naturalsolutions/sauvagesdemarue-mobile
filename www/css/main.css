@@ -547,9 +547,11 @@ font-size: 25px;
 		background-size: 100%;
 		background-repeat: no-repeat;
 }
-.container-home .row {
-		margin: 0px -15px;
+#home-page-content > div > div.row > div {
+		padding-left: 0;
+		padding-right: 0;
 }
+
 .first a img{
 		margin-left:50%;
 		display: block;
