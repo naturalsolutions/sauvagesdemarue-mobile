@@ -35,9 +35,9 @@
 																				</div>
 																				<div id="collapse<%= i %>" class="panel-collapse collapse" >
 																								<div class="panel-body">
-																												<ul>
+																												<ul class="list-group">
 																												<% if (group.length === 0){ %>
-																																<li>
+																																<li class="list-group-item">
 																																				<div>
 																																						<p>la rue ne contient pas d'observations.</p>
 																																				</div>
@@ -46,7 +46,7 @@
 																																<%  
 																																	_.each(group,function(item,key,list){
 																																%>
-																																<li>
+																																<li class="list-group-item">
 																																				<div class="clearfix">
 																																						<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %></p>
 																																				<% console.log(item.get('photo'));if(item.get('photo')!== "undefined") { %>

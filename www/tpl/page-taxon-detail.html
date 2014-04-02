@@ -10,8 +10,8 @@
         }       
       %>
       <li class="loading-slideshow">
+        <img src = "<%= picture %>" alt = "<%= data.commonName %> image <%= key %>" />
         <label><%= item.get('author')%></label>
-       <img src = "<%= picture %>" alt = "<%= data.commonName %> image <%= key %>" />
       </li>
       <%
       });

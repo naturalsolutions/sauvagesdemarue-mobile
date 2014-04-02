@@ -347,12 +347,12 @@ background-color: #007600;
 }
 .panel-group .panel,.panel-heading{
 		border-radius:1px;
-		background: #28717E;
+		background: none;
 		border-color: rgba(0,0,0,0.4);
 }
 .panel-default>.panel-heading {
 		color: white;
-		background-color: rgba(0,0,0,0.2);
+		background: none;
 		border-color: rgba(0,0,0,0.4);
 }
 .panel-heading.rueEnCours {
@@ -392,9 +392,9 @@ padding-left: 10px;
 .panel-group .panel+.panel {
  margin-top: 0px;
 }
-/*.list-group {
-		color:#333;
-}*/
+.list-group-item {
+background: none;
+}
 /*****tab*****/
 
 .nav-tabs {
@@ -764,7 +764,6 @@ body.pad-bottom-top.cleliste.cle, .cleliste.cle .mm-page #header {
   display: -moz-box;
   display: box;
   width: 100%;
-  background-color:white;   
 }
 .page-block-sub-title{
 display: inline-block;
@@ -801,12 +800,12 @@ border-bottom: 1px solid rgba(0, 0, 0, 0.25);;
 li.item-list-alphabetique{
   background:rgba(0, 0, 0, 0.25);
 }
-li:nth-child(odd){
+/*li:nth-child(odd){
 		background:transparent;
 }
 li:nth-child(even){
 		background:rgba(0, 0, 0, 0.25);
-}
+}*/
 ul.nav-list ul {
   padding-left: 0;
 }
@@ -816,7 +815,7 @@ ul.nav-list ul {
 		padding:5px;
 }
 #obs-list-content .loc-container {
-		margin: 10px 0px 180px;
+		margin: 0px 180px;
 }
 /*#obs-list-content .panel-default>.panel-heading.rueEnCours{
 		background-color: #A0CA10;
@@ -852,7 +851,13 @@ ul.nav-list ul {
   height:5px;
 }
 .flexslider .slides > li:first-child {display: list-item;}
-
+#taxon-detail-content > div.loc-container > div.flexslider > div > ul > li.loading-slideshow.flex-active-slide {
+		background: none;
+}
+#taxon-detail-content > div.loc-container > div.flexslider > div > ul > li.loading-slideshow.flex-active-slide > label {
+		padding-left: 5px;
+		color: #333;
+}
 /***DETAIL TAXON***/
 /*#taxon-detail-content .loc-container{
   margin:20px 10px 0px;
