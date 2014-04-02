@@ -916,10 +916,10 @@ margin: 10px;
 #Provence-Alpes-Cotes-Azur{
 		background-image: url('./region/Provence-Alpes-Cotes-Azur/icon-region.png');
 		background-repeat: no-repeat;
-		width: 32px;
-		height: 35px;
+		width: 50px;
+		height: 55px;
 		display: inline-block;
-		margin: 10px 10px 10px 0px;
+		margin: 12px 10px 10px 0px;
 		float:left;
 }
 #map-region > svg {
