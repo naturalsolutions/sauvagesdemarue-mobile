@@ -547,7 +547,7 @@ font-size: 25px;
 		background-size: 100%;
 		background-repeat: no-repeat;
 }
-#home-page-content > div > div.row > div {
+#home-page-content > div > div.row > div,#ma-region-page-content > div > div.row > div {
 		padding-left: 0;
 		padding-right: 0;
 }
@@ -817,7 +817,7 @@ ul.nav-list ul {
 		padding:5px;
 }
 #obs-list-content .loc-container {
-		margin: 0px 180px;
+		margin: 0px 0px 180px;
 }
 /*#obs-list-content .panel-default>.panel-heading.rueEnCours{
 		background-color: #A0CA10;
