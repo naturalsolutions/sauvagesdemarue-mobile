@@ -642,7 +642,6 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 						app.globals.currentFilterTaxonIdList.length = 0;
       $("#taxonNb").html(app.globals.cListAllTaxonsRegion.models.length);
     }
-				console.log(app.globals.currentFilterTaxonIdList);
   }
 
 });
