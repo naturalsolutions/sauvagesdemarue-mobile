@@ -539,6 +539,7 @@ a.btn.btn-footer{
 
 #home-page-content .col-xs-12.col-sm-12 p {
 		display: inline-block;
+		-webkit-margin-after: 0em;
 }
 #home-page-content, #home-page-content > div {
 		height: 100%;
@@ -887,6 +888,11 @@ margin: 10px;
 		width: 30%;
 		float: left;
 }
+#ma-region-page-content .row p{
+		white-space: normal;
+		max-width: 80%;
+		-webkit-margin-after: 0em;
+}
 #Provence-Alpes-Cotes-Azur{
 		background-image: url('./region/Provence-Alpes-Cotes-Azur/icon-region.png');
 		background-repeat: no-repeat;
@@ -897,19 +903,16 @@ margin: 10px;
 		float:left;
 }
 #map-region > svg {
-height: 250px;
+		height: 250px;
 }
 /***********MEDIA QUERIE**********/
-@media (min-width: 768px){
-  #carousel-container {
-				width: 100%;
-  }
-}
+
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 
 /* Small devices (tablets, 768px and up) */
-@media all and (min-width: @screen-sm-min) {
+@media all and (min-width: 768px) {
+		body{background-color: red;}
 		#home-page-content .first {
 				background-image: url('images/ENTETE-menu/entete-home-992.jpg');
 		}
@@ -922,14 +925,14 @@ height: 250px;
 }
 
 /* Medium devices (desktops, 992px and up) */
-@media all and (min-width: @screen-md-min) { 
+@media all and (min-width: 992px ) { 
 		#home-page-content .first {
 				background-image: url('images/ENTETE-menu/entete-home-1280.jpg');
 		}
 }
 
 /* Large devices (large desktops, 1200px and up) */
-@media (min-width: @screen-lg-min) { ... }
+@media (min-width: 1200px) { ... }
 
 
 /******RATIO*****/
@@ -937,15 +940,30 @@ height: 250px;
 @media all and (device-aspect-ratio: 4/3){
 		#home-page-content .first {height: 38%;}
 }
+@media all and (aspect-ratio: 4/3){
+		#home-page-content .first {height: 38%;}
+}
 /*Ratio 1,775% Iphone 5*/
-@media all and (device-aspect-ratio: 16/9){
+@media all and (device-aspect-ratio: 640/1136){
+			#home-page-content .first {height: 28.6%;}
+}
+@media all and (aspect-ratio: 640/1136){
 			#home-page-content .first {height: 28.6%;}
 }
 /*Ratio 1,5% Iphone 4S 3S*/
-@media all and (device-aspect-ratio: 3/2){
+@media all and (device-aspect-ratio: 2/3){
 			#home-page-content .first {height: 34%;}
 }
-
+@media all and (aspect-ratio: 2/3){
+			#home-page-content .first {height: 34%;}
+}
+/*Ratio 0,625 ex : Android tablet GT-P5110T*/
+@media all and (device-aspect-ratio: 5/8){
+			#home-page-content .first {height: 31%;}
+}
+@media all and (aspect-ratio: 5/8){
+			#home-page-content .first {height:31%}
+}
 
 /*******SURCHARGE DE TWITTER BOOTSTRAP*******/
 
@@ -974,8 +992,6 @@ height: 250px;
 
 .navbar-fixed-top{
   position: fixed;
- /* background:whitesmoke;
-  min-height:43px;*/
 }
 
 .notification-list{
