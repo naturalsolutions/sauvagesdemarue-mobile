@@ -536,16 +536,18 @@ a.btn.btn-footer{
 }
 
 /********HOME*********/
-#home-page-content [class^="icon-"], [class*=" icon-"] {
-font-size: 25px;
-}
+
 #home-page-content .col-xs-12.col-sm-12 p {
 		display: inline-block;
 }
+#home-page-content, #home-page-content > div {
+		height: 100%;
+}
 #home-page-content .first{
-		background-image: url('images/ENTETE-menu/entete-home-1280.jpg');
+		background-image: url('images/ENTETE-menu/entete-home-768.jpg');
 		background-size: 100%;
 		background-repeat: no-repeat;
+		background-clip: content-box;
 }
 #home-page-content > div > div.row > div,#ma-region-page-content > div > div.row > div {
 		padding-left: 0;
@@ -569,13 +571,10 @@ font-size: 25px;
   display:block;
 }
 #home-page-content .first{
-		height: 32%;
-		min-height: 240px;
-		max-height: 655px;
-		max-width: 1280px;
+		height: 38%;
 }
 /****Smartphones (portrait)*****/
-@media only screen and (max-height : 320px){
+@media  (max-height : 320px){
     #home-bonhomme {
     margin: 1% 5px 1px 60%;
     width:30px;
@@ -660,7 +659,6 @@ height: 100%;
 		background: -ms-linear-gradient(left, rgba(138,46,30,1) 0%, rgba(240,47,23,1) 16%, rgba(240,47,23,1) 84%, rgba(201,51,38,1) 93%, rgba(150,36,28,1) 99%, rgba(150,36,28,1) 100%);
 		background: linear-gradient(to right, rgba(138,46,30,1) 0%, rgba(240,47,23,1) 16%, rgba(240,47,23,1) 84%, rgba(201,51,38,1) 93%, rgba(150,36,28,1) 99%, rgba(150,36,28,1) 100%);
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8a2e1e', endColorstr='#96241c', GradientType=1 );
-
 		border-left: 3px solid rgba(210,47,23,1);
 }
 .languette-left{
@@ -681,13 +679,11 @@ height: 100%;
 
 #languette a{
 		color:white;
-		/*display: table-row;*/
 		color: rgba(20,40,40,0.6);
 		text-shadow: 1px 4px 4px red, 0 0 0 #000, 1px 4px 4px red;
 		text-decoration: none;
 }
 #languette .glyphicon{
-		/*display: table-cell;*/
 		vertical-align: middle;
 		top: initial;
 		font-size: x-large;
@@ -722,13 +718,6 @@ background: linear-gradient(to right,  #7c0000 0%,#ff0000 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c0000', endColorstr='#ff0000',GradientType=1 ); /* IE6-8 */
 
 }
-
-/*body.pad-bottom-top.cleliste.liste, .cleliste.liste .mm-page #header {
-		margin-left: 4%;
-}
-body.pad-bottom-top.cleliste.cle, .cleliste.cle .mm-page #header {
-		margin-right: 4%;
-} */
 .taxon-list-item {
 	width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.25);;
@@ -755,7 +744,6 @@ body.pad-bottom-top.cleliste.cle, .cleliste.cle .mm-page #header {
 }
 
 .taxonName .taxon-img-thumb {
-  /*width: 67px;*/
   margin: 3px 5px 3px 3px;
   float: left;
   border-radius:4px;
@@ -788,9 +776,6 @@ margin-top: 3px;
 z-index: 1;
 right: 70px;
 }
-.btnAddObsList{
- 
-}
 .item-list-alphabetique p {
 -webkit-margin-start: 6px;
 -webkit-margin-after: 0px;
@@ -819,12 +804,6 @@ ul.nav-list ul {
 #obs-list-content .loc-container {
 		margin: 0px 0px 180px;
 }
-/*#obs-list-content .panel-default>.panel-heading.rueEnCours{
-		background-color: #A0CA10;
-}
-#obs-list-content .panel-default>.panel-heading{
-		background-color: lightgray;
-}*/
 .btnAddObsList .btn{
 		height:86px;
 }
@@ -839,9 +818,7 @@ ul.nav-list ul {
 #obs-list-content .panel-body li{
 		margin-bottom:4px;
 }
-/*#mesObsParRue .accordion-heading{
-		padding:10px;
-}*/
+
 /**********carousel-container*************/
 #taxon-detail-content .flexslider{
 	margin:0 0 35px;
@@ -861,9 +838,6 @@ ul.nav-list ul {
 		color: #333;
 }
 /***DETAIL TAXON***/
-/*#taxon-detail-content .loc-container{
-  margin:20px 10px 0px;
-}*/
 .btnObs{
   width:25%;
   margin:0px 32% 5px;
@@ -928,21 +902,58 @@ height: 250px;
 /***********MEDIA QUERIE**********/
 @media (min-width: 768px){
   #carousel-container {
-  width: 100%;
+				width: 100%;
   }
 }
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Small devices (tablets, 768px and up) */
+@media all and (min-width: @screen-sm-min) {
+		#home-page-content .first {
+				background-image: url('images/ENTETE-menu/entete-home-992.jpg');
+		}
+		.container-home .btn {
+				font-size: x-large;
+		}
+		#home-page-content [class^="icon-"], [class*=" icon-"] {
+				font-size: 25px;
+		}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media all and (min-width: @screen-md-min) { 
+		#home-page-content .first {
+				background-image: url('images/ENTETE-menu/entete-home-1280.jpg');
+		}
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: @screen-lg-min) { ... }
+
+
+/******RATIO*****/
+/*Ratio 1,33% android xlarge large small*/
+@media all and (device-aspect-ratio: 4/3){
+		#home-page-content .first {height: 38%;}
+}
+/*Ratio 1,775% Iphone 5*/
+@media all and (device-aspect-ratio: 16/9){
+			#home-page-content .first {height: 28.6%;}
+}
+/*Ratio 1,5% Iphone 4S 3S*/
+@media all and (device-aspect-ratio: 3/2){
+			#home-page-content .first {height: 34%;}
+}
+
 
 /*******SURCHARGE DE TWITTER BOOTSTRAP*******/
 
 @media (max-width: 767px){
   body {
-	padding-right: 0;
-	padding-left: 0;
+				padding-right: 0;
+				padding-left: 0;
   }
- /* [class*="span"], .uneditable-input[class*="span"], .row-fluid [class*="span"] {
-	width: 80%;
-	float: left;
-  }*/
   .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
 				margin-right: 0;
 				margin-left: 0;
@@ -987,51 +998,4 @@ height: 250px;
 
 
 /****Annuaire****/
-/*.btn-group-vertical > .btn:first-child {
-		-webkit-border-radius: 0;
-		-moz-border-radius: 0;
-		border-radius: 0;
-		margin-top: 0;
-}
 
-#aphabetic-list-el{
-		position: fixed !important;
-		right: 0px !important;
-		background: whitesmoke;
-}
-
-a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
-		z-index: 2;
-		color: #ffffff;
-		background-color: #008D00;
-		border-color: #008D00;
-}
-.internal-anchor {
-		border: 0;
-		font-size: xx-small !important;
-		min-width: 100%;
-		padding: 0;
-		margin: 5px 5px 0px;
-		background-color: transparent;
-		background-image: none;
-		height: 4%;
-}*/
-@media all {
-	#aphabetic-list-el {
-		overflow                    : hidden;
-		position                    : fixed;
-		display                     : block;
-		/*width                       : 100%;
-	  padding-top               : 60px;
-		padding-bottom              : 60px;
-		top                         : 0;*/
-	 height: 80%;  /* uncomment if desktop */
-	}
-/* #home-page-content {
-		overflow                    : hidden;
-		position                    : fixed;
-		display                     : block;
-		top                         : 0;
-  height: 95%;  /* uncomment if desktop */
-	}*/
-}

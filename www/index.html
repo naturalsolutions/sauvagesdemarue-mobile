@@ -23,7 +23,14 @@
             document.addEventListener("deviceready", onDeviceReady, false);
         }
         function onDeviceReady() {
-            navigator.splashscreen.hide();
+          navigator.splashscreen.hide();
+
+										var element = document.getElementById('deviceProperties');
+										element.innerHTML = 'Device Model: '    + device.model    + '<br />' +
+																														'Device Cordova: '  + device.cordova  + '<br />' +
+																														'Device Platform: ' + device.platform + '<br />' +
+																														'Device UUID: '     + device.uuid     + '<br />' +
+																														'Device Version: '  + device.version  + '<br />';
         }
     </script>
   </head>
@@ -69,10 +76,7 @@
     <!-- Scripts -->
     
     <script type="text/javascript">
-				//<![CDATA[
-				//window.addEventListener('load', function() {
-				//		FastClick.attach(document.body);
-				//}, false);
+
 		//12 plantes PACA
 		var LISTE_PACA = ["Ailante faux-vernis-du-Japon","Vergerette de Buenos Aires","Séneçon commun","Renouée des oiseaux","Sétaire verticillée","Faux millet","Pariétaire de Judée","Mercuriale annuelle","Laiteron délicat","Euphorbe réveille-matin","Centhrantus lilas d'Espagne","Arbre aux papillons"];
 		var lISTE_PACA_FKID = [8,35,94,110,125,130,136,167,199,202,204,227];		
