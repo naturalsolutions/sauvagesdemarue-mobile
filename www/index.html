@@ -24,14 +24,6 @@
         }
         function onDeviceReady() {
           navigator.splashscreen.hide();
-
-										var element = document.getElementById('deviceProperties');
-										element.innerHTML = 'Device Model: '    + device.model    + '<br />' +
-																														'Device Cordova: '  + device.cordova  + '<br />' +
-																														'Device Platform: ' + device.platform + '<br />' +
-																														'Device UUID: '     + device.uuid     + '<br />' +
-																														'Device Version: '  + device.version  + '<br />';
-        }
     </script>
   </head>
 
@@ -41,6 +33,7 @@
     <div>
 								<nav id="menu" class="hide">
 										<ul>
+												<li id='entete-menu'></li>
 												<li id='menu-item-home'><a ><span class="glyphicon glyphicon-home"></span> Accueil</a></li>
 												<li id='menu-item-je-participe'><a ><span class="glyphicon glyphicon-play"></span> Je participe</a></li>
 												<li id='menu-item-region'><a ><span class="icon-francegras-simple"></span> Ma région</a></li>
