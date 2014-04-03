@@ -282,7 +282,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
       $('input:submit', this.$el).attr('value', 'Terminer').removeClass('btn-primary').addClass('btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' >Annuler</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' >Retour à la saisie</button>");
      }
     //$('input:reset', this.$el).attr('style', 'display:none');
     $('h3', this.$el).attr('style', 'display:none');
@@ -475,11 +475,21 @@ app.views.RegionPageView= app.utils.BaseView.extend({
 		},
 
   beforeRender: function() {		
-						$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
-						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisis ta région !</h1>");
+				$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
+				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Choisis ta région !</h1>");
+				$('.icone-page-title').hide();		
   },
 		afterRender: function(){
-					$('#map', this.$el).load('css/map/map_regions.svg');
+				if(typeof device !== 'undefined'){
+						if(device.platform === "Android" && parseInt(device.version) < 3 ){
+								$('.liste-not-support-svg').remove();
+								$('#map', this.$el).append("<div class='row-fluid liste-not-support-svg' ><div class='row'><a id='Provence-Alpes-Cotes-Azur' class='btn btn-lg btn-danger android2'>Région Provence Alpes Côtes-d'Azur</a></div></div>");
+						}else{		
+								$('#map', this.$el).load('css/map/map_regions.svg');
+						}
+				}else{
+						$('#map', this.$el).load('css/map/map_regions.svg');
+				}
 		}
 });
 
@@ -504,7 +514,7 @@ app.views.MaRegionView= app.utils.BaseView.extend({
 
   beforeRender: function() {
 				if ( this.region === 'Provence-Alpes-Cotes-Azur') this.regionEditorial = "Provence Alpes Côtes d'Azur" ;
-				$('.icone-page-title').attr("id", this.region);
+				$('.icone-page-title').attr("id", "icone"+this.region);
 				$('.icone-page-title').show();		
 				$('.page-title').replaceWith("<div class='page-title'>Ma région</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+this.regionEditorial+"</h1>");
