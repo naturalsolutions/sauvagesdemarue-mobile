@@ -450,9 +450,9 @@ a.btn.btn-footer{
 }
 
 #footer > nav > div > .btn{
-		height: 80px;
+		height: 60px;
 		background: #DEDB00;
-		color: black;
+		color: #333;
 		font-size: large;
 		white-space: normal;
 }
@@ -562,7 +562,7 @@ a.btn.btn-footer{
 .container-home .btn{
   width:100%;
 		border-bottom: 3px solid rgba(0,0,0,0.5);
-		font-size: x-large;
+		font-size: large;
 }
 #home-bonhomme {
   margin: 25% 5px 5px 60%;  
@@ -921,6 +921,12 @@ margin: 10px;
 		}
 		#home-page-content [class^="icon-"], [class*=" icon-"] {
 				font-size: 25px;
+		}
+		.container-home .btn{
+		font-size: x-large;
+		}
+		#footer > nav > div > .btn {
+		height: 80px;
 		}
 }
 
