@@ -21,7 +21,6 @@ app.Router = Backbone.Router.extend({
     'ouSuisJe' : 'viewLocalisation',
     'credits' : 'viewCrédits',
     'utilisateur' : 'viewUtilisateur' ,
-     //'choixOutils' : 'viewChoixOutils',
     '' : 'viewHomePage'
   },
 
