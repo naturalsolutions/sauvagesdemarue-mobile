@@ -374,10 +374,9 @@ app.utils.geolocalisation = {
     console.log("Error: " + errors[error.code]);
   },
 }
-//-----------MMenu slide------------//
+// -------------------------------------------------- MMenu slide---------------------------------------------------- //
 $("#menu").mmenu({
   classes: "mm-slide",
-  //dragOpen: true
 });
 $('#menu').mmenu().on('opening.mm',function(){
   $('body').removeClass('pad-bottom-top');
@@ -390,7 +389,7 @@ $('#menu').mmenu().on('opened.mm',function(){
   app.utils.queryData.getObservationsTelaWSFormated()
     .done(function(data) {
         if (data.length !== 0 && $('#menu #menu-item-my-obs').has('#flagObs').length === 0) {
-          $('#menu #menu-item-my-obs .glyphicon').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-right'></span>");  
+          $('#menu #menu-item-my-obs .flag-container').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-right'></span>");  
         }
     });
 });
