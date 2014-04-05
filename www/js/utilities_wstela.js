@@ -65,32 +65,41 @@ NS.WSTelaAPIClient = (function() {
                             };
                             
                             var self = this;
-                            var gotFileEntry = function(fileEntry) {
+                            var gotFileEntry = _.bind(function(fileEntry) {
                                 console.log("got image file entry: " +  fileEntry.fullPath);
-                                fileEntry.file( function(file) {
+                                fileEntry.file( _.bind(function(file) {
                                     var reader = new FileReader();
-                                    reader.onloadend = function(evt) {
+                                    reader.onloadend = _.bind(function(evt) {
                                        console.log("Read complete!");
-                                       obs.image_b64 = evt.target.result;
-                                       obs.image_nom = file.name;
-                                       var observations = self.formatObsToSend(obs);
-                                       dfdImage.resolve(observations);
-                                    };
+                                       this.obs.image_b64 = evt.target.result;
+                                       this.obs.image_nom = this.file.name;
+                                       var observations = this.self.formatObsToSend(this.obs);
+                                        console.log(this.obs);
+                                       this.dfdImage.resolve(observations);
+                                    }, _.extend(this, {file: file}));
                                     reader.readAsDataURL(file);
-                                }, failFile);
-                            };
+                                }, this), failFile);
+                            }, {
+                                self: this,
+                                obs: obs,
+                                dfdImage: dfdImage
+                            });
                             window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
-                            }else{
-                                obs.image_b64 = obs.img;
-                                obs.image_nom = 'image-obs' + id;
-                                var observations = this.formatObsToSend(obs);
-                                dfdImage.resolve(observations);
-                            }                
+                        }else{
+                            obs.image_b64 = obs.img;
+                            obs.image_nom = 'image-obs' + id;
+                            var observations = this.formatObsToSend(obs);
+                            dfdImage.resolve(observations);
+                        }                
                     }
         
-                    var self = this;
-                    dfdImage.done(function(observations) {
-                        self.sendToTelaWS(observations, obsPerParcours[idp][id].ido)
+                    var self = this,
+                        context = {
+                            'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 
+                            'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs, 'dfdObservation' : dfdObservation
+                        };
+                    dfdImage.done(_.bind(function(observations) {
+                        self.sendToTelaWS(observations, this.ido)
                           .done(_.bind(function() {
                               // Mise a jour de l'obs sended = 1
                               this.nbSavePerObs[this.idp]['nbObsSent'] += 1
@@ -102,18 +111,14 @@ NS.WSTelaAPIClient = (function() {
                                   this.dfdObs.push(new $.Deferred().resolve());
                               }
                               this.dfdObservation.resolve();
-                          }, {
-                              'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 
-                              'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs, 'dfdObservation' : dfdObservation
-                              }
-                          ))
+                          }, this))
                           .fail(function() {
                               //var self = this;
                               dfdObservation.reject();
                               console.log( "dfdsendTelaWS"+error );
                               //console.log (self.nbSavePerObs[this.idp]['nbObsSent']  + '/' + self.nbSavePerObs[this.idp]['nbObsSent'] );
                           });
-                    }).fail(function(error) {
+                    }, context)).fail(function(error) {
                         dfdObservation.reject();
                         console.log('dfdimage'+error);
                     });
@@ -232,18 +237,21 @@ NS.WSTelaAPIClient = (function() {
         observations['obsId1'] = json;
             
         //@TODO traiter la réponse
-        //Gestion des defereds
+        //Gestion des deferreds
         observations['projet'] = this.tagprojet;
         observations['tag-obs'] = this.tagobs;
         observations['tag-img'] = this.tagimg;
         
-        if(typeof(app.globals.currentUser) !== 'undefined') { var email = app.globals.currentUser.get('email')}else{email = 'test@sauvages.fr'}; 
+        //@TODO User
+        if(typeof app.globals.currentUser !== 'undefined') { var email = app.globals.currentUser.get('email')}else{email = 'test@sauvages.fr'};
+
         observations['utilisateur'] = {
             'id_utilisateur': null,
             'prenom': null,
             'nom': null,
             'courriel': email
         }
+        console.log(observations);
         return observations;   
     };
     
