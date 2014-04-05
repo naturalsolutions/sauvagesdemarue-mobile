@@ -11,6 +11,7 @@
     <access origin="*" />
     <preference name="Orientation" value="portrait"/>
     <preference name="DisallowOverscroll" value="true"/>
-
+    <preference name="SplashScreen" value="splash" />
+    <preference name="SplashScreenDelay" value="10000" />
 </widget>
 
