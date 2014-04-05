@@ -53,7 +53,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 						$('.input-text', this.$el).attr('style', 'display:none');
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Retour aux résultats</button>");
       $('h3', this.$el).attr('style', 'display:none');
     },
 		
@@ -105,7 +105,7 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
     },
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Retour aux résultats</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
@@ -168,7 +168,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
     afterRender: function () {
 						$('input:text', this.$el).addClass('disabled');
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Annuler</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Retour aux résultats</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
@@ -275,7 +275,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
   afterRender: function () {
     if (this.isNew)  {
       $('input:submit', this.$el).attr('value', sauvages.messages.begin_street);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' >Annuler</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' >Retour à l'accueil</button>");
 				}
     else{
 						$('.page-title').replaceWith("<div class='page-title'>"+sauvages.messages.end_street+"</div>");
@@ -423,7 +423,7 @@ app.views.FormUserView = NS.UI.Form.extend({
 								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' >Modifier</button>");
 						}
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' >Annuler</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' >Retour à l'accueil</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-user'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
     },
@@ -887,8 +887,10 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				"dragright" : "swipeIdentification"
   },
 		swipeIdentification : function(event){
-				app.route.navigate(this.hrefIdentification , {trigger: true, replace: true});
 				event.gesture.preventDefault;
+				  if( event.gesture.direction == 'right' && event.gesture.velocityY < 0.04){
+								app.route.navigate(this.hrefIdentification , {trigger: true, replace: true});
+						}
 		}
 });
 

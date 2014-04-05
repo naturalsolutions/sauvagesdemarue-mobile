@@ -50,7 +50,7 @@
 																																				<div class="clearfix">
 																																						<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %></p>
 																																				<% console.log(item.get('photo'));if(item.get('photo')!== "undefined") { %>
-																																								<img class="taxon-img-thumb img-rounded pull-left" style ="width:50px;" id="<%= item.get('photo') %>" src="<%= item.get('photo') %>">
+																																								<img class="taxon-img-thumb img-rounded pull-left" style ="width:50px;"  src="css/images/image-par-defaut.jpg">
 																																				<% } %>				
 																																				
 																																						<button type="button" class="destroyObs btn btn-default pull-right" id="<%= item.get('id') %>"><span class="glyphicon glyphicon-trash"></span></button>
