@@ -933,7 +933,7 @@ NS.UI = (function(ns) {
 
 								initialize : function() {
             BaseEditor.prototype.initialize.apply(this, arguments);
-            this.validators.push(new validators.PictureConditional(arguments));
+           // this.validators.push(new validators.PictureConditional(arguments));
 													this.optCamera = _.defaults(this.options.optCamera || {}, {
 																	quality: 50,
 																	correctOrientation: false,
