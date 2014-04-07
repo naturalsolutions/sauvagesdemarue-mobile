@@ -32,9 +32,6 @@ app.Router = Backbone.Router.extend({
     app.globals.cListAllTaxonsRegion = new app.models.TaxonLiteCollection();
     app.globals.regionTaxonCaracValuesCollection = new app.models.TaxonCaracValuesCollection();
 
-    $(window).on("hashchange", app.Router.hashChange); // this will run before backbone's route handler
-    $(window).on("beforeunload", app.Router.beforeUnload);
-
     //Démarrage de l'écoute GPS
     app.utils.geolocalisation.watchCurrentPosition();
     // Keep track of the history of pages (we only store the page URL). Used to identify the direction
@@ -57,6 +54,7 @@ app.Router = Backbone.Router.extend({
     var self= this;
     if ($(".loading-splash").length !== 0) {
       setTimeout(function() {
+        $('body').css('background-color', '#28717E');
         $(".loading-splash").remove();
         $('#splash-screen').remove();
         var currentView = new app.views.HomePageView();
