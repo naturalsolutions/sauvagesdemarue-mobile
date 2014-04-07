@@ -3,17 +3,26 @@ html,body{
 }
 body{
 		color: white;
-		background-color: #28717E;
+		background-color: #68656f;
 		-webkit-font-smoothing: antialiased;	
 }
 #content{
-
+		
 }
 h2 {
 font-size: x-large;
 font-weight: 200;
 }
+/*------------Disable selection/copy in UIWebView --------------*/
+*{
+	-webkit-touch-callout:none;
+  -webkit-user-select:none;
+	-webkit-tap-highlight-color:rgba(255,255,255,0);
+}
 
+input {
+		-webkit-user-select: auto;
+}
 /*------------@font-face--------------*/
 @font-face {
 	font-family: 'sauvages';
@@ -547,7 +556,7 @@ a.btn.btn-footer{
 		background-color: #333;
 }
 #home-page-content .first{
-		background-image: url('images/ENTETE-menu/entete-home-768.jpg');
+		background-image: url('images/ENTETE-menu/entete768-large-ratio15.jpg');
 		background-size: 100%;
 		background-repeat: no-repeat;
 		background-clip: content-box;
@@ -574,7 +583,7 @@ a.btn.btn-footer{
   display:block;
 }
 #home-page-content .first{
-		height: 38%;
+		height: 43%;
 }
 /****Smartphones (portrait)*****/
 @media  (max-height : 320px){
@@ -910,11 +919,11 @@ margin: 10px;
 #map-region > svg {
 		height: 250px;
 }
-/*******************************************/
-/****************MEDIA QUERIE***************/
-/*******************************************/
+/*******************************************************/
+/**********************MEDIA QUERIE*********************/
+/*******************************************************/
 /* Not Small devices (480px and up) */
-@media all and (min-width: 320px) and (-webkit-min-device-pixel-ratio : 1.3) and (min-height:481px){
+@media all and (min-width: 320px) and (min-height:481px){
 		.container-home .btn {
 				font-size: x-large;
 		}
@@ -940,14 +949,14 @@ margin: 10px;
 /* Small devices (tablets, 768px and up) */
 @media all and (min-width: 768px) {
 		#home-page-content .first {
-				background-image: url('images/ENTETE-menu/entete-home-992.jpg');
+				background-image: url('images/ENTETE-menu/entete992-large-ratio15.jpg');
 		}
 }
 
 /* Medium devices (desktops, 992px and up) */
 @media all and (min-width: 992px ) { 
 		#home-page-content .first {
-				background-image: url('images/ENTETE-menu/entete-home-1280.jpg');
+				background-image: url('images/ENTETE-menu/entete1280-large-ratio15.jpg');
 		}
 }
 
@@ -958,24 +967,24 @@ margin: 10px;
 /******RATIO*****/
 /*Ratio 1,33% android xlarge large small*/
 @media all and (device-aspect-ratio: 4/3){
-		#home-page-content .first {height: 38%;}
+		#home-page-content .first {height: 43%;}
 }
 @media all and (aspect-ratio: 4/3){
-		#home-page-content .first {height: 38%;}
+		#home-page-content .first {height:43%;}
 }
 /*Ratio 1,775% Iphone 5*/
 @media all and (device-aspect-ratio: 40/71){
-			#home-page-content .first {height: 28.6%;}
+			#home-page-content .first {height: 36.6%;}
 }
 @media all and (aspect-ratio: 40/71){
-			#home-page-content .first {height: 28.6%;}
+			#home-page-content .first {height: 36.6%;}
 }
 /*Ratio 1,5% Iphone 4S 3S*/
 @media all and (device-aspect-ratio: 2/3){
-			#home-page-content .first {height: 34%;}
+			#home-page-content .first {height: 43%;}
 }
 @media all and (aspect-ratio: 2/3){
-			#home-page-content .first {height: 34%;}
+			#home-page-content .first {height: 43%%;}
 }
 /*Ratio 0,625 ex : Android tablet GT-P5110T*/
 @media all and (device-aspect-ratio: 5/8){
@@ -986,11 +995,19 @@ margin: 10px;
 }
 /*Ratio 0,625 ex : samsung GT-19305*/
 @media all and (device-aspect-ratio: 9/16){
-			#home-page-content .first {height: 28.5%;}
+			#home-page-content .first {height: 36.5%;}
 }
 @media all and (aspect-ratio: 9/16){
-			#home-page-content .first {height: 28.5%;}
+			#home-page-content .first {height: 36.5%;}
 }
+/*Ratio 0,625 ex : google nexus S*/
+@media all and (device-aspect-ratio: 3/5){
+			#home-page-content .first {height: 40%;}
+}
+@media all and (aspect-ratio: 3/5){
+			#home-page-content .first {height: 40%;}
+}
+
 /*******SURCHARGE DE TWITTER BOOTSTRAP*******/
 
 @media (max-width: 767px){
