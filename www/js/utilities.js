@@ -453,13 +453,6 @@ $('#menu-item-region').click(function(){
     $("#menu").trigger("close");
   }
 });
-if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
-$(".mm-page").hammer({ /* options */ }).on('event', function(ev) { 
-    console.dir("hamme"+ev);
-    ev.preventDefault();
-}); 
-//$(".mm-page").on(event, { /* options */ }, function(ev) {
-//    console.log("on"+ev);
-//    ev.preventDefault();
-//}); 
+
+
 

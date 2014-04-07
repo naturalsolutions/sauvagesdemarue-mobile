@@ -543,7 +543,6 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
   
   events: {
     "click input[type=checkbox]": "filterTaxon",
-				"dragleft" : "swipeTaxonList",
 				"click #supprimer-filtre" : "suppFiltre",
     "click .help": "helpShow"
   },
@@ -566,11 +565,6 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
     $('#languette').remove();
 		},
 		
-		swipeTaxonList : function(event){
-				app.route.navigate(this.href , {trigger: true, replace: true});
-    console.log("event gesture"+event.gesture);
-				event.gesture.preventDefault();
-		},
 
 		helpShow :function(){
 				var self=this;
@@ -657,7 +651,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   
   events: {
     "click input[type=checkbox]": "filterTaxon",
-				"dragleft" : "swipeTaxonList",
 				"click #supprimer-filtre" : "suppFiltre",
     "click .help": "helpShow"
   },
@@ -683,11 +676,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
     $('#languette').remove();
 		},
 		
-		swipeTaxonList : function(event){
-				app.route.navigate('taxonlist', {trigger: true, replace: true});
-    console.log("event gesture"+event.gesture);
-				event.gesture.preventDefault();
-		},
 		helpShow :function(){
 				var self=this;
 				var criteriaName = "Aide de l'assistant d'identification";

@@ -375,6 +375,10 @@ background-color: #007600;
 .panel-heading.rueEnCours > a {
 		color: #0C2125;
 }
+.panel-heading > a {
+		width: 100%;
+		display: inline-block;
+}
 .panel-group a, .panel-group {
 		color: white;
 }
@@ -407,7 +411,8 @@ padding-left: 10px;
  margin-top: 0px;
 }
 .list-group-item {
-background: none;
+		background: none;
+		padding: 10px 5px;
 }
 /*****tab*****/
 
@@ -433,6 +438,9 @@ background-color: rgba(0,0,0,0.5);
 border: 1px solid rgba(0,0,0,0.3);
 border-bottom-color: transparent;
 		cursor: default;
+}
+.nav>li>a:hover, .nav>li>a:focus {
+		background-color: rgb(40, 113, 126);
 }
 /*****label********/
 label {
@@ -823,12 +831,15 @@ ul.nav-list ul {
 		margin-top: 28px;
 }
 #obs-list-content .panel-body p{
-		width: 70%;
+		width: 69%;
 		float:left;
 		padding: 5px 0px 0px 10px; *
 }
 #obs-list-content .panel-body li{
 		margin-bottom:4px;
+}
+.taxon-img-thumb {
+		margin-right: 1%;
 }
 
 /**********carousel-container*************/
