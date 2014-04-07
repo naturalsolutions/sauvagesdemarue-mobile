@@ -982,7 +982,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		changeIcon: function(event){
 				$('#mesObsParRue').on('hide.bs.collapse', function () {
 						$(this).children().children().children().children('.glyph-collpase').removeClass('glyphicon-minus');
-						$(this).children().children().children().children('.glyph-collpase').addClass('glyphicon-plus');
+						$(this).children().children().children().children('.glyph-collpase').addClass('glyp.hicon-plus');
 				});
 				$('#mesObsParRues').on('show.bs.collapse',  function () {
 						$(this).children().children().children().children(".glyph-collpase").removeClass('glyphicon-plus');
@@ -992,12 +992,13 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   sendObs: function (event) {
     //Get current Obs
     var obsTosend ;
+				var emailUser;
     var self = this;
 				var currentUser = new app.models.User({'userId': 1});
 				currentUser.fetch({
           success: function(data) {
-            var emailUser = data.get('email');
-												if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 ) {
+            self.emailUser = data.get('email');
+												if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 ) {
 														var dfd = $.Deferred();
 														app.utils.queryData.getObservationsTelaWSFormated()
 																.done(
@@ -1006,7 +1007,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																				if (data.length !== 0 ) {
 																						//Send to tela via cel ws
 																						var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-																						wstela.sendSauvageObservation(data, self.collection, self.parcours).done(function() { 
+																						wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() { 
 																								self.render();
 																								//@TODO trouver mieux !!
 																								$("#tabObs a[href='#rue']").tab('show');

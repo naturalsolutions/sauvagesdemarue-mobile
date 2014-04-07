@@ -20,7 +20,7 @@ NS.WSTelaAPIClient = (function() {
      *  formate les données de l'observation pour le POST
      ****/
      //@TODO catcher les erreurs ajax
-    wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours){
+    wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, userEmail){
         $("body").find("a,button").addClass("disabled");
         $("#content").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
         var dfd = $.Deferred();
@@ -71,7 +71,7 @@ NS.WSTelaAPIClient = (function() {
                                        console.log("Read complete!");
                                        this.obs.image_b64 = evt.target.result;
                                        this.obs.image_nom = this.file.name;
-                                       var observations = this.self.formatObsToSend(this.obs);
+                                       var observations = this.self.formatObsToSend(this.obs,userEmail);
                                        this.dfdImage.resolve(observations);
                                     }, _.extend(this, {file: file}));
                                     reader.readAsDataURL(file);
@@ -85,7 +85,7 @@ NS.WSTelaAPIClient = (function() {
                         }else{
                             obs.image_b64 = obs.img;
                             obs.image_nom = 'image-obs' + id;
-                            var observations = this.formatObsToSend(obs);
+                            var observations = this.formatObsToSend(obs,userEmail);
                             dfdImage.resolve(observations);
                         }                
                     }
@@ -182,7 +182,7 @@ NS.WSTelaAPIClient = (function() {
      /***
      * Fonction qui formate une observation en vue de son envoie vers tela
      * ***/
-    wsTelaApiClient.prototype.formatObsToSend= function (obs){
+    wsTelaApiClient.prototype.formatObsToSend= function (obs,userEmail){
         var observations = new Object();
                        
         //Traitement de l'observation
@@ -239,14 +239,11 @@ NS.WSTelaAPIClient = (function() {
         observations['tag-obs'] = this.tagobs;
         observations['tag-img'] = this.tagimg;
         
-        //@TODO User
-        if(typeof app.globals.currentUser !== 'undefined') { var email = app.globals.currentUser.get('email')}else{email = 'test@sauvages.fr'};
-
         observations['utilisateur'] = {
             'id_utilisateur': null,
             'prenom': null,
             'nom': null,
-            'courriel': email
+            'courriel': userEmail
         }
         return observations;   
     };
