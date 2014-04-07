@@ -20,7 +20,7 @@ font-weight: 200;
 	-webkit-tap-highlight-color:rgba(255,255,255,0);
 }
 
-input {
+input,select,textarea {
 		-webkit-user-select: auto;
 }
 /*------------@font-face--------------*/
@@ -355,6 +355,7 @@ outline-width: 0px;
 color: #ffffff;
 background-color: #007600;
 }
+
 /*****panel******/
 .panel-group .panel-heading+.panel-collapse .panel-body {
 		border-top: 4px solid rgba(0,0,0,0.4);
