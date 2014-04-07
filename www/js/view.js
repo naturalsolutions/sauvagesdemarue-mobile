@@ -25,8 +25,18 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 		},
 	
 		events:{ 
-		'click .annuler-enregistrement-obs': 'annulerTerminer'
+		'click .annuler-enregistrement-obs': 'annulerTerminer',
+		'click .btn-footer-right' : 'verifPhoto'
   },
+
+		verifPhoto : function(e){
+				var val = this.$el.find('img').attr('src');
+				if (val === '') {
+						$('.img-preview').siblings('.help-inline').html('La photo de la plante est obligatoire.').addClass('error');
+						return false;
+				}
+		},
+
   annulerTerminer : function(evt){
 				window.history.back();
         return false;
@@ -50,6 +60,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
       });
     },
     afterRender: function () {
+						$('textarea',this.$el).focus();
 						$('.input-text', this.$el).attr('style', 'display:none');
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
@@ -79,8 +90,17 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 		},
 	
 		events:{ 
-		'click .annuler-enregistrement-obs': 'annulerTerminer'
+		'click .annuler-enregistrement-obs': 'annulerTerminer',
+  	'click .btn-footer-right' : 'verifPhoto'
   },
+
+		verifPhoto : function(e){
+				var val = this.$el.find('img').attr('src');
+				if (val === '') {
+						$('.img-preview').siblings('.help-inline').html('La photo de la plante est obligatoire.').addClass('error');
+						return false;
+				}
+		},
   annulerTerminer : function(evt){
 			window.history.back();
         return false;
@@ -160,6 +180,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 												app.globals.currentFilter.length = 0;
 												app.globals.currentFilterTaxonIdList.length = 0;
 												sauvages.notifications.obsSaveSuccess(self.options.localisation);
+												console.log(instance);
 										})
 										.fail(function(error){console.log(error)})
 										;
