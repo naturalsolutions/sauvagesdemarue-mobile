@@ -988,10 +988,10 @@ margin: 10px;
 }
 /*Ratio 0,625 ex : Android tablet GT-P5110T*/
 @media all and (device-aspect-ratio: 5/8){
-			#home-page-content .first {height: 31%;}
+			#home-page-content .first {height: 41%;}
 }
 @media all and (aspect-ratio: 5/8){
-			#home-page-content .first {height:31%;}
+			#home-page-content .first {height:41%;}
 }
 /*Ratio 0,625 ex : samsung GT-19305*/
 @media all and (device-aspect-ratio: 9/16){
