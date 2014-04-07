@@ -234,8 +234,6 @@ function init(){
   _.templateSettings['variable'] = 'data';
   window.deferreds = [];
 
-  
-  
 
 		initDB();
 
@@ -245,10 +243,6 @@ function init(){
     app.globals.cListAllTaxons.fetch({
        success: function(data) {
           app.route = new app.Router();
-    
-          $(window).on("hashchange", app.route.hashChange); // this will run before backbone's route handler
-          $(window).on("beforeunload", app.route.beforeUnload);
-
           Backbone.history.start();
           var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
           if (!FirstLoad ) {

@@ -45,7 +45,6 @@ NS.WSTelaAPIClient = (function() {
                     var dfdImage = $.Deferred(),
                     dfdObservation = $.Deferred();
                     dfdObs.push(dfdObservation);
-                    console.log("img obs " + typeof obs.img)
                     if(obs.img === null || obs.img === "" || obs.img === "undefined"){
                         var observations = this.formatObsToSend(obs);
                         dfdImage.resolve(observations);
@@ -54,7 +53,6 @@ NS.WSTelaAPIClient = (function() {
                         //mobile
                             var imageURI = obs.img;
                             if(device.platform === 'iOS'){var imageURI = 'file://' + obs.img;}
-                            console.log(imageURI);
                             var failSystem = function(error) {
                                 console.log("failed with error code: " + error.code);
                                 dfdImage.reject();
@@ -74,7 +72,6 @@ NS.WSTelaAPIClient = (function() {
                                        this.obs.image_b64 = evt.target.result;
                                        this.obs.image_nom = this.file.name;
                                        var observations = this.self.formatObsToSend(this.obs);
-                                        console.log(this.obs);
                                        this.dfdImage.resolve(observations);
                                     }, _.extend(this, {file: file}));
                                     reader.readAsDataURL(file);
@@ -104,11 +101,11 @@ NS.WSTelaAPIClient = (function() {
                               // Mise a jour de l'obs sended = 1
                               this.nbSavePerObs[this.idp]['nbObsSent'] += 1
                               if (this.ido !== -1 ) {
-                                  this.cObservation.get(this.ido).set('sended',1);
-                                  this.dfdObs.push(this.cObservation.get(this.ido).save());
+                                this.cObservation.get(this.ido).set('sended',1);
+                                this.dfdObs.push(this.cObservation.get(this.ido).save());
                               }
                               else {
-                                  this.dfdObs.push(new $.Deferred().resolve());
+                                this.dfdObs.push(new $.Deferred().resolve());
                               }
                               this.dfdObservation.resolve();
                           }, this))
@@ -251,7 +248,6 @@ NS.WSTelaAPIClient = (function() {
             'nom': null,
             'courriel': email
         }
-        console.log(observations);
         return observations;   
     };
     
