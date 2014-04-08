@@ -46,7 +46,7 @@ NS.WSTelaAPIClient = (function() {
                     dfdObservation = $.Deferred();
                     dfdObs.push(dfdObservation);
                     if(obs.img === null || obs.img === "" || obs.img === "undefined"){
-                        var observations = this.formatObsToSend(obs);
+                        var observations = this.formatObsToSend(obs,userEmail);
                         dfdImage.resolve(observations);
                     }else{
                         if (navigator.camera) {
@@ -71,7 +71,7 @@ NS.WSTelaAPIClient = (function() {
                                        console.log("Read complete!");
                                        this.obs.image_b64 = evt.target.result;
                                        this.obs.image_nom = this.file.name;
-                                       var observations = this.self.formatObsToSend(this.obs,userEmail);
+                                       var observations = this.self.formatObsToSend(this.obs,this.userEmail);
                                        this.dfdImage.resolve(observations);
                                     }, _.extend(this, {file: file}));
                                     reader.readAsDataURL(file);
@@ -79,7 +79,8 @@ NS.WSTelaAPIClient = (function() {
                             }, {
                                 self: this,
                                 obs: obs,
-                                dfdImage: dfdImage
+                                dfdImage: dfdImage,
+                                userEmail: userEmail
                             });
                             window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
                         }else{
@@ -92,7 +93,7 @@ NS.WSTelaAPIClient = (function() {
         
                     var self = this,
                         context = {
-                            'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 
+                            'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 'userEmail':userEmail,
                             'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs, 'dfdObservation' : dfdObservation
                         };
                     dfdImage.done(_.bind(function(observations) {
@@ -103,17 +104,16 @@ NS.WSTelaAPIClient = (function() {
                               if (this.ido !== -1 ) {
                                 this.cObservation.get(this.ido).set('sended',1);
                                 this.dfdObs.push(this.cObservation.get(this.ido).save());
+                                this.cObservation.get(this.ido).set('photo','');
                               }
                               else {
                                 this.dfdObs.push(new $.Deferred().resolve());
                               }
                               this.dfdObservation.resolve();
                           }, this))
-                          .fail(function() {
-                              //var self = this;
+                          .fail(function(error) {
                               dfdObservation.reject();
-                              console.log( "dfdsendTelaWS"+error );
-                              //console.log (self.nbSavePerObs[this.idp]['nbObsSent']  + '/' + self.nbSavePerObs[this.idp]['nbObsSent'] );
+                              console.log( "dfdsendTelaWS"+error.code );
                           });
                     }, context)).fail(function(error) {
                         dfdObservation.reject();
