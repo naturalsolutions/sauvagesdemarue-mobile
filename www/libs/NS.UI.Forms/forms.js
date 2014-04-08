@@ -39,7 +39,7 @@ NS.UI = (function(ns) {
 				};
 			
 				validators.Required = function() {
-								this.msg = 'Blank value not allowed here';
+								this.msg = 'Ce champ ne peut être vide.';
 								this.validate = function(value) {
 												if (typeof value === 'undefined')
 																throw new ValidationError(this.msg);
