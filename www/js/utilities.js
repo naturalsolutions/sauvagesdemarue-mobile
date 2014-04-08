@@ -390,7 +390,7 @@ $('#menu').mmenu().on('opened.mm',function(){
     .done(function(data) {
         if (data.length !== 0 && $('#menu #menu-item-my-obs').has('#flagObs').length === 0) {
           $('#menu #menu-item-my-obs .flag-container').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-right'></span>");  
-        }else{
+        }else if(data.length === 0 && $('#menu #menu-item-my-obs').has('#flagObs').length === 1){
           $('#flagObs').remove();
         }
     });
