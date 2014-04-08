@@ -13,8 +13,8 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
-		  this.model.set('identified', false);
-				this.model.constructor.schema.photo.validators = [new NS.UI.Form.validators.PictureConditional(this.model)];
+		  //this.model.set('identified', false);
+			//	this.model.constructor.schema.photo.validators = [new NS.UI.Form.validators.PictureConditional(this.model)];
     this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
 				$('.page-title').replaceWith("<div class='page-title'>Sauvage non identifiée</div>");
   },
@@ -25,14 +25,14 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 		},
 	
 		events:{ 
-		'click .annuler-enregistrement-obs': 'annulerTerminer',
-		'click .btn-footer-right' : 'verifPhoto'
+				'click .annuler-enregistrement-obs': 'annulerTerminer',
+				'click .btn-footer-right' : 'verifPhoto'
   },
 
 		verifPhoto : function(e){
-				var val = this.$el.find('img').attr('src');
+				var val = $('.editor-picture-img',this.$el).attr('src');
 				if (val === '') {
-						$('.img-preview').siblings('.help-inline').html('La photo de la plante est obligatoire.').addClass('error');
+						$('.img-preview').siblings('.help-inline').html('La photo est obligatoire.').addClass('error');
 						return false;
 				}
 		},
@@ -90,12 +90,12 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 		},
 	
 		events:{ 
-		'click .annuler-enregistrement-obs': 'annulerTerminer',
-  	'click .btn-footer-right' : 'verifPhoto'
+				'click .annuler-enregistrement-obs': 'annulerTerminer',
+				'click .btn-footer-right' : 'verifPhoto'
   },
 
 		verifPhoto : function(e){
-				var val = this.$el.find('img').attr('src');
+				var val = $('.editor-picture-img',this.$el).attr('src');
 				if (val === '') {
 						$('.img-preview').siblings('.help-inline').html('La photo de la plante est obligatoire.').addClass('error');
 						return false;
@@ -117,7 +117,7 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
 										.done( function(model, response, options) {
 												app.globals.currentFilter.length = 0;
 											app.globals.currentFilterTaxonIdList.length = 0;
-          sauvages.notifications.obsSaveSuccess();
+												sauvages.notifications.obsSaveSuccess();
 												})
 										.fail(function(error){console.log(error)})
 								;
@@ -395,8 +395,7 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 	},
 		
 		annuler: function(evt){
-				window.history.back();
-    return false;
+				app.route.navigate('', {trigger: true});
 		},
 
 
@@ -975,7 +974,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
     'click #send-obs': 'sendObs',
-			//	'click #submitEmail':'setEmail',
 				'click .destroyObs':'destroyObs',
 				'click .back-rue-en-cours':'backRueEnCours',
 				'click .back-home' : 'backHome',
@@ -1019,7 +1017,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																						wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() { 
 																								self.render();
 																								//@TODO trouver mieux !!
-																								$("#tabObs a[href='#rue']").tab('show');
+																								//$("#tabObs a[href='#rue']").tab('show');
 																								$('#dataloader-img').remove();
 																								$("body").find("a,button").removeClass("disabled");	
 																						});
