@@ -241,7 +241,7 @@ app.Router = Backbone.Router.extend({
     setTimeout(function() {
       app.utils.geolocalisation.getCurrentPosition();
       if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
-        var obs = new app.models.OccurenceDataValue({"fk_taxon": -2, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : "Non identifié"});
+        var obs = new app.models.OccurenceDataValue({fk_rue:app.globals.currentrue.get('id'), "name_taxon" : "inconnue"});
         obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
         obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
         var currentView = new app.views.AddSauvageOccurenceNonIdentifierView({model:obs});
@@ -259,7 +259,7 @@ app.Router = Backbone.Router.extend({
     setTimeout(function() {
       app.utils.geolocalisation.getCurrentPosition();
       if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
-        var obs = new app.models.OccurenceDataValue({"fk_taxon": -1, fk_rue:app.globals.currentrue.get('id'), "name_taxon" : ""});
+        var obs = new app.models.OccurenceDataValue({fk_rue:app.globals.currentrue.get('id'), "name_taxon" : ""});
         obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
         obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
         var currentView = new app.views.AddSauvageOccurencePasDansListeView({model:obs});
