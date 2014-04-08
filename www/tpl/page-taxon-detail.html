@@ -19,13 +19,14 @@
     </ul>
   </div>
 
-    <div class="">
-      <%= data.model.get('description') %>
-    </div>
-
-      <fieldset id ="radioCollection" class="" >
-        <ul id="values-list" class="criteriaList"></ul>
-      </fieldset>
+  <h3>Description</h3>
+  <p>
+    <%= data.model.get('description').replace(new RegExp(';','g'),'<br>') %>
+  </p>
+  <h3>Critères d'identification</h3>
+  <fieldset id ="radioCollection" class="" >
+    <ul id="values-list" class="criteriaList"></ul>
+  </fieldset>
     
   </div>
   <div id="wrapper-footer">
