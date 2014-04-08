@@ -85,6 +85,7 @@ app.models.Taxon = Backbone.Model.extend({
     picture : { title:'picture', type:'Text', sqltype:'NVARCHAR(500)',  required: true},
     pictures : {type: 'NestedModel',  model: 'app.models.PicturesCollection',className : 'PicturesCollection' , pk : 'taxonId', fk: 'fk_taxon', fetch: true, save:true},
     caracValues : {type: 'NestedModel', model: 'app.models.TaxonCaracValuesCollection', className : 'TaxonCaracValuesCollection', pk : 'taxonId', fk: 'fk_taxon', fetch: true, save:true},
+    regionPaca: { title:'regionPaca', type:'Number',sqltype:'INTEGER'}
   },
   dao: app.dao.TaxonDAO,
 });
@@ -108,6 +109,7 @@ app.models.TaxonLite = Backbone.Model.extend({
     commonName: { title:'commonName', type:'Text', sqltype:'NVARCHAR(200)',  required: true },
     scientificName: { title:'scientificName', type:'Text', sqltype:'NVARCHAR(500)',  required: true },
     picture : { title:'picture', type:'Text', sqltype:'NVARCHAR(500)',  required: true},
+    regionPaca: { title:'regionPaca', type:'Number',sqltype:'INTEGER'},
    },
   
   dao: app.dao.TaxonDAO,
@@ -285,6 +287,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
 				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
 			},
     note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)'},
+    regionPaca: { title:'regionPaca', type:'Number',sqltype:'INTEGER'}
   }, 
   dao: app.dao.OccurenceDataValueDAO,
   verboseName: 'Occurence'
@@ -298,45 +301,6 @@ app.models.OccurenceDataValuesCollection =Backbone.Collection.extend({
     return this.where({'fk_rue': fkrue});
   } 
 });
-
-// The OccurenceDataValue Model picture no required
-//app.models.OccurenceDataValueNoRequired = Backbone.Model.extend({
-//	defaults: {
-//    milieu:'Mur',
-//    sended:0,
-//    photo:'undefined'
-//	},
-//
-//},{
-//  table : 'TdataObs_occurences',
-//  schema: {
-//      id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
-//      latitude:{ type: 'hidden', title:'Latitude',sqltype:'REAL', required: true}, 
-//      longitude: { type: 'hidden', title:'Longitude',sqltype:'REAL', required: true} ,
-//      fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
-//      fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
-//      sended: { title:'sended',  type:'hidden', sqltype:'INTEGER' ,required: true},
-//      name_taxon: { title:'Espèce',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
-//      milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Pelouse', label:'Pelouse'},{val:'Mur', label:'Mur'},{val:'Plate bande', label:'Plate bande'},{val:'Pied d\'arbre', label:'Pied d\'arbre'} ,{val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
-//      datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
-//      photo: { 
-//				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)',
-//				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
-//			},
-//    note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)',required: false},
-//  }, 
-//  dao: app.dao.OccurenceDataValueDAO,
-//  verboseName: 'OccurencePhotoNoRequired'
-//});
-//// The OccurenceDataValue Collection picture no required
-//app.models.OccurenceDataValueNoRequiredCollection =Backbone.Collection.extend({
-//
-//  model : app.models.OccurenceDataValueNoRequis,
-//  
-//  getObsByRueId : function(fkrue) {
-//    return this.where({'fk_rue': fkrue});
-//  } 
-//});
 
 
 // The ParcoursDataValues Model

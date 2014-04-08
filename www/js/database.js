@@ -7,7 +7,7 @@
 // Taxon => Requête paramétrée (avec les ?) écrite en "dur", insertion valeur par valeur
 // Critère/Picture => Requête écrite en "dur", insertion par lot avec un select + UNION pour chaque donnée
 function loadXmlTaxa(){
-  var sqlTaxon = 'INSERT INTO Ttaxon ( taxonId,fk_group,commonName,scientificName,description,picture) VALUES (?,?,?,?,?,?) ';
+  var sqlTaxon = 'INSERT INTO Ttaxon ( taxonId,fk_group,commonName,scientificName,description,picture,regionPaca) VALUES (?,?,?,?,?,?,?) ';
 
   var sqlInsertPicture = 'INSERT INTO Tpicture ( fk_taxon,path,description,author) ';
   var sqlInsertCriteria = 'INSERT INTO TvalTaxon_Criteria_values ( fk_taxon,fk_carac_value) ';
@@ -43,9 +43,11 @@ function loadXmlTaxa(){
           });
         }
         else {
-          oTaxon['picture'] = 'NULL'; 
+          oTaxon['picture'] = 'NULL';
         }
-        
+        //Ajout d'une colonne par région
+        oTaxon['regionPaca']=parseInt($(this).find('REGIONPACA').text());
+
         //Stockage des caractères associés aux taxons
         $(this).find('CRITERIAS VALUE').each(function(){
           //test si un critère contient plusieurs valeurs séparées par une virgule
@@ -59,7 +61,7 @@ function loadXmlTaxa(){
           }
         });
         arr.push(runQuery(sqlTaxon , [oTaxon['taxonId'],oTaxon['fk_group'],oTaxon['commonName'],
-                oTaxon['scientificName'], oTaxon['description'], oTaxon['picture']]));
+                oTaxon['scientificName'], oTaxon['description'], oTaxon['picture'],oTaxon['regionPaca']]));
       });
       
       //Tip to simulate multiple row insert
