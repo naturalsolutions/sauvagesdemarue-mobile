@@ -49,7 +49,7 @@
 																																<li class="list-group-item">
 																																				<div class="clearfix">
 																																						<p><%= item.get('name_taxon') %> - <%= item.get('milieu') %></p>
-																																				<% console.log(item.get('photo'));if(item.get('photo')!== "undefined") { %>
+																																				<% if(item.get('photo') !== "undefined") { %>
 																																								<img class="taxon-img-thumb img-rounded pull-left" style ="width:50px;"  src="<%= item.get('photo') %>">
 																																				<% } %>				
 																																				
