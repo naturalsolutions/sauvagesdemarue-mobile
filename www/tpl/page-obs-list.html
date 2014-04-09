@@ -69,25 +69,23 @@
 								</div><!--tab-rue-->
 								<div class="tab-pane" id="espece">
 												<ul id="values-list" class="list-group">
-												<%
-																var groups = _.groupBy(data.collection.models,function(item,key,list){
-																				return item.get('name_taxon');
-																});
-																_.each(groups,function(group,i,list){
-																				var nameTaxon = group[0].get('name_taxon');	
+														<%
+																_.each(data.collection.models,function(group,i,list){
+																				var nameTaxon = group.get('name_taxon');
+																				var tagRegion = group.get('regionPaca');
 														%>    
 																<li class="list-group-item">
-																		<span class="badge"><%= group.length %></span>
+																		<span class="pull-right"><% if(tagRegion === 1){ %><img class="badge-localisation" src='css/region/Provence-Alpes-Cotes-Azur/icon-region.png'"/> <% } %></span>
 																		<span><%= nameTaxon %></span>
 																</li>
-																<% }); %>
+														<% }); %>
 												</ul>
 								</div>
     </div>
     
 		<div id="wrapper-footer">
 				<div id="footer" class="mm-fixed-bottom footer-default">
-						<nav class="bottom-navbar " role="navigation">
+						<nav class="bottom-navbar" role="navigation" >
 						<div class="btn-group btn-group-justified">
 								<% 	var rueEnCours = data.parcours.findWhere({'state': 0});	
 								%>
