@@ -65,7 +65,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 						$('.input-text', this.$el).attr('style', 'display:none');
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Retour aux résultats</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' type='button'>Retour aux résultats</button>");
       $('h3', this.$el).attr('style', 'display:none');
     },
 		
@@ -127,7 +127,7 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
     },
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Retour aux résultats</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' type='button' >Retour aux résultats</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
@@ -196,7 +196,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
     afterRender: function () {
 						$('input:text', this.$el).addClass('disabled');
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' >Retour aux résultats</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' type='button'>Retour aux résultats</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
@@ -303,14 +303,14 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
   afterRender: function () {
     if (this.isNew)  {
       $('input:submit', this.$el).attr('value', sauvages.messages.begin_street);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' >Retour à l'accueil</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' type='button' >Retour à l'accueil</button>");
 				}
     else{
 						$('.page-title').replaceWith("<div class='page-title'>"+sauvages.messages.end_street+"</div>");
       $('input:submit', this.$el).attr('value', 'Terminer').removeClass('btn-primary').addClass('btn-danger');
       $('input:text', this.$el).addClass('disabled');
       $('select', this.$el).addClass('disabled');
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' >Retour à la saisie</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' type='button'>Retour à la saisie</button>");
      }
     //$('input:reset', this.$el).attr('style', 'display:none');
     $('h3', this.$el).attr('style', 'display:none');
@@ -429,14 +429,14 @@ app.views.FormUserView = NS.UI.Form.extend({
       NS.UI.Form.prototype.initialize.apply(this, arguments);
 						var self = this;
 						if (this.initialData.email !== undefined) {
-								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' >Modifier</button>");
+								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button'>Modifier</button>");
 						}else{
 								this.on('submit:valid', function(instance) {
 										var self = this;
 												instance.set('userId', 1).save().done( function(model, response, options) {
 														instance.fetch({
 																success: function(data) {
-																		$('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' >Modifier</button>");
+																		$('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button' >Modifier</button>");
 																		sauvages.notifications.emailSaveSuccess();
 																		app.route.navigate('', {trigger: true});
 																}
@@ -447,10 +447,10 @@ app.views.FormUserView = NS.UI.Form.extend({
     },
     afterRender: function () {
 						if (this.initialData.email !== undefined) {
-								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' >Modifier</button>");
+								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button'>Modifier</button>");
 						}
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' >Retour à l'accueil</button>");
+						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' type='button'>Retour à l'accueil</button>");
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-user'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
     },
@@ -1017,7 +1017,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 														app.utils.queryData.getObservationsTelaWSFormated()
 																.done(
 																		function(data) {
-																				console.log(data);
 																				if (data.length !== 0 ) {
 																						//Send to tela via cel ws
 																						var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
