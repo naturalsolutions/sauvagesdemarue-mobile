@@ -75,14 +75,14 @@ NS.UI = (function(ns) {
 								};
 				};
 
-    validators.PictureConditional = function(instance) {
-								this.msg = "Une photo est requise.";
-        this.instance = instance;
-								this.validate = function(value) {
-												if (!this.instance.identified && (typeof value === 'undefined'))
-																throw new ValidationError(this.msg);
-								};
-				};
+//    validators.PictureConditional = function(instance) {
+//								this.msg = "Une photo est requise.";
+//        this.instance = instance;
+//								this.validate = function(value) {
+//												if (!this.instance.identified && (typeof value === 'undefined'))
+//																throw new ValidationError(this.msg);
+//								};
+//				};
     
     var editors = {};
 
