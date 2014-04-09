@@ -279,9 +279,22 @@ app.Router = Backbone.Router.extend({
     if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
       //teste si il n'y a pas de rue en cours
       if (typeof( app.globals.currentrue) === 'undefined') {
-        app.globals.currentrue = new app.models.ParcoursDataValue();
-		      var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
-		      self.displayView(currentView);  
+        var collParcours = new app.models.ParcoursDataValuesCollection();
+        var collParcoursAll = collParcours.fetch({
+          success: function(data) {
+            var modelRueEncours = data.findWhere({'state': 1});
+            if (modelRueEncours !== undefined) {
+              var currentView = new app.views.AddSauvageRueView({model:modelRueEncours});
+              self.displayView(currentView);  
+            }else{
+              app.globals.currentrue = new app.models.ParcoursDataValue();
+              var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
+              self.displayView(currentView);  
+            }
+        }
+      
+      });
+		      
       }
       else {
         var currentRueId = app.globals.currentrue.get('id');
