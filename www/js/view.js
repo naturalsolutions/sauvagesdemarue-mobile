@@ -49,6 +49,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+								instance.set('regionPaca', 0);
         instance.save()
 										.done( function(model, response, options) {
 											app.globals.currentFilter.length = 0;
@@ -113,6 +114,7 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+								instance.set('regionPaca', 0);
         instance.save()
 										.done( function(model, response, options) {
 												app.globals.currentFilter.length = 0;
@@ -174,6 +176,11 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+								if (this.options.localisation === "Provence-Alpes-Cotes-Azur") {
+										instance.set('regionPaca', 1);
+								}else{
+										instance.set('regionPaca', 0);
+								}
 								var self = this;
         instance.save()
 										.done( function(model, response, options) {
