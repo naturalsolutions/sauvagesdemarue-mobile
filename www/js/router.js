@@ -282,7 +282,7 @@ app.Router = Backbone.Router.extend({
         var collParcours = new app.models.ParcoursDataValuesCollection();
         var collParcoursAll = collParcours.fetch({
           success: function(data) {
-            var modelRueEncours = data.findWhere({'state': 1});
+            var modelRueEncours = data.findWhere({'state': 0});
             if (modelRueEncours !== undefined) {
               var currentView = new app.views.AddSauvageRueView({model:modelRueEncours});
               self.displayView(currentView);  
