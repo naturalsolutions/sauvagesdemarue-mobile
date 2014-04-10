@@ -462,13 +462,13 @@ function checkConnection() {
             var networkState = navigator.connection.type;
 
             var states = {};
-            states[Connection.UNKNOWN]  = 'Unknown connection';
-            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.UNKNOWN]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
+            states[Connection.ETHERNET] = 'Connexion ethernet';
             states[Connection.WIFI]     = 'WIFI';
-            states[Connection.CELL_2G]  = 'Cell 2G connection';
+            states[Connection.CELL_2G]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
             states[Connection.CELL_3G]  = '3G';
             states[Connection.CELL_4G]  = '4G';
-            states[Connection.CELL]     = 'Cell generic connection';
+            states[Connection.CELL]     = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
             states[Connection.NONE]     = "Vous n'êtes pas connecté à internet";
 
             return  states[networkState];
