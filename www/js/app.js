@@ -217,6 +217,9 @@ app.utils.BaseView = Backbone.View.extend({
 
 $().ready(function() {
   init();
+  //Détecte l'ouverture et la fermeture du clavier sur Android et cache le footer 
+  document.addEventListener("showkeyboard", function(){ $('.bottom-navbar').hide();}, false);
+  document.addEventListener("hidekeyboard", function(){ $('.bottom-navbar').show();}, false);
 }) ;
 $(document).ready(function() {
     new NS.UI.NotificationList();
@@ -293,6 +296,10 @@ function initDB(){
 
 
 //NS.UI.Form customize editors' template
+var stringVersion  = navigator.userAgent.toString();
+var stringVersionMatch = stringVersion.match(/4.1/i);
+var intVersionMatch =  parseInt(stringVersionMatch);
+
 NS.UI.Form.templateSrc.stacked = 
                 '<form>' +
                 '    <div class="form-content"></div>' +
@@ -307,36 +314,65 @@ NS.UI.Form.templateSrc.stacked =
                 '     </div>	'+
                 '     </div>' +
                 '</form>';
-NS.UI.Form.editors.Text.templateSrc.stacked =
-                '<div class="form-group input-text">' +
-                '<div class="input-group input-group-lg">'+
-                '   <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>'+
-                '   <label  class="sr-only" for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-                '   <input class="form-control input-lg" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" placeholder="<%- data.label %>"/>' +
-                ' </div>'+
-                '    <div class="controls">' +   
-                '        <div class="help-inline"></div>' +
-                '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
-                '    </div>' +
-                '</div>'
-;
-NS.UI.Form.editors.Select.templateSrc.stacked =
-		'<div class="form-group select">' +
-                ' <div class="input-group input-group-lg">'+
-                '     <span class="input-group-addon"><span class="glyphicon glyphicon-resize-full"></span></span>'+
-                '     <label class="sr-only" ><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-                '	    <select class="form-control input-lg" id="<%- data.id %>" name="<%- data.name %>" <% if (data.multiple) { %> multiple="multiple"<% } %>>' +
-                '            <% _.each(data.options, function(group) {' +
-                '                var isGroup = group.label != "";' +
-                '                if (isGroup) { %><optgroup label="<%- group.label %>"><% }' +
-                '                _.each(group.options, function(opt) { %><option value="<%- opt.val %>"<% if (_.contains(data.initialData, opt.val)) { %> selected="selected"<% } %>><%- opt.label %></option><% });' +
-                '                if (isGroup) { %></optgroup><% }' +
-                '            }); %>' +
-                '        </select>' +
-                ' </div>'+
-                '    <div class="controls">' +     
-                '        <div class="help-inline"></div>' +
-                '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
-                '    </div>' +
-                '</div>';
+  if (intVersionMatch < 4.1) {
+    NS.UI.Form.editors.Text.templateSrc.stacked =
+      '<div class="form-group">' +
+                    '    <label  for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+      '   <input class="form-control" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" />' +
+                    '    <div class="controls">' +   
+                    '        <div class="help-inline"></div>' +
+                    '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+                    '    </div>' +
+                    '</div>'
+    ;
+    NS.UI.Form.editors.Select.templateSrc.stacked =
+      '<div class="form-group">' +
+                    '    <label ><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+      '	<select class="form-control" id="<%- data.id %>" name="<%- data.name %>" <% if (data.multiple) { %> multiple="multiple"<% } %>>' +
+                    '            <% _.each(data.options, function(group) {' +
+                    '                var isGroup = group.label != "";' +
+                    '                if (isGroup) { %><optgroup label="<%- group.label %>"><% }' +
+                    '                _.each(group.options, function(opt) { %><option value="<%- opt.val %>"<% if (_.contains(data.initialData, opt.val)) { %> selected="selected"<% } %>><%- opt.label %></option><% });' +
+                    '                if (isGroup) { %></optgroup><% }' +
+                    '            }); %>' +
+                    '        </select>' +
+                    '    <div class="controls">' +     
+                    '        <div class="help-inline"></div>' +
+                    '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+                    '    </div>' +
+                    '</div>';
+  }else{
+    NS.UI.Form.editors.Text.templateSrc.stacked =
+                  '<div class="form-group input-text">' +
+                  '<div class="input-group input-group-lg">'+
+                  '   <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>'+
+                  '   <label  class="sr-only" for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+                  '   <input class="form-control input-lg" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" placeholder="<%- data.label %>"/>' +
+                  ' </div>'+
+                  '    <div class="controls">' +   
+                  '        <div class="help-inline"></div>' +
+                  '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+                  '    </div>' +
+                  '</div>'
+  ;
+    NS.UI.Form.editors.Select.templateSrc.stacked =
+    '<div class="form-group select">' +
+                  ' <div class="input-group input-group-lg">'+
+                  '     <span class="input-group-addon"><span class="glyphicon glyphicon-resize-full"></span></span>'+
+                  '     <label class="sr-only" ><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+                  '	    <select class="form-control input-lg" id="<%- data.id %>" name="<%- data.name %>" <% if (data.multiple) { %> multiple="multiple"<% } %>>' +
+                  '            <% _.each(data.options, function(group) {' +
+                  '                var isGroup = group.label != "";' +
+                  '                if (isGroup) { %><optgroup label="<%- group.label %>"><% }' +
+                  '                _.each(group.options, function(opt) { %><option value="<%- opt.val %>"<% if (_.contains(data.initialData, opt.val)) { %> selected="selected"<% } %>><%- opt.label %></option><% });' +
+                  '                if (isGroup) { %></optgroup><% }' +
+                  '            }); %>' +
+                  '        </select>' +
+                  ' </div>'+
+                  '    <div class="controls">' +     
+                  '        <div class="help-inline"></div>' +
+                  '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
+                  '    </div>' +
+                  '</div>';
+  }
 }
