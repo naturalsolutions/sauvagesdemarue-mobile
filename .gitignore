@@ -3,3 +3,5 @@
 merge
 platforms
 plugins
+node_modules
+build
