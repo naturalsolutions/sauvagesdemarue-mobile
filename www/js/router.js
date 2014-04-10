@@ -284,6 +284,7 @@ app.Router = Backbone.Router.extend({
           success: function(data) {
             var modelRueEncours = data.findWhere({'state': 0});
             if (modelRueEncours !== undefined) {
+              app.globals.currentrue = modelRueEncours;
               var currentView = new app.views.AddSauvageRueView({model:modelRueEncours});
               self.displayView(currentView);  
             }else{
