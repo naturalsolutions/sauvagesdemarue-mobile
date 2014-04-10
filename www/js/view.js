@@ -187,7 +187,6 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 												app.globals.currentFilter.length = 0;
 												app.globals.currentFilterTaxonIdList.length = 0;
 												sauvages.notifications.obsSaveSuccess(self.options.localisation);
-												console.log(instance);
 										})
 										.fail(function(error){console.log(error)})
 										;
@@ -399,18 +398,29 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 		events : {
 				"click .modifier-enregistrement"	: "updateEmail",
 				"click .annuler-enregistrement"	: "annuler",
+				"click .enable-email" : "enableInputEmail",
+				"keydown input" : "enableSave"
 	},
 		
 		annuler: function(evt){
 				app.route.navigate('', {trigger: true});
 		},
 
-
+		enableSave	: function(evt){
+				if ($('.btn-update', this.$el).hasClass('enable-email')) {
+						$('.btn-update', this.$el).addClass('modifier-enregistrement').removeClass('enable-email').html('Enregistrer');
+				}
+		},
+		
+		enableInputEmail: function(evt){
+				var isDisabled = $('input[type=text]').hasClass('disabled');
+				if (isDisabled) {
+						$('input[type=text]').removeClass('disabled');		
+				}		
+		},
 		updateEmail: function(evt){
 				var currentEmail = this.$el.find('input[type="text"]').val();
-    //var currentUser = new app.models.User();
-				//currentUser.set('userId',1)
-					this.model.set('email',String(currentEmail))
+				this.model.set('email',String(currentEmail))
 						.save();
 		},
 		
@@ -429,14 +439,16 @@ app.views.FormUserView = NS.UI.Form.extend({
       NS.UI.Form.prototype.initialize.apply(this, arguments);
 						var self = this;
 						if (this.initialData.email !== undefined) {
-								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button'>Modifier</button>");
+								//$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button'>Modifier</button>");
+								//$('input[type=text]').addClass('disabled');
 						}else{
 								this.on('submit:valid', function(instance) {
 										var self = this;
 												instance.set('userId', 1).save().done( function(model, response, options) {
 														instance.fetch({
 																success: function(data) {
-																		$('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button' >Modifier</button>");
+																		$('input[type=text]').addClass('disabled');
+																		$('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
 																		sauvages.notifications.emailSaveSuccess();
 																		app.route.navigate('', {trigger: true});
 																}
@@ -447,7 +459,8 @@ app.views.FormUserView = NS.UI.Form.extend({
     },
     afterRender: function () {
 						if (this.initialData.email !== undefined) {
-								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button'>Modifier</button>");
+								$('input[type=text]',this.$el).addClass('disabled');
+								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button'>Modifier</button>");
 						}
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' type='button'>Retour à l'accueil</button>");
@@ -581,7 +594,6 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 				$('body').addClass('cleliste cle');
 				$('body.cleliste.cle #content').append("<div id='languette' class='languette-right'><a href='#"+this.href+"'><span id='taxonNb'>"+ app.globals.cListAllTaxonsRegion.models.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
-				this.$el.hammer();
 		},
 		
 		remove: function(){
@@ -692,7 +704,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				if (app.globals.currentrue !== undefined) {
 						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
 				}
-				this.$el.hammer();
 		},
 		
 		remove: function(){
@@ -950,7 +961,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 		
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
-				console.log('remove détail taxon')
 				$('.page-block-title em').remove();
 				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
 		}
@@ -1004,12 +1014,13 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				});
 		}, 
   sendObs: function (event) {
-    //Get current Obs
+    var connect = checkConnection();
     var obsTosend ;
 				var emailUser;
     var self = this;
 				var currentUser = new app.models.User({'userId': 1});
-				currentUser.fetch({
+				if (connect === '4G' ||connect === '3G'||connect === 'WIFI'){
+						currentUser.fetch({
           success: function(data) {
             self.emailUser = data.get('email');
 												if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 ) {
@@ -1055,7 +1066,13 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 														self.render();
 														}
 										}
-				});
+						});
+						
+				}else{
+						sauvages.notifications.connection(connect);
+				}
+
+				
   },
 		destroyObs : function(event){
 						var self = this;
