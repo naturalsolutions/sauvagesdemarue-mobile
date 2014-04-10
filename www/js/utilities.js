@@ -456,5 +456,22 @@ $('#menu-item-region').click(function(){
   }
 });
 
+// -------------------------------------------------- checkConnection ---------------------------------------------------- //
+
+function checkConnection() {
+            var networkState = navigator.connection.type;
+
+            var states = {};
+            states[Connection.UNKNOWN]  = 'Unknown connection';
+            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.WIFI]     = 'WIFI';
+            states[Connection.CELL_2G]  = 'Cell 2G connection';
+            states[Connection.CELL_3G]  = '3G';
+            states[Connection.CELL_4G]  = '4G';
+            states[Connection.CELL]     = 'Cell generic connection';
+            states[Connection.NONE]     = "Vous n'êtes pas connecté à internet";
+
+            return  states[networkState];
+        }
 
 

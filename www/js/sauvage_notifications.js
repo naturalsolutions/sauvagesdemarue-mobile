@@ -133,58 +133,69 @@ function() {
           }
       });
    },
+
+   sauvages.connection= function connection(connect) {
+      var myModal = new NS.UI.NotificationModal({
+         type: '',
+         title: 'Connection à internet',
+         message: connect,
+         delay: '5',
+         btnLabel: ''
+      });
+   },
+
    sauvages.finDeProtocol = function finDeProtocol(msg) {
-			var myModal = new NS.UI.NotificationModal({
-				type: '',
-				title: 'Voulez-vous terminer votre parcours ?',
-				message:  msg,
-				delay: '',
-				btnLabel: '', 
-			});
-   myModal.$el.on('submit', 'form', _.bind(function(evt) {
-      evt.preventDefault();
-      $('#nodal').modal('hide');
-      $('#nodal').remove();
-      $('.modal-backdrop').remove();
-      $('body').removeClass('modal-open');
-   }, myModal))
-   myModal.$el.on('reset', 'form', _.bind(function(evt) {
-      evt.preventDefault();
-      $('#nodal').modal('hide');
-      $('#nodal').remove();
-      $('.modal-backdrop').remove();
-      $('body').removeClass('modal-open');
-      app.route.navigate('taxonlist', {trigger: true});
-   }, myModal))
-	},
+      var myModal = new NS.UI.NotificationModal({
+       type: '',
+       title: 'Voulez-vous terminer votre parcours ?',
+       message:  msg,
+       delay: '',
+       btnLabel: '', 
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      }, myModal))
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         app.route.navigate('taxonlist', {trigger: true});
+      }, myModal))
+    },
    sauvages.SortieProtocol = function SortieProtocol(msg) {
-			var myModal = new NS.UI.NotificationModal({
-				type: '',
-				title: 'Rue en cours',
-				message: msg,
-				delay: '',
-				btnLabel: '', 
-			});
-   myModal.$el.on('submit', 'form', _.bind(function(evt) {
-     evt.preventDefault();
-      $('#nodal').modal('hide');
-      $('#nodal').remove();
-      $('.modal-backdrop').remove();
-      $('body').removeClass('modal-open');
-      app.route.navigate('addParcours', {trigger: true, replace: true});
-      $("#menu").trigger("close");
-   }, myModal))
-   myModal.$el.on('reset', 'form', _.bind(function(evt) {
-      evt.preventDefault();
-      $('#nodal').modal('hide');
-      $('#nodal').remove();
-      $('.modal-backdrop').remove();
-      $('body').removeClass('modal-open');
-      //app.globals.currentFilter.length = 0;
-						//app.globals.currentFilterTaxonIdList.length = 0;
-      //app.route.navigate('identification', {trigger: true, replace: trues});
-      $("#menu").trigger("close"); 
-   }, myModal))
+      var myModal = new NS.UI.NotificationModal({
+       type: '',
+       title: 'Rue en cours',
+       message: msg,
+       delay: '',
+       btnLabel: '', 
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+        evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         app.route.navigate('addParcours', {trigger: true, replace: true});
+         $("#menu").trigger("close");
+      }, myModal))
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         //app.globals.currentFilter.length = 0;
+         //app.globals.currentFilterTaxonIdList.length = 0;
+         //app.route.navigate('identification', {trigger: true, replace: trues});
+         $("#menu").trigger("close"); 
+      }, myModal))
    }
 //sauvages.SortieProtocol = function SortieProtocol() {
 //      var myModal = new NS.UI.NotificationModal({
