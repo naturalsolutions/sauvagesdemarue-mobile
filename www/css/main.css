@@ -1,14 +1,13 @@
 html,body{
 		height : 100%;
+		width : 100%;
 }
 body{
 		color: white;
 		background-color: #68656f;
 		-webkit-font-smoothing: antialiased;	
 }
-#content{
-		
-}
+
 h2 {
 font-size: x-large;
 font-weight: 200;
@@ -88,9 +87,9 @@ width: 100%;
 		position: absolute;
 		top: 0;
 		left: 0;
-}
-#splash-screen img {
-		width: 100%;
+		background-image: url('images/splash-screen_v05-rapport1_6.png');
+		background-repeat: no-repeat;
+		background-size: 100%;
 }
 body > div.mm-page {
 		width: 100%;
@@ -971,46 +970,82 @@ margin: 10px;
 
 /******RATIO*****/
 /*Ratio 1,33% android xlarge large small*/
-@media all and (device-aspect-ratio: 4/3){
+@media all and (device-aspect-ratio: 3/4){
 		#home-page-content .first {height: 43%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport3_4.jpg');
+		}	
 }
-@media all and (aspect-ratio: 4/3){
+@media all and (aspect-ratio: 3/4){
 		#home-page-content .first {height:43%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport3_4.jpg');
+		}	
 }
 /*Ratio 1,775% Iphone 5*/
 @media all and (device-aspect-ratio: 40/71){
-			#home-page-content .first {height: 36.6%;}
+		#home-page-content .first {height: 36.6%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport40_71.jpg');
+		}		
 }
 @media all and (aspect-ratio: 40/71){
-			#home-page-content .first {height: 36.6%;}
+		#home-page-content .first {height: 36.6%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport40_71.jpg');
+		}		
 }
 /*Ratio 1,5% Iphone 4S 3S*/
 @media all and (device-aspect-ratio: 2/3){
-			#home-page-content .first {height: 43%;}
+		#home-page-content .first {height: 43%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport2_3.jpg');
+		}	
 }
 @media all and (aspect-ratio: 2/3){
-			#home-page-content .first {height: 43%%;}
+		#home-page-content .first {height: 43%%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport2_3.jpg');
+		}	
 }
 /*Ratio 0,625 ex : Android tablet GT-P5110T*/
 @media all and (device-aspect-ratio: 5/8){
-			#home-page-content .first {height: 41%;}
+		#home-page-content .first {height: 41%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport1_6.jpg');
+		}		
 }
 @media all and (aspect-ratio: 5/8){
-			#home-page-content .first {height:41%;}
+		#home-page-content .first {height:41%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport1_6.png');
+		}
 }
 /*Ratio 0,625 ex : samsung GT-19305*/
 @media all and (device-aspect-ratio: 9/16){
-			#home-page-content .first {height: 36.5%;}
+		#home-page-content .first {height: 36.5%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport9_16.jpg');
+		}
 }
 @media all and (aspect-ratio: 9/16){
-			#home-page-content .first {height: 36.5%;}
+		#home-page-content .first {height: 36.5%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport9_16.jpg');
+		}		
 }
 /*Ratio 0,625 ex : google nexus S*/
 @media all and (device-aspect-ratio: 3/5){
-			#home-page-content .first {height: 40%;}
+		#home-page-content .first {height: 40%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport3_5.jpg');
+		}		
 }
 @media all and (aspect-ratio: 3/5){
-			#home-page-content .first {height: 40%;}
+		#home-page-content .first {height: 40%;}
+		#splash-screen{
+				background-image: url('images/splash-screen_v05-rapport3_5.jpg');
+		}		
 }
 
 /*******SURCHARGE DE TWITTER BOOTSTRAP*******/
