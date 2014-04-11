@@ -62,6 +62,7 @@ app.Router = Backbone.Router.extend({
         self.displayView(currentView);
       }, 2000);
     }else{
+      $('#content').addClass('content-home');
       var currentView = new app.views.HomePageView({dirty : true});
       self.displayView(currentView);
     }   
@@ -231,6 +232,7 @@ app.Router = Backbone.Router.extend({
       }
       else{
         sauvages.notifications.gpsNotStart();
+        $('#content').addClass('content-home');
         self.goToLastPage();
       }
     },500);
