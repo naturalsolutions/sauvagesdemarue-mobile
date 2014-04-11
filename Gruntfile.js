@@ -105,19 +105,40 @@
                     }, {
                         match: /[\s\t]*<script .*src="(libs|js)\/.*<\/script>/g,
                         replacement: ''
+                    }, {
+                        match: /<\/body>/,
+                        replacement: function() {
+                            return grunt.file.read("tmp/templates.html") + '</body>';
+                        }
+                    }, {
+                        match: /app.config.debug = true/,
+                        replacement: 'app.config.debug = false'
                     }]
                 }
             },
         },
         concat: {
-            options: {
-                separator: ';',
+            templates: {
+                options: {
+                    process: function(src, filepath) {
+                        var id = filepath.replace(/www\/tpl\/(.*)\.html/, '$1');
+                        return '<script type="text/template" id="' + id + '">' + src + '</script>';
+                    }
+                },
+                src: ['www/tpl/*.html'],
+                dest: 'tmp/templates.html'
             },
             distPreCordova: {
+                options: {
+                    separator: ';',
+                },
                 src: ['www/libs/jquery_1.9.1/jquery-1.9.1.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
                 dest: 'build/preCordova.js'
             },
             distPostCordova: {
+                options: {
+                    separator: ';',
+                },
                 src: [
                     // libriairies déjà minifiées
                     'www/libs/flexslider/jquery.flexslider-min.js',
@@ -143,7 +164,6 @@
         },
         clean: ['tmp']
         // TODO: zip + phonegap build : https://coderwall.com/p/e0jxea
-        // TODO: comment concaténer les templates (<script> wrapper + function de loading adaptée)
     });
 
     // Load the plugin that provides the "uglify" task.
