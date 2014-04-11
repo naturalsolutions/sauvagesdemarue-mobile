@@ -32,14 +32,18 @@ app.utils.BaseView = Backbone.View.extend({
     template: '',
 
     getTemplate: function () {
-        var path = this.prefix + this.template + '.html',
+        var path = this.prefix + this.template,
             dfd = $.Deferred();
         app.templates = app.templates || {};
 
         if (app.templates[path]) {
             dfd.resolve(app.templates[path]);
+        } else if (app.config.debug === false) {
+          var data = $('#'+this.template).html();
+          app.templates[path] = _.template(data);
+          dfd.resolve(app.templates[path]);
         } else {
-            $.get(path, function (data) {
+            $.get(path + '.html', function (data) {
                 app.templates[path] = _.template(data);
                 dfd.resolve(app.templates[path]);
             }, "text");
