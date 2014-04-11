@@ -15,7 +15,7 @@
                         'data/*.xml',
                         'data/**/*.{jpg,png}',
                         'libs/**/*.{png,svg,jpeg,jpg,gif,eot,ttf,woff}',
-                        'libs/**/*min.{js,css}',
+                        'libs/**/*min.css',
                         'tpl/*.html'
                     ]
                 }]
@@ -42,6 +42,14 @@
                     src: ['libs/jQuery.mmenu-master/src/css/jquery.mmenu.css']
                 }]
             },
+            libleaflet: {
+                files: [{
+                    expand: true,
+                    cwd: 'www',
+                    dest: 'build',
+                    src: ['libs/leaflet/leaflet.css']
+                }]
+            },      
             libnotification : {
                 files: [{
                     expand: true,
@@ -56,7 +64,7 @@
                 files: [{
                     expand: true,
                     cwd: 'www',
-                    dest: 'build',
+                    dest: 'tmp',
                     src: ['js/*.js']
                 }]
             },
@@ -64,7 +72,7 @@
                 files: [{
                     expand: true,
                     cwd: 'www',
-                    dest: 'build',
+                    dest: 'tmp',
                     src: ['libs/NS.UI.Forms/forms.js']
                 }]
             },
@@ -72,7 +80,7 @@
                 files: [{
                     expand: true,
                     cwd: 'www',
-                    dest: 'build',
+                    dest: 'tmp',
                     src: ['libs/NS.UI.Notification/*.js']
                 }]
             }
@@ -89,19 +97,53 @@
                         match: /[\s\t]*<link .*css\/key\.css.*\/>/,
                         replacement: ''
                     }, {
-                        match: /(jquery-1\.9\.1|jquery\.mmenu)\.js/g,
-                        replacement: '$1.min.js'
+                        match: /libs\/jquery_1\.9\.1\/jquery-1\.9\.1\.js/,
+                        replacement: 'preCordova.js'
                     }, {
-                        match: /(underscore|backbone)\.js/g,
-                        replacement: '$1-min.js'
+                        match: /libs\/flexslider\/jquery\.flexslider-min\.js/,
+                        replacement: 'postCordova.js'
+                    }, {
+                        match: /[\s\t]*<script .*src="(libs|js)\/.*<\/script>/g,
+                        replacement: ''
                     }]
                 }
+            },
+        },
+        concat: {
+            options: {
+                separator: ';',
+            },
+            distPreCordova: {
+                src: ['www/libs/jquery_1.9.1/jquery-1.9.1.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
+                dest: 'build/preCordova.js'
+            },
+            distPostCordova: {
+                src: [
+                    // libriairies déjà minifiées
+                    'www/libs/flexslider/jquery.flexslider-min.js',
+                    'www/libs/jQuery.mmenu-master/src/js/jquery.mmenu.min.js',
+                    'www/libs/leaflet/leaflet.js',
+                    'www/libs/bootstrap_3.0.2/js/bootstrap.min.js',
+                    // libriairies minifiées avec uglify ci-dessus
+                    'tmp/libs/NS.UI.Notification/notification.js',
+                    'tmp/js/sauvage_notifications.js',
+                    'tmp/js/app.js',
+                    'tmp/js/utilities.js',
+                    'tmp/libs/NS.UI.Forms/forms.js',
+                    'tmp/js/database.js',
+                    'tmp/js/dao.js',
+                    'tmp/js/model.js',
+                    'tmp/js/view.js',
+                    'tmp/js/router.js',
+                    'tmp/js/utilities_wstela.js',
+                    'tmp/libs/NS.UI.Notification/notification_modal.js'
+                ],
+                dest: 'build/postCordova.js'
             }
-        }
-        // TODO: replace
+        },
+        clean: ['tmp']
         // TODO: zip + phonegap build : https://coderwall.com/p/e0jxea
         // TODO: comment concaténer les templates (<script> wrapper + function de loading adaptée)
-        // TODO: concaténer les JS en gérant le chargement de Forms.js
     });
 
     // Load the plugin that provides the "uglify" task.
@@ -109,7 +151,9 @@
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-replace');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Default task(s).
-    grunt.registerTask('default', ['copy', 'cssmin', 'uglify', 'replace']);
+    grunt.registerTask('default', ['copy', 'cssmin', 'uglify', 'concat', 'replace', 'clean']);
 };
