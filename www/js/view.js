@@ -347,7 +347,8 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 				$('body').addClass('pad-bottom-top');
 				$('.navbar').show();
 				$('#header').removeClass('hide');
-    $('#menu').removeClass('hide'); 
+    $('#menu').removeClass('hide');
+				$('#content').removeClass('content-home');
 		},
 		afterRender: function(){
     $('body').removeClass('pad-bottom-top');

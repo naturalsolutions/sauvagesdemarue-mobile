@@ -55,6 +55,7 @@ app.Router = Backbone.Router.extend({
     if ($(".loading-splash").length !== 0) {
       setTimeout(function() {
         $('body').css('background-color', '#28717E');
+        $('#content').addClass('content-home');
         $(".loading-splash").remove();
         $('#splash-screen').remove();
         var currentView = new app.views.HomePageView();

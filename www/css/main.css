@@ -96,7 +96,7 @@ body > div.mm-page {
 		width: 100%;
 		height: 100%;
 }
-#content,body > div.mm-page > div{
+#content.content-home,body > div.mm-page > div{
 		height: 100%;
 }
 /*********/
