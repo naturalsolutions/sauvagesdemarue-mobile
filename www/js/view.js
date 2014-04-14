@@ -342,6 +342,10 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
+		  beforeRender:function(){
+    $('#content').addClass('content-home');
+  },
+
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('body').addClass('pad-bottom-top');
@@ -376,7 +380,7 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'> latitude : "+latitudePosition +" - longitude : "+longitudePosition+"</h1>");
 						this.map = L.map(this.el).setView([latitudePosition, longitudePosition], 13);
 						var marker = L.marker([latitudePosition, longitudePosition]).addTo(this.map);
-						
+						L.Icon.Default.imagePath = 'libs/leaflet/images';
 						L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 						attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
 						maxZoom: 18

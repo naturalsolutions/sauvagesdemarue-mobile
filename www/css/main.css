@@ -1012,7 +1012,7 @@ margin: 10px;
 @media all and (device-aspect-ratio: 5/8){
 		#home-page-content .first {height: 41%;}
 		#splash-screen{
-				background-image: url('images/splash-screen_v05-rapport1_6.jpg');
+				background-image: url('images/splash-screen_v05-rapport1_6.png');
 		}		
 }
 @media all and (aspect-ratio: 5/8){
