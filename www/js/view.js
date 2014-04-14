@@ -364,6 +364,9 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
+  beforeRender:function(){
+    $('#content').addClass('content-home');
+  },
 		afterRender: function(){
 				$('.page-title').replaceWith("<div class='page-title'>Ma localisation</div>");
 				app.utils.geolocalisation.getCurrentPosition();
@@ -383,7 +386,11 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 						sauvages.notifications.gpsNotStart();
 						self.goToLastPage();
 				}
-		}
+		},
+  remove : function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('#content').removeClass('content-home');
+  }
 });
 
 app.views.UtilisateurPageView = app.utils.BaseView.extend({
@@ -909,15 +916,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				console.log('remove liste');
 				$('body').removeClass('cleliste liste');
     $('#languette').remove();
-		},
-		events: {
-				"dragright" : "swipeIdentification"
-  },
-		swipeIdentification : function(event){
-				event.gesture.preventDefault;
-				  if( event.gesture.direction == 'right' && event.gesture.velocityY < 0.04){
-								app.route.navigate(this.hrefIdentification , {trigger: true, replace: true});
-						}
 		}
 });
 
