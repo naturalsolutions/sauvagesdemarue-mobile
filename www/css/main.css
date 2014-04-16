@@ -1010,13 +1010,13 @@ margin: 10px;
 }
 /*Ratio 0,625 ex : Android tablet GT-P5110T*/
 @media all and (device-aspect-ratio: 5/8){
-		#home-page-content .first {height: 41%;}
+		#home-page-content .first {height: 42%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport1_6.png');
 		}		
 }
 @media all and (aspect-ratio: 5/8){
-		#home-page-content .first {height:41%;}
+		#home-page-content .first {height:42%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport1_6.png');
 		}
