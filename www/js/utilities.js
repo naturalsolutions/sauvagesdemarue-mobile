@@ -353,7 +353,7 @@ app.utils.geolocalisation = {
 
   getCurrentPosition : function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.gotErr, { enableHighAccuracy: true, maximumAge: 100, timeout: 1000 });
+      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.gotErr, { enableHighAccuracy: false, maximumAge: 5000, timeout: 1000 });
     }
     else
       console.log("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
