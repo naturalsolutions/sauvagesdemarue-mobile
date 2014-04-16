@@ -162,7 +162,7 @@
                 dest: 'build/postCordova.js'
             }
         },
-        clean: ['tmp']
+        clean: ['tmp','build/tpl']
         // TODO: zip + phonegap build : https://coderwall.com/p/e0jxea
     });
 
