@@ -997,13 +997,13 @@ margin: 10px;
 }
 /*Ratio 1,5% Iphone 4S 3S*/
 @media all and (device-aspect-ratio: 2/3){
-		#home-page-content .first {height: 43%;}
+		#home-page-content .first {height: 45%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport2_3.jpg');
 		}	
 }
 @media all and (aspect-ratio: 2/3){
-		#home-page-content .first {height: 43%%;}
+		#home-page-content .first {height: 45%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport2_3.jpg');
 		}	
