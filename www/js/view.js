@@ -1022,7 +1022,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				var emailUser;
     var self = this;
 				var currentUser = new app.models.User({'userId': 1});
-				if (connect === '4G' ||connect === '3G'||connect === 'WIFI'){
+				if (connect === '4G' ||connect === '3G'||connect === 'WIFI' || connect === true){
 						currentUser.fetch({
           success: function(data) {
             self.emailUser = data.get('email');
