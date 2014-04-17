@@ -212,7 +212,7 @@ app.dao.baseDAOBD = {
       function(tx) {
         var selectField = _.filter(_.keys(self.schema), function(key){ return (self.schema[key].type !== 'NestedModel') ; }).join(','); 
         var sql = 'SELECT '+selectField+' FROM '+self.table+' LIMIT 500 ';
-        console.log(sql);
+  
         tx.executeSql(sql,[], function(tx, results) {
           var len = results.rows.length,
             data = [],
@@ -459,19 +459,23 @@ $('#menu-item-region').click(function(){
 // -------------------------------------------------- checkConnection ---------------------------------------------------- //
 
 function checkConnection() {
-            var networkState = navigator.connection.type;
-
-            var states = {};
-            states[Connection.UNKNOWN]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
-            states[Connection.ETHERNET] = 'Connexion ethernet';
-            states[Connection.WIFI]     = 'WIFI';
-            states[Connection.CELL_2G]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
-            states[Connection.CELL_3G]  = '3G';
-            states[Connection.CELL_4G]  = '4G';
-            states[Connection.CELL]     = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
-            states[Connection.NONE]     = "Vous n'êtes pas connecté à internet";
-
-            return  states[networkState];
-        }
+  //si l'appareil est un mobile
+  if (navigator.connection) {  
+    var networkState = navigator.connection.type;
+    var states = {};
+    states[Connection.UNKNOWN]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
+    states[Connection.ETHERNET] = 'Connexion ethernet';
+    states[Connection.WIFI]     = 'WIFI';
+    states[Connection.CELL_2G]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
+    states[Connection.CELL_3G]  = '3G';
+    states[Connection.CELL_4G]  = '4G';
+    states[Connection.CELL]     = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
+    states[Connection.NONE]     = "Vous n'êtes pas connecté à internet";
+  
+    return  states[networkState];
+  }else{
+    return navigator.onLine;
+  }
+}
 
 
