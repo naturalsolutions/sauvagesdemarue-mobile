@@ -63,7 +63,6 @@ NS.WSTelaAPIClient = (function() {
                                     if (this.ido !== -1 ) {
                                       this.cObservation.get(this.ido).set('sended',1);
                                       this.dfdObs.push(this.cObservation.get(this.ido).save());
-                                      this.cObservation.get(this.ido).set('photo','');
                                     }
                                     else {
                                       this.dfdObs.push(new $.Deferred().resolve());
@@ -138,38 +137,38 @@ NS.WSTelaAPIClient = (function() {
     wsTelaApiClient.prototype.encodeImg= function (obs,id,userEmail,dfdImage){
         if (navigator.camera) {
             //mobile
-                var imageURI = obs.img;
-                if(device.platform === 'iOS'){var imageURI = 'file://' + obs.img;}
-                var failSystem = function(error) {
-                    console.log("failed with error code: " + error.code);
-                    dfdImage.reject();
-                };
-                var failFile = function(error) {
-                    console.log("failed with error code: " + error.code);
-                    dfdImage.reject();
-                };
-                
-                var self = this;
-                var gotFileEntry = _.bind(function(fileEntry) {
-                    console.log("got image file entry: " +  fileEntry.fullPath);
-                    fileEntry.file( _.bind(function(file) {
-                        var reader = new FileReader();
-                        reader.onloadend = _.bind(function(evt) {
-                           console.log("Read complete!");
-                           this.obs.image_b64 = evt.target.result;
-                           this.obs.image_nom = this.file.name;
-                           var observations = this.self.formatObsToSend(this.obs,this.userEmail);
-                           this.dfdImage.resolve(observations);
-                        }, _.extend(this, {file: file}));
-                        reader.readAsDataURL(file);
-                    }, this), failFile);
-                }, {
-                    self: this,
-                    obs: obs,
-                    dfdImage: dfdImage,
-                    userEmail: userEmail
-                });
-                window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
+            var imageURI = obs.img;
+            if(device.platform === 'iOS'){var imageURI = 'file://' + obs.img;}
+            var failSystem = function(error) {
+                console.log("failed with error code: " + error.code);
+                dfdImage.reject();
+            };
+            var failFile = function(error) {
+                console.log("failed with error code: " + error.code);
+                dfdImage.reject();
+            };
+            
+            var self = this;
+            var gotFileEntry = _.bind(function(fileEntry) {
+                console.log("got image file entry: " +  fileEntry.fullPath);
+                fileEntry.file( _.bind(function(file) {
+                    var reader = new FileReader();
+                    reader.onloadend = _.bind(function(evt) {
+                       console.log("Read complete!");
+                       this.obs.image_b64 = evt.target.result;
+                       this.obs.image_nom = this.file.name;
+                       var observations = this.self.formatObsToSend(this.obs,this.userEmail);
+                       this.dfdImage.resolve(observations);
+                    }, _.extend(this, {file: file}));
+                    reader.readAsDataURL(file);
+                }, this), failFile);
+            }, {
+                self: this,
+                obs: obs,
+                dfdImage: dfdImage,
+                userEmail: userEmail
+            });
+            window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
         }else{
             obs.image_b64 = obs.img;
             obs.image_nom = 'image-obs' + id;
