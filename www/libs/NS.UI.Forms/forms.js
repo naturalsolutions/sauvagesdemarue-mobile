@@ -875,7 +875,7 @@ NS.UI = (function(ns) {
     }, {
         templateSrc: {
             stacked:
-                '<form class="<% if (data.inline) { %>form-inline<% } else { %><% } %>">' +
+                'form class="<% if (data.inline) { %>form-inline<% } else { %><% } %>">' +
                 '    <h3><%- data.title %></h3>' +
                 '    <div class="form-content"></div>' +
                 '    <div class="form-actions">' +
@@ -972,6 +972,8 @@ NS.UI = (function(ns) {
 																				quality: window[self.optCamera.quality],
 																				correctOrientation: window[self.optCamera.correctOrientation],
 																				encodingType: window[self.optCamera.encodingType],
+                    targetWidth: 500,
+                    targetHeight: 500,
 																				source:window[self.optCamera.source],
 																				destinationType: window[self.optCamera.destinationType],
 																}
