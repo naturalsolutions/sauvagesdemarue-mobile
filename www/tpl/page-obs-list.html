@@ -20,16 +20,17 @@
 																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
 																												<b><%= rueName %></b>
 																													<% if(rue.get('state') === 1) { %>
-																																		<% if(group.length >= 1) { partage = true;%>
-																																				<span class="glyphicon glyphicon-share"></span>
-																																		<%	} %>
 																																<% 	var obsTime = 	rue.set('end_datetime', new Date().format("dd/MM/yyyy")); %>
 																																<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
+																																<% if(group.length >= 1) { partage = true;%>
+																																		<button type="button" id ="<%= rue.get('id') %>" class="btn btn-sm btn-vert-clair send-obs <% if(! partage){%>disabled<%}%>"><span class="glyphicon glyphicon-send"></span> Partager</button>
+																																<%	} %>			
 																													<%	}else if(rue.get('state') === 2){ %>
 																																<i> Rue partagée</i>
 																												<%	}else{ %>
 																																<i> Rue en cours</i>
 																												<%	} %>
+																														
 																												<span class="badge pull-right"><%= group.length %></span>
 																								</a>
 																				</div>
@@ -89,9 +90,9 @@
 						<div class="btn-group btn-group-justified">
 								<% 	var rueEnCours = data.parcours.findWhere({'state': 0});	
 								%>
-								<button id="send-obs" type="button" class="btn btn-footer btn-default <% if(! partage){%>disabled<%}%>">Partager</button>
+								<button type="button" class="btn btn-footer btn-default back-home">Retour à l'accueil</button>
 								<% if(typeof(rueEnCours) !== 'undefined'){ %><button id="" type="button" class="btn btn-footer btn-default back-rue-en-cours">Retour à la saisie</button>
-								<% }else{ %><button id="" type="button" class="btn btn-footer btn-default back-home">Nouvelle rue</button><% };%>
+								<% }else{ %><button type="button" class="btn btn-footer btn-default back-parcours">Nouvelle rue</button><% };%>
 			
 
     </div>

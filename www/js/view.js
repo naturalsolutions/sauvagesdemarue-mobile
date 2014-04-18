@@ -993,11 +993,13 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
-    'click #send-obs': 'sendObs',
+    'click .send-obs': 'sendObs',
 				'click .destroyObs':'destroyObs',
 				'click .back-rue-en-cours':'backRueEnCours',
 				'click .back-home' : 'backHome',
-				'click div.panel-heading': 'changeIcon'
+				'click .back-parcours' : 'backParcours',
+				'hidden.bs.collapse': 'hideIcon',
+				'shown.bs.collapse': 'showIcon'
 		},
   
   tabObsespece: function(event){
@@ -1006,18 +1008,19 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   tabObrue: function(event){
     $("#tabObs a[href='#rue']").tab('show');
   },
-		changeIcon: function(event){
-				$('#mesObsParRue').on('hide.bs.collapse', function () {
-						$(this).children().children().children().children('.glyph-collpase').removeClass('glyphicon-minus');
-						$(this).children().children().children().children('.glyph-collpase').addClass('glyp.hicon-plus');
-				});
-				$('#mesObsParRues').on('show.bs.collapse',  function () {
-						$(this).children().children().children().children(".glyph-collpase").removeClass('glyphicon-plus');
-						$(this).children().children().children().children(".glyph-collpase").addClass('glyphicon-minus');
-				});
-		}, 
+		hideIcon: function(event){
+				$('#mesObsParRue').on('hidden.bs.collapse', this.toggleChevron(event));
+		},
+		showIcon: function(event){
+				$('#mesObsParRue').on('shown.bs.collapse', this.toggleChevron(event));
+		},
+		toggleChevron: function(event){
+    $(event.target).prev().find('.glyph-collpase').toggleClass('glyphicon-minus glyphicon-plus');
+		},
   sendObs: function (event) {
     var connect = checkConnection();
+				var ctarget = $(event.currentTarget);
+				this.idRue =  parseInt(ctarget.context.id);
     var obsTosend ;
 				var emailUser;
     var self = this;
@@ -1028,7 +1031,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
             self.emailUser = data.get('email');
 												if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 ) {
 														var dfd = $.Deferred();
-														app.utils.queryData.getObservationsTelaWSFormated()
+														app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
 																.done(
 																		function(data) {
 																				if (data.length !== 0 ) {
@@ -1107,7 +1110,10 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				app.globals.currentrue =	this.parcours.findWhere({'state': 0});
 				app.route.navigate('identification', {trigger: true});
 		},
-		backHome : function(event){
+		backParcours : function(event){
 				app.route.navigate('#addParcours', {trigger: true});
+		},
+		backHome : function(event){
+				app.route.navigate('', {trigger: true});
 		}
 });
