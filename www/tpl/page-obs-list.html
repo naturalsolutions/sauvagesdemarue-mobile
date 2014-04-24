@@ -23,15 +23,20 @@
 																																<% 	var obsTime = 	rue.set('end_datetime', new Date().format("dd/MM/yyyy")); %>
 																																<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
 																																<% if(group.length >= 1) { partage = true;%>
-																																		<button type="button" id ="<%= rue.get('id') %>" class="btn btn-sm btn-vert-clair send-obs <% if(! partage){%>disabled<%}%>"><span class="glyphicon glyphicon-send"></span> Partager</button>
+																																		<button type="button" id ="<%= rue.get('id') %>" class="btn btn-sm btn-vert-clair send-obs pull-right">
+																																				<span class="glyphicon glyphicon-send"></span>
+ 																																				Partager
+																																				<span class="badge"><%= group.length %></span>																												
+																																		</button>
 																																<%	} %>			
-																													<%	}else if(rue.get('state') === 2){ %>
+																												<%	}else if(rue.get('state') === 2){ %>
 																																<i> Rue partagée</i>
+																																<span class="badge pull-right"><%= group.length %></span>
 																												<%	}else{ %>
 																																<i> Rue en cours</i>
+																																<span class="badge pull-right"><%= group.length %></span>
 																												<%	} %>
-																														
-																												<span class="badge pull-right"><%= group.length %></span>
+
 																								</a>
 																				</div>
 																				<div id="collapse<%= i %>" class="panel-collapse collapse" >
