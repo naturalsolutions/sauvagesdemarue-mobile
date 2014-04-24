@@ -25,101 +25,29 @@ NS.WSTelaAPIClient = (function() {
         $("#content").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
         var dfd = $.Deferred();
         var observations =new Object();
-        //Traitement parcours par parcours
-        var obsPerParcours = _.groupBy(obsToSend,function(item,key,list){
-            console.log(item.idp);   
-            return item.idp;
-        });
-        var dfdObs= [];
-        var nbSavePerObs = new Array();
-        var nbObsSent;
-        var nbObsTheorique;
-        for (var idp in obsPerParcours) {      
-            //Test si les rues sont vides, modifier la requete si confirmation de Tela de ne pas les envoyer
-            if(obsPerParcours[idp][0].ido !== -1){
-                if(obsPerParcours[idp][0].longitudeFinRue !== "undefined" && obsPerParcours[idp][0].latitudeFinRue !== "undefined"){
-                    nbSavePerObs[idp] = {'nbObsTheorique' : obsPerParcours[idp].length, 'nbObsSent': 0};
-                    for (var id in obsPerParcours[idp]) {
-                        var obs = _.defaults(obsPerParcours[idp][id], this.defaultObs);
-                        var dfdImage = $.Deferred(),
-                        dfdObservation = $.Deferred();
-                        dfdObs.push(dfdObservation);
-                        if(obs.img === null || obs.img === "" || obs.img === "undefined"){
-                            var observations = this.formatObsToSend(obs,userEmail);
-                            dfdImage.resolve(observations);
-                        }else{
-                            this.encodeImg(obs,id,userEmail,dfdImage);               
-                        }          
-                        var self = this,
-                        context = {
-                            'nbSavePerObs':nbSavePerObs, 'ido' :  obsPerParcours[idp][id].ido, 'userEmail':userEmail,
-                            'idp' : idp, 'cObservation' : cObservation, 'dfdObs' : dfdObs, 'dfdObservation' : dfdObservation
-                        };
-                        dfdImage.done(_.bind(function(observations) {
-                            self.sendToTelaWS(observations, this.ido)
-                                .done(_.bind(function() {
-                                    // Mise a jour de l'obs sended = 1
-                                    this.nbSavePerObs[this.idp]['nbObsSent'] += 1
-                                    if (this.ido !== -1 ) {
-                                      this.cObservation.get(this.ido).set('sended',1);
-                                      this.dfdObs.push(this.cObservation.get(this.ido).save());
-                                    }
-                                    else {
-                                      this.dfdObs.push(new $.Deferred().resolve());
-                                    }
-                                    this.dfdObservation.resolve();
-                                }, this))
-                                .fail(function(error) {
-                                    dfdObservation.reject();
-                                    console.log( "dfdsendTelaWS"+error.code );
-                                });
-                        }, context)).fail(function(error) {
-                            dfdObservation.reject();
-                            console.log('dfdimage'+error);
-                        });
-                    }
-                }else{
-                    var self = this;
-                    var nbObsPerParcours = obsPerParcours[idp].length;
-                    var idDerObs = nbObsPerParcours -1;
-                    var derObsLong = obsPerParcours[idp][idDerObs].longitude;
-                    var derObsLat = obsPerParcours[idp][idDerObs].latitude;
-                    var idParcoursNonFini = cParcours.get(obsPerParcours[idp][0].idp)
-                    var msg = _.template(
-                        "<form role='form'>"+
-                         "<div class='form-group'>"+
-                         "<button type='reset'  class='btn btn-default btn-primary'>Annuler</button>"+
-                         "<button type='submit'  class='btn btn-default btn-danger pull-right'>Valider</button>"+
-                         "</div>"+
-                        "</form>"					
-                       );
-                    sauvages.notifications.finDeProtocolHorsParcours(msg(),derObsLat,derObsLong, idParcoursNonFini);
-                }
-            }else{
-                alert("La rue " + obsPerParcours[idp][0].lieudit + " ne contient pas d'observation à partager.");   
-            }       
-        }
+        var dfdObs = $.Deferred(); 
+        this.treatObservations(obsToSend, cObservation,dfdObs,userEmail);
+        
+        var idp = obsToSend[0].idp;
         //Quand toutes les données sont envoyées et les obs MAJ (sended == 1) alors
         // MAJ des parcours (state == 2) et resolve du deferred
-        $.when.apply(this, dfdObs).then(
-            function (status) {
-              var dfdParcours= [];
-              console.log('when finished dfd.resolve obser per rue');
-              for (var idp in nbSavePerObs) {
-                if (nbSavePerObs[idp]['nbObsSent'] == nbSavePerObs[idp]['nbObsTheorique']) {
-                    cParcours.get(obsPerParcours[idp][0].idp).set('state',2);
-                    dfdParcours.push(cParcours.get(obsPerParcours[idp][0].idp).save());
-                }   
-              }
+        dfdObs.done(
+            _.bind(function (status) {
+                console.log('when finished dfd.resolve obser per rue');
+                
+                this.cParcours.get(this.idp).set('state',2);
+                this.cParcours.get(this.idp).save().done(
+                    function (a) {
+                        return dfd.resolve();
+                    }
+                );
+                
                 $('#dataloader-img').remove();
                 $("body").find("a,button").removeClass("disabled");
-              $.when.apply(this, dfdParcours).then(
-                function (a) {
-                    return dfd.resolve();
-                }
-              );
-            },
-            
+            }, {'idp':idp, 'cParcours':cParcours})
+        );
+        
+        dfdObs.fail( 
             function (status) {
                 $('#dataloader-img').remove();
                 $("body").find("a,button").removeClass("disabled");
@@ -129,6 +57,56 @@ NS.WSTelaAPIClient = (function() {
         $('#dataloader-img').remove();
         $("body").find("a,button").removeClass("disabled");
         return dfd.promise();
+    };
+    /***
+     *  Fonction qui traite les observations et les envoie une par une.
+     * ***/
+    wsTelaApiClient.prototype.treatObservations= function(obsToSend,cObservation, dfdObs,userEmail){
+        var currentobs = obsToSend.pop();
+        
+        console.log ('traite 1 ere obs');
+        var obs = _.defaults(currentobs, this.defaultObs);
+        var dfdImage = $.Deferred();
+        if(obs.img === null || obs.img === "" || obs.img === "undefined"){
+            var observations = this.formatObsToSend(obs,userEmail);
+            dfdImage.resolve(observations);
+        }else{
+            this.encodeImg(obs,obs.ido,userEmail,dfdImage);               
+        }          
+        var self = this,
+        context = {
+            'ido' :  currentobs.ido, 'userEmail':userEmail,'cObservation' : cObservation, 'obsToSend':obsToSend, 'dfdObs':dfdObs
+        };
+        dfdImage.done(_.bind(function(observations) {
+            self.sendToTelaWS(observations, this.ido)
+                .done(_.bind(function() {
+                    // Mise a jour de l'obs sended = 1
+                    this.cObservation.get(this.ido).set('sended',1);
+                    this.cObservation.get(this.ido).save().done(
+                        _.bind(function() {
+                            if (this.obsToSend.length > 0) {
+                                
+                                console.log ('traite obs suivante');
+                                //traite l'obs suivante
+                                self.treatObservations(this.obsToSend, this.cObservation, this.dfdObs, this.userEmail);
+                            }
+                            else {
+                                //Super c'est fini
+                                console.log ('super');
+                                this.dfdObs.resolve();
+                            }
+                        }, this)    
+                    )           
+                }, this))
+                .fail(function(error) {
+                    dfdObservation.reject();
+                    console.log( "dfdsendTelaWS"+error.code );
+                });
+        }, context)).fail(function(error) {
+            dfdObservation.reject();
+            console.log('dfdimage'+error);
+        });
+       
     };
 
     /***
@@ -223,6 +201,10 @@ NS.WSTelaAPIClient = (function() {
         //Ajout des données supplémentaires associées à sauvages
         //@TODO gestion des undefined
         var additionalValues = _.difference(_.keys(obs), _.keys(this.defaultObs));
+        
+        this.defaultObs = _.omit(this.defaultObs, 'image_nom');
+        this.defaultObs = _.omit(this.defaultObs, 'image_b64');
+
         var idAd;
         for (idAd in additionalValues) {
             if (! json['obs_etendue']) json['obs_etendue'] = new Array();
