@@ -843,9 +843,14 @@ ul.nav-list ul {
 		margin-right: 1%;
 }
 .send-obs{
-		margin:0px 3px;
+		border-radius: 3px;
+		padding-right: 4px;
+		margin-right: -6px;
 }
-
+.send-obs span.badge {
+		position: initial;
+		top: inherit;
+}
 /**********carousel-container*************/
 
 .flexslider .slides > li:first-child {display: list-item;}
