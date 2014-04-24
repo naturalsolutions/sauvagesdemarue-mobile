@@ -972,8 +972,8 @@ NS.UI = (function(ns) {
 																				quality: window[self.optCamera.quality],
 																				correctOrientation: window[self.optCamera.correctOrientation],
 																				encodingType: window[self.optCamera.encodingType],
-                    targetWidth: 500,
-                    targetHeight: 500,
+                    targetWidth: 800,
+                    targetHeight: 800,
 																				source:window[self.optCamera.source],
 																				destinationType: window[self.optCamera.destinationType],
 																}
@@ -981,6 +981,7 @@ NS.UI = (function(ns) {
 								},
 
 								onSuccess: function(imageURI) {
+            var tagprojetClean = TAG_PROJET.replace(',','_');
             var self = this;
 												var fsFail =  function(error) {
 																console.log("failed with error code: " + error.code);
@@ -992,8 +993,8 @@ NS.UI = (function(ns) {
 												var gotFileEntry = function(fileEntry) {
 																console.log("got image file entry: " + fileEntry.fullPath);
 																var gotFileSystem = function(fileSystem){
-                    fileSystem.root.getDirectory(TAG_PROJET, { create: true, exclusive: false }, function(dossier) {
-                        fileEntry.moveTo(dossier, (new Date()).getTime()+'_'+TAG_PROJET+'.jpg', copiedFile, fsFail);
+                    fileSystem.root.getDirectory(tagprojetClean, { create: true, exclusive: false }, function(dossier) {
+                        fileEntry.moveTo(dossier, (new Date()).getTime()+'_'+tagprojetClean+'.jpg', copiedFile, fsFail);
                     }, fsFail);
 																};
 																window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFileSystem, fsFail); 
