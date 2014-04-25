@@ -22,13 +22,13 @@ NS.WSTelaAPIClient = (function() {
      //@TODO catcher les erreurs ajax
     wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, userEmail){
         $("body").find("a,button").addClass("disabled");
-        $("#content").append("<img id='dataloader-img' src='css/images/ajax-loader.gif'/>");
+        $("#content").append("<img id='dataloader-img' src='css/images/spinner.gif'/>");
         var dfd = $.Deferred();
         var observations =new Object();
-        var dfdObs = $.Deferred(); 
-        this.treatObservations(obsToSend, cObservation,dfdObs,userEmail);
-        
+        var dfdObs = $.Deferred();
         var idp = obsToSend[0].idp;
+        this.treatObservations(obsToSend, cObservation,dfdObs,userEmail);
+           
         //Quand toutes les données sont envoyées et les obs MAJ (sended == 1) alors
         // MAJ des parcours (state == 2) et resolve du deferred
         dfdObs.done(
