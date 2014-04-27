@@ -127,9 +127,10 @@ body > div.mm-page {
   margin: 40% auto;
 }
 .loading-slideshow{
-	background-image: url(./images/slideshow-loader.gif);
-	background-repeat:no-repeat;
-	background-size:100%;
+		background-image: url(./images/ajax-loader.gif);
+		background-repeat: no-repeat;
+		background-size: 32px;
+		background-position: center;
 }
 
 a {
