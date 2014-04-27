@@ -13,8 +13,6 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
-		  //this.model.set('identified', false);
-			//	this.model.constructor.schema.photo.validators = [new NS.UI.Form.validators.PictureConditional(this.model)];
     this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
 				$('.page-title').replaceWith("<div class='page-title'>Sauvage non identifiée</div>");
   },
@@ -1039,10 +1037,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																						var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
 																						wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() { 
 																								self.render();
-																								//@TODO trouver mieux !!
-																								//$("#tabObs a[href='#rue']").tab('show');
-																								$('#dataloader-img').remove();
-																								$("body").find("a,button").removeClass("disabled");	
 																						});
 																				}else{
 																						alert("Il n'y a pas d'observations à envoyer.");		
