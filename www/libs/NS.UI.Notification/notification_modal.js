@@ -40,7 +40,6 @@ NS.UI = (function(ns) {
                         '</div>',
 
         initialize: function(options) {
-            console.log ('init');
             this.options = _.defaults(options || {}, {
                 type: 'error',
                 title: 'Error',
@@ -53,8 +52,7 @@ NS.UI = (function(ns) {
   
         render: function() {
             var self = this;
-            $('#myModal').empty();
-            
+            $('#myModal').empty();    
             var data = _.pick(this.options, 'type', 'title', 'message', 'btnLabel');
             var $html = $(_.template(this.templateSrc, data, {variable: 'data'}));
             this.setElement($html);
