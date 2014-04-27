@@ -10,12 +10,12 @@ function() {
            'end_street':'Fin du parcours',
    },
 		
-   sauvages.gpsNotStart = function gpsNotStart() {
+   sauvages.gpsNotStart = function gpsNotStart(msg) {
       var myModal = new NS.UI.NotificationModal({
        type: '',
        title: "Géolocalisation",
-       message: "Patience, le GPS n'a pas encore démarré!",
-       delay: 1,
+       message: msg,
+       delay: '',
        btnLabel: '',
       });
    },
@@ -34,7 +34,7 @@ function() {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Rue sauvegardée',
-         message: 'Retrouver vos données dans "Mes Sauvages"<br/> N\'oublier pas de les partager <br/>',
+         message: 'Retrouver vos données dans la rubrique "Mes Sauvages"<br/> N\'oublier pas de les partager <br/>',
          delay: 2,
          btnLabel: '',
          onClick: function() {
@@ -47,8 +47,8 @@ function() {
      var myModal = new NS.UI.NotificationModal({
       type: '',
       title: 'Observation sauvegardée',
-      message: 'Félicitations !',
-      delay: 1,
+      message: 'Félicitations !<br/>Retrouver vos données dans la rubrique "Mes Sauvages"',
+      delay: 3,
       btnLabel: '', 
       onClose: function() {
          if (localisation) {
@@ -65,7 +65,7 @@ function() {
       type: '',
       title: 'Votre email a été sauvegardé',
       message: 'Félicitations !',
-      delay: 1,
+      delay: 2,
       btnLabel: '', 
      });
    },
@@ -90,7 +90,7 @@ function() {
          type: '',
          title: 'Observation envoyée',
          message: 'Une erreur s\'est produite, les observations n\'ont pu être envoyées',
-         delay: 2,
+         delay: 3,
          btnLabel: '',
          onClose: function() {
             $('#nodal').modal('hide');
@@ -139,7 +139,7 @@ function() {
          type: '',
          title: 'Connection à internet',
          message: connect,
-         delay: '5',
+         delay: '',
          btnLabel: ''
       });
    },
@@ -196,20 +196,6 @@ function() {
          //app.route.navigate('identification', {trigger: true, replace: trues});
          $("#menu").trigger("close"); 
       }, myModal))
-   }
-//sauvages.SortieProtocol = function SortieProtocol() {
-//      var myModal = new NS.UI.NotificationModal({
-//         type: '',
-//         title: "Rue en cours",
-//         message: "Vous devez terminer votre rue pour accèder à cette partie de l'application",
-//         delay: '',
-//         btnLabel: 'Terminer', 
-//         onClose: function() {
-//          app.route.navigate('addParcours');
-//         }
-//      });
-//   }
-
-  
+   }  
   return sauvages;
 })(sauvages.notifications|| {});
