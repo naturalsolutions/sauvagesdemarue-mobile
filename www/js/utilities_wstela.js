@@ -21,8 +21,7 @@ NS.WSTelaAPIClient = (function() {
      ****/
      //@TODO catcher les erreurs ajax
     wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, userEmail){
-        $("body").find("a,button").addClass("disabled");
-        $("#content").append("<img id='dataloader-img' src='css/images/spinner.gif'/>");
+        $('body').addClass('loading disabled');
         var dfd = $.Deferred();
         var observations =new Object();
         var dfdObs = $.Deferred();
@@ -41,21 +40,16 @@ NS.WSTelaAPIClient = (function() {
                         return dfd.resolve();
                     }
                 );
-                
-                $('#dataloader-img').remove();
-                $("body").find("a,button").removeClass("disabled");
+                $('body').removeClass('loading disabled');
             }, {'idp':idp, 'cParcours':cParcours})
         );
         
         dfdObs.fail( 
             function (status) {
-                $('#dataloader-img').remove();
-                $("body").find("a,button").removeClass("disabled");
+                 $('body').removeClass('loading disabled');
                 return dfd.reject();
             }
         );
-        $('#dataloader-img').remove();
-        $("body").find("a,button").removeClass("disabled");
         return dfd.promise();
     };
     /***
