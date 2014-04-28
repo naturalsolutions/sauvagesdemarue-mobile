@@ -518,7 +518,7 @@ a.btn.btn-footer{
 }
 
 .page-block-title {
-		margin-top: 6px;
+		margin-top: 12px;
 }
 .page-title{
 		font-size: 26px;		
@@ -651,7 +651,7 @@ font-size: 24px;
 }
 
 /***********LIST TAXONS***************/
-#taxon-list-content .loc-container,#taxon-list-content,.cleliste #content,.cleliste > div.mm-page > div,.cleliste .mm-page{
+#taxon-list-content .loc-container,#taxon-list-content,.cleliste > div.mm-page > div,.cleliste .mm-page{
 		height:100%;
 		width: 100%;
 }

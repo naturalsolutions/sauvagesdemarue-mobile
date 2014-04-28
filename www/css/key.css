@@ -118,7 +118,10 @@ a.sprite-btn-resultat:hover {
 .alert-helpkey .modal-body{
 		padding:0;
 }
-
+.modal-header.alert-helpkey + .modal-body{
+		padding: 0px;
+		font-size:15px;
+}
 .helpKeyDiv li {
 	min-height: 55px;
 	list-style-type: none;
