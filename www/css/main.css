@@ -15,11 +15,11 @@ font-weight: 200;
 /*------------Disable selection/copy in UIWebView --------------*/
 *{
 	-webkit-touch-callout:none;
-  /*-webkit-user-select:none;*/
+  -webkit-user-select:none;
 	-webkit-tap-highlight-color:rgba(255,255,255,0);
 }
 
-input,select,textarea {
+input,select,textarea,form {
 		-webkit-user-select: auto;
 }
 /*------------@font-face--------------*/
@@ -339,6 +339,9 @@ outline-width: 0px;
 .btn-camera{
 		font-size: 21px;
 		border-radius:4px;
+}
+.btn-camera .glyphicon.glyphicon-camera{
+		font-size:48px;
 }
 
 .btn-success {
@@ -833,9 +836,9 @@ ul.nav-list ul {
 		margin-top: 28px;
 }
 #obs-list-content .panel-body p{
-		width: 69%;
+		width: 66%;
 		float:left;
-		padding: 5px 0px 0px 10px; *
+		padding: 0px 5px; 
 }
 #obs-list-content .panel-body li{
 		margin-bottom:4px;

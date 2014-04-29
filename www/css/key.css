@@ -20,7 +20,6 @@ background:#EBECDE;
 
 .criteria-name p{
   margin:3px 0 0px;
-  line-height: 10px;
   float:left;
 }
 .criteria-name a{
@@ -53,6 +52,7 @@ background:#EBECDE;
 		margin: 2px 3px 5px;
 		border-radius: 3px;
 		box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+		padding: 2%;
 }
 .RadioCustomOn{
   background:#BFE639;
