@@ -46,7 +46,7 @@ app.utils.queryData = {
     );
     return dfd.promise();
   },
-  //get observations to sends
+  //Récupère les observations de l'identifiant de la rue passé en paramètre
   getObservationsTelaWSFormated: function(id) {
     var dfd = $.Deferred();
     var parameters = new Array();
@@ -76,7 +76,7 @@ app.utils.queryData = {
     return dfd.promise();
   },
 
-  //get observations to sendsde 
+  //Récupère toutes les observations
   getObservationsTelaWSFormatedAll: function() {
     var dfd = $.Deferred();
     var parameters = new Array();
@@ -382,7 +382,7 @@ app.utils.geolocalisation = {
 
   getCurrentPosition : function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.gotErr, { enableHighAccuracy: false, maximumAge: 5000, timeout: 1000 });
+      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.gotErr, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
     }
     else
       console.log("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
@@ -396,11 +396,13 @@ app.utils.geolocalisation = {
   // Trap a GPS error, log it to console and display on site
   gotErr:  function (error) {
     var errors = { 
-            1: 'Permission denied',
-            2: 'Position unavailable',
-            3: 'Request timeout'
+            1: "L'application n'est pas autorisée à récupérer les informations de géolocalisation de l'appareil. Activez la géolocalisation dans les paramètres de l'appareil pour utiliser Sauvages de ma rue.",
+            2: "L'appareil est incapable de récupérer une position de géocalisation. Vérifiez que l'appareil est connecté à un réseau ou peut obtenir une position par GPS.",
+            3: "L'appareil n'a pas eu le temps de récupérer les informations de géolocalisation"
         };
+    var errorCode  = errors[error.code];
     console.log("Error: " + errors[error.code]);
+    sauvages.notifications.gpsNotStart(errorCode);
   },
 }
 // -------------------------------------------------- MMenu slide---------------------------------------------------- //
@@ -492,13 +494,13 @@ function checkConnection() {
   if (navigator.connection) {  
     var networkState = navigator.connection.type;
     var states = {};
-    states[Connection.UNKNOWN]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
-    states[Connection.ETHERNET] = 'Connexion ethernet';
+    states[Connection.UNKNOWN]  = "inconnu";
+    states[Connection.ETHERNET] = 'ethernet';
     states[Connection.WIFI]     = 'WIFI';
-    states[Connection.CELL_2G]  = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
+    states[Connection.CELL_2G]  = "2G";
     states[Connection.CELL_3G]  = '3G';
     states[Connection.CELL_4G]  = '4G';
-    states[Connection.CELL]     = "L'envoi des observations requiert une connexion 3G 4G ou Wifi.";
+    states[Connection.CELL]     = "cell";
     states[Connection.NONE]     = "Vous n'êtes pas connecté à internet";
   
     return  states[networkState];

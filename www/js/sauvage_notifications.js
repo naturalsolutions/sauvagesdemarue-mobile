@@ -99,7 +99,7 @@ function() {
          }
       });
    },
-   sauvages.email = function email(msg) {
+   sauvages.email = function email(msg,currentUser) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Ajouter votre email.',
@@ -110,11 +110,8 @@ function() {
       myModal.$el.on('submit', _.bind(function(evt) {
          evt.preventDefault();
            var currentEmail = this.$el.find('input[type="email"]').val();
-            var currentUser = new app.models.User({
-               'userId': 1,
-               'email':currentEmail
-            });
-            currentUser.save();
+            currentUser.set('email',String(currentEmail))
+            .save();
             $('#nodal').modal('hide');
             $('#nodal').remove();
             $('.modal-backdrop').remove();

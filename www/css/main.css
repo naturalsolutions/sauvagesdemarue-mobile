@@ -455,6 +455,11 @@ padding-left: 10px;
 body.obsListe {
 		overflow: hidden;
 }
+.annulerEnvoi {
+		position: fixed;
+		top: 40px;
+		z-index: 3000;
+}
 /*****label********/
 label {
 		font-weight: 200;
