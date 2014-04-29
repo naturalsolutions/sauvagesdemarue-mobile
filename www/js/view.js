@@ -375,7 +375,7 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 				if (typeof app.utils.geolocalisation.currentPosition !== undefined) {
 						var latitudePosition = app.utils.geolocalisation.currentPosition.latitude;
 						var longitudePosition = app.utils.geolocalisation.currentPosition.longitude;
-						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'> latitude : "+latitudePosition +" - longitude : "+longitudePosition+"</h1>");
+						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'> latitude : "+latitudePosition.toPrecision(5) +" - longitude : "+longitudePosition.toPrecision(5)+"</h1>");
 						this.map = L.map(this.el).setView([latitudePosition, longitudePosition], 13);
 						var marker = L.marker([latitudePosition, longitudePosition]).addTo(this.map);
 						L.Icon.Default.imagePath = 'libs/leaflet/images';
@@ -396,7 +396,6 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 });
 
 app.views.UtilisateurPageView = app.utils.BaseView.extend({
-
 
   template: 'page-utilisateur',
 
@@ -577,7 +576,6 @@ app.views.MaRegionView= app.utils.BaseView.extend({
 });
 
 app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
-
 
   template: 'page-identification-key-filter',
   
@@ -983,11 +981,15 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     return true;
   },
 		beforeRender: function(){
+				$('body').addClass('obsListe');
 				$('.icone-page-title').hide();
 				$('.page-title').replaceWith("<div class='page-title'>Mes sauvages</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Liste de toutes mes sauvages</h1>");
 		},
- 
+		remove: function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('body').removeClass('obsListe');
+		},
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
@@ -997,15 +999,20 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				'click .back-home' : 'backHome',
 				'click .back-parcours' : 'backParcours',
 				'hidden.bs.collapse': 'hideIcon',
-				'shown.bs.collapse': 'showIcon'
+				'shown.bs.collapse': 'showIcon',
+				'shown.bs.tab': 'scrollOnshow'
 		},
   
   tabObsespece: function(event){
     $("#tabObs a[href='#espece']").tab('show');
+				$('#content').scrollTop(0);
   },
   tabObrue: function(event){
     $("#tabObs a[href='#rue']").tab('show');
   },
+		scrollOnshow : function(event){
+				setTimeout(function(){$('#content').scrollTop(0);},100)
+		},
 		hideIcon: function(event){
 				$('#mesObsParRue').on('hidden.bs.collapse', this.toggleChevron(event));
 		},
@@ -1023,53 +1030,37 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				var emailUser;
     var self = this;
 				var currentUser = new app.models.User({'userId': 1});
-				if (connect === '4G' ||connect === '3G'||connect === 'WIFI' || connect === true){
-						currentUser.fetch({
-          success: function(data) {
-            self.emailUser = data.get('email');
-												if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 ) {
-														var dfd = $.Deferred();
-														app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
-																.done(
-																		function(data) {
-																				if (data.length !== 0 ) {
-																						//Send to tela via cel ws
-																						var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-																						wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() { 
-																								self.render();
-																						});
-																				}else{
-																						alert("Il n'y a pas d'observations à envoyer.");		
-																				}		
-																		}
-																)
-																.fail(function(msg) {
-																		console.log(msg);
-																});
-												}
-												else{		
-														var msg = _.template(
-																			"<form role='form form-inline'>"+
-																				"<div class='form-group'>"+
-																				"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
-																				'	<div class="input-group input-group-lg">'+
-																				'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
-																				"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
-																				"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
-																				"	</div>"+
-																				"</div>"+
-																				"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
-																			"</form>"					
-																		);
-														sauvages.notifications.email(msg());
-														$('.modal-footer').addClass("hide");
-														self.render();
-														}
-										}
-						});
-						
-				}else{
+				if (connect === '2G' ||connect === 'inconnu'||connect === "Vous n'êtes pas connecté à internet" || connect === false){
 						sauvages.notifications.connection(connect);
+				}else{
+						currentUser.fetch({
+								success: function(data) {
+										self.emailUser = data.get('email');
+										if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 ) {
+												var dfd = $.Deferred();
+												app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
+														.done(
+																function(data) {
+																		if (data.length !== 0 ) {
+																				//Send to tela via cel ws
+																				var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
+																				wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() { 
+																						self.render();
+																				});
+																		}else{
+																				alert("Il n'y a pas d'observations à envoyer.");		
+																		}		
+																}
+														)
+														.fail(function(msg) {
+																console.log(msg);
+														});
+										}
+										else{		
+
+										}
+								}
+						});	
 				}
 
 				
