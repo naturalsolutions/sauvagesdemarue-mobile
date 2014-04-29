@@ -447,6 +447,14 @@ padding-left: 10px;
 .badge-localisation{
 		width:20px;
 }
+
+.obsListe div#content {
+		overflow-x: auto;
+		height: 88%;
+}
+body.obsListe {
+		overflow: hidden;
+}
 /*****label********/
 label {
 		font-weight: 200;
@@ -780,10 +788,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c0000', end
   display: box;
   width: 100%;
 }
-.page-block-sub-title{
-display: inline-block;
-float: left;
-}
+
 
 h1.page-sub-title {
 		font-size: 14px;
