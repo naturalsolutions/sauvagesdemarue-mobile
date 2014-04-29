@@ -972,8 +972,8 @@ NS.UI = (function(ns) {
 																				quality: window[self.optCamera.quality],
 																				correctOrientation: window[self.optCamera.correctOrientation],
 																				encodingType: window[self.optCamera.encodingType],
-                    targetWidth: 800,
-                    targetHeight: 800,
+                    targetWidth: 600,
+                    targetHeight: 600,
 																				source:window[self.optCamera.source],
 																				destinationType: window[self.optCamera.destinationType],
 																}

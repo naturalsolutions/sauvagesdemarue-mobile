@@ -1000,7 +1000,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				'click .back-parcours' : 'backParcours',
 				'hidden.bs.collapse': 'hideIcon',
 				'shown.bs.collapse': 'showIcon',
-				'shown.bs.tab': 'scrollOnshow'
+				'shown.bs.tab': 'scrollOnshow',
+				'click .annulerEnvoi': 'abortRequete'
 		},
   
   tabObsespece: function(event){
@@ -1036,6 +1037,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						currentUser.fetch({
 								success: function(data) {
 										self.emailUser = data.get('email');
+										//tester validité email avant envoi
 										if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 ) {
 												var dfd = $.Deferred();
 												app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
@@ -1044,7 +1046,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																		if (data.length !== 0 ) {
 																				//Send to tela via cel ws
 																				var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-																				wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() { 
+																				wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() {
+																						setTimeout(function(){$('#content').scrollTop(0);},100);
 																						self.render();
 																				});
 																		}else{
@@ -1055,9 +1058,23 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 														.fail(function(msg) {
 																console.log(msg);
 														});
-										}
-										else{		
-
+										}else{
+												var msg = _.template(
+																			"<form role='form form-inline'>"+
+																				"<div class='form-group'>"+
+																				"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
+																				'	<div class="input-group input-group-lg">'+
+																				'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
+																				"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
+																				"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
+																				"	</div>"+
+																				"</div>"+
+																				"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
+																			"</form>"					
+																		);
+														sauvages.notifications.email(msg());
+														$('.modal-footer').addClass("hide");
+														//self.render();
 										}
 								}
 						});	
@@ -1065,6 +1082,10 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 
 				
   },
+		abortRequete : function(event){
+				var wstela = new NS.WSTelaAPIClient();
+				wstela.sendToTelaWS.abort();
+		},
 		destroyObs : function(event){
 						var self = this;
 						var ctarget = $(event.currentTarget);
