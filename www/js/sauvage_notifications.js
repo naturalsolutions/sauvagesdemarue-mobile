@@ -15,7 +15,7 @@ function() {
        type: '',
        title: "Géolocalisation",
        message: msg,
-       delay: '',
+       delay: 5,
        btnLabel: '',
       });
    },
@@ -39,7 +39,7 @@ function() {
          btnLabel: '',
          onClick: function() {
           app.route.navigate('addParcours/new', {trigger: true});
-          },
+         },
       });
    },
 	
@@ -138,7 +138,7 @@ function() {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Connection à internet',
-         message: connect,
+         message: "Votre connexion est de type : "+connect+"<br/> L'envoi des observations requiert une connexion à haut débit (3G, H+, 4G, wifi)." ,
          delay: '',
          btnLabel: ''
       });
