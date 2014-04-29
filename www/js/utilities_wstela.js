@@ -93,11 +93,11 @@ NS.WSTelaAPIClient = (function() {
                     )           
                 }, this))
                 .fail(function(error) {
-                    dfdObservation.reject();
+                    dfdObs.reject();
                     console.log( "dfdsendTelaWS"+error.code );
                 });
         }, context)).fail(function(error) {
-            dfdObservation.reject();
+            dfdObs.reject();
             console.log('dfdimage'+error);
         });
        
