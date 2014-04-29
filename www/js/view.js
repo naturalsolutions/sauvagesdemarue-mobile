@@ -977,6 +977,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   },
   
   serialize: function() {
+				this.parcours.models.reverse();
     if (this.collection) return {collection : this.collection, parcours : this.parcours};
     return true;
   },
@@ -1023,6 +1024,12 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		toggleChevron: function(event){
     $(event.target).prev().find('.glyph-collpase').toggleClass('glyphicon-minus glyphicon-plus');
 		},
+		validatorsEmail : function(value) {
+				var regex = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+						var flag = regex.test(value);
+						if (!flag)
+								return flag;
+		},
   sendObs: function (event) {
     var connect = checkConnection();
 				var ctarget = $(event.currentTarget);
@@ -1037,8 +1044,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						currentUser.fetch({
 								success: function(data) {
 										self.emailUser = data.get('email');
-										//tester validité email avant envoi
-										if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 ) {
+										var valEmail = self.validatorsEmail(self.emailUser);
+										if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 && valEmail === true) {
 												var dfd = $.Deferred();
 												app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
 														.done(
@@ -1060,21 +1067,20 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 														});
 										}else{
 												var msg = _.template(
-																			"<form role='form form-inline'>"+
-																				"<div class='form-group'>"+
-																				"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
-																				'	<div class="input-group input-group-lg">'+
-																				'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
-																				"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
-																				"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
-																				"	</div>"+
-																				"</div>"+
-																				"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
-																			"</form>"					
-																		);
-														sauvages.notifications.email(msg());
-														$('.modal-footer').addClass("hide");
-														//self.render();
+														"<form role='form form-inline'>"+
+															"<div class='form-group'>"+
+															"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
+															'	<div class="input-group input-group-lg">'+
+															'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
+															"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
+															"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
+															"	</div>"+
+															"</div>"+
+															"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
+														"</form>"					
+													);
+												sauvages.notifications.email(msg());
+												$('.modal-footer').addClass("hide");
 										}
 								}
 						});	
