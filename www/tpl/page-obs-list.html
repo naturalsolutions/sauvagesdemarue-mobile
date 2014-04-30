@@ -15,7 +15,8 @@
 																		var group = data.collection.getObsByRueId(rueId);
 														%>   
 																<div class="panel panel-default" id='taxonList-div-<%=i %>' >
-																				<div class="panel-heading <% if(rue.get('end_datetime') === 'undefined'){ %> rueEnCours <% } %>" >
+																				<div class="panel-heading <% if(rue.get('end_datetime') === 'undefined' || rue.get('end_datetime') === null){ %> rueEnCours <% } %>" >
+																						<%= console.log(rue.get('end_datetime')) %>
 																								<a data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
 																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
 																												<b><%= rueName %></b>
@@ -23,8 +24,8 @@
 																																<% 	var obsTime = 	rue.set('end_datetime', new Date().format("dd/MM/yyyy")); %>
 																																<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
 																																<% if(group.length >= 1) { partage = true;%>
-																																		<button type="button" id ="<%= rue.get('id') %>" class="btn btn-sm btn-vert-clair send-obs pull-right">
-																																				<span class="glyphicon glyphicon-send"></span>
+																																		<button type="button" id ="<%= rue.get('id') %>" class="btn btn-sm btn-vert-clair test-obs pull-right">
+																																				<span class="glyphicon glyphicon-refresh"></span>
  																																				Partager
 																																				<span class="badge"><%= group.length %></span>																												
 																																		</button>
