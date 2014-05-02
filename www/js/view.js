@@ -15,6 +15,10 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
   beforeRender: function() {
     this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
 				$('.page-title').replaceWith("<div class='page-title'>Sauvage non identifiée</div>");
+    $('#content').scrollTop(0);
+  },
+  afterRender: function() {
+    $('body').scrollTop(0);
   },
 		
 		remove : function(){
@@ -83,6 +87,9 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
     this.insertView("#obs-pl-form", new app.views.FormAddOccurencePasDansListeView({initialData:this.model}));
 				$('.page-title').replaceWith("<div class='page-title'>Sauvage non répertoriée</div>");
   },
+  afterRender: function() {
+    $('body').scrollTop(0);
+  },
 		
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
@@ -150,11 +157,13 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 						$('.select').hide(); 
 				}
 				$('.page-title').replaceWith("<div class='page-title'> Nouvelle Sauvage</div>");
-  },
+  },  
+
 		afterRender: function() {
-						if (this.options.localisation !== null ) {
-								$('.select').hide(); 
-						}
+    if (this.options.localisation !== null ) {
+      $('.select').hide(); 
+    }
+    $('body').scrollTop(0);
   },
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
@@ -942,7 +951,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   },
 
 		afterRender: function() {
-    $('#content').scrollTop(0);
 				$('.flexslider', this.$el).flexslider({
 														animation: "slide",  
 														slideshow: false,
@@ -951,6 +959,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 															$('.flexImages').show();
 														}
 				});
+    $('#content').scrollTop(0);
 		},
 		
 		serialize: function() {
@@ -967,6 +976,8 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 				$('.page-block-title em').remove();
 				if (app.globals.currentrue !== undefined) {
 						$('.page-block-sub-title').append("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
+				}else if(this.options.localisation !== undefined){
+						$('.page-block-sub-title').append("<h1 class='page-sub-title'>"+this.options.localisation+"</h1>");
 				}
 				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
 		}
