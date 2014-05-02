@@ -33,7 +33,8 @@ app.Router = Backbone.Router.extend({
     app.globals.regionTaxonCaracValuesCollection = new app.models.TaxonCaracValuesCollection();
 
     //Démarrage de l'écoute GPS
-    app.utils.geolocalisation.watchCurrentPosition();
+   // app.utils.geolocalisation.watchCurrentPosition();
+    app.utils.geolocalisation.getCurrentPosition();
     // Keep track of the history of pages (we only store the page URL). Used to identify the direction
     // (left or right) of the sliding transition between pages.
     this.pageHistory = [];
@@ -231,7 +232,6 @@ app.Router = Backbone.Router.extend({
         self.displayView(currentView);   
       }
       else{
-        sauvages.notifications.gpsNotStart();
         $('#content').addClass('content-home');
         self.goToLastPage();
       }
@@ -251,7 +251,7 @@ app.Router = Backbone.Router.extend({
         self.displayView(currentView);   
       }
       else{
-        sauvages.notifications.gpsNotStart();
+       // sauvages.notifications.gpsNotStart();
         self.goToLastPage();
       }
     },500);
@@ -269,7 +269,7 @@ app.Router = Backbone.Router.extend({
         self.displayView(currentView);   
       }
       else{
-        sauvages.notifications.gpsNotStart();
+       // sauvages.notifications.gpsNotStart();
         self.goToLastPage();
       }
     },500);
@@ -277,49 +277,47 @@ app.Router = Backbone.Router.extend({
   },
   
   viewFormAddParcours : function(state) {
-    var self = this;
-    //Teste si il ya des données de géolocalisation
-    if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
-      //teste si il n'y a pas de rue en cours
-      if (typeof( app.globals.currentrue) === 'undefined') {
-        var collParcours = new app.models.ParcoursDataValuesCollection();
-        var collParcoursAll = collParcours.fetch({
-          success: function(data) {
-            var modelRueEncours = data.findWhere({'state': 0});
-            if (modelRueEncours !== undefined) {
-              app.globals.currentrue = modelRueEncours;
-              var currentView = new app.views.AddSauvageRueView({model:modelRueEncours});
-              self.displayView(currentView);  
-            }else{
-              app.globals.currentrue = new app.models.ParcoursDataValue();
-              var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
-              self.displayView(currentView);  
-            }
-        }
-      
-      });
-		      
-      }
-      else {
-        var currentRueId = app.globals.currentrue.get('id');
-        var collObs = new app.models.OccurenceDataValuesCollection;
-          collObs.fetch({
-              success: function(data) {
-              var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
-              self.displayView(currentView);
-            }
+    var self = this; 
+    //teste si il n'y a pas de rue en cours
+    if (typeof( app.globals.currentrue) === 'undefined') {
+      //Teste si il ya des données de géolocalisation
+      setTimeout(function() {
+        app.utils.geolocalisation.getCurrentPosition();
+        if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+          var collParcours = new app.models.ParcoursDataValuesCollection();
+          var collParcoursAll = collParcours.fetch({
+            success: function(data) {
+              var modelRueEncours = data.findWhere({'state': 0});
+              if (modelRueEncours !== undefined) {
+                app.globals.currentrue = modelRueEncours;
+                var currentView = new app.views.AddSauvageRueView({model:modelRueEncours});
+                self.displayView(currentView);  
+              }else{
+                app.globals.currentrue = new app.models.ParcoursDataValue();
+                var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
+                self.displayView(currentView);  
+              }
+            } 
           });
-      }
-      //Supprime les filtres de la clé
-      if (app.globals.currentFilter !== undefined) {
-        app.globals.currentFilter.length = 0;
-        app.globals.currentFilterTaxonIdList.length = 0;
-      }
+        }else{
+          self.goToLastPage();
+        }
+      },1500);    
+    }else {
+      var currentRueId = app.globals.currentrue.get('id');
+      var collObs = new app.models.OccurenceDataValuesCollection;
+        collObs.fetch({
+            success: function(data) {
+            var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue, collection: data});
+            self.displayView(currentView);
+          }
+        });
     }
-    else{
-      sauvages.notifications.gpsNotStart();
-      this.goToLastPage();
-    }
+    //Supprime les filtres de la clé
+    if (app.globals.currentFilter !== undefined) {
+      app.globals.currentFilter.length = 0;
+      app.globals.currentFilterTaxonIdList.length = 0;
+    }   
   },
 
   viewTableMyObs : function() {
