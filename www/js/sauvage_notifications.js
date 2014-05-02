@@ -48,7 +48,7 @@ function() {
       type: '',
       title: 'Observation sauvegardée',
       message: 'Félicitations !<br/>Retrouver vos données dans la rubrique "Mes Sauvages"',
-      delay: 3,
+      delay: 2,
       btnLabel: '', 
       onClose: function() {
          if (localisation) {
@@ -135,11 +135,31 @@ function() {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Connection à internet',
-         message: "Votre connexion est de type : "+connect+"<br/> L'envoi des observations requiert une connexion à haut débit (3G, H+, 4G, wifi)." ,
+         message: "Votre connexion est de type : <em>"+connect+"</em><br/> L'envoi des observations requiert une connexion à haut débit (3G, H+, 4G, wifi)." ,
          delay: '',
          btnLabel: ''
       });
    },
+   sauvages.connectionInfo = function connectionInfo(msg,idRue,viewBefore) {
+      var self = this;
+      self.viewBefore = viewBefore ;
+      var myModal = new NS.UI.NotificationModal({
+       type: '',
+       title: 'Êtes-vous vous connecté à un réseau à haut débit ?',
+       message:  msg,
+       delay: '',
+       btnLabel: '', 
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         $(self.viewBefore).find("#"+idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
+         $(self.viewBefore).find("#"+idRue).removeClass('send-obs').addClass('test-obs');
+      }, myModal))
+    },
 
    sauvages.finDeProtocol = function finDeProtocol(msg) {
       var myModal = new NS.UI.NotificationModal({

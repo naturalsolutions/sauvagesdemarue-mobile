@@ -21,7 +21,8 @@ NS.WSTelaAPIClient = (function() {
      ****/
      //@TODO catcher les erreurs ajax
     wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, userEmail){
-        $('body').addClass('loading disabled');
+        $('body').addClass('loading ');
+        //$('body').append("<button class='annulerEnvoi' type=''>Annuler</button>");
         var dfd = $.Deferred();
         var observations =new Object();
         var dfdObs = $.Deferred();
