@@ -48,6 +48,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								instance.set('regionPaca', 0);
+								instance.set('fk_taxon', 0);
         instance.save()
 										.done( function(model, response, options) {
 											app.globals.currentFilter.length = 0;
@@ -113,6 +114,7 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								instance.set('regionPaca', 0);
+								instance.set('fk_taxon', 0);
         instance.save()
 										.done( function(model, response, options) {
 												app.globals.currentFilter.length = 0;
@@ -940,6 +942,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   },
 
 		afterRender: function() {
+    $('#content').scrollTop(0);
 				$('.flexslider', this.$el).flexslider({
 														animation: "slide",  
 														slideshow: false,
@@ -963,7 +966,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('.page-block-title em').remove();
 				if (app.globals.currentrue !== undefined) {
-						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
+						$('.page-block-sub-title').append("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
 				}
 				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
 		}
@@ -998,7 +1001,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
-    'click .send-obs': 'sendObs',
+    'click .test-obs': 'testConnection',
+				'click .send-obs': 'sendObs',
 				'click .destroyObs':'destroyObs',
 				'click .back-rue-en-cours':'backRueEnCours',
 				'click .back-home' : 'backHome',
@@ -1033,17 +1037,38 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				var flag = regex.test(value);
 				return flag;
 		},
+
+		testConnection : function(event){
+				var ctarget = $(event.currentTarget);
+				this.idRue =  parseInt(ctarget.context.id);
+				var connect = checkConnection();
+				if (connect === '2G' ||connect === 'inconnu'||connect === "Vous n'êtes pas connecté à internet" || connect === false){
+						sauvages.notifications.connection(connect);
+				}else if(typeof device !== 'undefined') {
+						if (device.platform === "iOS") {
+								var msg = _.template(
+										"<form role='form form-inline'>"+
+											"<div class='form-group'>"+
+											"		<p>L'envoi des observations requiert une connexion à haut débit (3G, H+, 4G, wifi).</p>"+
+											"</div>"+
+											"<button type='submit' id='submitEmail' class='btn btn-primary'>Envoyer vos données !</button>"+
+										"</form>"					
+								);
+								sauvages.notifications.connectionInfo(msg(),this.idRue, this.$el);
+						}
+				}else{
+						$("#"+this.idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
+      $("#"+this.idRue).removeClass('send-obs').addClass('test-obs');
+				}
+		},
+
   sendObs: function (event) {
-    var connect = checkConnection();
 				var ctarget = $(event.currentTarget);
 				this.idRue =  parseInt(ctarget.context.id);
     var obsTosend ;
 				var emailUser;
     var self = this;
 				var currentUser = new app.models.User({'userId': 1});
-				if (connect === '2G' ||connect === 'inconnu'||connect === "Vous n'êtes pas connecté à internet" || connect === false){
-						sauvages.notifications.connection(connect);
-				}else{
 						currentUser.fetch({
 								success: function(data) {
 										self.emailUser = data.get('email');
@@ -1087,8 +1112,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 										}
 								}
 						});	
-				}
-
 				
   },
 		abortRequete : function(event){
