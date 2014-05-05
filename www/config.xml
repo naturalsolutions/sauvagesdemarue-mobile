@@ -9,8 +9,9 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <preference name="Orientation" value="portrait"/>
+    
     <preference name="DisallowOverscroll" value="true"/>
+    <preference name="Orientation" value="portrait" />
 
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
