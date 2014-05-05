@@ -16,7 +16,6 @@
 														%>   
 																<div class="panel panel-default" id='taxonList-div-<%=i %>' >
 																				<div class="panel-heading <% if(rue.get('end_datetime') === 'undefined' || rue.get('end_datetime') === null){ %> rueEnCours <% } %>" >
-																						<%= console.log(rue.get('end_datetime')) %>
 																								<a data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
 																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
 																												<b><%= rueName %></b>

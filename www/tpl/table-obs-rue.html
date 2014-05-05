@@ -8,14 +8,12 @@
         %>
         <%
         _.each(groups,function(group){
-        console.log(groups);
         %>    
             <li class="list-group-item">
                 <span class="badge"><%= group.length %></span>
                 <h3><%= group[0].get('name_taxon') %></h3>
                 <ul>
                <% _.each(group,function(item){
-                console.log(item);    
                 %>
                     <li>
                         <p><%= item.get('name_taxon') %> - <%= item.get('milieu') %> </p>
