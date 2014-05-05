@@ -53,6 +53,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								instance.set('regionPaca', 0);
 								instance.set('fk_taxon', 0);
+								instance.set('name_ret', 'inconnu');
         instance.save()
 										.done( function(model, response, options) {
 											app.globals.currentFilter.length = 0;
@@ -122,6 +123,7 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								instance.set('regionPaca', 0);
 								instance.set('fk_taxon', 0);
+								instance.set('name_ret', 'inconnu');
         instance.save()
 										.done( function(model, response, options) {
 												app.globals.currentFilter.length = 0;
@@ -1066,10 +1068,14 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 										"</form>"					
 								);
 								sauvages.notifications.connectionInfo(msg(),this.idRue, this.$el);
+						}else{
+								$("#"+this.idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
+								$("#"+this.idRue).removeClass('send-obs').addClass('test-obs');
 						}
 				}else{
 						$("#"+this.idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
       $("#"+this.idRue).removeClass('send-obs').addClass('test-obs');
+
 				}
 		},
 
