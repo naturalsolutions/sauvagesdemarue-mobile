@@ -15,8 +15,14 @@ function() {
        type: '',
        title: "Géolocalisation",
        message: msg,
-       delay: 5,
+       delay: 4,
        btnLabel: '',
+      onClose: function() {
+          $('#nodal').modal('hide');
+          $('#nodal').remove();
+          $('.modal-backdrop').remove();
+          $('body').removeClass('modal-open');
+       }
       });
    },
    
@@ -66,7 +72,13 @@ function() {
       title: 'Votre email a été sauvegardé',
       message: 'Félicitations !',
       delay: 2,
-      btnLabel: '', 
+      btnLabel: '',
+      onClose: function() {
+          $('#nodal').modal('hide');
+          $('#nodal').remove();
+          $('.modal-backdrop').remove();
+          $('body').removeClass('modal-open');
+       }
      });
    },
 
@@ -77,7 +89,7 @@ function() {
          message: 'L\'envoi des observations s\'est bien déroulé.',
          delay: 1,
          btnLabel: '',
-          onClose: function() {
+         onClose: function() {
             $('#nodal').modal('hide');
             $('#nodal').remove();
             $('.modal-backdrop').remove();
@@ -137,7 +149,13 @@ function() {
          title: 'Connection à internet',
          message: "Votre connexion est de type : <em>"+connect+"</em><br/> L'envoi des observations requiert une connexion à haut débit (3G, H+, 4G, wifi)." ,
          delay: '',
-         btnLabel: ''
+         btnLabel: '',
+         onClose: function() {
+            $('#nodal').modal('hide');
+            $('#nodal').remove();
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+         }
       });
    },
    sauvages.connectionInfo = function connectionInfo(msg,idRue,viewBefore) {
@@ -148,17 +166,16 @@ function() {
        title: 'Êtes-vous vous connecté à un réseau à haut débit ?',
        message:  msg,
        delay: '',
-       btnLabel: '', 
+       btnLabel: '',
+         onClose: function() {
+            $('#nodal').modal('hide');
+            $('#nodal').remove();
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+            $(self.viewBefore).find("#"+idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
+            $(self.viewBefore).find("#"+idRue).removeClass('send-obs').addClass('test-obs');
+         }
       });
-      myModal.$el.on('submit', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         $(self.viewBefore).find("#"+idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
-         $(self.viewBefore).find("#"+idRue).removeClass('send-obs').addClass('test-obs');
-      }, myModal))
     },
 
    sauvages.finDeProtocol = function finDeProtocol(msg) {
