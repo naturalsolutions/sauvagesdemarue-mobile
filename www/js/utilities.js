@@ -379,10 +379,10 @@ app.utils.geolocalisation = {
   watchCurrentPosition : function () {
     var survId = navigator.geolocation.watchPosition(_.bind(this.gotPositionCoords, this));
   },
-
+  
   getCurrentPosition : function() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.gotErr, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
+      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.errorCallback_highAccuracy, { enableHighAccuracy: true, maximumAge: 500, timeout: 5000 });
     }
     else
       console.log("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
@@ -393,18 +393,48 @@ app.utils.geolocalisation = {
     this.currentPosition = position.coords;
   },//gotPos
 
-  // Trap a GPS error, log it to console and display on site
-  gotErr:  function (error) {
-    var errors = { 
-            1: "L'application n'est pas autorisée à récupérer les informations de géolocalisation de l'appareil. Activez la géolocalisation dans les paramètres de l'appareil pour utiliser Sauvages de ma rue.",
-            2: "L'appareil est incapable de récupérer une position de géocalisation. Vérifiez que l'appareil est connecté à un réseau ou peut obtenir une position par GPS.",
-            3: "L'appareil n'a pas eu le temps de récupérer les informations de géolocalisation"
-        };
-    var errorCode  = errors[error.code];
-    console.log("Error: " + errors[error.code]);
-    sauvages.notifications.gpsNotStart(errorCode);
-  },
+
+errorCallback_highAccuracy: function (error) {
+    if (error.code == error.TIMEOUT)
+    {
+        // Attempt to get GPS loc timed out after 5 seconds, 
+        // try low accuracy location
+        sauvages.notifications.gpsNotStart("Tentative de lancer la géolocalisation sans le GPS. ")
+        navigator.geolocation.getCurrentPosition(
+               _.bind(this.gotPositionCoords,this), 
+               this.errorCallback_lowAccuracy,
+               {maximumAge:0, timeout:10000, enableHighAccuracy: false});
+        return;
+    }
+    
+    var msg = "<p>L'appareil ne parvient pas à lancer la géolocalisation (Tentative avec le GPS). Erreur = ";
+    if (error.code == 1)
+        msg += "L'application n'est pas autorisée à récupérer les informations de géolocalisation de l'appareil. Activez la géolocalisation dans les paramètres de l'appareil pour utiliser Sauvages de ma rue.";
+    else if (error.code == 2)
+        msg += "L'appareil est incapable de récupérer une position de géocalisation. Vérifiez que l'appareil est connecté à un réseau ou peut obtenir une position par GPS.";
+    msg += ", msg = "+error.message;
+    
+    sauvages.notifications.gpsNotStart(msg);
+},
+
+errorCallback_lowAccuracy: function (error) {
+    var msg = "<p>L'appareil ne parvient pas à lancer la géolocalisation (Tentative sans le GPS). Erreur = ";
+    if (error.code == 1)
+        msg += "L'application n'est pas autorisée à récupérer les informations de géolocalisation de l'appareil. Activez la géolocalisation dans les paramètres de l'appareil pour utiliser Sauvages de ma rue.";
+    else if (error.code == 2)
+        msg += "L'appareil est incapable de récupérer une position de géocalisation. Vérifiez que l'appareil est connecté à un réseau ou peut obtenir une position par GPS.";
+    else if (error.code == 3)
+        msg += "L'appareil n'a pas eu le temps de récupérer les informations de géolocalisation.";
+    msg += ", msg = "+error.message;
+    
+    sauvages.notifications.gpsNotStart(msg);
 }
+
+}
+
+
+
+
 // -------------------------------------------------- MMenu slide---------------------------------------------------- //
 $("#menu").mmenu({
   classes: "mm-slide",

@@ -34,7 +34,8 @@ app.Router = Backbone.Router.extend({
 
     //Démarrage de l'écoute GPS
    // app.utils.geolocalisation.watchCurrentPosition();
-    app.utils.geolocalisation.getCurrentPosition();
+   // app.utils.geolocalisation.getCurrentPosition();
+
     // Keep track of the history of pages (we only store the page URL). Used to identify the direction
     // (left or right) of the sliding transition between pages.
     this.pageHistory = [];
@@ -223,7 +224,7 @@ app.Router = Backbone.Router.extend({
         if (app.globals.currentrue !== undefined) {
           var idCurrentRue = app.globals.currentrue.get('id');
         }
-        var obs = new app.models.OccurenceDataValue({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName')});
+        var obs = new app.models.OccurenceDataValue({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName'),"name_ret" : selectedTaxon[0].get('scientificName')});
 
         obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
         obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
@@ -281,7 +282,7 @@ app.Router = Backbone.Router.extend({
     //teste si il n'y a pas de rue en cours
     if (typeof( app.globals.currentrue) === 'undefined') {
       //Teste si il ya des données de géolocalisation
-      setTimeout(function() {
+     // setTimeout(function() {
         app.utils.geolocalisation.getCurrentPosition();
         if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
           var collParcours = new app.models.ParcoursDataValuesCollection();
@@ -302,7 +303,7 @@ app.Router = Backbone.Router.extend({
         }else{
           self.goToLastPage();
         }
-      },1500);    
+     // },1500);    
     }else {
       var currentRueId = app.globals.currentrue.get('id');
       var collObs = new app.models.OccurenceDataValuesCollection;
