@@ -32,10 +32,6 @@ app.Router = Backbone.Router.extend({
     app.globals.cListAllTaxonsRegion = new app.models.TaxonLiteCollection();
     app.globals.regionTaxonCaracValuesCollection = new app.models.TaxonCaracValuesCollection();
 
-    //Démarrage de l'écoute GPS
-   // app.utils.geolocalisation.watchCurrentPosition();
-   // app.utils.geolocalisation.getCurrentPosition();
-
     // Keep track of the history of pages (we only store the page URL). Used to identify the direction
     // (left or right) of the sliding transition between pages.
     this.pageHistory = [];
@@ -65,7 +61,7 @@ app.Router = Backbone.Router.extend({
       }, 2000);
     }else{
       $('#content').addClass('content-home');
-      var currentView = new app.views.HomePageView({dirty : true});
+      var currentView = new app.views.HomePageView();
       self.displayView(currentView);
     }   
   },
@@ -217,63 +213,64 @@ app.Router = Backbone.Router.extend({
   viewFormAddObs : function(taxonI,localisation) {
     var idCurrentRue = undefined;
     var self = this;
-    setTimeout(function() {
-      app.utils.geolocalisation.getCurrentPosition();
-      if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+    //setTimeout(function() {
+      var coords = app.models.pos.get('coords');
+      if (coords) {
         var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
         if (app.globals.currentrue !== undefined) {
           var idCurrentRue = app.globals.currentrue.get('id');
         }
-        var obs = new app.models.OccurenceDataValue({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName'),"name_ret" : selectedTaxon[0].get('scientificName')});
+        var obs = new app.models.OccurenceDataValue({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName'),"scientificName" : selectedTaxon[0].get('scientificName')});
 
-        obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
-        obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+        obs.set('latitude',coords.latitude );
+        obs.set('longitude',coords.longitude);
         
         var currentView = new app.views.AddSauvageOccurenceView({model:obs, localisation : localisation});
         self.displayView(currentView);   
       }
       else{
         $('#content').addClass('content-home');
+        sauvages.notifications.connection();
         self.goToLastPage();
       }
-    },500);
+    //},500);
     
   },
   
   viewFormNIOnbs  : function() {
     var self = this;
-    setTimeout(function() {
-      app.utils.geolocalisation.getCurrentPosition();
-      if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+    //setTimeout(function() {
+    var coords = app.models.pos.get('coords');
+				if (coords) {
         var obs = new app.models.OccurenceDataValue({fk_rue:app.globals.currentrue.get('id'), "name_taxon" : "inconnue"});
-        obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
-        obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+        obs.set('latitude',coords.latitude );
+        obs.set('longitude',coords.longitude);
         var currentView = new app.views.AddSauvageOccurenceNonIdentifierView({model:obs});
         self.displayView(currentView);   
       }
       else{
-       // sauvages.notifications.gpsNotStart();
+        sauvages.notifications.connection();
         self.goToLastPage();
       }
-    },500);
+    //},500);
     
   },
   viewFormPLOnbs : function() {
     var self = this;
-    setTimeout(function() {
-      app.utils.geolocalisation.getCurrentPosition();
-      if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+   // setTimeout(function() {
+    var coords = app.models.pos.get('coords');
+				if (coords) {
         var obs = new app.models.OccurenceDataValue({fk_rue:app.globals.currentrue.get('id'), "name_taxon" : ""});
-        obs.set('latitude',app.utils.geolocalisation.currentPosition.latitude );
-        obs.set('longitude',app.utils.geolocalisation.currentPosition.longitude);
+        obs.set('latitude',coords.latitude );
+        obs.set('longitude',coords.longitude);
         var currentView = new app.views.AddSauvageOccurencePasDansListeView({model:obs});
         self.displayView(currentView);   
       }
       else{
-       // sauvages.notifications.gpsNotStart();
+        sauvages.notifications.connection();
         self.goToLastPage();
       }
-    },500);
+    //},500);
     
   },
   
@@ -282,9 +279,8 @@ app.Router = Backbone.Router.extend({
     //teste si il n'y a pas de rue en cours
     if (typeof( app.globals.currentrue) === 'undefined') {
       //Teste si il ya des données de géolocalisation
-     // setTimeout(function() {
-        app.utils.geolocalisation.getCurrentPosition();
-        if (typeof(app.utils.geolocalisation.currentPosition) !== 'undefined') {
+      var coords = app.models.pos.get('coords');
+      if (coords) {
           var collParcours = new app.models.ParcoursDataValuesCollection();
           var collParcoursAll = collParcours.fetch({
             success: function(data) {
@@ -301,9 +297,10 @@ app.Router = Backbone.Router.extend({
             } 
           });
         }else{
+          sauvages.notifications.gpsNotStart();
           self.goToLastPage();
         }
-     // },1500);    
+  
     }else {
       var currentRueId = app.globals.currentrue.get('id');
       var collObs = new app.models.OccurenceDataValuesCollection;

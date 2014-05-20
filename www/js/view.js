@@ -53,7 +53,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								instance.set('regionPaca', 0);
 								instance.set('fk_taxon', 0);
-								instance.set('name_ret', 'inconnu');
+								instance.set('scientificName', '');
         instance.save()
 										.done( function(model, response, options) {
 											app.globals.currentFilter.length = 0;
@@ -121,9 +121,9 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
+								instance.set('scientificName', '');
 								instance.set('regionPaca', 0);
 								instance.set('fk_taxon', 0);
-								instance.set('name_ret', 'inconnu');
         instance.save()
 										.done( function(model, response, options) {
 												app.globals.currentFilter.length = 0;
@@ -189,6 +189,7 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								if (this.options.localisation === "Provence-Alpes-Cotes-Azur") {
 										instance.set('regionPaca', 1);
+										instance.set('fk_rue', 'regionPaca');
 								}else{
 										instance.set('regionPaca', 0);
 								}
@@ -276,11 +277,12 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 						//Get value for hidden fields
 						var prefix = 'end_';
 						if (self.isNew) prefix = 'begin_';
-						app.utils.geolocalisation.getCurrentPosition();
 						
+						var coords = app.models.pos.get('coords');
+
 						instance.set(prefix+'datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
-						instance.set(prefix+'latitude',app.utils.geolocalisation.currentPosition.latitude );
-						instance.set(prefix+'longitude',app.utils.geolocalisation.currentPosition.longitude);
+						instance.set(prefix+'latitude',coords.latitude );
+						instance.set(prefix+'longitude',coords.longitude);
 									
 						instance.save().done( function(model, response, options) {
 								//On refetch le model pour récupérer le PK
@@ -384,10 +386,10 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
   },
 		afterRender: function(){
 				$('.page-title').replaceWith("<div class='page-title'>Ma localisation</div>");
-				app.utils.geolocalisation.getCurrentPosition();
-				if (typeof app.utils.geolocalisation.currentPosition !== undefined) {
-						var latitudePosition = app.utils.geolocalisation.currentPosition.latitude;
-						var longitudePosition = app.utils.geolocalisation.currentPosition.longitude;
+				var coords = app.models.pos.get('coords');
+				if (coords) {
+						var latitudePosition = coords.latitude;
+						var longitudePosition = coords.longitude;
 						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'> latitude : "+latitudePosition.toPrecision(5) +" - longitude : "+longitudePosition.toPrecision(5)+"</h1>");
 						this.map = L.map(this.el).setView([latitudePosition, longitudePosition], 13);
 						var marker = L.marker([latitudePosition, longitudePosition]).addTo(this.map);
@@ -992,7 +994,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   initialize: function() {
 				this.parcours = this.options.parcours;
     this.collection.bind("reset", this.render, this);
-				this.parcours.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
@@ -1054,31 +1055,49 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		testConnection : function(event){
 				var ctarget = $(event.currentTarget);
 				this.idRue =  parseInt(ctarget.context.id);
+				var dfd = $.Deferred();
+
 				var connect = checkConnection();
-				if (connect === '2G' ||connect === 'inconnu'||connect === "Vous n'êtes pas connecté à internet" || connect === false){
-						sauvages.notifications.connection(connect);
-				}else if(typeof device !== 'undefined') {
-						if (device.platform === "iOS") {
+				if (connect === '2G' || connect === '3G' || connect === 'Cell' || connect === 'wifi' || connect === true){
 								var msg = _.template(
 										"<form role='form form-inline'>"+
 											"<div class='form-group'>"+
-											"		<p>L'envoi des observations requiert une connexion à haut débit (3G, H+, 4G, wifi).</p>"+
+											"		<p>L'envoi des observations requiert une connexion à haut débit (H+, 4G, wifi).</p>"+
 											"</div>"+
 											"<button type='submit' id='submitEmail' class='btn btn-primary'>Envoyer vos données !</button>"+
 										"</form>"					
 								);
 								sauvages.notifications.connectionInfo(msg(),this.idRue, this.$el);
-						}else{
-								$("#"+this.idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
-								$("#"+this.idRue).removeClass('send-obs').addClass('test-obs');
-						}
-				}else{
-						$("#"+this.idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
-      $("#"+this.idRue).removeClass('send-obs').addClass('test-obs');
-
+				}else if(connect === 'inconnu'||connect === "none" || connect === false || connect === undefined){
+						sauvages.notifications.connection();
 				}
 		},
 
+		appelServiceCommuneTela :  function (latParcours,longParcours,callback){
+				if (latParcours && longParcours) {
+						var serviceCommune,
+						lat = latParcours,
+							lng = longParcours;
+						
+						var url_service = SERVICE_NOM_COMMUNE_URL;
+						var urlNomCommuneFormatee = url_service.replace('{lat}', lat).replace('{lon}', lng);
+						var jqxhr = $.ajax({
+							url : urlNomCommuneFormatee,
+							type : 'GET',
+							dataType : 'jsonp',
+							success : function(data) {
+								console.log('NOM_COMMUNE found.');
+								console.log(data['nom']);
+								console.log(data['codeINSEE']);
+								serviceCommune = data;
+								if(typeof callback === "function") callback(serviceCommune);
+							}
+						});
+				} else {
+						console.log("Cette observation n'a pas d'information de géolocalisation.")
+				}
+		},
+		
   sendObs: function (event) {
 				var ctarget = $(event.currentTarget);
 				this.idRue =  parseInt(ctarget.context.id);
@@ -1091,25 +1110,35 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 										self.emailUser = data.get('email');
 										var valEmail = self.validatorsEmail(self.emailUser);
 										if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 && valEmail === true) {
-												var dfd = $.Deferred();
-												app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
-														.done(
-																function(data) {
-																		if (data.length !== 0 ) {
-																				//Send to tela via cel ws
-																				var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-																				wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser).done(function() {
-																						setTimeout(function(){$('#content').scrollTop(0);},100);
-																						self.render();
-																				});
-																		}else{
-																				alert("Il n'y a pas d'observations à envoyer.");		
-																		}		
-																}
-														)
-														.fail(function(msg) {
-																console.log(msg);
-														});
+												var latParcours = self.parcours.get(self.idRue).get('begin_latitude');												
+												var longParcours = self.parcours.get(self.idRue).get('begin_longitude');												
+												self.appelServiceCommuneTela(latParcours,longParcours,function(serviceCommune){
+														console.log(serviceCommune);
+														
+														var dfd = $.Deferred();
+														app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
+																.done(
+																		function(data) {
+																				if (data.length !== 0 ) {
+		
+																						//Send to tela via cel ws
+																						var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
+																						wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser,serviceCommune).done(function() {
+																								setTimeout(function(){$('#content').scrollTop(0);},100);
+																								self.parcours.models.reverse();
+																								self.render();
+																						});
+																				}else{
+																						alert("Il n'y a pas d'observations à envoyer.");		
+																				}		
+																		}
+																)
+																.fail(function(msg) {
+																		console.log(msg);
+																});
+
+												});
+
 										}else{
 												var msg = _.template(
 														"<form role='form form-inline'>"+
@@ -1143,6 +1172,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 								var obsTime = 	obs.set('datetime', new Date().format("dd/MM/yyyy"));
 								var msg = "L'observation <i>"+obs.get('name_taxon')+"</i> du "+ obs.get('datetime')+" a été supprimée du mobile." 
 								sauvages.notifications.supprimerObs(msg);
+								self.parcours.models.reverse();
 								self.render();
 								$("#tabObs a[href='#rue']").tab('show');
 								

@@ -10,11 +10,11 @@ function() {
            'end_street':'Fin du parcours',
    },
 		
-   sauvages.gpsNotStart = function gpsNotStart(msg) {
+   sauvages.gpsNotStart = function gpsNotStart() {
       var myModal = new NS.UI.NotificationModal({
        type: '',
        title: "Géolocalisation",
-       message: msg,
+       message: "Activer votre GPS ou le WIFI",
        delay: 4,
        btnLabel: '',
       onClose: function() {
@@ -143,11 +143,11 @@ function() {
       });
    },
 
-   sauvages.connection= function connection(connect) {
+   sauvages.connection= function connection() {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Connection à internet',
-         message: "Votre connexion est de type : <em>"+connect+"</em><br/> L'envoi des observations requiert une connexion à haut débit (3G, H+, 4G, wifi)." ,
+         message: "L'envoi des observations requiert une connexion à haut débit (H+, 4G, wifi)." ,
          delay: '',
          btnLabel: '',
          onClose: function() {
@@ -166,16 +166,18 @@ function() {
        title: 'Êtes-vous vous connecté à un réseau à haut débit ?',
        message:  msg,
        delay: '',
-       btnLabel: '',
-         onClose: function() {
-            $('#nodal').modal('hide');
-            $('#nodal').remove();
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open');
-            $(self.viewBefore).find("#"+idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
-            $(self.viewBefore).find("#"+idRue).removeClass('send-obs').addClass('test-obs');
-         }
+       btnLabel: ''
       });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         $(self.viewBefore).find("#"+idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
+         $(self.viewBefore).find("#"+idRue).removeClass('send-obs').addClass('test-obs');
+      }, myModal))
+     
     },
 
    sauvages.finDeProtocol = function finDeProtocol(msg) {

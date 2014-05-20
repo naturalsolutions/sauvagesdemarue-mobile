@@ -11,7 +11,9 @@ var app = {
   views: {},
   utils: {},
   globals : {},
+
 };
+
 
 /*
  * Base view: common operations for all views (template base rendering, dynamic loading of templates, sub-views)
@@ -218,29 +220,66 @@ app.utils.BaseView = Backbone.View.extend({
 });
 
 // ----------------------------------------------- The Application initialisation ------------------------------------------ //
+document.addEventListener("deviceready", onDeviceReady, false);
+//pour fonctionner avec navigateur desktop
+  $( document ).ready(function() {
+    onDeviceReady();
+  });
 
-$().ready(function() {
+function onDeviceReady() {
+  window.deferreds = [];  
+  app.models.pos = new app.models.Position;
+
+  if (navigator.connection) {
+    var geoldfd = $.Deferred();
+    // Wait first response of Geolocation API before starting app
+    app.models.pos.once('change:coords', function() {this.resolve();$('#geoloc').remove();}, geoldfd);
+    deferreds.push(geoldfd);
+  }
+
+  setTimeout(function(){geolocalisation()},500);
+
   init();
+
+  function geolocalisation(){
+    navigator.geolocation.watchPosition(
+      function(position) {
+        app.models.pos.set({'coords': position.coords});
+        $('#geoloc').remove();
+      },
+      function(error) {
+        app.models.pos.clear();
+        $('body').append("<strong id='geoloc'>En attente de la Géolocalisation de l'appareil.<br/> Activer le wifi accélère la géolocalisation.</strong>");
+        console.warn('ERROR(' + error.code + '): ' + error.message);
+        if (error.code === 2 || error.code === 1 || error.code === 0){ 
+          sauvages.notifications.gpsNotStart(); 
+        }
+        geolocalisation();
+      },
+      {
+        maximumAge: 10000,
+        enableHighAccuracy: true
+      }
+    );
+  }
+
   //Détecte l'ouverture et la fermeture du clavier sur Android et cache le footer 
   document.addEventListener("showkeyboard", function(){ $('.bottom-navbar').hide();}, false);
   document.addEventListener("hidekeyboard", function(){ $('.bottom-navbar').show();}, false);
-}) ;
-$(document).ready(function() {
-    new NS.UI.NotificationList();
-    new NS.UI.NotificationModalList();
-   
-    $("#menu").mmenu({
-            classes: "mm-slide",
-            transitionDuration : 0,
-    });
-});
+
+  new NS.UI.NotificationList();
+  new NS.UI.NotificationModalList();
+ 
+  $("#menu").mmenu({
+          classes: "mm-slide",
+          transitionDuration : 0,
+  });
+}
 
 
 function init(){
   // Customize Underscore templates behaviour: 'with' statement is prohibited in JS strict mode
   _.templateSettings['variable'] = 'data';
-  window.deferreds = [];
-
 
 		initDB();
 
@@ -250,14 +289,15 @@ function init(){
     app.globals.cListAllTaxons.fetch({
        success: function(data) {
           app.route = new app.Router();
-          Backbone.history.start();
+          if (!Backbone.History.started) {
+            Backbone.history.start();
+          }        
           var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
           if (!FirstLoad ) {
            // Spinner management (visual feedback for ongoing requests) ici pour eviter superposition avec splash screen spinner
             $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
             $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
           }
-          
         }
     });
   });
@@ -266,8 +306,11 @@ function init(){
 
 function initDB(){
   console.log("initBD");
-  // Initialisation des données 
-  app.db = openDatabase("sauvage-PACA", "1.0", "db sauvage-PACA", 20*1024*1024);
+
+  // Initialisation des données
+  app.db = openDatabase("sauvage-PACA", "", "db sauvage-PACA", 20*1024*1024);
+
+
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
@@ -278,25 +321,127 @@ function initDB(){
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Context()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.OccurenceDataValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.ParcoursDataValue()));
+  
 
-  var dfd = $.Deferred();
-  deferreds.push(dfd);
-  //test if data are already loaded
-  //Si oui alors => pas de chargement des données en base
-  $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
-    var arr = [];
-    if (dta.rows.length == 0 ) {      
-      arr.push(loadXmlTaxa());
-      arr.push(loadXmlCriteria());
-    }
-    $.when.apply(this, arr).then(function () {
-      console.log('when finished dfd.resolve test if data are loaded');
-      return  dfd.resolve();
-    });
-  }).fail(function (err) {
-      return dfd.resolve();
-  });
+try {
 
+		// Si première installation de l'appli
+		if(app.db.version === "") {
+    var dfdTaxon = $.Deferred();
+    deferreds.push(dfdTaxon);
+    console.log('im a "" user');
+    app.db.changeVersion("", "1.1", 
+      function() {
+          console.log('deferreds version vide '+ deferreds.length);
+          //test if data are already loaded
+          //Si oui alors => pas de chargement des données en base
+          $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
+          var arr = [];
+            if (dta.rows.length == 0 ) {
+              arr.push(loadXmlTaxa());
+              arr.push(loadXmlCriteria());
+            }
+          $.when.apply(this, arr).then(function () {
+            console.log('when finished dfd.resolve test if data are loaded');
+            return setTimeout(function(){ dfdTaxon.resolve()},1000);
+          });
+          }).fail(function (err) {
+            return dfdTaxon.resolve();
+          });
+      }, 
+      //used for error
+      function(e) {
+       console.log('error in changeV vide à 1.1');
+       console.log(JSON.stringify(e));
+      },
+      //used for success
+      function() {
+       console.log("success '' à 1.1 : "+app.db.version);
+      }
+			);
+  // Sinon si appli avec v1.0 installée
+		} else if(app.db.version === "1.0") {
+    var dfdTaxon = $.Deferred();
+    deferreds.push(dfdTaxon);
+      console.log('im a 1.0 user');	
+      app.db.changeVersion("1.0", "1.1", 
+        function(trans) {
+         //do initial setup
+          var dfd = $.Deferred();
+          var arr = [];
+          arr.push(runQuery('DROP TABLE Ttaxon',[]));
+          arr.push(runQuery('DROP TABLE TvalTaxon_Criteria_values',[]));
+          arr.push(runQuery('DROP TABLE Tpicture',[]));
+          arr.push(runQuery('DROP TABLE TdefCriteria',[]));
+          arr.push(runQuery('DROP TABLE TdefCriteria_values',[]));     
+          arr.push(runQuery('alter table TdataObs_occurences add column scientificName',[]));
+
+          $.when.apply(this, arr).then(function () {
+            console.log('when finished dfd.resolve DROP TABLE');
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
+          
+            //test if data are already loaded
+            //Si oui alors => pas de chargement des données en base
+            $.when(app.dao.baseDAOBD.populate(new app.models.Taxon())).done(function (dta) {
+              var arr = [];
+              if (dta.rows.length == 0 ) {
+                arr.push(loadXmlTaxa());
+               // arr.push(loadXmlCriteria());
+              }
+              $.when.apply(this, arr).then(function () {
+                console.log('when finished dfd.resolve test if data are loaded');
+                return setTimeout(function(){ dfdTaxon.resolve()},1000);
+              });
+            }).fail(function (err) {
+                console.log(err);
+                return dfdTaxon.resolve();
+            });
+
+            var dfdCrit = $.Deferred();
+            deferreds.push(dfdCrit);
+          
+            //test if data are already loaded
+            //Si oui alors => pas de chargement des données en base
+            $.when(runQuery("SELECT * FROM TvalTaxon_Criteria_values" , [])).done(function (dta) {
+              var arr = [];
+              if (dta.rows.length == 0 ) {
+                arr.push(loadXmlCriteria());
+              }
+              $.when.apply(this, arr).then(function () {
+                console.log('when finished dfd.resolve CRITERIA TAXON VALUES if data are loaded');
+                return  dfdCrit.resolve();
+              });
+            }).fail(function (err) {
+                console.log(err);
+                return dfdCrit.resolve();
+            });
+
+            return  dfd.resolve();
+          });
+
+        }, 
+        //used for error
+        function(e) {
+         console.log('error in changeV for v1.1');
+         console.log(JSON.stringify(e));
+        },
+        //used for success
+        function() {
+         console.log('success in changeV for v1.1');
+         console.log(app.db.version);
+        }
+      );			
+		}
+		
+		console.log('database mise à jour');
+
+  }catch(e) {
+    console.log(JSON.stringify(e));
+  }
 
 
 //NS.UI.Form customize editors' template

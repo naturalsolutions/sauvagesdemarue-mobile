@@ -19,15 +19,14 @@ NS.WSTelaAPIClient = (function() {
      * Fonction envoie par POST un ensemble d'obs aux services de tela
      *  formate les données de l'observation pour le POST
      ****/
-     //@TODO catcher les erreurs ajax
-    wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, userEmail){
-        $('body').addClass('loading ');
+    wsTelaApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, userEmail,serviceCommune){
+        $('body').addClass('loading disabled');
         //$('body').append("<button class='annulerEnvoi' type=''>Annuler</button>");
         var dfd = $.Deferred();
         var observations =new Object();
         var dfdObs = $.Deferred();
         var idp = obsToSend[0].idp;
-        this.treatObservations(obsToSend, cObservation,dfdObs,userEmail);
+        this.treatObservations(obsToSend, cObservation,dfdObs,userEmail,serviceCommune);
            
         //Quand toutes les données sont envoyées et les obs MAJ (sended == 1) alors
         // MAJ des parcours (state == 2) et resolve du deferred
@@ -56,21 +55,21 @@ NS.WSTelaAPIClient = (function() {
     /***
      *  Fonction qui traite les observations et les envoie une par une.
      * ***/
-    wsTelaApiClient.prototype.treatObservations= function(obsToSend,cObservation, dfdObs,userEmail){
+    wsTelaApiClient.prototype.treatObservations= function(obsToSend,cObservation, dfdObs,userEmail,serviceCommune){
         var currentobs = obsToSend.pop();
         
         console.log ('traite 1 ere obs');
         var obs = _.defaults(currentobs, this.defaultObs);
         var dfdImage = $.Deferred();
         if(obs.img === null || obs.img === "" || obs.img === "undefined"){
-            var observations = this.formatObsToSend(obs,userEmail);
+            var observations = this.formatObsToSend(obs,userEmail,serviceCommune);
             dfdImage.resolve(observations);
         }else{
-            this.encodeImg(obs,obs.ido,userEmail,dfdImage);               
+            this.encodeImg(obs,obs.ido,userEmail,dfdImage,serviceCommune);               
         }          
         var self = this,
         context = {
-            'ido' :  currentobs.ido, 'userEmail':userEmail,'cObservation' : cObservation, 'obsToSend':obsToSend, 'dfdObs':dfdObs
+            'ido' :  currentobs.ido, 'userEmail':userEmail,'cObservation' : cObservation, 'obsToSend':obsToSend, 'dfdObs':dfdObs , 'serviceCommune':serviceCommune
         };
         dfdImage.done(_.bind(function(observations) {
             self.sendToTelaWS(observations, this.ido)
@@ -83,7 +82,7 @@ NS.WSTelaAPIClient = (function() {
                                 
                                 console.log ('traite obs suivante');
                                 //traite l'obs suivante
-                                self.treatObservations(this.obsToSend, this.cObservation, this.dfdObs, this.userEmail);
+                                self.treatObservations(this.obsToSend, this.cObservation, this.dfdObs, this.userEmail,this.serviceCommune);
                             }
                             else {
                                 //Super c'est fini
@@ -107,11 +106,10 @@ NS.WSTelaAPIClient = (function() {
     /***
      *  Fonction qui encode en base64 une image
      * ***/
-    wsTelaApiClient.prototype.encodeImg= function (obs,id,userEmail,dfdImage){
+    wsTelaApiClient.prototype.encodeImg= function (obs,id,userEmail,dfdImage,serviceCommune){
         if (navigator.camera) {
             //mobile
             var imageURI = obs.img;
-            if(device.platform === 'iOS'){var imageURI = 'file://' + obs.img;}
             var failSystem = function(error) {
                 console.log("failed with error code: " + error.code);
                 dfdImage.reject();
@@ -123,14 +121,14 @@ NS.WSTelaAPIClient = (function() {
             
             var self = this;
             var gotFileEntry = _.bind(function(fileEntry) {
-                console.log("got image file entry: " +  fileEntry.fullPath);
+                console.log("got image file entry: " +  fileEntry.toURL());
                 fileEntry.file( _.bind(function(file) {
                     var reader = new FileReader();
                     reader.onloadend = _.bind(function(evt) {
                        console.log("Read complete!");
                        this.obs.image_b64 = evt.target.result;
                        this.obs.image_nom = this.file.name;
-                       var observations = this.self.formatObsToSend(this.obs,this.userEmail);
+                       var observations = this.self.formatObsToSend(this.obs,this.userEmail,this.serviceCommune);
                        this.dfdImage.resolve(observations);
                     }, _.extend(this, {file: file}));
                     reader.readAsDataURL(file);
@@ -139,39 +137,40 @@ NS.WSTelaAPIClient = (function() {
                 self: this,
                 obs: obs,
                 dfdImage: dfdImage,
-                userEmail: userEmail
+                userEmail: userEmail,
+                serviceCommune : serviceCommune
             });
-            window.resolveLocalFileSystemURI(imageURI, gotFileEntry, failSystem);
+            window.resolveLocalFileSystemURL(imageURI, gotFileEntry, failSystem);
         }else{
             obs.image_b64 = obs.img;
             obs.image_nom = 'image-obs' + id;
-            var observations = this.formatObsToSend(obs,userEmail);
+            var observations = this.formatObsToSend(obs,userEmail,serviceCommune);
             dfdImage.resolve(observations);
         }
     };
+
     
      /***
      * Fonction qui formate une observation en vue de son envoie vers tela
      * ***/
-    wsTelaApiClient.prototype.formatObsToSend= function (obs,userEmail){
+    wsTelaApiClient.prototype.formatObsToSend= function (obs,userEmail,serviceCommune){
         var observations = new Object();
                        
         //Traitement de l'observation
         var json = {
             'date' : obs.date, 
             'notes' : (obs.ido === -1) ? 'rue sans observation; '+obs.note: obs.note,
-            'nom_sel' : obs.nom_sel,
+            'nom_sel' : obs.nom_ret ,
             'num_nom_sel' : obs.num_nom_sel,
             'nom_ret' : obs.nom_ret,
             'num_nom_ret' : obs.num_nom_ret,
             'num_taxon' : obs.num_taxon,
             'famille' : obs.famille ,
             'referentiel' : obs.referentiel ,
-    
             'latitude' : (obs.latitude !== null) ? obs.latitude : obs.latitudeDebutRue,
             'longitude' : (obs.longitude !== null) ? obs.longitude : obs.longitudeDebutRue,
-            'commune_nom' : obs.commune_nom,
-            'commune_code_insee' : obs.commune_code_insee,
+            'commune_nom' :serviceCommune.nom,
+            'commune_code_insee' : serviceCommune.codeINSEE,
             'lieudit' : obs.lieudit,
             'station' : obs.station,
             'milieu' : obs.milieu,

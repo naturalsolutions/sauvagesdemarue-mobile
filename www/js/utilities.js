@@ -3,8 +3,8 @@
 
 // -------------------------------------------------- Utilities ---------------------------------------------------- //
   // Spinner management (visual feedback for ongoing requests)
-  $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
-  $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
+  //$(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
+  //$(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
 
 // Ensemble des méthodes permettant de manipuler les données en dehors des modèles/collection au sens Backbone
 // Correspond à des requêtes SQL customisée et optimisée
@@ -33,6 +33,7 @@ app.utils.queryData = {
       var sql = 'SELECT DISTINCT fk_taxon, count(*) as count FROM TvalTaxon_Criteria_values ' + sqlWere + sqlGroupBy;
     } 
     runQuery(sql, parameters).done(
+
       function(results){
           var len = results.rows.length,
             data = [],
@@ -53,7 +54,7 @@ app.utils.queryData = {
     var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',COALESCE(o.datetime, p.begin_datetime)) as date,"
         +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
         +"p.name AS lieudit, o.latitude, o.longitude, "
-        +"o.name_taxon as nom_sel, o.name_ret as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
+        +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
         +"o.milieu, "
         +"o.note, "
         +"o.photo as img,"
@@ -83,7 +84,7 @@ app.utils.queryData = {
     var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',COALESCE(o.datetime, p.begin_datetime)) as date,"
         +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
         +"p.name AS lieudit, o.latitude, o.longitude, "
-        +"o.name_taxon as nom_sel, o.name_ret as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
+        +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
         +"o.milieu, "
         +"o.note, "
         +"o.photo as img,"
@@ -258,6 +259,7 @@ app.dao.baseDAOBD = {
     );
   },
 
+
   findWithCriteria :  function(model, callback) {
     this.getDaoMetadata(model);
     var self = this;
@@ -372,68 +374,6 @@ Date.prototype.format = function(format) {
   return format;
 }
 
-// -------------------------------------------------- GEOLOCALISATION ---------------------------------------------------- //
-
-app.utils.geolocalisation = {
-  // Fonction de callback en cas de succès
-  watchCurrentPosition : function () {
-    var survId = navigator.geolocation.watchPosition(_.bind(this.gotPositionCoords, this));
-  },
-  
-  getCurrentPosition : function() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(_.bind(this.gotPositionCoords, this), this.errorCallback_highAccuracy, { enableHighAccuracy: true, maximumAge: 500, timeout: 5000 });
-    }
-    else
-      console.log("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
-  },
-
-  // We've got our position, let's show map and update user
-  gotPositionCoords: function (position) {
-    this.currentPosition = position.coords;
-  },//gotPos
-
-
-errorCallback_highAccuracy: function (error) {
-    if (error.code == error.TIMEOUT)
-    {
-        // Attempt to get GPS loc timed out after 5 seconds, 
-        // try low accuracy location
-        sauvages.notifications.gpsNotStart("Tentative de lancer la géolocalisation sans le GPS. ")
-        navigator.geolocation.getCurrentPosition(
-               _.bind(this.gotPositionCoords,this), 
-               this.errorCallback_lowAccuracy,
-               {maximumAge:0, timeout:10000, enableHighAccuracy: false});
-        return;
-    }
-    
-    var msg = "<p>L'appareil ne parvient pas à lancer la géolocalisation (Tentative avec le GPS). Erreur = ";
-    if (error.code == 1)
-        msg += "L'application n'est pas autorisée à récupérer les informations de géolocalisation de l'appareil. Activez la géolocalisation dans les paramètres de l'appareil pour utiliser Sauvages de ma rue.";
-    else if (error.code == 2)
-        msg += "L'appareil est incapable de récupérer une position de géocalisation. Vérifiez que l'appareil est connecté à un réseau ou peut obtenir une position par GPS.";
-    msg += ", msg = "+error.message;
-    
-    sauvages.notifications.gpsNotStart(msg);
-},
-
-errorCallback_lowAccuracy: function (error) {
-    var msg = "<p>L'appareil ne parvient pas à lancer la géolocalisation (Tentative sans le GPS). Erreur = ";
-    if (error.code == 1)
-        msg += "L'application n'est pas autorisée à récupérer les informations de géolocalisation de l'appareil. Activez la géolocalisation dans les paramètres de l'appareil pour utiliser Sauvages de ma rue.";
-    else if (error.code == 2)
-        msg += "L'appareil est incapable de récupérer une position de géocalisation. Vérifiez que l'appareil est connecté à un réseau ou peut obtenir une position par GPS.";
-    else if (error.code == 3)
-        msg += "L'appareil n'a pas eu le temps de récupérer les informations de géolocalisation.";
-    msg += ", msg = "+error.message;
-    
-    sauvages.notifications.gpsNotStart(msg);
-}
-
-}
-
-
-
 
 // -------------------------------------------------- MMenu slide---------------------------------------------------- //
 $("#menu").mmenu({
@@ -518,22 +458,21 @@ $('#menu-item-region').click(function(){
 });
 
 // -------------------------------------------------- checkConnection ---------------------------------------------------- //
-
 function checkConnection() {
-  //si l'appareil est un mobile
-  if (navigator.connection) {  
+  if (navigator.connection) {
     var networkState = navigator.connection.type;
+
     var states = {};
-    states[Connection.UNKNOWN]  = "inconnu";
+    states[Connection.UNKNOWN]  = 'inconnu';
     states[Connection.ETHERNET] = 'ethernet';
-    states[Connection.WIFI]     = 'WIFI';
-    states[Connection.CELL_2G]  = "2G";
+    states[Connection.WIFI]     = 'wifi';
+    states[Connection.CELL_2G]  = '2G';
     states[Connection.CELL_3G]  = '3G';
     states[Connection.CELL_4G]  = '4G';
-    states[Connection.CELL]     = "cell";
-    states[Connection.NONE]     = "Vous n'êtes pas connecté à internet";
-  
-    return  states[networkState];
+    states[Connection.CELL]     = 'Cell';
+    states[Connection.NONE]     = 'none';
+
+    return states[networkState];
   }else{
     return navigator.onLine;
   }

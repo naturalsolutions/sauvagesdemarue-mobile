@@ -987,11 +987,11 @@ NS.UI = (function(ns) {
 																console.log("failed with error code: " + error.code);
 												};
 												var copiedFile = function(fileEntry){ 
-                console.log(fileEntry.fullPath);
-                $('.editor-picture-img').attr('src', fileEntry.fullPath);
+                console.log(fileEntry.nativeURL);
+                $('.editor-picture-img').attr('src', fileEntry.nativeURL);
 												}
 												var gotFileEntry = function(fileEntry) {
-																console.log("got image file entry: " + fileEntry.fullPath);
+																console.log("got image file entry: " + fileEntry.nativeURL);
 																var gotFileSystem = function(fileSystem){
                     fileSystem.root.getDirectory(tagprojetClean, { create: true, exclusive: false }, function(dossier) {
                         fileEntry.moveTo(dossier, (new Date()).getTime()+'_'+tagprojetClean+'.jpg', copiedFile, fsFail);
