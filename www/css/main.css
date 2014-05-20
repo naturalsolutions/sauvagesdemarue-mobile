@@ -71,6 +71,8 @@ background-position: center center;
 width: 100%;
 		margin:auto;
 		background-color:#28717e;
+		position:absolute;
+		z-index:3000;
 }
 .loading-splash {
 		background-image: url(./images/spinner.gif);
@@ -90,6 +92,14 @@ width: 100%;
 		background-image: url('images/splash-screen_v05-rapport1_6.png');
 		background-repeat: no-repeat;
 		background-size: 100%;
+}
+#geoloc {
+		width: 100%;
+		position: absolute;
+		z-index: 2010;
+		top: 55%;
+		padding: 10px;
+		text-align: center;
 }
 body > div.mm-page {
 		width: 100%;
@@ -450,7 +460,7 @@ padding-left: 10px;
 
 .obsListe div#content {
 		overflow-x: auto;
-		height: 88%;
+		max-height: 100%;
 }
 body.obsListe {
 		overflow: hidden;
@@ -467,7 +477,7 @@ label {
 
 /***Footer***/
 #footer {
-		z-index: 100;
+		z-index: 1000;
 }
 #footer .btn[disabled],#footer .btn.disabled {
 		opacity: 1;
@@ -635,7 +645,12 @@ font-size: 24px;
 		text-align: right;
 		margin-top: 1px;
 }
-
+#languette.languette-left a{
+		padding:180% 0;
+}
+#languette.languette-right a{
+		padding:30% 0;
+}
 /*********** Transition slide ***********/
 .page {
   position: absolute;
@@ -846,7 +861,7 @@ ul.nav-list ul {
 		margin-top: 28px;
 }
 #obs-list-content .panel-body p{
-		width: 66%;
+		width: 60%;
 		float:left;
 		padding: 0px 5px; 
 }
@@ -993,13 +1008,13 @@ margin: 10px;
 /******RATIO*****/
 /*Ratio 1,33% android xlarge large small*/
 @media all and (device-aspect-ratio: 3/4){
-		#home-page-content .first {height: 43%;}
+		#home-page-content .first {height: 49%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport3_4.jpg');
 		}	
 }
 @media all and (aspect-ratio: 3/4){
-		#home-page-content .first {height:43%;}
+		#home-page-content .first {height:49%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport3_4.jpg');
 		}	
