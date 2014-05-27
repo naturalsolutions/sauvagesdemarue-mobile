@@ -222,9 +222,9 @@ app.utils.BaseView = Backbone.View.extend({
 // ----------------------------------------------- The Application initialisation ------------------------------------------ //
 document.addEventListener("deviceready", onDeviceReady, false);
 //pour fonctionner avec navigateur desktop
-  $( document ).ready(function() {
-    onDeviceReady();
-  });
+  //$( document ).ready(function() {
+  //  onDeviceReady();
+  //});
 
 function onDeviceReady() {
   window.deferreds = [];  
