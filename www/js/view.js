@@ -864,7 +864,7 @@ app.views.IKCriteriaListItemFilterView =  app.utils.BaseView.extend({
 				if (app.globals.regiontaxon.length > 0) { 
       _.each(app.globals.regiontaxon,function(l){ 
 								var currentInput = 'defCaracValue-'+l;
-								$('input[name="'+currentInput+'"]').prop('checked', true).parent().removeClass("disabled");
+								$('input[name="'+currentInput+'"]').prop('checked', false).parent().removeClass("disabled");
       },this);
     }
   },
