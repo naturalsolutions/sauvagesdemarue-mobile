@@ -113,14 +113,47 @@ app.models.TaxonLite = Backbone.Model.extend({
    },
   
   dao: app.dao.TaxonDAO,
+
+
+
 });
 // The TaxonCollection Model
 app.models.TaxonLiteCollection = Backbone.Collection.extend({
 
   model: app.models.TaxonLite,
+
   
 });
 
+// Espece CEL Model id, num_nom, nom_sci, famille, num_taxon, referentiel
+app.models.EspeceCel = Backbone.Model.extend({
+   
+},{
+  table : 'TespeceCel',
+  schema: {
+    id: { title:'id',type:'Number', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY',autoincrement:true},
+    num_nom: { title:'num_nom', type:'Number', sqltype:'NVARCHAR(500)',  required: true },
+    nom_sci: { title:'nom_sci', type:'Text', sqltype:'NVARCHAR(500)',  required: true },
+    famille: { title:'famille', type:'Text', sqltype:'NVARCHAR(500)' },
+    num_taxon : { title:'num_taxon', sqltype:'INTEGER'},
+    referentiel: { title:'referentiel', type:'Text', sqltype:'NVARCHAR(50)'},
+   },
+  
+  dao: app.dao.EspeceCELDataValueDAO,
+
+});
+// Espece CEL Model
+app.models.EspeceCelCollection = Backbone.Collection.extend({
+
+  model: app.models.EspeceCel,
+
+  findByName: function(key) {
+    var self = this;
+     new app.dao.EspeceCELDataValueDAO.findByName(key, function(data) {
+          self.reset(data);
+      });
+  }
+});
 
 // The Picture Model
 app.models.Picture =Backbone.Model.extend({
@@ -276,11 +309,11 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
       id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
       latitude:{ type: 'hidden', title:'Latitude',sqltype:'REAL', required: true}, 
       longitude: { type: 'hidden', title:'Longitude',sqltype:'REAL', required: true} ,
-      fk_taxon: { title:'fk_taxon',  type:'hidden', sqltype:'INTEGER' ,required: true},
+      fk_taxon: { title:'fk_taxon',  type:'Number', sqltype:'INTEGER' ,required: true},
       fk_rue: { title:'fk_rue',  type:'hidden', sqltype:'INTEGER' ,required: true},
       sended: { title:'sended',  type:'hidden', sqltype:'INTEGER' ,required: true},
       name_taxon: { title:'Espèce',  type:'Text',sqltype:'NVARCHAR(500)', required: true},
-      scientificName: { title:'Nom scientifique',  type: 'hidden',sqltype:'NVARCHAR(500)', required: true},
+      scientificName: { title:'Nom scientifique',  type: 'Text',sqltype:'NVARCHAR(500)', required: true},
       milieu: { title:'Type de milieu', type: 'Select', sqltype:'NVARCHAR(500)',  options: [{val:'Pelouse', label:'Pelouse'},{val:'Mur', label:'Mur'},{val:'Plate bande', label:'Plate bande'},{val:'Pied d\'arbre', label:'Pied d\'arbre'} ,{val:'Fissure', label:'Fissure'}, {val:'Haie', label:'Haie'}, {val: 'Chemin', label:'Chemin'}],required: true },
       datetime : { type: 'hidden',  sqltype:'DATETIME' ,title:'datetime', required: true}, 
       photo: { 

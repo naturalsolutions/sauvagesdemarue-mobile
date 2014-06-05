@@ -222,9 +222,9 @@ app.utils.BaseView = Backbone.View.extend({
 // ----------------------------------------------- The Application initialisation ------------------------------------------ //
 document.addEventListener("deviceready", onDeviceReady, false);
 //pour fonctionner avec navigateur desktop
-  //$( document ).ready(function() {
-  //  onDeviceReady();
-  //});
+  $( document ).ready(function() {
+    onDeviceReady();
+  });
 
 function onDeviceReady() {
   window.deferreds = [];  
@@ -233,11 +233,14 @@ function onDeviceReady() {
   if (navigator.connection) {
     var geoldfd = $.Deferred();
     // Wait first response of Geolocation API before starting app
-    app.models.pos.once('change:coords', function() {this.resolve();$('#geoloc').remove();}, geoldfd);
+    app.models.pos.once('change:coords', function() {this.resolve($('#geoloc').remove())}, geoldfd);
     deferreds.push(geoldfd);
   }
 
-  setTimeout(function(){geolocalisation()},500);
+  setTimeout(function(){
+    geolocalisation();
+    $('body').append("<strong id='geoloc'>En attente de la Géolocalisation de l'appareil.<br/> Activer le wifi accélère la géolocalisation.</strong>");
+  },500);
 
   init();
 
@@ -249,7 +252,7 @@ function onDeviceReady() {
       },
       function(error) {
         app.models.pos.clear();
-        $('body').append("<strong id='geoloc'>En attente de la Géolocalisation de l'appareil.<br/> Activer le wifi accélère la géolocalisation.</strong>");
+        //$('body').append("<strong id='geoloc'>En attente de la Géolocalisation de l'appareil.<br/> Activer le wifi accélère la géolocalisation.</strong>");
         console.warn('ERROR(' + error.code + '): ' + error.message);
         if (error.code === 2 || error.code === 1 || error.code === 0){ 
           sauvages.notifications.gpsNotStart(); 
@@ -314,6 +317,7 @@ function initDB(){
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.EspeceCel));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
@@ -340,6 +344,7 @@ try {
             if (dta.rows.length == 0 ) {
               arr.push(loadXmlTaxa());
               arr.push(loadXmlCriteria());
+              arr.push(loadXmlEspCEL());
             }
           $.when.apply(this, arr).then(function () {
             console.log('when finished dfd.resolve test if data are loaded');
@@ -380,6 +385,7 @@ try {
             console.log('when finished dfd.resolve DROP TABLE');
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.app.models.EspeceCel()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
@@ -390,7 +396,7 @@ try {
               var arr = [];
               if (dta.rows.length == 0 ) {
                 arr.push(loadXmlTaxa());
-               // arr.push(loadXmlCriteria());
+                arr.push(loadXmlEspCEL());
               }
               $.when.apply(this, arr).then(function () {
                 console.log('when finished dfd.resolve test if data are loaded');
@@ -465,9 +471,9 @@ NS.UI.Form.templateSrc.stacked =
                 '</form>';
   if (intVersionMatch < 4.1) {
     NS.UI.Form.editors.Text.templateSrc.stacked =
-      '<div class="form-group">' +
+      '<div class="form-group  <%- data.name %>">' +
                     '    <label  for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-      '   <input class="form-control" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" />' +
+      '   <input class="form-control <%- data.name %>" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" />' +
                     '    <div class="controls">' +   
                     '        <div class="help-inline"></div>' +
                     '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
@@ -492,11 +498,11 @@ NS.UI.Form.templateSrc.stacked =
                     '</div>';
   }else{
     NS.UI.Form.editors.Text.templateSrc.stacked =
-                  '<div class="form-group input-text">' +
+                  '<div class="form-group input-text <%- data.name %>">' +
                   '<div class="input-group input-group-lg">'+
                   '   <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>'+
                   '   <label  class="sr-only" for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-                  '   <input class="form-control input-lg" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" placeholder="<%- data.label %>"/>' +
+                  '   <input class="form-control input-lg <%- data.name %>" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" placeholder="<%- data.label %>"/> ' +
                   ' </div>'+
                   '    <div class="controls">' +   
                   '        <div class="help-inline"></div>' +

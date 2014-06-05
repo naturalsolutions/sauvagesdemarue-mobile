@@ -97,6 +97,14 @@ width: 100%;
 		width: 100%;
 		position: absolute;
 		z-index: 2010;
+		top: 58%;
+		padding: 10px;
+		text-align: center;
+}
+#dataCEL {
+		width: 100%;
+		position: absolute;
+		z-index: 2010;
 		top: 55%;
 		padding: 10px;
 		text-align: center;

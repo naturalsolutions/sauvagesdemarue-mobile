@@ -102,6 +102,10 @@ app.dao.ParcoursDataValueDAO = function(db) {
     this.db = db;
 };
 
+app.dao.EspeceCELDataValueDAO = function(db) {
+    this.db = db;
+};
+
 _.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{
   updateEmailTuser: function(model, callback) {
     this.db.transaction(
@@ -130,7 +134,7 @@ _.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{
       );
   },
 });
-_.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD,{});
 _.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.GroupeDAO.prototype, app.dao.baseDAOBD);
@@ -182,8 +186,8 @@ _.extend(app.dao.ParcoursDataValueDAO.prototype , {
     },
 });
 
-_.extend(
-app.dao.TaxonDAO.prototype, {
+_.extend(app.dao.EspeceCELDataValueDAO.prototype, app.dao.baseDAOBD,{
+
 });
 
 

@@ -45,7 +45,7 @@ function loadXmlTaxa(){
         else {
           oTaxon['picture'] = 'NULL';
         }
-        //Ajout d'une colonne par région
+        //Ajout d'une colonne pour la région PACA
         oTaxon['regionPaca']=parseInt($(this).find('REGIONPACA').text());
 
         //Stockage des caractères associés aux taxons
@@ -61,7 +61,7 @@ function loadXmlTaxa(){
           }
         });
         arr.push(runQuery(sqlTaxon , [oTaxon['taxonId'],oTaxon['fk_group'],oTaxon['commonName'],
-                oTaxon['scientificName'], oTaxon['description'], oTaxon['picture'],oTaxon['regionPaca']]));
+                oTaxon['scientificName'], oTaxon['description'], oTaxon['picture'],oTaxon['regionPaca'] ]));
       });
       
       //Tip to simulate multiple row insert
@@ -83,8 +83,7 @@ function loadXmlTaxa(){
 			}
   });
   return dfd.promise();
- }
- 
+ } 
  
 // Insertion des données par la méthode "classique" : création de modèle et de collection backbone
 function loadXmlCriteria(){
@@ -139,6 +138,54 @@ function loadXmlCriteria(){
   });
   return dfd.promise();
  }
+
+
+//************************************** Alimenter la base de données par le contenu des  XML espéces CEL
+// Insertion des données spécifiques pour des questions de perfs (crash sur ios)
+// Requête écrite en "dur", insertion par lot avec un select + UNION pour chaque donnée
+function loadXmlEspCEL(){
+  $('body').append("<strong id='dataCEL'>Chargement des données..</strong>");
+
+  //var sqlTaxon = 'INSERT INTO TespeceCel ( num_nom, nom_sci, famille, num_taxon, referentiel) VALUES (?,?,?,?,?) ';
+  var sqlTaxon = 'INSERT INTO TespeceCel ( num_nom, nom_sci)';
+ 
+  var arrEspece = [];
+  
+  var urlFile = "data/cel_app.xml";
+  var dfd = $.Deferred();
+  var arr = [];
+  $.ajax( {
+    type: "GET",
+    url: urlFile,
+    dataType: "xml",
+    success: function(xml) {
+      $(xml).find('TAXON').each(function(){	
+        var oTaxon = new Array();
+        oTaxon['num_nom'] = parseInt($(this).find('num_nom').text());
+        oTaxon['nom_sci'] = $(this).find('nom_complet').text();
+      
+       /* oTaxon['famille'] = $(this).find('famille').text();
+        oTaxon['num_taxon']=parseInt($(this).find('num_taxon').text());
+        oTaxon['referentiel']=$(this).find('ref').text();*/
+        //arr.push(runQuery(sqlTaxon , [oTaxon['num_nom'],oTaxon['nom_sci'],oTaxon['famille'],oTaxon['num_taxon'],oTaxon['referentiel']]));
+        arrEspece.push(' SELECT '+oTaxon['num_nom'] +','+ oTaxon['nom_sci']);
+      });
+      
+      //Tip to simulate multiple row insert
+      var i = 0;
+      for (;  i < arrEspece.length; i = i + 499) {
+        var subarrCelData = arrEspece.slice(i,i+499); 
+        arr.push(runQuery(sqlTaxon +' '+ subarrCelData.join(' UNION ALL ') , []));
+      }
+          
+      $.when.apply(this, arr).then(function () {
+          console.log('when finished dfd.resolve loadEspeceCELFile');
+          return  dfd.resolve($('#dataCEL').remove());
+      });
+			}
+  });
+  return dfd.promise();
+ } 
  
 // ----------------------------------------------- Utilitaire de requêtes------------------------------------------ //
 
@@ -159,6 +206,8 @@ function successWrapper(d) {
 function failureWrapper(d) {
   return (function (tx, error) {
     d.reject(error)
+alert(error);
+  console.log(error);
   })
 };
 

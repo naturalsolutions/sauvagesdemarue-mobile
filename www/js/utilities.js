@@ -105,7 +105,31 @@ app.utils.queryData = {
       }
     );
     return dfd.promise();
-  }
+  },
+	findByName: function(key, callback) {
+  var dfd = $.Deferred();
+  var parameters = new Array();
+	//	this.db.transaction(function(tx) {
+			var sql = 
+				"SELECT num_nom, nom_sci " +
+				"FROM TespeceCel " + 
+				"WHERE nom_sci LIKE ? " +
+				"ORDER BY nom_sci";
+
+		runQuery(sql, [key + '%']).done(
+      function(results){
+          var len = results.rows.length,
+            data = [],
+            i = 0;
+          for (; i < len; i = i + 1) {
+            data[i] = results.rows.item(i);
+          }
+          return dfd.resolve(data);
+      }
+    );
+    return dfd.promise();
+
+	}
 }
 
 // WebDataBase DAO base code
@@ -300,6 +324,7 @@ app.dao.baseDAOBD = {
       }
     );
   },
+
 }
 
 // The Template Loader. Used to asynchronously load templates located in separate .html files

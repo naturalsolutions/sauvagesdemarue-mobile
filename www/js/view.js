@@ -52,8 +52,6 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								instance.set('regionPaca', 0);
-								instance.set('fk_taxon', 0);
-								instance.set('scientificName', '');
         instance.save()
 										.done( function(model, response, options) {
 											app.globals.currentFilter.length = 0;
@@ -71,6 +69,8 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement-obs' type='button'>Retour aux résultats</button>");
       $('h3', this.$el).attr('style', 'display:none');
+						$('input.scientificName', this.$el).attr('style', 'display:none').val('inconnue');
+						$('input.fk_taxon', this.$el).attr('style', 'display:none').val(0);
     },
 		
 });
@@ -90,6 +90,11 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
   },
   afterRender: function() {
     $('body').scrollTop(0);
+				var especeSearch = new app.models.EspeceCelCollection()
+				new AutoCompleteView({
+											input: $("input.scientificName"), // your input field
+											model: especeSearch // your collection
+							}).render();
   },
 		
 		remove : function(){
@@ -99,7 +104,7 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 	
 		events:{ 
 				'click .annuler-enregistrement-obs': 'annulerTerminer',
-				'click .btn-footer-right' : 'verifPhoto'
+				'click .btn-footer-right' : 'verifPhoto',
   },
 
 		verifPhoto : function(e){
@@ -113,6 +118,7 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 			window.history.back();
         return false;
 		},
+
 });
 
 app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
@@ -121,18 +127,17 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
       this.on('submit:valid', function(instance) {
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
-								instance.set('scientificName', '');
 								instance.set('regionPaca', 0);
-								instance.set('fk_taxon', 0);
         instance.save()
 										.done( function(model, response, options) {
 												app.globals.currentFilter.length = 0;
-											app.globals.currentFilterTaxonIdList.length = 0;
+												app.globals.currentFilterTaxonIdList.length = 0;
 												sauvages.notifications.obsSaveSuccess();
 												})
 										.fail(function(error){console.log(error)})
 								;
       });
+
     },
     afterRender: function () {
       $('input:submit', this.$el).attr('value', sauvages.messages.save);
@@ -140,6 +145,8 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-home'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
+						$('.name_taxon', this.$el).attr('style', 'display:none');
+						$('.fk_taxon', this.$el).attr('style', 'display:none');
     },
 		
 });
@@ -211,6 +218,8 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 						$('.input-text .glyphicon',this.$el).replaceWith("<span class='icon-fleurgrasse-sauvages'></span> ");
 						$('.select .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-globe'></span> ");
       $('h3', this.$el).attr('style', 'display:none');
+						$('.scientificName', this.$el).attr('style', 'display:none');
+						$('.fk_taxon', this.$el).attr('style', 'display:none');
     },
 		
 });
