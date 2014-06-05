@@ -29,9 +29,14 @@
                     </a>
                   </div>
                   <%
-                  setTimeout(function() {
+                  var flag = false;
+                  if(flag){
                      $('#taxonList-div-'+taxon.get('taxonId')+ ' .taxon-img-thumb').attr('src', picture);
-                  }, 10*k);
+                  }else{
+                     setTimeout(function() {
+                        $('#taxonList-div-'+taxon.get('taxonId')+ ' .taxon-img-thumb').attr('src', picture);
+                     }, 10*k);
+                  }
                   %>
                   <div class="btnAddObsList pull-right">
                     <a href="#addObs/<%= taxon.get('taxonId') %>/localisation/<% if(data.region !== undefined){ %><%= data.region %> <%} %>" class="btn btn-primary"><span class='glyphicon glyphicon-plus'></span></a>
