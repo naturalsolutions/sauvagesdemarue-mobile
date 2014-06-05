@@ -25,6 +25,7 @@ app.Router = Backbone.Router.extend({
   },
 
   initialize: function() {
+    app.globals.positionScroll = 0;
     app.globals.currentFilter = new Array();
     app.globals.regiontaxon = new Array();
     app.globals.currentFilterTaxonIdList = new Array();

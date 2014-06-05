@@ -718,6 +718,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   initialize: function() {
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+				//Mise à zéro de la position du scroll pour la liste
+				app.globals.positionScroll = 0;
   },
   
   events: {
@@ -904,6 +906,14 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				}
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+		
+			_.bindAll(this, 'checkpositionScroll');
+    // bind to window
+    $(window).scroll(this.checkpositionScroll);
+  },
+
+  events : {
+    "scroll" : "checkpositionScroll"
   },
 
   beforeRender: function() {
@@ -929,11 +939,19 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				}	
     return true;
   },
-		
+
+		checkpositionScroll : function(e){
+				var pos = $('body.liste').scrollTop();
+				if (pos > 0) {
+								app.globals.positionScroll = pos;
+				}
+		},
+
 		afterRender: function() {
 				if (this.options.region !== undefined) {
 						$('.footer-default').remove();
 				}
+				$('body.liste').scrollTop(app.globals.positionScroll);
 		},
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
@@ -972,7 +990,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 															$('.flexImages').show();
 														}
 				});
-    $('#content').scrollTop(0);
+    $('body').scrollTop(0);
 		},
 		
 		serialize: function() {
@@ -983,6 +1001,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 				}	
     return true;
   },
+
 		
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
