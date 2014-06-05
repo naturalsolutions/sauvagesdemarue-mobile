@@ -136,7 +136,7 @@ function() {
          title: criteriaName,
          message: criteriaValues,
          delay: '',
-         btnLabel: '', 
+         btnLabel: 'Fermer', 
          onClose: function() {
           app.route.navigate('taxonlist', {trigger: true});
           }
