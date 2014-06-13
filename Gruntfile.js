@@ -57,6 +57,14 @@
                     dest: 'build',
                     src: ['libs/NS.UI.Notification/*.css']
                 }]
+            },
+            libautocomplete : {
+                files: [{
+                    expand: true,
+                    cwd: 'www',
+                    dest: 'build',
+                    src: ['libs/backbone-autocomplete/backbone.autocomplete.css']
+                }]
             }
         },
         uglify: {
@@ -82,6 +90,14 @@
                     cwd: 'www',
                     dest: 'tmp',
                     src: ['libs/NS.UI.Notification/*.js']
+                }]
+            },
+            libautocomplete : {
+                files: [{
+                    expand: true,
+                    cwd: 'www',
+                    dest: 'tmp',
+                    src: ['libs/backbone-autocomplete/backbone.autocomplete.js']
                 }]
             }
         },
@@ -116,6 +132,16 @@
                     }]
                 }
             },
+            distApp: {
+                src: ['build/postCordova.js'],
+                dest: 'build/postCordova.js',
+                options: {
+                    patterns: [{
+                        match: /app.config.debug=!0/,
+                        replacement: 'app.config.debug=0'
+                    }]
+                }
+            }
         },
         concat: {
             templates: {
@@ -145,6 +171,7 @@
                     'www/libs/jQuery.mmenu-master/src/js/jquery.mmenu.min.js',
                     'www/libs/leaflet/leaflet.js',
                     'www/libs/bootstrap_3.0.2/js/bootstrap.min.js',
+                    'www/libs/jquery.hammer.js-master/jquery.hammer-full.min.js',
                     // libriairies minifiées avec uglify ci-dessus
                     'tmp/libs/NS.UI.Notification/notification.js',
                     'tmp/js/sauvage_notifications.js',
@@ -157,7 +184,8 @@
                     'tmp/js/view.js',
                     'tmp/js/router.js',
                     'tmp/js/utilities_wstela.js',
-                    'tmp/libs/NS.UI.Notification/notification_modal.js'
+                    'tmp/libs/NS.UI.Notification/notification_modal.js',
+                    'tmp/libs/backbone-autocomplete/backbone.autocomplete.js',
                 ],
                 dest: 'build/postCordova.js'
             }
