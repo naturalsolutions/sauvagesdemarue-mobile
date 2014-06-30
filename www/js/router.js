@@ -14,18 +14,21 @@ app.Router = Backbone.Router.extend({
     'taxonlistRegion/:region' : 'viewTaxonlistRegion',
     'taxondetail/:id/localisation/(:localisation)' : 'viewTaxonDetail',
     'addObs/:taxonId/localisation/(:localisation)' : 'viewFormAddObs',
+    'detailObs/:id' : 'viewdetailObs',
     'addNonIdentifiee'  : 'viewFormNIOnbs',
     'addPasListe'  : 'viewFormPLOnbs',
     'addParcours(/:state)' : 'viewFormAddParcours',
     'myObservation' : 'viewTableMyObs',
     'ouSuisJe' : 'viewLocalisation',
     'credits' : 'viewCrédits',
+    'aide' : 'viewAide',
     'utilisateur' : 'viewUtilisateur' ,
     '' : 'viewHomePage'
   },
 
   initialize: function() {
     app.globals.positionScroll = 0;
+    app.globals.flagAide = true;
     app.globals.currentFilter = new Array();
     app.globals.regiontaxon = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
@@ -53,23 +56,31 @@ app.Router = Backbone.Router.extend({
     var self= this;
     if ($(".loading-splash").length !== 0) {
       setTimeout(function() {
-        $('body').css('background-color', '#28717E');
-        $('#content').addClass('content-home');
         $(".loading-splash").remove();
         $('#splash-screen').remove();
-        var currentView = new app.views.HomePageView();
+        app.route.navigate('aide',{trigger: true});
+        var currentView = new app.views.AidePageView();
         self.displayView(currentView);
       }, 2000);
     }else{
-      $('#content').addClass('content-home');
       var currentView = new app.views.HomePageView();
       self.displayView(currentView);
-    }   
+    }
+      $('#content').addClass('content-home');
+      $('body').css('background-color', '#28717E');
   },
   
   viewLocalisation: function() {
     var currentView = new app.views.LocalisationPageView();
     this.displayView(currentView);  
+  },
+
+
+  viewAide : function(){
+    var currentView = new app.views.AidePageView();
+    this.displayView(currentView);
+    $(".loading-splash").remove();
+    $('#splash-screen').remove();
   },
 
   viewCrédits: function() {
@@ -100,6 +111,15 @@ app.Router = Backbone.Router.extend({
   },
   
   viewMaRegion : function(name) {
+    if (typeof app.globals.currentrue !== 'undefined' && app.globals.currentrue.get('name') !== undefined) {
+         var msg = _.template(
+                  "<form role='form form-inline'>"+
+                    "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
+                     "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
+                    "</form>"					
+                   );
+         sauvages.notifications.SortieProtocol(msg());
+    }
     var region;
     var taxonsPaca  = new app.models.TaxonLiteCollection();
     taxonsPaca.models = app.globals.cListAllTaxons.multiValueWhere({'commonName' : LISTE_PACA});
@@ -195,7 +215,6 @@ app.Router = Backbone.Router.extend({
     var taxon= new app.models.Taxon({"taxonId": id});
     taxon.fetch({
           success: function(data) {
-
         //Recupération de tous les critères de la clé
            var cListAllCriterias = new app.models.CaracteristiqueDefsCollection();
            
@@ -205,16 +224,32 @@ app.Router = Backbone.Router.extend({
                  self.displayView(currentView);
                }
            }) 
-
           }
       });
    
   },
 
+  viewdetailObs : function(id) {
+    console.log('viewObsDetail');
+    var self = this;
+    //Recupération des données de l'obs
+    var obs= new app.models.OccurenceDataValue({"id": id});
+    obs.fetch({
+      success: function(data) {
+        var parcours = new app.models.ParcoursDataValuesCollection();
+        parcours.fetch({success: function(dataParcours) {
+          var currentParcours = dataParcours.findWhere({"id": data.get('fk_rue')});
+          var currentView = new app.views.obsDetailView({model: data, parcours : currentParcours});
+          self.displayView(currentView);
+        }
+      });
+      }       
+    });
+  },
+
   viewFormAddObs : function(taxonI,localisation) {
     var idCurrentRue = undefined;
     var self = this;
-    //setTimeout(function() {
       var coords = app.models.pos.get('coords');
       if (coords) {
         var selectedTaxon = app.globals.cListAllTaxons.where({taxonId:parseInt(taxonI)});
@@ -222,7 +257,7 @@ app.Router = Backbone.Router.extend({
           var idCurrentRue = app.globals.currentrue.get('id');
         }
         var obs = new app.models.OccurenceDataValue({"fk_taxon" : taxonI, fk_rue : idCurrentRue ,"name_taxon" : selectedTaxon[0].get('commonName'),"scientificName" : selectedTaxon[0].get('scientificName')});
-
+  
         obs.set('latitude',coords.latitude );
         obs.set('longitude',coords.longitude);
         
@@ -234,13 +269,10 @@ app.Router = Backbone.Router.extend({
         sauvages.notifications.connection();
         self.goToLastPage();
       }
-    //},500);
-    
   },
   
   viewFormNIOnbs  : function() {
     var self = this;
-    //setTimeout(function() {
     var coords = app.models.pos.get('coords');
 				if (coords) {
         var obs = new app.models.OccurenceDataValue({fk_rue:app.globals.currentrue.get('id'), "name_taxon" : "inconnue"});
@@ -252,13 +284,10 @@ app.Router = Backbone.Router.extend({
       else{
         sauvages.notifications.connection();
         self.goToLastPage();
-      }
-    //},500);
-    
+      }    
   },
   viewFormPLOnbs : function() {
     var self = this;
-   // setTimeout(function() {
     var coords = app.models.pos.get('coords');
 				if (coords) {
         var obs = new app.models.OccurenceDataValue({fk_rue:app.globals.currentrue.get('id'), "name_taxon" : ""});
@@ -271,8 +300,6 @@ app.Router = Backbone.Router.extend({
         sauvages.notifications.connection();
         self.goToLastPage();
       }
-    //},500);
-    
   },
   
   viewFormAddParcours : function(state) {
@@ -333,9 +360,10 @@ app.Router = Backbone.Router.extend({
           }
         });
       }
-    });
-   
+    });  
   },
+
+
   _currentView: null,
 
   displayView: function (view) {

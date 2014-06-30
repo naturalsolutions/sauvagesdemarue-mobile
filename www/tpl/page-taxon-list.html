@@ -1,6 +1,7 @@
 <div id="taxon-list-content" class="container">
    <%
     var col = _.groupBy(data.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
+      var flag = false;
    %>
    <div class="loc-container" >
       
@@ -23,19 +24,19 @@
                       <% if ((typeof(taxon.get('picture')) !== "undefined")  &&  (taxon.get('picture') !== "undefined")){ %>
                       <% var picture = taxon.get('picture')
                       picture = picture.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/")%>
-                        <img class="taxon-img-thumb" id="taxonList-img-<%= taxon.get('taxonId') %>" src="<%=picture%>" alt="image : <%= taxon.get('scientificName') %>"/>
+                        <img class="taxon-img-thumb loading-slideshow" id="taxonList-img-<%= taxon.get('taxonId') %>" src="<%=picture%>" alt="image : <%= taxon.get('scientificName') %>"/>
                       <% } %> 
                       <p><b><%= taxon.get('commonName') %></b></br><em><%= taxon.get('scientificName') %></em></p>
                     </a>
                   </div>
                   <%
-                  var flag = false;
                   if(flag){
                      $('#taxonList-div-'+taxon.get('taxonId')+ ' .taxon-img-thumb').attr('src', picture);
                   }else{
                      setTimeout(function() {
                         $('#taxonList-div-'+taxon.get('taxonId')+ ' .taxon-img-thumb').attr('src', picture);
-                     }, 10*k);
+                     }, 100*k);
+                     flag = true;
                   }
                   %>
                   <div class="btnAddObsList pull-right">
@@ -48,7 +49,7 @@
         <% }); %>
         </ul>
       <%}%>
-      <% }); %>
+      <% });%>
       </ul>
     </fieldset>
    <div id="wrapper-footer">

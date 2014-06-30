@@ -13,6 +13,7 @@ var app = {
   globals : {},
 
 };
+app.config.debug = true;
 
 
 /*
@@ -221,10 +222,9 @@ app.utils.BaseView = Backbone.View.extend({
 
 // ----------------------------------------------- The Application initialisation ------------------------------------------ //
 document.addEventListener("deviceready", onDeviceReady, false);
-//pour fonctionner avec navigateur desktop
-  $( document ).ready(function() {
-    onDeviceReady();
-  });
+
+//pour fonctionner sur navigateur desktop
+if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
 
 function onDeviceReady() {
   window.deferreds = [];  
@@ -252,7 +252,6 @@ function onDeviceReady() {
       },
       function(error) {
         app.models.pos.clear();
-        //$('body').append("<strong id='geoloc'>En attente de la Géolocalisation de l'appareil.<br/> Activer le wifi accélère la géolocalisation.</strong>");
         console.warn('ERROR(' + error.code + '): ' + error.message);
         if (error.code === 2 || error.code === 1 || error.code === 0){ 
           sauvages.notifications.gpsNotStart(); 
@@ -328,17 +327,17 @@ function initDB(){
   
 
 try {
-
+console.log('version avant changeV : ' +app.db.version);
 		// Si première installation de l'appli
-		if(app.db.version === "") {
+  if(app.db.version === "") {
     var dfdTaxon = $.Deferred();
     deferreds.push(dfdTaxon);
     console.log('im a "" user');
-    app.db.changeVersion("", "1.1", 
+    app.db.changeVersion("", "1.2", 
       function() {
           console.log('deferreds version vide '+ deferreds.length);
-          //test if data are already loaded
-          //Si oui alors => pas de chargement des données en base
+          //teste si les données taxons sont chargés dans la base
+          //Si le tableau retourné est vide alors => chargement des données en base
           $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
           var arr = [];
             if (dta.rows.length == 0 ) {
@@ -354,22 +353,56 @@ try {
             return dfdTaxon.resolve();
           });
       }, 
-      //used for error
+      // error
       function(e) {
-       console.log('error in changeV vide à 1.1');
+       console.log('error in changeV vide à 1.2');
        console.log(JSON.stringify(e));
       },
-      //used for success
+      // success
       function() {
-       console.log("success '' à 1.1 : "+app.db.version);
+       console.log("success '' à 1.2 : "+app.db.version);
       }
 			);
-  // Sinon si appli avec v1.0 installée
+  // Sinon si la base de données de l'appli à mettre à jour est 1.1 
+		}
+		else if(app.db.version === "1.1") {
+    var dfdTaxon = $.Deferred();
+    deferreds.push(dfdTaxon);
+    console.log('im a "" user');
+    app.db.changeVersion("1.1", "1.2", 
+      function() {
+          console.log('deferreds version vide '+ deferreds.length);
+          //teste si les données taxons sont chargés dans la base
+          //Si le tableau retourné est vide alors => chargement des données en base
+          $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
+          var arr = [];
+            if (dta.rows.length == 0 ) {
+              arr.push(loadXmlEspCEL());
+            }
+          $.when.apply(this, arr).then(function () {
+            console.log('when finished dfd.resolve test if data are loaded');
+            return setTimeout(function(){ dfdTaxon.resolve()},1000);
+          });
+          }).fail(function (err) {
+            return dfdTaxon.resolve();
+          });
+      }, 
+      // error
+      function(e) {
+       console.log('error in changeV 1.1 à 1.2');
+       console.log(JSON.stringify(e));
+      },
+      // success
+      function() {
+       console.log("success 1.1 à 1.2 : "+app.db.version);
+      }
+			);
+  // Sinon si la base de données de l'appli à mettre à jour est 1.0 
 		} else if(app.db.version === "1.0") {
     var dfdTaxon = $.Deferred();
     deferreds.push(dfdTaxon);
       console.log('im a 1.0 user');	
-      app.db.changeVersion("1.0", "1.1", 
+      app.db.changeVersion("1.0", "1.2", 
         function(trans) {
          //do initial setup
           var dfd = $.Deferred();
@@ -385,7 +418,7 @@ try {
             console.log('when finished dfd.resolve DROP TABLE');
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
-            deferreds.push(app.dao.baseDAOBD.populate(new app.models.app.models.EspeceCel()));
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.EspeceCel()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
@@ -432,12 +465,12 @@ try {
         }, 
         //used for error
         function(e) {
-         console.log('error in changeV for v1.1');
+         console.log('error in changeV for v1.2');
          console.log(JSON.stringify(e));
         },
         //used for success
         function() {
-         console.log('success in changeV for v1.1');
+         console.log('success in changeV for v1.2');
          console.log(app.db.version);
         }
       );			

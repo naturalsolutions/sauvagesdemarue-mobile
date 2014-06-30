@@ -374,10 +374,6 @@ app.utils.bbforms2sqlite= {
 		'autoincrement':'AUTOINCREMENT',
   },  
 }
-// capitaliseFirstLetter
-function capitaliseFirstLetter(string){
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 Date.prototype.format = function(format) {
   var o = {
@@ -398,7 +394,6 @@ Date.prototype.format = function(format) {
         ("00"+ o[k]).substr((""+ o[k]).length));
   return format;
 }
-
 
 // -------------------------------------------------- MMenu slide---------------------------------------------------- //
 $("#menu").mmenu({
@@ -457,6 +452,10 @@ $('#menu-item-credits').click(function(){
   app.route.navigate('credits', {trigger: true, replace: true});
   $("#menu").trigger("close");
 });
+$('#menu-item-aide').click(function(){
+  app.route.navigate('aide', {trigger: true, replace: true});
+  $("#menu").trigger("close");
+});
 $('#menu-item-utilisateur').click(function(){
   app.route.navigate('utilisateur', {trigger: true, replace: true});
   $("#menu").trigger("close");
@@ -482,6 +481,17 @@ $('#menu-item-region').click(function(){
   }
 });
 
+
+// -------------------------------------------------- Hammer event desktop et mobile ---------------------------------------------------- //
+
+  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+				var options = {
+						dragLockToAxis: true,
+						dragBlockHorizontal: true
+				};
+				var element = document.getElementsByClassName('mm-page');
+				var hammertime = new Hammer(element, options);
+			//	hammertime.on("dragleft dragright swipeleft swiperight", function(ev){ console.log('drag')});
 // -------------------------------------------------- checkConnection ---------------------------------------------------- //
 function checkConnection() {
   if (navigator.connection) {
@@ -502,5 +512,13 @@ function checkConnection() {
     return navigator.onLine;
   }
 }
+//----------------------------------------//
+function findIdToTargetEvent(event){
+				var ctarget = $(event.currentTarget);
+				var idCurrentTarget= parseInt(ctarget.context.id);
+				return idCurrentTarget;
+		}
 
-
+function capitaliseFirstLetter(string){
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

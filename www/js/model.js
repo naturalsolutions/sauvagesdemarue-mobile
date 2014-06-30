@@ -64,6 +64,8 @@ app.models.UserCollection = Backbone.Collection.extend({
   model: app.models.User,
 });
 
+
+
 // The Taxon Model
 /// !!!!!!!!!!!!!!!  !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!! !!!!!!!!!!!!!!!
 ///          En cas de modification des modèles taxons/Critères et Picture  

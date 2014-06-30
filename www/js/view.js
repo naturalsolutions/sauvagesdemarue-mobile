@@ -128,6 +128,7 @@ app.views.FormAddOccurencePasDansListeView = NS.UI.Form.extend({
 								//Get value for hidden fields
 								instance.set('datetime', new Date().format("yyyy-MM-dd h:mm:ss"));
 								instance.set('regionPaca', 0);
+								instance.set('name_taxon', 'Non renseigné');
         instance.save()
 										.done( function(model, response, options) {
 												app.globals.currentFilter.length = 0;
@@ -243,6 +244,8 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
 		'click .annuler-retour': 'annulerParcours',
+  'focus .notNew': 'editFormElem',
+  'blur .notNew': 'readOnlyFormElem',
   },
 
 		annulerTerminer : function(evt){
@@ -251,9 +254,18 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 		},
 		annulerParcours : function(evt){
 				delete app.globals.currentrue;
-				app.route.navigate('', {trigger: true});
+				app.route.navigate('#', {trigger: true});
 				return false;
 		},
+  editFormElem : function(evt){
+				var objCurrentTarget=$(evt.target);
+				var idCurrentTarget= objCurrentTarget['context']['id'];
+    $('#'+idCurrentTarget).removeAttr("readonly","readonly");},
+  
+  readOnlyFormElem : function(evt){
+				var objCurrentTarget=$(evt.target);
+				var idCurrentTarget= objCurrentTarget['context']['id'];
+    $('#'+idCurrentTarget).attr("readonly","readonly");},
 
   beforeRender: function() {
 				$('.icone-page-title').hide();
@@ -280,7 +292,6 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
     NS.UI.Form.prototype.initialize.apply(this, arguments);
 				//Test if new instance
 				this.isNew = this.instance.isNew();
-				
 				var self = this;
 				this.on('submit:valid', function(instance) {
 						//Get value for hidden fields
@@ -299,13 +310,22 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 										success: function(data) {
 												//fin de parcours
 												if (!self.isNew) {
-														// TODO enlever les globales
 														delete app.globals.currentrue;
 														data.set('state',1).save();
 														app.globals.currentFilter.length = 0;
 														app.globals.currentFilterTaxonIdList.length = 0;
 														$('.page-sub-title').empty();
-														sauvages.notifications.finParcours();				
+
+														var msg = _.template(
+																				"<form role='form form-inline'>"+
+																					"<div class='form-group'>"+
+																					"		<p>Retrouver vos données dans la rubrique <strong>Mes Sauvages</strong>.<br/> N\'oublier pas de les partager aux scientifiques !</p>"+
+																					"</div>"+
+																					"<button type='submit' class='btn btn-success'>Partager</button>"+
+																					"<button type='button' class='btn btn-default pull-right' data-dismiss='modal' aria-hidden='true'>Fermer</button>"+
+																				"</form>"					
+																		);
+														sauvages.notifications.finParcours(msg());				
 												}
 												//nouvelle rue
 												else {
@@ -327,13 +347,12 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-retour' type='button' >Retour à l'accueil</button>");
 				}
     else{
-						$('.page-title').replaceWith("<div class='page-title'>"+sauvages.messages.end_street+"</div>");
-      $('input:submit', this.$el).attr('value', 'Terminer').removeClass('btn-primary').addClass('btn-danger');
-      $('input:text', this.$el).addClass('disabled');
-      $('select', this.$el).addClass('disabled');
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' type='button'>Retour à la saisie</button>");
+						$('.page-title').replaceWith("<div class='page-title'>Mon parcours</div>");
+      $('input:text,select', this.$el).attr("readonly","readonly").addClass('notNew');
+      $('input:submit', this.$el).replaceWith("<button class='btn btn-footer btn-default annuler-fin-saisie' type='button'>Retour à la saisie</button>")
+      $('input:reset', this.$el).replaceWith("<input type='submit' class='btn btn-footer btn-footer-right btn-danger' value='Terminer'>");
      }
-    //$('input:reset', this.$el).attr('style', 'display:none');
+    $('input:reset', this.$el).attr('style', 'display:none');
     $('h3', this.$el).attr('style', 'display:none');
   }
 });
@@ -364,7 +383,7 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
-		  beforeRender:function(){
+		beforeRender:function(){
     $('#content').addClass('content-home');
   },
 
@@ -379,7 +398,16 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 		afterRender: function(){
     $('body').removeClass('pad-bottom-top');
 				$('#header').addClass('hide');
-    $('#menu').addClass('hide'); 
+    $('#menu').addClass('hide');
+
+  app.utils.queryData.getObservationsTelaWSFormatedAll()
+    .done(function(data) {
+        if (data.length !== 0 && $('#home-page-content .flag-container').has('#flagObs').length === 0) {
+          $('#home-page-content .flag-container p').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-left'></span>");  
+        }else if(data.length === 0 && $('#home-page-content .flag-container').has('#flagObs').length === 1){
+          $('#flagObs').remove();
+        }
+    });
   }
 });
 
@@ -399,7 +427,7 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 				if (coords) {
 						var latitudePosition = coords.latitude;
 						var longitudePosition = coords.longitude;
-						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'> latitude : "+latitudePosition.toPrecision(5) +" - longitude : "+longitudePosition.toPrecision(5)+"</h1>");
+						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'> lat : "+latitudePosition.toPrecision(5) +" - lon : "+longitudePosition.toPrecision(5)+"</h1>");
 						this.map = L.map(this.el).setView([latitudePosition, longitudePosition], 13);
 						var marker = L.marker([latitudePosition, longitudePosition]).addTo(this.map);
 						L.Icon.Default.imagePath = 'libs/leaflet/images';
@@ -449,7 +477,7 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 				var isDisabled = $('input[type=text]').hasClass('disabled');
 				if (isDisabled) {
 						$('input[type=text]').removeClass('disabled');		
-				}		
+				}		detail
 		},
 		updateEmail: function(evt){
 				var currentEmail = this.$el.find('input[type="text"]').val();
@@ -739,6 +767,10 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
 				}
 		},
+
+		afterRender :function(){
+				$('body').scrollTop(0);
+		},
 		
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
@@ -1015,6 +1047,85 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 		}
 });
 
+
+
+app.views.obsDetailView=  app.utils.BaseView.extend({
+
+  template: 'page-obs-detail',
+
+   initialize: function() {
+				this.parcours = this.options.parcours;
+    this.model.bind("reset", this.render, this);
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+  beforeRender: function() {
+				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('name_taxon')+"</div><em>"+ this.parcours.get('name')+" - "+this.parcours.get('cote')+"</em>");
+				$('.page-block-sub-title').empty();
+  },
+
+		afterRender: function() {
+    $('body').scrollTop(0);
+		},
+		
+		serialize: function() {
+				if (this.model) return {model : this.model};
+    return true;
+  },
+		
+  events : {
+    "click .confirme-supp" : "confirmeSupprObs",
+    "click .destroy-obs" : "destroyObs"
+  },
+
+		remove: function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+				$('.page-block-title em').remove();
+				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
+		},
+
+		confirmeSupprObs : function(event){
+		this.model;
+				var msg = _.template(
+						"<form role='form form-inline'>"+
+							"<div class='form-group'>"+
+							"		<p>Voulez-voulez supprimer l'observation <i><%= data.get('name_taxon') %></i> du <%= data.get('datetime') %>.</p>"+
+							"</div>"+
+							"<button type='submit' class='btn btn-danger'>Supprimer</button>"+
+							"<button type='button' class='btn btn-default pull-right' data-dismiss='modal' aria-hidden='true'>Annuler</button>"+
+						"</form>"					
+				);
+				sauvages.notifications.supprimerData(msg(this.model), this.$el);
+		},
+
+		destroyObs : function(event){
+						var self = this;
+						this.obsCollection = new app.models.OccurenceDataValuesCollection();
+						this.obsCollection.fetch({success: function(dataParcours) {
+								var obsToDestroy = self.obsCollection.findWhere({'id': self.model.get('id')});
+								obsToDestroy.destroy({success: function(obs, idObs) {
+										var obsTime = 	obs.set('datetime', new Date().format("dd/MM/yyyy"));
+										var msg = "L'observation <i>"+obs.get('name_taxon')+"</i> du "+ obs.get('datetime')+" a été supprimée du mobile." 
+										sauvages.notifications.supprimerObs(msg);
+										app.route.navigate('myObservation', {trigger: true});
+
+										var obsFkRue = obs.get('fk_rue');
+										var ObsWhereRueTarget = self.obsCollection.where({'fk_rue' : parseInt(obsFkRue)})
+										var nbObs = ObsWhereRueTarget.length;
+										
+										var parcoursState =	self.parcours.get('state');
+										if (parseInt(nbObs) === 0 && parcoursState !==  0) {
+												self.parcours.destroy({success: function(rue, results) {
+												app.route.navigate('myObservation', {trigger: true});
+												}});
+										}
+								}
+						});
+				}});
+		},
+
+});
+
 app.views.ObservationListView =  app.utils.BaseView.extend({
 
   template: 'page-obs-list',
@@ -1023,6 +1134,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				this.parcours = this.options.parcours;
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+				this.flagSuppr = false;
   },
   
   serialize: function() {
@@ -1036,6 +1148,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				$('.page-title').replaceWith("<div class='page-title'>Mes sauvages</div>");
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Liste de toutes mes sauvages</h1>");
 		},
+
+
 		remove: function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('body').removeClass('obsListe');
@@ -1045,14 +1159,18 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     "click #tabObs a[href='#rue']": "tabObrue",
     'click .test-obs': 'testConnection',
 				'click .send-obs': 'sendObs',
-				'click .destroyObs':'destroyObs',
+				'click .destroyRue':'destroyRue',
 				'click .back-rue-en-cours':'backRueEnCours',
 				'click .back-home' : 'backHome',
 				'click .back-parcours' : 'backParcours',
 				'hidden.bs.collapse': 'hideIcon',
 				'shown.bs.collapse': 'showIcon',
 				'shown.bs.tab': 'scrollOnshow',
-				'click .annulerEnvoi': 'abortRequete'
+				'click .annulerEnvoi': 'abortRequete',
+				'dragleft .panel-heading': 'supprDrag',
+				'dragright .panel-heading': 'annuleDrag',
+				'click a':'fermerAllDrag',
+				"click .confirme-supp" : "confirmeSupprRue",
 		},
   
   tabObsespece: function(event){
@@ -1079,12 +1197,10 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				var flag = regex.test(value);
 				return flag;
 		},
-
 		testConnection : function(event){
 				var ctarget = $(event.currentTarget);
 				this.idRue =  parseInt(ctarget.context.id);
 				var dfd = $.Deferred();
-
 				var connect = checkConnection();
 				if (connect === '2G' || connect === '3G' || connect === 'Cell' || connect === 'wifi' || connect === true){
 								var msg = _.template(
@@ -1100,7 +1216,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						sauvages.notifications.connection();
 				}
 		},
-
 		appelServiceCommuneTela :  function (latParcours,longParcours,callback){
 				if (latParcours && longParcours) {
 						var serviceCommune,
@@ -1125,7 +1240,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 						console.log("Cette observation n'a pas d'information de géolocalisation.")
 				}
 		},
-		
   sendObs: function (event) {
 				var ctarget = $(event.currentTarget);
 				this.idRue =  parseInt(ctarget.context.id);
@@ -1192,30 +1306,26 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				var wstela = new NS.WSTelaAPIClient();
 				wstela.sendToTelaWS.abort();
 		},
-		destroyObs : function(event){
-						var self = this;
-						var ctarget = $(event.currentTarget);
-						var obsToDestroy = self.collection.findWhere({'id': parseInt(ctarget.context.id)});
-						obsToDestroy.destroy({success: function(obs, idObs) {
-								var obsTime = 	obs.set('datetime', new Date().format("dd/MM/yyyy"));
-								var msg = "L'observation <i>"+obs.get('name_taxon')+"</i> du "+ obs.get('datetime')+" a été supprimée du mobile." 
+		destroyRue : function(event){
+				var self = this;
+				var rueToDestroy = this.findCollectionToTargetEvent(event,self.parcours);
+				var idRue = findIdToTargetEvent(event);
+				rueToDestroy.destroy({
+						success: function(rue, idRue) {
+								if(app.globals.currentrue != undefined && app.globals.currentrue.get('id') == idRue){ app.globals.currentrue = undefined};
+								var rueTime = 	rue.set('datetime', new Date().format("dd/MM/yyyy"));
+								var msg = "La rue <i>"+rue.get('name')+"</i> du "+ rue.get('datetime')+" a été supprimée du mobile." 
 								sauvages.notifications.supprimerObs(msg);
+								$("#tabObs a[href='#rue']").tab('show');
+								//Suppression des obs attachées à cette rue
+								var collectionTarget = self.collection.where({'fk_rue': idRue})
+								if (collectionTarget.length > 0) {
+										_.each(collectionTarget,function(item) {
+												item.destroy();
+										});
+								}
 								self.parcours.models.reverse();
 								self.render();
-								$("#tabObs a[href='#rue']").tab('show');
-								
-								var obsFkRue = obs.get('fk_rue');
-								var ObsWhereRueTarget = self.collection.where({'fk_rue' : parseInt(obsFkRue)})
-								var nbObs = ObsWhereRueTarget.length;
-								
-								var parcoursObs = self.parcours.findWhere({'id' : parseInt(obsFkRue)});
-								var parcoursState =	parcoursObs.get('state');
-								if (parseInt(nbObs) === 0 && parcoursState !==  0) {
-										parcoursObs.destroy({success: function(rue, results) {
-												self.render();
-												$("#tabObs a[href='#rue']").tab('show');
-										}});
-								}
 						}
 				});
 		},
@@ -1228,5 +1338,103 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		},
 		backHome : function(event){
 				app.route.navigate('', {trigger: true});
+		},
+		supprDrag : function(event){
+				event.gesture.stopDetect();
+				event.stopPropagation();
+				this.fermerAllDrag();
+				var objCurrentTarget=$(event.currentTarget);
+				var idCurrentTarget = objCurrentTarget[0]['id'];
+				var idParentCurrentTarget= objCurrentTarget.parents('.panel');
+				$('#'+idParentCurrentTarget[0]['id'] + ' .panel-heading')
+						.css("border-right-style","solid")				
+						.animate({ "borderRightWidth": "90px" }, "slow");
+				var buttonDestroyRue = $('#'+idParentCurrentTarget[0]['id'] + ' .panel-heading').find('.confirme-supp');
+				if (buttonDestroyRue.length === 0) {
+						setTimeout(function(){$('#'+idParentCurrentTarget[0]['id'] + ' .panel-heading').append('<button type="button" class="confirme-supp btn btn-danger pull-right" id='+ idCurrentTarget + '><span class="glyphicon glyphicon-trash"></span></button>')},400);		
+				}
+				var buttonTestObs =$('#'+idParentCurrentTarget[0]['id'] + ' .panel-heading').find('.test-obs');
+				if (buttonTestObs.length > 0) {
+						setTimeout(function(){
+								$(buttonTestObs).hide().fadeOut(1000);
+								$('.badge').hide().fadeOut(1000)
+						},400);		
+				}
+				var buttonBadge =$('#'+idParentCurrentTarget[0]['id'] + ' .panel-heading').children('.badge').hide();
+		},
+		annuleDrag : function(event){
+				event.gesture.stopDetect()
+				event.stopPropagation();
+				this.fermerAllDrag();
+		},
+		fermerAllDrag : function(){
+				$('button.destroyRue').remove();
+				$('.panel-heading')
+						.css("border-right-style","none")
+						.animate({ "borderRightWidth": "0px" }, "slow");
+				var buttonTestObs =$('.panel-heading').find('.test-obs');
+				$('.badge').show().fadeIn(1000);
+				if (buttonTestObs.length > 0) {
+						setTimeout(function(){
+								$('.test-obs').show().fadeIn(500)
+						},400);		
+				}	
+		},
+		confirmeSupprRue : function(event){
+				var idRue = findIdToTargetEvent(event);
+				var currentCollection = this.findCollectionToTargetEvent(event,this.parcours);
+				var msg = _.template(
+						"<form role='form form-inline'>"+
+							"<div class='form-group'>"+
+							"		<p>Voulez-voulez supprimer la rue <i><%= data.get('name') %></i> et toutes les observations liées à celle-ci ?</p>"+
+							"</div>"+
+							"<button type='submit' class='btn btn-danger'>Supprimer</button>"+
+							"<button type='button' class='btn btn-primary pull-right' data-dismiss='modal' aria-hidden='true'>Annuler</button>"+
+						"</form>"					
+				);
+				sauvages.notifications.supprimerRue(msg(currentCollection),idRue ,this.$el);
+		},
+		findCollectionToTargetEvent : function(event,collection){
+				var idCurrentTarget = findIdToTargetEvent(event);
+				var currentCollection = collection.findWhere({'id': idCurrentTarget});
+				return currentCollection;
 		}
+});
+
+app.views.AidePageView = app.utils.BaseView.extend({
+  template: 'page-aide',
+
+   initialize: function() {
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  },
+
+  events: {
+    "touch #quitter-aide": "navigateHome"
+  },
+
+  navigateHome: function(evt){
+    app.route.navigate('', {trigger: true});
+  },
+
+  beforeRender: function() {
+    $('#header').hide();
+    $('body').addClass('page-aide');
+  },
+
+		afterRender: function() {
+				$('.flexslider', this.$el).flexslider({
+														animation: "slide",  
+														slideshow: false,
+														touch: true,  
+														start: function(slider) {
+															$('.flexImages').show();
+														}
+				});
+    $('body').scrollTop(0);
+		},
+  remove: function(){
+				app.utils.BaseView.prototype.remove.apply(this, arguments);
+    $('#header').show();
+    $('body').removeClass('page-aide');
+  }
 });

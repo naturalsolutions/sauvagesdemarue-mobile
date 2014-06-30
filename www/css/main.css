@@ -97,17 +97,20 @@ width: 100%;
 		width: 100%;
 		position: absolute;
 		z-index: 2010;
-		top: 58%;
+		top: 59%;
 		padding: 10px;
 		text-align: center;
+  background-color:rgba(0,0,0,0.3);
+  background-size:90%;
 }
 #dataCEL {
 		width: 100%;
 		position: absolute;
 		z-index: 2010;
-		top: 55%;
-		padding: 10px;
+		top: 53%;
+		padding: 8px;
 		text-align: center;
+  background-color:rgba(0,0,0,0.7);
 }
 body > div.mm-page {
 		width: 100%;
@@ -116,7 +119,7 @@ body > div.mm-page {
 #content.content-home,body > div.mm-page > div{
 		height: 100%;
 }
-/*********/
+/************** GENERAL **************/
 .pad-bottom-top {
 		padding-top: 80px;
 }
@@ -131,9 +134,28 @@ body > div.mm-page {
 	cursor: default!important;
 	pointer-events: none;
 }
-.btn.disabled {
+.btn.disabled,input[readonly],select[readonly] {
 		color: gray;
 }
+
+@media screen {
+	div#preloader {
+		position: absolute;
+		left: -9999px;
+		top:  -9999px;
+		}
+	div#preloader img {
+		display: block;
+		}
+	}
+@media print {
+	div#preloader, 
+	div#preloader img {
+		visibility: hidden;
+		display: none;
+		}
+	}
+
 .container{
   padding-left:0;
   padding-right:0;
@@ -285,6 +307,10 @@ ul{
 		padding-top:0px;
 }
 
+span#flagObs {
+		color: yellow;
+		margin-left: 8px;
+}
 /******PAGE LOCALISATION******/
 #mapLeaflet {
 		height: 100%;
@@ -313,7 +339,12 @@ outline-width: 0px;
 		font-weight: 200;
 		line-height: 1.3em;
 }
-
+/****** détail d'une observation ****************/
+.photo-obs img{
+		width: 100%;
+		display: block;
+		border: 4px solid white;
+}
 /****** NS_UI-Form****************/
 #rue-form {
 		height: 100%;
@@ -393,8 +424,11 @@ background-color: #007600;
 		color: #0C2125;
 }
 .panel-heading > a {
-		width: 100%;
+		width: 70%;
 		display: inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 }
 .panel-group a, .panel-group {
 		color: white;
@@ -419,6 +453,21 @@ padding-left: 10px;
 }
 #taxonList-div-3 > div.panel-heading > a > span.glyphicon.glyphicon-share {
 		color: yellowgreen;
+}
+button.destroyRue,button.confirme-supp{
+		clear: right;
+		margin-top: -25px;
+		margin-right: -85px;
+		color: black;
+}
+button.destroyRue span.glyphicon.glyphicon-trash,button.confirme-supp span.glyphicon.glyphicon-trash {
+		font-size: 20px;
+}
+button.test-obs {
+		margin-top: -30px;
+}
+.panel-heading i{
+		text-shadow: 1px 1px #333;
 }
 /****list-group****/
 .list-group-item:last-child,.list-group-item:first-child  {
@@ -629,6 +678,11 @@ a.btn.btn-footer{
 #home-page-content .first{
 		height: 43%;
 }
+
+a.menu-aide:hover{
+  color:#008D00;
+}
+
 /****Smartphones (portrait)*****/
 @media  (max-height : 320px){
     #home-bonhomme {
@@ -809,6 +863,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c0000', end
   float: left;
   border-radius:4px;
 }
+
+.taxon-img-thumb {
+		width: 80px;
+		height: 80px;
+}
+
 .taxonList li {
 		padding: 0;
   display: -webkit-box;
@@ -888,15 +948,80 @@ ul.nav-list ul {
 		position: initial;
 		top: inherit;
 }
-/**********carousel-container*************/
+/**********  carousel-container  *************/
 
 .flexslider .slides > li:first-child {display: list-item;}
 #taxon-detail-content > div.loc-container > div.flexslider > div > ul > li.loading-slideshow.flex-active-slide {
-		background: none;
+		min-height: 400px;
 }
 #taxon-detail-content > div.loc-container > div.flexslider > div > ul > li.loading-slideshow.flex-active-slide > label {
 		padding-left: 5px;
 		color: #333;
+}
+/*********************  AIDE  *********************/
+.page-aide{
+  padding-top: 0px;
+}
+.page-aide .loc-container{
+  margin: 20px 5% 0px;
+}
+.page-aide .flex-direction-nav {
+  display: none;
+}
+
+.page-aide .flex-control-paging li a.flex-active {
+  background: yellow;
+  cursor: default;
+  text-decoration: none;
+  padding: 4px 10px;
+  font-size: 20px;
+  color: #333;
+  font-weight: 600; 
+}
+.page-aide .flex-control-paging li a {
+  display: initial;
+  background:white;
+  cursor: pointer;
+  text-decoration: underline;
+  box-shadow: none;
+		color: #333;
+  padding: 2px 6px;
+  text-decoration: none;
+  font-weight: 500; 
+}
+.page-aide .flex-control-nav li {
+ display: inline;
+  margin: 0 5px;
+}
+.page-aide .flex-control-paging li a:hover{
+  background: yellowgreen;
+}
+
+.page-aide .flexslider{
+  border:none;
+  margin:0px;
+}
+
+a#quitter-aide {
+  position: absolute;
+  top: 5px;
+  left: 0px;
+  padding-left:1%;
+  z-index: 1;
+  color:yellow;
+}
+#quitter-aide span.glyphicon.glyphicon-remove-circle{
+  font-size:24px;
+}
+.page-aide .flex-control-nav {
+  position: absolute;
+  bottom: 40px;
+  text-align: center;
+  background-color: rgba(0,0,0,0.58);
+  padding: 5px 0px;
+  margin-left: 4%;
+  border-radius:4px;
+  width: 92%;
 }
 /***DETAIL TAXON***/
 .btnObs{
@@ -904,29 +1029,29 @@ ul.nav-list ul {
   margin:0px 32% 5px;
 }
 .btnObs {
-margin: 10px auto;
-background-image: url('images/btn-add-obs-round.png');
-background-repeat: no-repeat;
-width: 74px;
-height: 60px;
-display: block;
+  margin: 10px auto;
+  background-image: url('images/btn-add-obs-round.png');
+  background-repeat: no-repeat;
+  width: 74px;
+  height: 60px;
+  display: block;
 }
 .accordion-toggle {
-color: black;
+  color: black;
 }
 .accordion-toggle:hover {
-color: black;
-text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 .accordion-toggle i {
-margin-right: 7px;
+  margin-right: 7px;
 }
 .accordion {
-margin-bottom: 60px;
+  margin-bottom: 60px;
 }
 #criteria-list-container li {
-list-style: none;
-margin: 10px;
+  list-style: none;
+  margin: 10px;
 }
 
 /********** REGION *************/
@@ -1092,6 +1217,7 @@ margin: 10px;
 				background-image: url('images/splash-screen_v05-rapport3_5.jpg');
 		}		
 }
+
 
 /*******SURCHARGE DE TWITTER BOOTSTRAP*******/
 

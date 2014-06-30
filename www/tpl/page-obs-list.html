@@ -15,29 +15,31 @@
 																		var group = data.collection.getObsByRueId(rueId);
 														%>   
 																<div class="panel panel-default" id='taxonList-div-<%=i %>' >
-																				<div class="panel-heading <% if(rue.get('end_datetime') === 'undefined' || rue.get('end_datetime') === null){ %> rueEnCours <% } %>" >
-																								<a data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
-																												<span class="glyphicon glyphicon-plus glyph-collpase"></span>
-																												<b><%= rueName %></b>
-																													<% if(rue.get('state') === 1) { %>
-																																<% 	var obsTime = 	rue.set('end_datetime', new Date().format("dd/MM/yyyy")); %>
-																																<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
-																																<% if(group.length >= 1) { partage = true;%>
-																																		<button type="button" id ="<%= rue.get('id') %>" class="btn btn-sm btn-vert-clair test-obs pull-right">
-																																				<span class="glyphicon glyphicon-refresh"></span>
- 																																				Partager
-																																				<span class="badge"><%= group.length %></span>																												
-																																		</button>
-																																<%	} %>			
-																												<%	}else if(rue.get('state') === 2){ %>
-																																<i> Rue partagée</i>
-																																<span class="badge pull-right"><%= group.length %></span>
-																												<%	}else{ %>
-																																<i> Rue en cours</i>
-																																<span class="badge pull-right"><%= group.length %></span>
-																												<%	} %>
-
-																								</a>
+																				<div class="panel-heading <% if(rue.get('end_datetime') === 'undefined' || rue.get('end_datetime') === null){ %> rueEnCours <% } %>" id='<%= rueId %>' >
+																						<a data-toggle="collapse" data-parent="#mesObsParRue" href="#collapse<%= i %>">
+																										<span class="glyphicon glyphicon-plus glyph-collpase"></span>
+																										<b><%= rueName %></b>
+																						</a>
+																										<br>
+																											<% if(rue.get('state') === 1) { %>
+																														<% 	var obsTime = 	rue.set('end_datetime', new Date().format("dd/MM/yyyy")); %>
+																														<i> Fin du parcours : <%= rue.get('end_datetime') %></i>
+																						
+																														<% if(group.length >= 1) { partage = true;%>
+																																<button type="button" id ="<%= rue.get('id') %>" class="btn btn-sm btn-vert-clair test-obs pull-right">
+																																		<span class="glyphicon glyphicon-refresh"></span>
+																																			Partager
+																																		<span class="badge"><%= group.length %></span>																												
+																																</button>
+																														<%	} %>			
+																										<%	}else if(rue.get('state') === 2){ %>
+																														<i> Rue partagée</i>
+																														<span class="badge pull-right"><%= group.length %></span>
+																										<%	}else{ %>
+																														<i> Rue en cours</i>
+																														<span class="badge pull-right"><%= group.length %></span>
+																										<%	} %>
+																						
 																				</div>
 																				<div id="collapse<%= i %>" class="panel-collapse collapse" >
 																								<div class="panel-body">
@@ -54,13 +56,12 @@
 																																%>
 																																<li class="list-group-item">
 																																				<div class="clearfix">
-																																						<p><i><%= item.get('name_taxon') %></i> - <%= item.get('milieu') %></p>
-																																				<% if(item.get('photo') !== "undefined") { %>
-																																								<img class="taxon-img-thumb img-rounded pull-left" style ="width:50px;"  src="<%= item.get('photo') %>">
-																																				<% } %>				
-																																				
-																																						<button type="button" class="destroyObs btn btn-default pull-right" id="<%= item.get('id') %>"><span class="glyphicon glyphicon-trash"></span></button>
-																																								
+																																						<a href='#detailObs/<%=  item.get('id') %>'>
+																																								<p><i><%= item.get('name_taxon') %></i> - <%= item.get('milieu') %></p>
+																																								<% if(item.get('photo') !== "undefined") { %>
+																																												<img class="img-rounded pull-left" style ="width:50px;"  src="<%= item.get('photo') %>">
+																																								<% } %>				
+																																						</a>																																								
 																																				</div>
 																																</li>
 																																<% });%>

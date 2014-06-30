@@ -77,6 +77,11 @@ background:#EBECDE;
   margin-bottom:0;
 }
 
+span.RadioCustom img {
+		width: 43px;
+		height: 43px;
+}
+
 #crit-list li h3{
   margin:1px;
   display:inline;

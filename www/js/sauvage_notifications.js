@@ -36,17 +36,25 @@ function() {
       });
    },
 	
-   sauvages.finParcours = function finParcours() {
+   sauvages.finParcours = function finParcours(msg) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Rue sauvegardée',
-         message: 'Retrouver vos données dans la rubrique "Mes Sauvages"<br/> N\'oublier pas de les partager <br/>',
-         delay: 2,
+         message: msg,
+         delay: '',
          btnLabel: '',
          onClick: function() {
           app.route.navigate('addParcours/new', {trigger: true});
          },
       });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         app.route.navigate('myObservation', {trigger: true});
+      }, myModal))
    },
 	
    sauvages.obsSaveSuccess = function obsSaveSuccess(localisation) {
@@ -64,6 +72,48 @@ function() {
          }  
       },
      });
+   },
+
+   sauvages.supprimerData = function supprimerData(msg,viewBefore) {
+      var self = this;
+      self.viewBefore = viewBefore ;
+      var myModal = new NS.UI.NotificationModal({
+       type: '',
+       title: 'Supprimer une observation',
+       message:  msg,
+       delay: '',
+       btnLabel: ''
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         $(self.viewBefore).find('.btn-footer-left').removeClass('confirme-supp').addClass('destroy-obs').trigger('click');
+         $(self.viewBefore).find('.btn-footer-left').addClass('confirme-supp').removeClass('destroy-obs');
+      }, myModal))  
+   },
+
+   sauvages.supprimerRue = function supprimerData(msg,idRue,viewBefore) {
+      var self = this;
+      self.viewBefore = viewBefore ;
+      var myModal = new NS.UI.NotificationModal({
+       type: '',
+       title: 'Supprimer une rue',
+       message:  msg,
+       delay: '',
+       btnLabel: ''
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         $(self.viewBefore).find("#"+idRue).removeClass('confirme-supp').addClass('destroyRue').trigger('click');
+         $(self.viewBefore).find("#"+idRue).addClass('confirme-supp').removeClass('destroyRue');
+      }, myModal))  
    },
 
    sauvages.emailSaveSuccess= function emailSaveSuccess() {
@@ -176,9 +226,8 @@ function() {
          $('body').removeClass('modal-open');
          $(self.viewBefore).find("#"+idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
          $(self.viewBefore).find("#"+idRue).removeClass('send-obs').addClass('test-obs');
-      }, myModal))
-     
-    },
+      }, myModal))  
+   },
 
    sauvages.finDeProtocol = function finDeProtocol(msg) {
       var myModal = new NS.UI.NotificationModal({
@@ -227,9 +276,6 @@ function() {
          $('#nodal').remove();
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
-         //app.globals.currentFilter.length = 0;
-         //app.globals.currentFilterTaxonIdList.length = 0;
-         //app.route.navigate('identification', {trigger: true, replace: trues});
          $("#menu").trigger("close"); 
       }, myModal))
    }  
