@@ -862,6 +862,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c0000', end
   margin: 3px 5px 3px 3px;
   float: left;
   border-radius:4px;
+  background:white;
 }
 
 .taxon-img-thumb {
@@ -952,7 +953,7 @@ ul.nav-list ul {
 
 .flexslider .slides > li:first-child {display: list-item;}
 #taxon-detail-content > div.loc-container > div.flexslider > div > ul > li.loading-slideshow.flex-active-slide {
-		min-height: 400px;
+		min-height: 340px;
 }
 #taxon-detail-content > div.loc-container > div.flexslider > div > ul > li.loading-slideshow.flex-active-slide > label {
 		padding-left: 5px;
@@ -969,6 +970,19 @@ ul.nav-list ul {
   display: none;
 }
 
+.page-aide .flex-control-paging li a {
+  display: initial;
+  cursor: pointer;
+  text-decoration: underline;
+  box-shadow: none;
+		color: #333;
+  padding: 2px 3px;
+  text-decoration: none;
+  font-weight: 500; 
+}
+.page-aide .flex-control-paging li a:not(.flex-active) {
+  background:white;
+}
 .page-aide .flex-control-paging li a.flex-active {
   background: yellow;
   cursor: default;
@@ -977,17 +991,6 @@ ul.nav-list ul {
   font-size: 20px;
   color: #333;
   font-weight: 600; 
-}
-.page-aide .flex-control-paging li a {
-  display: initial;
-  background:white;
-  cursor: pointer;
-  text-decoration: underline;
-  box-shadow: none;
-		color: #333;
-  padding: 2px 6px;
-  text-decoration: none;
-  font-weight: 500; 
 }
 .page-aide .flex-control-nav li {
  display: inline;
@@ -1005,7 +1008,7 @@ ul.nav-list ul {
 a#quitter-aide {
   position: absolute;
   top: 5px;
-  left: 0px;
+  right: 0px;
   padding-left:1%;
   z-index: 1;
   color:yellow;
