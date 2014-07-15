@@ -970,33 +970,11 @@ ul.nav-list ul {
   display: none;
 }
 
-.page-aide .flex-control-paging li a {
-  display: initial;
-  cursor: pointer;
-  text-decoration: underline;
-  box-shadow: none;
-		color: #333;
-  padding: 2px 3px;
-  text-decoration: none;
-  font-weight: 500; 
-}
 .page-aide .flex-control-paging li a:not(.flex-active) {
   background:white;
 }
-.page-aide .flex-control-paging li a.flex-active {
-  background: yellow;
-  cursor: default;
-  text-decoration: none;
-  padding: 4px 10px;
-  font-size: 20px;
-  color: #333;
-  font-weight: 600; 
-}
-.page-aide .flex-control-nav li {
- display: inline;
-  margin: 0 5px;
-}
-.page-aide .flex-control-paging li a:hover{
+
+.page-aide .flex-control-paging li a:hover,.page-aide .flex-control-paging li a.flex-active{
   background: yellowgreen;
 }
 
@@ -1021,10 +999,10 @@ a#quitter-aide {
   bottom: 40px;
   text-align: center;
   background-color: rgba(0,0,0,0.58);
-  padding: 5px 0px;
-  margin-left: 4%;
+  padding: 8px 0px 0px;
+  margin-left: 10%;
   border-radius:4px;
-  width: 92%;
+  width: 80%;
 }
 /***DETAIL TAXON***/
 .btnObs{
