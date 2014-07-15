@@ -962,6 +962,7 @@ ul.nav-list ul {
 /*********************  AIDE  *********************/
 .page-aide{
   padding-top: 0px;
+  background-color:rgb(40,113,126);
 }
 .page-aide .loc-container{
   margin: 20px 5% 0px;
@@ -975,7 +976,7 @@ ul.nav-list ul {
 }
 
 .page-aide .flex-control-paging li a:hover,.page-aide .flex-control-paging li a.flex-active{
-  background: yellowgreen;
+  background: yellow;
 }
 
 .page-aide .flexslider{
@@ -983,13 +984,28 @@ ul.nav-list ul {
   margin:0px;
 }
 
-a#quitter-aide {
+.page-aide .row.en-tete {
+  background-color:rgba(3,3,3,0.6);;
   position: absolute;
-  top: 5px;
+  top: 0;
+  left: 0px;
+  z-index: 2000;
+  width: 100%;
+}
+
+.page-aide .row.en-tete h1 {
+  margin-top: 5px;
+  margin-left: 15px;
+  line-height: 1;
+  margin-bottom: 0px;
+  font-size: 28px;
+}
+
+a#quitter-aide {
   right: 0px;
-  padding-left:1%;
   z-index: 1;
-  color:yellow;
+  color: yellow;
+  padding: 10% 1% 1%;
 }
 #quitter-aide span.glyphicon.glyphicon-remove-circle{
   font-size:24px;
@@ -1244,6 +1260,11 @@ a#quitter-aide {
 }
 .modal-body .btn {
 		margin-top: 20px;
+}
+
+.modal-header button.close {
+  color: yellow;
+  opacity: inherit;
 }
 /****CARTE SVG******/
 
