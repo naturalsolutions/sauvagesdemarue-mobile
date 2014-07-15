@@ -30,8 +30,8 @@
 												<li id='entete-menu'></li>
 												<li id='menu-item-home'><a ><span class="glyphicon glyphicon-home"></span> Accueil</a></li>
 												<li id='menu-item-je-participe'><a ><span class="glyphicon glyphicon-play"></span> Je participe</a></li>
-												<li id='menu-item-region'><a ><span class="icon-francegras-simple"></span> Ma région</a></li>
 												<li id='menu-item-my-obs'><a ><span class="icon-fleurgrasse-sauvages flag-container"></span> Mes Sauvages</a></li>
+												<li id='menu-item-region'><a ><span class="icon-francegras-simple"></span> Ma région</a></li>
 												<li id='menu-item-ou-suis-je'><a ><span class="glyphicon glyphicon-map-marker"></span> Où suis-je ?</a></li>
 												<li id='menu-item-utilisateur'><a ><span class="glyphicon glyphicon-user"></span> Mon profil</a></li>
 												<li id='menu-item-credits'><a ><span class="glyphicon glyphicon-copyright-mark"></span> Crédits</a></li>
@@ -143,6 +143,21 @@
 						<img src="./data/images/pictos/morphotype_de_fleur_papillonacee.png" width="1" height="1" />
 						<img src="./data/images/pictos/pilosite_avec.png" width="1" height="1" />
 						<img src="./data/images/pictos/pilosite_sans.png" width="1" height="1" />
+
+						<img src="./css/images/ENTETE-menu/entete768-large-ratio15.jpg" width="1" height="1" />
+
+						<img src="./data/images/images_formated/000033244CRS.jpg" width="1" height="1" />
+
+
+						<script>
+								$('#map').load('css/map/map_regions.svg');
+								for(var i=0; app.globals.cListAllTaxons.models;i++ ){
+										var image = app.globals.cListAllTaxons.models[i].get('picture');
+										var	imageLocal = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
+								$('#preloader').append(	"<img src='+ imageLocal +' width='1' height='1' />");
+								};
+						</script>
+
 				</div>
   </body>
 </html>
