@@ -25,7 +25,7 @@ NS.UI = (function(ns) {
                         '   <div class="modal-dialog">'+
                         '       <div class="modal-content">'+
                         '           <div class="modal-header alert-<%= data.type %>"> '+
-                        '               <button type="button" class="close btn btn-lg pull-right" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove-circle"></button> '+
+                        '               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove-circle"></button> '+
                         '               <h3 id="myModalLabel"><%= data.title %></h3> '+
                         '           </div> '+
                         '       <div class="modal-body"> '+

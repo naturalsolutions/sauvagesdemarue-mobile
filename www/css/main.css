@@ -1265,6 +1265,7 @@ a#quitter-aide {
 .modal-header button.close {
   color: yellow;
   opacity: inherit;
+  text-shadow: none;
 }
 /****CARTE SVG******/
 
