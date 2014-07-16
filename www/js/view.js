@@ -58,8 +58,7 @@ app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
 											app.globals.currentFilterTaxonIdList.length = 0;
 										 sauvages.notifications.obsSaveSuccess();
 										})
-										.fail(function(error){console.log(error)})
-						;
+										.fail(function(error){console.log(error)});
       });
     },
     afterRender: function () {

@@ -61,6 +61,9 @@ Backbone.sync = function(method, model, options) {
 app.dao.UserDAO = function(db) {
     this.db = db;
 };
+app.dao.ApplicationDAO= function(db) {
+    this.db = db;
+};
 app.dao.TaxonDAO = function(db) {
     this.db = db;
 };
@@ -95,6 +98,7 @@ app.dao.EspeceCELDataValueDAO = function(db) {
 };
 
 _.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{});
+_.extend(app.dao.ApplicationDAO.prototype, app.dao.baseDAOBD,{});
 _.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD,{});
 _.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);

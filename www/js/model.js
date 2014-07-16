@@ -64,6 +64,24 @@ app.models.UserCollection = Backbone.Collection.extend({
   model: app.models.User,
 });
 
+// Application model
+app.models.Application = Backbone.Model.extend({
+	defaults: {
+
+	},
+},{  
+  table : 'Tapplication',
+  schema: {
+    id: { title:'id',type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+    aide: { title:'aide', type:'hidden', sqltype:'INTEGER',  required: true},
+    },
+  dao: app.dao.ApplicationDAO,
+  verboseName: 'Application'
+});
+// The User Collection Model
+app.models.ApplicationCollection = Backbone.Collection.extend({
+  model: app.models.Application,
+});
 
 
 // The Taxon Model

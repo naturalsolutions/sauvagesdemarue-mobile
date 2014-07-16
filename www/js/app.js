@@ -224,7 +224,7 @@ app.utils.BaseView = Backbone.View.extend({
 document.addEventListener("deviceready", onDeviceReady, false);
 
 //pour fonctionner sur navigateur desktop
-if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
+//if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
 
 function onDeviceReady() {
   window.deferreds = [];  
@@ -321,6 +321,7 @@ function initDB(){
 
 
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.Application()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.EspeceCel()));

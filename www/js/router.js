@@ -20,7 +20,7 @@ app.Router = Backbone.Router.extend({
     'addParcours(/:state)' : 'viewFormAddParcours',
     'myObservation' : 'viewTableMyObs',
     'ouSuisJe' : 'viewLocalisation',
-    'credits' : 'viewCrédits',
+    'credits' : 'viewCredits',
     'aide' : 'viewAide',
     'utilisateur' : 'viewUtilisateur' ,
     '' : 'viewHomePage'
@@ -28,7 +28,6 @@ app.Router = Backbone.Router.extend({
 
   initialize: function() {
     app.globals.positionScroll = 0;
-    app.globals.flagAide = true;
     app.globals.currentFilter = new Array();
     app.globals.regiontaxon = new Array();
     app.globals.currentFilterTaxonIdList = new Array();
@@ -53,21 +52,33 @@ app.Router = Backbone.Router.extend({
   },
 	
   viewHomePage: function() {
-    var self= this;
-    if ($(".loading-splash").length !== 0) {
-      setTimeout(function() {
-        $(".loading-splash").remove();
-        $('#splash-screen').remove();
+    var self = this;
+    var onDataHandler = function(data, response, options) {
+      console.log('viewHomePage fetch onedatahandler');
+      if (data.get('aide') !== undefined) {
+        var currentView = new app.views.HomePageView();
+        self.displayView(currentView);
+      }else{
         app.route.navigate('aide',{trigger: true});
+        var newUser = new app.models.Application();
         var currentView = new app.views.AidePageView();
         self.displayView(currentView);
-      }, 2000);
-    }else{
-      var currentView = new app.views.HomePageView();
-      self.displayView(currentView);
-    }
-      $('#content').addClass('content-home');
-      $('body').css('background-color', '#28717E');
+        self.applicationStateOnce = new app.models.Application(); 
+        self.applicationStateOnce.set('aide', 1).save()
+          .done( function(model, response, options) {
+            console.log(model);
+            })
+          .fail(function(error){console.log(error)});
+      }
+      $(".loading-splash").remove();
+      $('#splash-screen').remove();
+    };
+    var onErrorHandler = function(data, response, options) {
+        console.log('viewHomePage fetch onerrorhandler');
+        alert(response.responseText);
+    };
+    this.applicationState = new app.models.Application({'id': 1}); 
+    this.applicationState.fetch({ success : onDataHandler, error: onErrorHandler });
   },
   
   viewLocalisation: function() {
@@ -75,15 +86,14 @@ app.Router = Backbone.Router.extend({
     this.displayView(currentView);  
   },
 
-
   viewAide : function(){
     var currentView = new app.views.AidePageView();
     this.displayView(currentView);
-    $(".loading-splash").remove();
-    $('#splash-screen').remove();
+    //$(".loading-splash").remove();
+    //$('#splash-screen').remove();
   },
 
-  viewCrédits: function() {
+  viewCredits: function() {
     var currentView = new app.views.CreditsPageView();
     this.displayView(currentView);  
   },
@@ -101,12 +111,10 @@ app.Router = Backbone.Router.extend({
         self.displayView(currentView);
       }
     };
- 
     var onErrorHandler = function(data, response, options) {
         console.log('viewUtilisateur fetch onerrorhandler');
         alert(response.responseText);
     };
- 
     this.currentUser = new app.models.User({'id': 1}); 
     this.currentUser.fetch({ success : onDataHandler, error: onErrorHandler });
   },
@@ -292,6 +300,7 @@ app.Router = Backbone.Router.extend({
         self.goToLastPage();
       }    
   },
+
   viewFormPLOnbs : function() {
     var self = this;
     var coords = app.models.pos.get('coords');
@@ -315,26 +324,25 @@ app.Router = Backbone.Router.extend({
       //Teste si il ya des données de géolocalisation
       var coords = app.models.pos.get('coords');
       if (coords) {
-          var collParcours = new app.models.ParcoursDataValuesCollection();
-          var collParcoursAll = collParcours.fetch({
-            success: function(data) {
-              var modelRueEncours = data.findWhere({'state': 0});
-              if (modelRueEncours !== undefined) {
-                app.globals.currentrue = modelRueEncours;
-                var currentView = new app.views.AddSauvageRueView({model:modelRueEncours});
-                self.displayView(currentView);  
-              }else{
-                app.globals.currentrue = new app.models.ParcoursDataValue();
-                var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
-                self.displayView(currentView);  
-              }
-            } 
-          });
-        }else{
-          sauvages.notifications.gpsNotStart();
-          self.goToLastPage();
-        }
-  
+        var collParcours = new app.models.ParcoursDataValuesCollection();
+        var collParcoursAll = collParcours.fetch({
+          success: function(data) {
+            var modelRueEncours = data.findWhere({'state': 0});
+            if (modelRueEncours !== undefined) {
+              app.globals.currentrue = modelRueEncours;
+              var currentView = new app.views.AddSauvageRueView({model:modelRueEncours});
+              self.displayView(currentView);  
+            }else{
+              app.globals.currentrue = new app.models.ParcoursDataValue();
+              var currentView = new app.views.AddSauvageRueView({model:app.globals.currentrue});
+              self.displayView(currentView);  
+            }
+          } 
+        });
+      }else{
+        sauvages.notifications.gpsNotStart();
+        self.goToLastPage();
+      } 
     }else {
       var currentRueId = app.globals.currentrue.get('id');
       var collObs = new app.models.OccurenceDataValuesCollection;
