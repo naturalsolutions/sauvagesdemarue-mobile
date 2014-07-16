@@ -79,9 +79,10 @@ width: 100%;
 		background-repeat: no-repeat;
 		background-size: 220px;
 		background-position: center center;
-		position: relative;
+		position: absolute;
 		z-index: 2000;
 		height: 220px !important;
+  width:100%;
 		margin-top: 33%;
 }
 #splash-screen{
@@ -997,7 +998,7 @@ ul.nav-list ul {
 }
 
 .page-aide .row.en-tete h1 {
-  margin-top: 5px;
+  margin-top: 10px;
   margin-left: 15px;
   line-height: 1;
   margin-bottom: 0px;
