@@ -477,12 +477,15 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 				var isDisabled = $('input[type=text]').hasClass('disabled');
 				if (isDisabled) {
 						$('input[type=text]').removeClass('disabled');		
-				}		detail
+				}	
 		},
 		updateEmail: function(evt){
 				var currentEmail = this.$el.find('input[type="text"]').val();
-				this.model.set('email',String(currentEmail))
-						.save();
+				this.model.set('email',String(currentEmail)).save().done( function(model, response, options) {
+      $('input[type=text]').addClass('disabled');
+      $('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
+      sauvages.notifications.emailSaveSuccess();
+    });
 		},
 		
 		beforeRender: function(){
@@ -499,24 +502,18 @@ app.views.FormUserView = NS.UI.Form.extend({
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
 						var self = this;
-						if (this.initialData.email !== undefined) {
-								//$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer modifier-enregistrement' type='button'>Modifier</button>");
-								//$('input[type=text]').addClass('disabled');
-						}else{
-								this.on('submit:valid', function(instance) {
-										var self = this;
-												instance.set('userId', 1).save().done( function(model, response, options) {
-														instance.fetch({
-																success: function(data) {
-																		$('input[type=text]').addClass('disabled');
-																		$('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-																		sauvages.notifications.emailSaveSuccess();
-																		app.route.navigate('', {trigger: true});
-																}
-														});
-												});
-								});
-						}
+      this.on('submit:valid', function(instance) {
+        var self = this;
+        instance.save().done( function(model, response, options) {
+          instance.fetch({
+            success: function(data) {
+              $('input[type=text]').addClass('disabled');
+              $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
+              sauvages.notifications.emailSaveSuccess();
+            }
+          });
+        });
+      });
     },
     afterRender: function () {
 						if (this.initialData.email !== undefined) {
@@ -1105,7 +1102,7 @@ app.views.obsDetailView=  app.utils.BaseView.extend({
 								var obsToDestroy = self.obsCollection.findWhere({'id': self.model.get('id')});
 								obsToDestroy.destroy({success: function(obs, idObs) {
 										var obsTime = 	obs.set('datetime', new Date().format("dd/MM/yyyy"));
-										var msg = "L'observation <i>"+obs.get('name_taxon')+"</i> du "+ obs.get('datetime')+" a été supprimée du mobile." 
+										var msg = "L'observation a été supprimée du mobile." 
 										sauvages.notifications.supprimerObs(msg);
 										app.route.navigate('myObservation', {trigger: true});
 
@@ -1246,7 +1243,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     var obsTosend ;
 				var emailUser;
     var self = this;
-				var currentUser = new app.models.User({'userId': 1});
+				var currentUser = new app.models.User({'id': 1});
 						currentUser.fetch({
 								success: function(data) {
 										self.emailUser = data.get('email');
@@ -1278,7 +1275,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 																.fail(function(msg) {
 																		console.log(msg);
 																});
-
 												});
 
 										}else{

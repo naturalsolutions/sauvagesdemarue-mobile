@@ -20,11 +20,6 @@ Backbone.sync = function(method, model, options) {
           options.success(data);
       });
     }
-    else if (model.get('userId')) {
-      dao.findById(model.get('userId'), function(data) {
-          options.success(data);
-      });
-    }
     else if ((model.attributes) || (model.filters)) {
       dao.findWithCriteria(model, function(data) {
           options.success(data);
@@ -42,16 +37,9 @@ Backbone.sync = function(method, model, options) {
     });
   }
   else if (method === "update") {
-    if (model.attributes.email) {
-      dfd = dao.updateEmailTuser(model, function(data) {
-        options.success(data);
-      });  
-    }
-    else{
     		dfd = dao.update(model, function(data) {
       options.success(data);
     });
-  }
 	}
   else if (method === "delete") {
     if (model.attributes.id) {
@@ -106,34 +94,7 @@ app.dao.EspeceCELDataValueDAO = function(db) {
     this.db = db;
 };
 
-_.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{
-  updateEmailTuser: function(model, callback) {
-    this.db.transaction(
-      function(tx) {
-          var sql = "UPDATE Tuser SET email= ? WHERE userId = ? ";
-          tx.executeSql(sql, [model.get('email'), model.get('userId')]);
-      },
-      function(tx, error) {
-          console.log(tx);
-      }
-    );
-  },
-  findById: function(id, callback) {
-      this.db.transaction(
-          function(tx) {
-              var sql =  "SELECT userId as id, * " +
-                  "FROM Tuser " +
-                  "WHERE userId =?";
-              tx.executeSql(sql, [id], function(tx, results) {
-                  callback(results.rows.length === 1 ? results.rows.item(0) : null);
-              });
-          },
-          function(tx, error) {
-              console.log(tx);
-          }
-      );
-  },
-});
+_.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{});
 _.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD,{});
 _.extend(app.dao.PictureDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
@@ -142,7 +103,7 @@ _.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD,{
-   destroy: function(id,callback) {
+  destroy: function(id,callback) {
         this.db.transaction(
             function(tx) {
                 var sql = "delete from TdataObs_occurences where id= ? " ;
@@ -154,7 +115,7 @@ _.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD,{
                 console.log(tx);
             }
         );
-    }
+  }
 });
 _.extend(app.dao.ParcoursDataValueDAO.prototype, app.dao.baseDAOBD);
 

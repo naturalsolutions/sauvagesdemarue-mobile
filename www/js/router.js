@@ -89,20 +89,26 @@ app.Router = Backbone.Router.extend({
   },
 
   viewUtilisateur: function() {
-    var currentUser = new app.models.User({'userId': 1});
     var self = this;
-    if (currentUser !== undefined) {
-      currentUser.fetch({
-          success: function(data) {
-            var currentView = new app.views.UtilisateurPageView({model :data});
-            self.displayView(currentView);
-          }
-      });
-    }else{
-      var newUser = new app.models.User();
-      var currentView = new app.views.UtilisateurPageView({model :newUser});
-      this.displayView(currentView);
-    }
+    var onDataHandler = function(data, response, options) {
+      console.log('viewUtilisateur fetch onedatahandler');
+      if (data.get('email') !== undefined) {
+        var currentView = new app.views.UtilisateurPageView({model :data});
+        self.displayView(currentView);
+      }else{
+        var newUser = new app.models.User();
+        var currentView = new app.views.UtilisateurPageView({model :newUser});
+        self.displayView(currentView);
+      }
+    };
+ 
+    var onErrorHandler = function(data, response, options) {
+        console.log('viewUtilisateur fetch onerrorhandler');
+        alert(response.responseText);
+    };
+ 
+    this.currentUser = new app.models.User({'id': 1}); 
+    this.currentUser.fetch({ success : onDataHandler, error: onErrorHandler });
   },
 
   viewRegions: function() {
