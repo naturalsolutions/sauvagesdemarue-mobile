@@ -300,6 +300,13 @@ function init(){
             $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
             $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
           }
+          //preloader
+          for(var i=0; app.globals.cListAllTaxons.models;i++ ){
+            var image = app.globals.cListAllTaxons.models[i].get('picture');
+            var	imageLocal = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
+            $('#preloader').append(	"<img src="+ imageLocal +" width='1' height='1' />");
+          };
+          $('#map').load('css/map/map_regions.svg');
         }
     });
   });
@@ -316,7 +323,7 @@ function initDB(){
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
-  deferreds.push(app.dao.baseDAOBD.populate(new app.models.EspeceCel));
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.EspeceCel()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
@@ -374,7 +381,7 @@ console.log('version avant changeV : ' +app.db.version);
           console.log('deferreds version vide '+ deferreds.length);
           //teste si les données taxons sont chargés dans la base
           //Si le tableau retourné est vide alors => chargement des données en base
-          $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
+          $.when(runQuery("SELECT * FROM TespeceCel" , [])).done(function (dta) {
           var arr = [];
             if (dta.rows.length == 0 ) {
               arr.push(loadXmlEspCEL());
