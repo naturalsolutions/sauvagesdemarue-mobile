@@ -31,7 +31,7 @@ function() {
        type: '',
        title: 'Supprimer une observation',
        message: msg,
-       delay: 3,
+       delay: 1,
        btnLabel: '',
       });
    },
