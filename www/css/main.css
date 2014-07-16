@@ -682,6 +682,9 @@ a.btn.btn-footer{
 a.menu-aide:hover{
   color:#008D00;
 }
+a.btn.btn-lg.menu-aide {
+  background-color: #333;
+}
 
 /****Smartphones (portrait)*****/
 @media  (max-height : 320px){
