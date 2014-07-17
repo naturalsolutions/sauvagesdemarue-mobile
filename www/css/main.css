@@ -971,9 +971,6 @@ ul.nav-list ul {
 .page-aide .loc-container{
   margin: 20px 5% 0px;
 }
-.page-aide .flex-direction-nav {
-  display: none;
-}
 
 .page-aide .flex-control-paging li a:not(.flex-active) {
   background:white;
