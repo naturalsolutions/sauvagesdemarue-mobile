@@ -58,6 +58,8 @@ app.Router = Backbone.Router.extend({
       if (data.get('aide') !== undefined) {
         var currentView = new app.views.HomePageView();
         self.displayView(currentView);
+        $('#content').addClass('content-home');
+        $('body').css('background-color', '#28717E');
       }else{
         app.route.navigate('aide',{trigger: true});
         var newUser = new app.models.Application();

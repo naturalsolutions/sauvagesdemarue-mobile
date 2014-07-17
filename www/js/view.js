@@ -1012,8 +1012,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 		afterRender: function() {
 				$('.flexslider', this.$el).flexslider({
 														animation: "slide",  
-														slideshow: false,
-														touch: true,  
+														slideshow: false,  
 														start: function(slider) {
 															$('.flexImages').show();
 														}
@@ -1420,7 +1419,7 @@ app.views.AidePageView = app.utils.BaseView.extend({
 				$('.flexslider', this.$el).flexslider({
 														animation: "slide",  
 														slideshow: false,
-														touch: true,  
+              directionNav:false,
 														start: function(slider) {
 															$('.flexImages').show();
 														}
