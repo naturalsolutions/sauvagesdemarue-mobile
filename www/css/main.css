@@ -220,6 +220,10 @@ ul{
 .list-el a {
   width: 100%;
 }
+
+.visibilityHidden{
+  visibility: hidden;
+}
 /**color**/
 .vert-fonce-bg {
   background: #256226;
@@ -678,6 +682,10 @@ a.btn.btn-footer{
 }
 #home-page-content .first{
 		height: 43%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
 }
 
 a.menu-aide:hover{
@@ -687,6 +695,30 @@ a.btn.btn-lg.menu-aide {
   background-color: #333;
 }
 
+
+#home-page-content .row-fluid {
+  position: absolute;
+  top:43%;
+  height:57%;
+  overflow: scroll;
+  width: 100%;
+}
+#home-page-content .row-fluid .row .col-xs-12.col-sm-12 {
+		padding-left: 0px;
+		padding-right: 0px;
+}
+
+.icon-scroll-bottom {
+  background: url("images/touch-bottom.svg")no-repeat top right;
+  width: 20%;
+  background-size: contain;
+  height: 30%;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-right: 30px;
+}
 /****Smartphones (portrait)*****/
 @media  (max-height : 320px){
     #home-bonhomme {
@@ -910,12 +942,7 @@ border-bottom: 1px solid rgba(0, 0, 0, 0.25);;
 li.item-list-alphabetique{
   background:rgba(0, 0, 0, 0.25);
 }
-/*li:nth-child(odd){
-		background:transparent;
-}
-li:nth-child(even){
-		background:rgba(0, 0, 0, 0.25);
-}*/
+
 ul.nav-list ul {
   padding-left: 0;
 }
@@ -1142,52 +1169,84 @@ a#quitter-aide {
 		#home-page-content .first {height: 49%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport3_4.jpg');
-		}	
+		}
+  #home-page-content .row-fluid {
+    top: 49%;
+    height: 51%;
+  }
 }
 @media all and (aspect-ratio: 3/4){
 		#home-page-content .first {height:49%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport3_4.jpg');
-		}	
+		}
+  #home-page-content .row-fluid {
+    top: 49%;
+    height: 51%;
+  }
 }
 /*Ratio 1,775% Iphone 5*/
 @media all and (device-aspect-ratio: 40/71){
 		#home-page-content .first {height: 36.6%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport40_71.jpg');
-		}		
+		}
+  #home-page-content .row-fluid {
+    top: 36.6%;
+    height: 63.4%;
+  }
 }
 @media all and (aspect-ratio: 40/71){
 		#home-page-content .first {height: 36.6%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport40_71.jpg');
-		}		
+		}
+  #home-page-content .row-fluid {
+    top: 36.6%;
+    height: 63.4%;
+  }
 }
 /*Ratio 1,5% Iphone 4S 3S*/
 @media all and (device-aspect-ratio: 2/3){
 		#home-page-content .first {height: 45%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport2_3.jpg');
-		}	
+		}
+  #home-page-content .row-fluid {
+    top: 45%;
+    height: 55%;
+  }
 }
 @media all and (aspect-ratio: 2/3){
 		#home-page-content .first {height: 45%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport2_3.jpg');
-		}	
+		}
+  #home-page-content .row-fluid {
+    top: 45%;
+    height: 55%;
+  }
 }
 /*Ratio 0,625 ex : Android tablet GT-P5110T*/
 @media all and (device-aspect-ratio: 5/8){
 		#home-page-content .first {height: 42%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport1_6.png');
-		}		
+		}
+  #home-page-content .row-fluid {
+    top: 42%;
+    height: 58%;
+  }
 }
 @media all and (aspect-ratio: 5/8){
 		#home-page-content .first {height:42%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport1_6.png');
 		}
+  #home-page-content .row-fluid {
+    top: 42%;
+    height: 58%;
+  }
 }
 /*Ratio 0,625 ex : samsung GT-19305*/
 @media all and (device-aspect-ratio: 9/16){
@@ -1195,25 +1254,41 @@ a#quitter-aide {
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport9_16.jpg');
 		}
+  #home-page-content .row-fluid {
+    top: 36.5%;
+    height: 63.5%;
+  }
 }
 @media all and (aspect-ratio: 9/16){
 		#home-page-content .first {height: 36.5%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport9_16.jpg');
-		}		
+		}
+  #home-page-content .row-fluid {
+    top: 36.5%;
+    height: 63.5%;
+  }
 }
 /*Ratio 0,625 ex : google nexus S*/
 @media all and (device-aspect-ratio: 3/5){
 		#home-page-content .first {height: 40%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport3_5.jpg');
-		}		
+		}
+  #home-page-content .row-fluid {
+    top: 40%;
+    height: 60%;
+  }
 }
 @media all and (aspect-ratio: 3/5){
 		#home-page-content .first {height: 40%;}
 		#splash-screen{
 				background-image: url('images/splash-screen_v05-rapport3_5.jpg');
-		}		
+		}
+  #home-page-content .row-fluid {
+    top: 40%;
+    height: 60%;
+  }
 }
 
 
