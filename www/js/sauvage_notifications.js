@@ -261,6 +261,7 @@ function() {
        delay: '',
        btnLabel: '', 
       });
+      $('.close').hide();
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
         evt.preventDefault();
          $('#nodal').modal('hide');

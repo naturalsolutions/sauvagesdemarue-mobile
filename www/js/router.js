@@ -54,7 +54,6 @@ app.Router = Backbone.Router.extend({
   viewHomePage: function() {
     var self = this;
     var onDataHandler = function(data, response, options) {
-      console.log('viewHomePage fetch onedatahandler');
       if (data.get('aide') !== undefined) {
         var currentView = new app.views.HomePageView();
         self.displayView(currentView);
@@ -76,8 +75,7 @@ app.Router = Backbone.Router.extend({
       $('#splash-screen').remove();
     };
     var onErrorHandler = function(data, response, options) {
-        console.log('viewHomePage fetch onerrorhandler');
-        alert(response.responseText);
+      alert(response.responseText);
     };
     this.applicationState = new app.models.Application({'id': 1}); 
     this.applicationState.fetch({ success : onDataHandler, error: onErrorHandler });
@@ -103,7 +101,6 @@ app.Router = Backbone.Router.extend({
   viewUtilisateur: function() {
     var self = this;
     var onDataHandler = function(data, response, options) {
-      console.log('viewUtilisateur fetch onedatahandler');
       if (data.get('email') !== undefined) {
         var currentView = new app.views.UtilisateurPageView({model :data});
         self.displayView(currentView);
@@ -114,7 +111,7 @@ app.Router = Backbone.Router.extend({
       }
     };
     var onErrorHandler = function(data, response, options) {
-        console.log('viewUtilisateur fetch onerrorhandler');
+        console.log(response.responseText);
         alert(response.responseText);
     };
     this.currentUser = new app.models.User({'id': 1}); 
@@ -132,6 +129,7 @@ app.Router = Backbone.Router.extend({
                   "<form role='form form-inline'>"+
                     "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
                      "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
+                     "<button type='reset'  class='btn btn-gris visibilityHidden'>Annuler</button>"+
                     "</form>"					
                    );
          sauvages.notifications.SortieProtocol(msg());
