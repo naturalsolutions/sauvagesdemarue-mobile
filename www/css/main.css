@@ -221,8 +221,17 @@ ul{
   width: 100%;
 }
 
-.visibilityHidden{
+.visibility-hidden{
   visibility: hidden;
+}
+.width-cent-pour-cent{
+  width:100%;
+}
+.right-cent-pour-cent{
+  right:100% !important;
+}
+.right-inherit{
+  right:inherit;
 }
 /**color**/
 .vert-fonce-bg {
