@@ -380,6 +380,13 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
+  			_.bindAll(this, 'checkpositionScroll');
+    // bind to window
+    $(window).scroll(this.checkpositionScroll);
+  },
+
+  events : {
+    "scroll" : "checkpositionScroll"
   },
 
 		beforeRender:function(){
@@ -399,15 +406,28 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 				$('#header').addClass('hide');
     $('#menu').addClass('hide');
 
-  app.utils.queryData.getObservationsTelaWSFormatedAll()
-    .done(function(data) {
-        if (data.length !== 0 && $('#home-page-content .flag-container').has('#flagObs').length === 0) {
-          $('#home-page-content .flag-container p').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-left'></span>");  
-        }else if(data.length === 0 && $('#home-page-content .flag-container').has('#flagObs').length === 1){
-          $('#flagObs').remove();
-        }
-    });
+    app.utils.queryData.getObservationsTelaWSFormatedAll()
+      .done(function(data) {
+          if (data.length !== 0 && $('#home-page-content .flag-container').has('#flagObs').length === 0) {
+            $('#home-page-content .flag-container p').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-left'></span>");  
+          }else if(data.length === 0 && $('#home-page-content .flag-container').has('#flagObs').length === 1){
+            $('#flagObs').remove();
+          }
+      });
+      if ($('.row-fluid')[0].offsetHeight < $('.row-fluid')[0].scrollHeight) {
+        $('.row-fluid', this.$el).append("<div class='icon-scroll-bottom' ></div>");
+      };
+  },
+
+  checkpositionScroll : function(){
+				var pos = $('.row-fluid').scrollTop();
+				if (pos > 5) {
+						$('.icon-scroll-bottom').hide();	
+				}else if (pos == 0){
+      $('.icon-scroll-bottom').show();
+    }
   }
+
 });
 
 app.views.LocalisationPageView =  app.utils.BaseView.extend({
@@ -497,6 +517,7 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 				$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>Paramètres </h1>");
   }
 });
+
 app.views.FormUserView = NS.UI.Form.extend({
     initialize: function(options) {
       NS.UI.Form.prototype.initialize.apply(this, arguments);
@@ -550,7 +571,6 @@ app.views.RegionPageView= app.utils.BaseView.extend({
 
 		initialize: function(options) {
 				$('#header').show();
-   // this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
@@ -1041,8 +1061,6 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
 		}
 });
-
-
 
 app.views.obsDetailView=  app.utils.BaseView.extend({
 
