@@ -224,7 +224,7 @@ app.utils.BaseView = Backbone.View.extend({
 document.addEventListener("deviceready", onDeviceReady, false);
 
 //pour fonctionner sur navigateur desktop
-//if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
+if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
 
 function onDeviceReady() {
   window.deferreds = [];  
@@ -388,6 +388,7 @@ console.log('version avant changeV : ' +app.db.version);
               arr.push(loadXmlEspCEL());
             }
           $.when.apply(this, arr).then(function () {
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.Application()));
             console.log('when finished dfd.resolve test if data are loaded');
             return setTimeout(function(){ dfdTaxon.resolve()},1000);
           });
@@ -424,6 +425,7 @@ console.log('version avant changeV : ' +app.db.version);
 
           $.when.apply(this, arr).then(function () {
             console.log('when finished dfd.resolve DROP TABLE');
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.Application()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.EspeceCel()));
