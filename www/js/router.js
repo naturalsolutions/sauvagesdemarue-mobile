@@ -129,7 +129,7 @@ app.Router = Backbone.Router.extend({
                   "<form role='form form-inline'>"+
                     "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
                      "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
-                     "<button type='reset'  class='btn btn-gris visibilityHidden'>Annuler</button>"+
+                     "<button type='reset'  class='btn btn-gris visibility-hidden'>Annuler</button>"+
                     "</form>"					
                    );
          sauvages.notifications.SortieProtocol(msg());

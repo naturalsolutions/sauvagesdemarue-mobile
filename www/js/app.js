@@ -301,11 +301,13 @@ function init(){
             $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
           }
           //preloader
-          for(var i=0; app.globals.cListAllTaxons.models;i++ ){
-            var image = app.globals.cListAllTaxons.models[i].get('picture');
-            var	imageLocal = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
-            $('#preloader').append(	"<img src="+ imageLocal +" width='1' height='1' />");
-          };
+          if (app.globals.cListAllTaxons.models != "undefined") {
+            for(var i=0; app.globals.cListAllTaxons.models;i++ ){
+              var image = app.globals.cListAllTaxons.models[i].get('picture');
+              var	imageLocal = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
+              $('#preloader').append(	"<img src="+ imageLocal +" width='1' height='1' />");
+            };
+          }
           $('#map').load('css/map/map_regions.svg');
         }
     });
