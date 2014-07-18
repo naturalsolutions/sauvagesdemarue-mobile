@@ -403,7 +403,10 @@ $('#menu').mmenu().on('opening.mm',function(){
   $('body').removeClass('pad-bottom-top');
   $('#content').addClass('disabled  add-margin-top');
   $('.navbar-header').children().not('.open-menu').addClass('disabled');
-  $('#languette').css({'position' : 'absolute'});
+  $('#languette.languette-right').addClass('right-cent-pour-cent');
+  $('#languette.languette-left').css({'position' : 'absolute'});
+  $('#footer').addClass('width-cent-pour-cent');
+  $('.navbar-fixed-top').addClass('right-inherit');
 });
 //Ajoute un icon refresh si il y a une rue terminée qui contient des obs non envoyées.
 $('#menu').mmenu().on('opened.mm',function(){
@@ -424,7 +427,9 @@ $('#menu').mmenu().on('closed.mm',function(){
     }
     $('#content').removeClass('disabled add-margin-top');
     $('.navbar-header').children().not('.open-menu').removeClass('disabled');
-    $('#languette').css({'position' : 'fixed'});
+    $('#languette.languette-right').css({'position' : 'fixed'}).removeClass('right-cent-pour-cent');
+    $('#languette.languette-left').css({'position' : 'fixed'});
+    $('.navbar-fixed-top').removeClass('right-inherit');
 });
 
 $('.open-menu').click(function(){
