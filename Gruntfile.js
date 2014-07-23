@@ -113,7 +113,7 @@
                         match: /[\s\t]*<link .*css\/key\.css.*\/>/,
                         replacement: ''
                     }, {
-                        match: /libs\/jquery_1\.9\.1\/jquery-1\.9\.1\.js/,
+                        match: /libs\/jquery-2\.0\.0\.min\.js/,
                         replacement: 'preCordova.js'
                     }, {
                         match: /libs\/flexslider\/jquery\.flexslider-min\.js/,
@@ -158,7 +158,7 @@
                 options: {
                     separator: ';',
                 },
-                src: ['www/libs/jquery_1.9.1/jquery-1.9.1.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
+                src: ['www/libs/jquery-2.0.0.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
                 dest: 'build/preCordova.js'
             },
             distPostCordova: {

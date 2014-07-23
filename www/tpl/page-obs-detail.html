@@ -2,33 +2,33 @@
   <div class="loc-container" >
     <% if(device){var devicePlatform = device.platform; console.log(devicePlatform)}%>
     <h3>Photographie</h3>
-    <% console.log(data.model.get('photo'));if((data.model.get('photo') && devicePlatform === 'iOS') || (data.model.get('photo') !== "undefined" && devicePlatform === 'Android')){ %>
+    <% console.log(data.collection.models[0].get('photo'));if((data.collection.models[0].get('photo') && devicePlatform === 'iOS') || (data.collection.models[0].get('photo') !== "undefined" && devicePlatform === 'Android')){ %>
       <div class="photo-obs">
-        <img src = "<%= data.model.get('photo') %>" alt = "" />
+        <img src = "<%= data.collection.models[0].get('photo') %>" alt = "" />
         <label></label>
       </div>
 				<% }else{ %> <p>Pas de photographie pour cette observation.</p> <% } %>				
 
     <h3>Nom scientifique</h3>
       <p>
-      <%= data.model.get('scientificName') %>
+      <%= data.collection.models[0].get('scientificName') %>
       </p>
     <h3>Milieu</h3>
       <p>
-      <%= data.model.get('milieu') %>
+      <%= data.collection.models[0].get('milieu') %>
       </p>
     <h3>Position</h3>
       <ul>
-        <li>Latitude : <%= data.model.get('latitude') %></li>
-        <li>Longitude : <%= data.model.get('longitude') %></li>
+        <li>Latitude : <%= data.collection.models[0].get('latitude') %></li>
+        <li>Longitude : <%= data.collection.models[0].get('longitude') %></li>
       </ul>
 
     <h3>Note</h3>
     <p>
-      <% if(data.model.get('note') !== "undefined"){%><p><%= data.model.get('note')%></p><% }else{ %> <p>Pas de note pour cette observation.</p> <% } %>
+      <% if(data.collection.models[0].get('note') !== "undefined"){%><p><%= data.collection.models[0].get('note')%></p><% }else{ %> <p>Pas de note pour cette observation.</p> <% } %>
     </p>
     <h3>Etat</h3>
-      <% if(data.model.get('sended') == 1 ){ %><p>Cette observation à été envoyée.</p><%}else{%> <p>Cette observation n'a pas été envoyée.</p> <%} %>
+      <% if(data.collection.models[0].get('sended') == 1 ){ %><p>Cette observation à été envoyée.</p><%}else{%> <p>Cette observation n'a pas été envoyée.</p> <%} %>
   </div>
   <div id="wrapper-footer">
     <div id="footer" class="mm-fixed-bottom footer-default">

@@ -161,7 +161,7 @@ function() {
          }
       });
    },
-   sauvages.email = function email(msg,currentUser) {
+   sauvages.email = function email(msg,newUser) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Ajouter votre email.',
@@ -172,13 +172,19 @@ function() {
       myModal.$el.on('submit', _.bind(function(evt) {
          evt.preventDefault();
            var currentEmail = this.$el.find('input[type="email"]').val();
-            currentUser.set('email',String(currentEmail))
+            newUser.set('email',String(currentEmail))
             .save();
             $('#nodal').modal('hide');
             $('#nodal').remove();
             $('.modal-backdrop').remove();
             $('body').removeClass('modal-open');
-      }, myModal))
+      }, myModal));
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
       var myModal = new NS.UI.NotificationModal({
@@ -199,15 +205,16 @@ function() {
          title: 'Connection à internet',
          message: "L'envoi des observations requiert une connexion à haut débit (H+, 4G, wifi)." ,
          delay: '',
-         btnLabel: '',
-         onClose: function() {
-            $('#nodal').modal('hide');
-            $('#nodal').remove();
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open');
-         }
+         btnLabel: ''
+      });
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
       });
    },
+
    sauvages.connectionInfo = function connectionInfo(msg,idRue,viewBefore) {
       var self = this;
       self.viewBefore = viewBefore ;
@@ -224,9 +231,16 @@ function() {
          $('#nodal').remove();
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
-         $(self.viewBefore).find("#"+idRue).removeClass('test-obs').addClass('send-obs').trigger('click');
-         $(self.viewBefore).find("#"+idRue).removeClass('send-obs').addClass('test-obs');
-      }, myModal))  
+         $(self.viewBefore).find("#"+idRue).children('.test-obs').removeClass('test-obs disabled').addClass('send-obs').trigger('click');
+         $(self.viewBefore).find("#"+idRue).children('.test-obs').removeClass('send-obs').addClass('test-obs');
+      }, myModal));
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         $('body').find("#"+idRue).children('.test-obs').removeClass('disabled');
+      });
    },
 
    sauvages.finDeProtocol = function finDeProtocol(msg) {
@@ -243,7 +257,7 @@ function() {
          $('#nodal').remove();
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
-      }, myModal))
+      }, myModal));
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
          $('#nodal').modal('hide');
@@ -251,7 +265,13 @@ function() {
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
          app.route.navigate('taxonlist', {trigger: true});
-      }, myModal))
+      }, myModal));
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
     },
    sauvages.SortieProtocol = function SortieProtocol(msg) {
       var myModal = new NS.UI.NotificationModal({

@@ -380,13 +380,6 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  			_.bindAll(this, 'checkpositionScroll');
-    // bind to window
-    $(window).scroll(this.checkpositionScroll);
-  },
-
-  events : {
-    "scroll" : "checkpositionScroll"
   },
 
 		beforeRender:function(){
@@ -402,10 +395,8 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 				$('#content').removeClass('content-home');
 		},
 		afterRender: function(){
-    $('body').removeClass('pad-bottom-top');
 				$('#header').addClass('hide');
     $('#menu').addClass('hide');
-
     app.utils.queryData.getObservationsTelaWSFormatedAll()
       .done(function(data) {
           if (data.length !== 0 && $('#home-page-content .flag-container').has('#flagObs').length === 0) {
@@ -417,17 +408,17 @@ app.views.HomePageView=  app.utils.BaseView.extend({
       if ($('.row-fluid')[0].offsetHeight < $('.row-fluid')[0].scrollHeight) {
         $('.row-fluid', this.$el).append("<div class='icon-scroll-bottom' ></div>");
       };
+      $('body #home-page-content div.row-fluid').scroll(this.checkpositionScroll);
   },
 
-  checkpositionScroll : function(){
-				var pos = $('.row-fluid').scrollTop();
+  checkpositionScroll : function(event){
+				var pos = $('body #home-page-content div.row-fluid').scrollTop();
 				if (pos > 5) {
 						$('.icon-scroll-bottom').hide();	
 				}else if (pos == 0){
       $('.icon-scroll-bottom').show();
     }
   }
-
 });
 
 app.views.LocalisationPageView =  app.utils.BaseView.extend({
@@ -476,9 +467,9 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   },
 
 		events : {
-				"click .modifier-enregistrement"	: "updateEmail",
-				"click .annuler-enregistrement"	: "annuler",
-				"click .enable-email" : "enableInputEmail",
+				"touch .modifier-enregistrement"	: "updateEmail",
+				"touch .annuler-enregistrement"	: "annuler",
+				"touch .enable-email" : "enableInputEmail",
 				"keydown input" : "enableSave"
 	},
 		
@@ -500,11 +491,13 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 		},
 		updateEmail: function(evt){
 				var currentEmail = this.$el.find('input[type="text"]').val();
-				this.model.set('email',String(currentEmail)).save().done( function(model, response, options) {
-      $('input[type=text]').addClass('disabled');
-      $('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-      sauvages.notifications.emailSaveSuccess();
-    });
+    if (validatorsEmail(currentEmail)) {
+        this.model.set('email',String(currentEmail)).save().done( function(model, response, options) {
+          $('input[type=text]').addClass('disabled');
+          $('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
+          sauvages.notifications.emailSaveSuccess();
+        });
+    }
 		},
 		
 		beforeRender: function(){
@@ -953,16 +946,12 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 						this.hrefIdentification = 	'identification/'+this.region;
 				}
     this.collection.bind("reset", this.render, this);
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-		
-			_.bindAll(this, 'checkpositionScroll');
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);		
+		//	_.bindAll(this, 'checkpositionScroll');
     // bind to window
     $(window).scroll(this.checkpositionScroll);
   },
 
-  events : {
-    "scroll" : "checkpositionScroll"
-  },
 
   beforeRender: function() {
 				$('body').addClass('cleliste liste');
@@ -988,10 +977,10 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
     return true;
   },
 
-		checkpositionScroll : function(e){
+		checkpositionScroll : function(event){
 				var pos = $('body.liste').scrollTop();
 				if (pos > 0) {
-								app.globals.positionScroll = pos;
+						app.globals.positionScroll = pos;
 				}
 		},
 
@@ -1068,12 +1057,12 @@ app.views.obsDetailView=  app.utils.BaseView.extend({
 
    initialize: function() {
 				this.parcours = this.options.parcours;
-    this.model.bind("reset", this.render, this);
+    this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
   beforeRender: function() {
-				$('.page-title').replaceWith("<div class='page-title'>"+ this.model.get('name_taxon')+"</div><em>"+ this.parcours.get('name')+" - "+this.parcours.get('cote')+"</em>");
+				$('.page-title').replaceWith("<div class='page-title'>"+ this.collection.models[0].get('name_taxon') +"</div><em>"+ this.parcours.get('name')+" - "+this.parcours.get('cote')+"</em>");
 				$('.page-block-sub-title').empty();
   },
 
@@ -1082,7 +1071,7 @@ app.views.obsDetailView=  app.utils.BaseView.extend({
 		},
 		
 		serialize: function() {
-				if (this.model) return {model : this.model};
+				if (this.collection) return {collection : this.collection};
     return true;
   },
 		
@@ -1102,20 +1091,20 @@ app.views.obsDetailView=  app.utils.BaseView.extend({
 				var msg = _.template(
 						"<form role='form form-inline'>"+
 							"<div class='form-group'>"+
-							"		<p>Voulez-voulez supprimer l'observation <i><%= data.get('name_taxon') %></i> du <%= data.get('datetime') %>.</p>"+
+							"		<p>Voulez-voulez supprimer l'observation <i><%= data.models[0].get('name_taxon') %></i> du <%= data.models[0].get('datetime') %>.</p>"+
 							"</div>"+
 							"<button type='submit' class='btn btn-danger'>Supprimer</button>"+
 							"<button type='button' class='btn btn-default pull-right' data-dismiss='modal' aria-hidden='true'>Annuler</button>"+
 						"</form>"					
 				);
-				sauvages.notifications.supprimerData(msg(this.model), this.$el);
+				sauvages.notifications.supprimerData(msg(this.collection), this.$el);
 		},
 
 		destroyObs : function(event){
 						var self = this;
 						this.obsCollection = new app.models.OccurenceDataValuesCollection();
 						this.obsCollection.fetch({success: function(dataParcours) {
-								var obsToDestroy = self.obsCollection.findWhere({'id': self.model.get('id')});
+								var obsToDestroy = self.obsCollection.findWhere({'id': self.collection.models[0].get('id')});
 								obsToDestroy.destroy({success: function(obs, idObs) {
 										var obsTime = 	obs.set('datetime', new Date().format("dd/MM/yyyy"));
 										var msg = "L'observation a été supprimée du mobile." 
@@ -1170,7 +1159,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
-    'click .test-obs': 'testConnection',
+    'touch .test-obs': 'testConnection',
 				'click .send-obs': 'sendObs',
 				'click .destroyRue':'destroyRue',
 				'click .back-rue-en-cours':'backRueEnCours',
@@ -1211,23 +1200,24 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				return flag;
 		},
 		testConnection : function(event){
-				var ctarget = $(event.currentTarget);
-				this.idRue =  parseInt(ctarget.context.id);
-				var dfd = $.Deferred();
-				var connect = checkConnection();
-				if (connect === '2G' || connect === '3G' || connect === 'Cell' || connect === 'wifi' || connect === true){
-								var msg = _.template(
-										"<form role='form form-inline'>"+
-											"<div class='form-group'>"+
-											"		<p>L'envoi des observations requiert une connexion à haut débit (H+, 4G, wifi).</p>"+
-											"</div>"+
-											"<button type='submit' id='submitEmail' class='btn btn-primary'>Envoyer vos données !</button>"+
-										"</form>"					
-								);
-								sauvages.notifications.connectionInfo(msg(),this.idRue, this.$el);
-				}else if(connect === 'inconnu'||connect === "none" || connect === false || connect === undefined){
-						sauvages.notifications.connection();
-				}
+    $('.test-obs').addClass('disabled')
+    var ctarget = $(event.currentTarget);
+    this.idRue =  parseInt(ctarget.context.id);
+    var dfd = $.Deferred();
+    var connect = checkConnection();
+    if (connect === '2G' || connect === '3G' || connect === 'Cell' || connect === 'wifi' || connect === true){
+        var msg = _.template(
+          "<form role='form form-inline'>"+
+           "<div class='form-group'>"+
+           "		<p>L'envoi des observations requiert une connexion à haut débit (H+, 4G, wifi).</p>"+
+           "</div>"+
+           "<button type='submit' id='submitEmail' class='btn btn-primary'>Envoyer vos données !</button>"+
+          "</form>"					
+        );
+        sauvages.notifications.connectionInfo(msg(),this.idRue, this.$el);
+    }else if(connect === 'inconnu'||connect === "none" || connect === false || connect === undefined){
+      sauvages.notifications.connection();
+    }
 		},
 		appelServiceCommuneTela :  function (latParcours,longParcours,callback){
 				if (latParcours && longParcours) {
@@ -1294,6 +1284,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 												});
 
 										}else{
+            var newUser = new app.models.User();
 												var msg = _.template(
 														"<form role='form form-inline'>"+
 															"<div class='form-group'>"+
@@ -1307,7 +1298,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 															"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
 														"</form>"					
 													);
-												sauvages.notifications.email(msg(),currentUser);
+												sauvages.notifications.email(msg(),newUser);
 												$('.modal-footer').addClass("hide");
 										}
 								}

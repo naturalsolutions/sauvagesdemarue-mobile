@@ -224,9 +224,18 @@ app.utils.BaseView = Backbone.View.extend({
 document.addEventListener("deviceready", onDeviceReady, false);
 
 //pour fonctionner sur navigateur desktop
-if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
+//if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
 
 function onDeviceReady() {
+
+  $(document).ajaxStart(function () {
+    var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
+      if (!FirstLoad ) {
+        $('body').addClass('loading disabled')
+      }
+  });
+  $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
+
   window.deferreds = [];  
   app.models.pos = new app.models.Position;
 
@@ -294,12 +303,6 @@ function init(){
           if (!Backbone.History.started) {
             Backbone.history.start();
           }        
-          var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
-          if (!FirstLoad ) {
-           // Spinner management (visual feedback for ongoing requests) ici pour eviter superposition avec splash screen spinner
-            $(document).ajaxStart(function () { $('body').addClass('loading disabled'); });
-            $(document).ajaxStop(function () { $('body').removeClass('loading disabled'); });
-          }
           //preloader
           if (app.globals.cListAllTaxons.models != "undefined") {
             for(var i=0; app.globals.cListAllTaxons.models;i++ ){
@@ -384,9 +387,11 @@ console.log('version avant changeV : ' +app.db.version);
           console.log('deferreds version vide '+ deferreds.length);
           //teste si les données taxons sont chargés dans la base
           //Si le tableau retourné est vide alors => chargement des données en base
-          $.when(runQuery("SELECT * FROM TespeceCel" , [])).done(function (dta) {
+          $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
           var arr = [];
             if (dta.rows.length == 0 ) {
+              arr.push(loadXmlTaxa());
+              arr.push(loadXmlCriteria());
               arr.push(loadXmlEspCEL());
             }
           $.when.apply(this, arr).then(function () {

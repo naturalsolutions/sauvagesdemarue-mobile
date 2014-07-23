@@ -93,6 +93,7 @@ width: 100%;
 		background-image: url('images/splash-screen_v05-rapport1_6.png');
 		background-repeat: no-repeat;
 		background-size: 100%;
+  z-index: 3;
 }
 #geoloc {
 		width: 100%;
@@ -477,9 +478,7 @@ button.destroyRue,button.confirme-supp{
 button.destroyRue span.glyphicon.glyphicon-trash,button.confirme-supp span.glyphicon.glyphicon-trash {
 		font-size: 20px;
 }
-button.test-obs {
-		margin-top: -30px;
-}
+
 .panel-heading i{
 		text-shadow: 1px 1px #333;
 }
@@ -710,6 +709,7 @@ a.btn.btn-lg.menu-aide {
   top:43%;
   height:57%;
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 #home-page-content .row-fluid .row .col-xs-12.col-sm-12 {
@@ -797,6 +797,11 @@ font-size: 24px;
 		min-height: 100%;
 		padding-bottom: 80px;
 }
+
+body.pad-bottom-top.cleliste.liste {
+  -webkit-overflow-scrolling: touch;
+}
+
 #content.container {
 position: absolute;
 height: 100%;
@@ -980,11 +985,12 @@ ul.nav-list ul {
 .taxon-img-thumb {
 		margin-right: 1%;
 }
-.send-obs{
+.send-obs,.test-obs{
 		border-radius: 3px;
 		padding-right: 4px;
-		margin-right: -6px;
+  margin-top: -20px;
 }
+
 .send-obs span.badge {
 		position: initial;
 		top: inherit;
@@ -1026,12 +1032,12 @@ ul.nav-list ul {
   position: absolute;
   top: 0;
   left: 0px;
-  z-index: 2000;
+  z-index: 2;
   width: 100%;
 }
 
 .page-aide .row.en-tete h1 {
-  margin-top: 0px;
+  margin-top: 6px;
   margin-left: 15px;
   line-height: 1.3;
   margin-bottom: 0px;
@@ -1043,6 +1049,8 @@ a#quitter-aide {
   z-index: 1;
   color: yellow;
   padding: 10% 1% 1%;
+  width: 100px;
+  height: 40px;
 }
 #quitter-aide span.glyphicon.glyphicon-remove-circle{
   font-size:24px;
@@ -1314,8 +1322,7 @@ a#quitter-aide {
   }
 		.loading-splash {
 				background-size: 110px;
-				height: 110px !important;
-				margin-top: 20%;
+    margin-top: 16%;
 		}
 }
 

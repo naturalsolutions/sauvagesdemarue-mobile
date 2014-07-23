@@ -124,7 +124,7 @@ app.models.TaxonLite = Backbone.Model.extend({
   //delete :  true/false
   table : 'Ttaxon',
   schema: {
-    taxonId: { title:'taxonId',type:'Number', sqltype:'INTEGER', required: true, sqlconstraints:'PRIMARY KEY'},
+    taxonId: { title:'taxonId',type:'Number', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', required: true},
     fk_group: { title:'fk_group', sqltype:'INTEGER'},
     commonName: { title:'commonName', type:'Text', sqltype:'NVARCHAR(200)',  required: true },
     scientificName: { title:'scientificName', type:'Text', sqltype:'NVARCHAR(500)',  required: true },

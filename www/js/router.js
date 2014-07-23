@@ -54,15 +54,25 @@ app.Router = Backbone.Router.extend({
   viewHomePage: function() {
     var self = this;
     var onDataHandler = function(data, response, options) {
+      $('body').css('background-color', '#28717E');
+      setTimeout(function(){
+        $(".loading-splash").remove();
+        $('#splash-screen').remove();
+      },1200);
       if (data.get('aide') !== undefined) {
+        setTimeout(function(){
+          $('#content').addClass('content-home');
+        },1200);
         var currentView = new app.views.HomePageView();
         self.displayView(currentView);
-        $('#content').addClass('content-home');
-        $('body').css('background-color', '#28717E');
       }else{
         app.route.navigate('aide',{trigger: true});
         var newUser = new app.models.Application();
         var currentView = new app.views.AidePageView();
+        setTimeout(function(){
+          $(".loading-splash").remove();
+          $('#splash-screen').remove();
+        },1200);
         self.displayView(currentView);
         self.applicationStateOnce = new app.models.Application(); 
         self.applicationStateOnce.set('aide', 1).save()
@@ -70,9 +80,8 @@ app.Router = Backbone.Router.extend({
             console.log(model);
             })
           .fail(function(error){console.log(error)});
-      }
-      $(".loading-splash").remove();
-      $('#splash-screen').remove();
+      };
+
     };
     var onErrorHandler = function(data, response, options) {
       alert(response.responseText);
@@ -89,8 +98,6 @@ app.Router = Backbone.Router.extend({
   viewAide : function(){
     var currentView = new app.views.AidePageView();
     this.displayView(currentView);
-    //$(".loading-splash").remove();
-    //$('#splash-screen').remove();
   },
 
   viewCredits: function() {
@@ -247,13 +254,13 @@ app.Router = Backbone.Router.extend({
     console.log('viewObsDetail');
     var self = this;
     //Recupération des données de l'obs
-    var obs= new app.models.OccurenceDataValue({"id": id});
+    var obs= new app.models.OccurenceDataValuesCollection({"id": id});
     obs.fetch({
       success: function(data) {
         var parcours = new app.models.ParcoursDataValuesCollection();
         parcours.fetch({success: function(dataParcours) {
-          var currentParcours = dataParcours.findWhere({"id": data.get('fk_rue')});
-          var currentView = new app.views.obsDetailView({model: data, parcours : currentParcours});
+          var currentParcours = dataParcours.findWhere({"id": data.models[0].get('fk_rue')});
+          var currentView = new app.views.obsDetailView({collection: data, parcours : currentParcours});
           self.displayView(currentView);
         }
       });
