@@ -486,17 +486,6 @@ $('#menu-item-region').click(function(){
   }
 });
 
-
-// -------------------------------------------------- Hammer event desktop et mobile ---------------------------------------------------- //
-
-  if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
-				var options = {
-						dragLockToAxis: true,
-						dragBlockHorizontal: true
-				};
-				var element = document.getElementsByClassName('mm-page');
-				var hammertime = new Hammer(element, options);
-			//	hammertime.on("dragleft dragright swipeleft swiperight", function(ev){ console.log('drag')});
 // -------------------------------------------------- checkConnection ---------------------------------------------------- //
 function checkConnection() {
   if (navigator.connection) {

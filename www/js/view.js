@@ -28,7 +28,9 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 	
 		events:{ 
 				'click .annuler-enregistrement-obs': 'annulerTerminer',
-				'click .btn-footer-right' : 'verifPhoto'
+				'click .btn-footer-right' : 'verifPhoto',
+    'change div.control-group' :'renderView'
+
   },
 
 		verifPhoto : function(e){
@@ -43,6 +45,9 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 				window.history.back();
         return false;
 		},
+  renderView : function(evt){
+    setTimeout(function(){$('.bottom-navbar').show();},2500)
+  }
 });
 app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
     initialize: function(options) {
@@ -91,9 +96,9 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
     $('body').scrollTop(0);
 				var especeSearch = new app.models.EspeceCelCollection()
 				new AutoCompleteView({
-											input: $("input.scientificName"), // your input field
-											model: especeSearch // your collection
-							}).render();
+										input: $("input.scientificName"), // your input field
+										model: especeSearch // your collection
+				}).render();
   },
 		
 		remove : function(){
@@ -104,6 +109,7 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 		events:{ 
 				'click .annuler-enregistrement-obs': 'annulerTerminer',
 				'click .btn-footer-right' : 'verifPhoto',
+    'change div.control-group' :'renderView'
   },
 
 		verifPhoto : function(e){
@@ -117,6 +123,9 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 			window.history.back();
         return false;
 		},
+  renderView : function(evt){
+    setTimeout(function(){$('.bottom-navbar').show();},2500)
+  }
 
 });
 
@@ -155,7 +164,6 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   template: 'form-add-obs',
 
   initialize: function() {
-				$('.footer-default').hide();
     this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -173,6 +181,10 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
       $('.select').hide(); 
     }
     $('body').scrollTop(0);
+
+    $('img.editor-picture-img').on('load', function () {
+      $('.bottom-navbar').show();
+    });
   },
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
@@ -180,12 +192,16 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
 		},
 	
 		events:{ 
-		'click .annuler-enregistrement-obs': 'annulerTerminer'
+		'click .annuler-enregistrement-obs': 'annulerTerminer',
+  'change div.control-group' :'renderView'
   },
   annulerTerminer : function(evt){
 						window.history.back();
         return false;	
 		},
+  renderView : function(evt){
+    setTimeout(function(){$('.bottom-navbar').show();},2500)
+  }
 });
 
 app.views.FormAddOccurenceView = NS.UI.Form.extend({
@@ -243,8 +259,9 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
 		'click .annuler-retour': 'annulerParcours',
-  'focus .notNew': 'editFormElem',
+  'focusin .notNew': 'editFormElem',
   'blur .notNew': 'readOnlyFormElem',
+  "click .input-text" : "editFormElem",
   },
 
 		annulerTerminer : function(evt){
@@ -281,8 +298,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 						$('.page-sub-title').empty();
 						$('.page-sub-title').append('Ma nouvelle rue');
 				}
-  },
-
+  }
 });
 
 app.views.FormAddSauvageRue = NS.UI.Form.extend({
@@ -320,7 +336,7 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 																					"<div class='form-group'>"+
 																					"		<p>Retrouver vos données dans la rubrique <strong>Mes Sauvages</strong>.<br/> N\'oublier pas de les partager aux scientifiques !</p>"+
 																					"</div>"+
-																					"<button type='submit' class='btn btn-success'>Partager</button>"+
+																					"<button type='submit' class='btn btn-success'>Mes Sauvages</button>"+
 																					"<button type='button' class='btn btn-default pull-right' data-dismiss='modal' aria-hidden='true'>Fermer</button>"+
 																				"</form>"					
 																		);
@@ -454,6 +470,10 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
   remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('#content').removeClass('content-home');
+    $('.page-block-sub-title h1').remove();
+				if (app.globals.currentrue !== undefined) {
+						$('.page-block-sub-title').append("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
+				}
   }
 });
 
@@ -467,9 +487,9 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   },
 
 		events : {
-				"touch .modifier-enregistrement"	: "updateEmail",
-				"touch .annuler-enregistrement"	: "annuler",
-				"touch .enable-email" : "enableInputEmail",
+				"click .modifier-enregistrement"	: "updateEmail",
+				"click .annuler-enregistrement"	: "annuler",
+				"click .enable-email" : "enableInputEmail",
 				"keydown input" : "enableSave"
 	},
 		
@@ -1010,6 +1030,7 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   },
 
   beforeRender: function() {
+  		$('body').addClass('detail-taxon');
     var self = this;
 						this.collection.each(function(criteria) {
 								self.insertView("#values-list", new app.views.IKCriteriaListItemFilterTaxonView({model: criteria, taxon: self.model}));
@@ -1048,6 +1069,8 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
 						$('.page-block-sub-title').append("<h1 class='page-sub-title'>"+this.options.localisation+"</h1>");
 				}
 				$('.navbar-fixed-bottom .btn-group .btn-footer').remove();
+    $('body').removeClass('detail-taxon');
+
 		}
 });
 
@@ -1087,7 +1110,7 @@ app.views.obsDetailView=  app.utils.BaseView.extend({
 		},
 
 		confirmeSupprObs : function(event){
-		this.model;
+    //this.model;
 				var msg = _.template(
 						"<form role='form form-inline'>"+
 							"<div class='form-group'>"+
@@ -1137,6 +1160,15 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
 				this.flagSuppr = false;
+
+  // -------------------------------------------------- Hammer event desktop et mobile ---------------------------------------------------- //
+  //if (document.documentElement.hasOwnProperty('ontouchstart')) { var event = 'touchstart' }else{ event = 'click'};
+				var options = {
+						dragLockToAxis: true,
+						dragBlockHorizontal: true
+				};
+				var element = document.getElementsByClassName('mm-page');
+				var hammertime = new Hammer(element, options);
   },
   
   serialize: function() {
@@ -1159,7 +1191,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
-    'touch .test-obs': 'testConnection',
+    'click .test-obs': 'testConnection',
 				'click .send-obs': 'sendObs',
 				'click .destroyRue':'destroyRue',
 				'click .back-rue-en-cours':'backRueEnCours',
@@ -1200,10 +1232,10 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				return flag;
 		},
 		testConnection : function(event){
-    $('.test-obs').addClass('disabled')
     var ctarget = $(event.currentTarget);
     this.idRue =  parseInt(ctarget.context.id);
-    var dfd = $.Deferred();
+    if($('#'+this.idRue).hasClass('processing')) return;
+    $('#'+this.idRue).addClass('processing');
     var connect = checkConnection();
     if (connect === '2G' || connect === '3G' || connect === 'Cell' || connect === 'wifi' || connect === true){
         var msg = _.template(
@@ -1218,6 +1250,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     }else if(connect === 'inconnu'||connect === "none" || connect === false || connect === undefined){
       sauvages.notifications.connection();
     }
+    $('#'+this.idRue).removeClass('processing');
 		},
 		appelServiceCommuneTela :  function (latParcours,longParcours,callback){
 				if (latParcours && longParcours) {
@@ -1371,6 +1404,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				this.fermerAllDrag();
 		},
 		fermerAllDrag : function(){
+
 				$('button.destroyRue').remove();
 				$('.panel-heading')
 						.css("border-right-style","none")
@@ -1412,7 +1446,7 @@ app.views.AidePageView = app.utils.BaseView.extend({
   },
 
   events: {
-    "touch #quitter-aide": "navigateHome"
+   "click #quitter-aide": "navigateHome"
   },
 
   navigateHome: function(evt){
@@ -1428,9 +1462,13 @@ app.views.AidePageView = app.utils.BaseView.extend({
 				$('.flexslider', this.$el).flexslider({
 														animation: "slide",  
 														slideshow: false,
-              directionNav:false,
 														start: function(slider) {
-															$('.flexImages').show();
+                var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
+                if (FirstLoad ) {
+                  $(".loading-splash").remove();
+                  $('#splash-screen').remove();
+                }
+                $('body').removeClass('loading-slide opacite-null');
 														}
 				});
     $('body').scrollTop(0);

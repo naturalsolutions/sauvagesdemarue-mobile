@@ -99,6 +99,14 @@
                     dest: 'tmp',
                     src: ['libs/backbone-autocomplete/backbone.autocomplete.js']
                 }]
+            },
+            libfastclick: {
+                files: [{
+                    expand: true,
+                    cwd: 'www',
+                    dest: 'tmp',
+                    src: ['libs/fastclick.js']
+                }]
             }
         },
         replace: {
@@ -113,7 +121,7 @@
                         match: /[\s\t]*<link .*css\/key\.css.*\/>/,
                         replacement: ''
                     }, {
-                        match: /libs\/jquery-2\.0\.0\.min\.js/,
+                        match: /libs\/jquery-2\.0\.3\.\min.js/,
                         replacement: 'preCordova.js'
                     }, {
                         match: /libs\/flexslider\/jquery\.flexslider-min\.js/,
@@ -158,7 +166,7 @@
                 options: {
                     separator: ';',
                 },
-                src: ['www/libs/jquery-2.0.0.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
+                src: ['www/libs/jquery-2.0.3.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
                 dest: 'build/preCordova.js'
             },
             distPostCordova: {
@@ -174,6 +182,7 @@
                     'www/libs/jquery.hammer.js-master/jquery.hammer-full.min.js',
                     // libriairies minifiées avec uglify ci-dessus
                     'tmp/libs/NS.UI.Notification/notification.js',
+                    'tmp/libs/fastclick.js',
                     'tmp/js/sauvage_notifications.js',
                     'tmp/js/app.js',
                     'tmp/js/utilities.js',

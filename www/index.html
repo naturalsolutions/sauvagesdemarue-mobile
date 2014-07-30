@@ -62,12 +62,13 @@
 
 
     <!-- Scripts -->
-				<script type="text/javascript" src="libs/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript" src="libs/jquery-2.0.3.min.js"></script>
     <script type="text/javascript" src="libs/underscore_1.4.4/underscore.js"></script>
     <script type="text/javascript" src="libs/backbone_1.0.0/backbone.js"></script>
    
     <script type="text/javascript" src="cordova.js"></script>
 				
+				<script type="text/javascript" src="libs/fastclick.js"></script>
     <script type="text/javascript" src="libs/flexslider/jquery.flexslider-min.js"></script>
 				<script type="text/javascript" src="libs/jQuery.mmenu-master/src/js/jquery.mmenu.js"></script>
 				<script type="text/javascript" src="libs/jquery.hammer.js-master/jquery.hammer-full.min.js"></script>
@@ -118,6 +119,15 @@
 				<!-- Test à poursuivre sur le préchargement des images-->
 				<div id="preloader">
 						<!-- préchargement pictos clé-->
+      <img src = './data/images/aide/application/1_home-sync.jpg' width='1' height='1' />
+      <img src = './data/images/aide/application/2_nouvelle-rue.jpg' width='1' height='1' />
+      <img src = './data/images/aide/application/3_assistant.jpg' width='1' height='1' />
+      <img src = './data/images/aide/application/4_liste-taxon.jpg' width='1' height='1' />
+      <img src = './data/images/aide/application/5_assistant-fin.jpg' width='1' height='1' />
+      <img src = './data/images/aide/application/9_liste-sauvages.jpg' width='1' height='1' />
+      <img src = './data/images/aide/application/10_mmenu.jpg' width='1' height='1' />
+      <img src = './data/images/aide/application/11_mon-profil.jpg' width='1' height='1' />
+
 						<img src="./data/images/pictos/bord_de_la_feuille_dents.png" width="1" height="1" />
 						<img src="./data/images/pictos/bord_de_la_feuille_lisse.png" width="1" height="1" />
 						<img src="./data/images/pictos/couleur_blanche.png" width="1" height="1" />
@@ -144,20 +154,7 @@
 						<img src="./data/images/pictos/pilosite_avec.png" width="1" height="1" />
 						<img src="./data/images/pictos/pilosite_sans.png" width="1" height="1" />
 
-						<img src="./css/images/ENTETE-menu/entete768-large-ratio15.jpg" width="1" height="1" />
-
-						<img src="./data/images/images_formated/000033244CRS.jpg" width="1" height="1" />
-
-
-						<script>
-								$('#map').load('css/map/map_regions.svg');
-								for(var i=0; app.globals.cListAllTaxons.models;i++ ){
-										var image = app.globals.cListAllTaxons.models[i].get('picture');
-										var	imageLocal = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
-								$('#preloader').append(	"<img src='+ imageLocal +' width='1' height='1' />");
-								};
-						</script>
-
+						<img src="./css/images/ENTETE-menu/entete-440.jpg" width="1" height="1" />
 				</div>
   </body>
 </html>

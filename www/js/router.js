@@ -55,30 +55,22 @@ app.Router = Backbone.Router.extend({
     var self = this;
     var onDataHandler = function(data, response, options) {
       $('body').css('background-color', '#28717E');
-      setTimeout(function(){
-        $(".loading-splash").remove();
-        $('#splash-screen').remove();
-      },1200);
       if (data.get('aide') !== undefined) {
-        setTimeout(function(){
-          $('#content').addClass('content-home');
-        },1200);
+        $('#content').addClass('content-home');
+        var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
+        if (FirstLoad ) {
+          $(".loading-splash").remove();
+          $('#splash-screen').remove();
+        }
         var currentView = new app.views.HomePageView();
         self.displayView(currentView);
       }else{
         app.route.navigate('aide',{trigger: true});
-        var newUser = new app.models.Application();
         var currentView = new app.views.AidePageView();
-        setTimeout(function(){
-          $(".loading-splash").remove();
-          $('#splash-screen').remove();
-        },1200);
         self.displayView(currentView);
         self.applicationStateOnce = new app.models.Application(); 
         self.applicationStateOnce.set('aide', 1).save()
-          .done( function(model, response, options) {
-            console.log(model);
-            })
+          .done( function(model, response, options) {})
           .fail(function(error){console.log(error)});
       };
 
@@ -96,6 +88,7 @@ app.Router = Backbone.Router.extend({
   },
 
   viewAide : function(){
+    $('body').addClass('loading-slide opacite-null');
     var currentView = new app.views.AidePageView();
     this.displayView(currentView);
   },
@@ -126,20 +119,29 @@ app.Router = Backbone.Router.extend({
   },
 
   viewRegions: function() {
+    var msg = _.template(
+             "<form role='form form-inline'>"+
+               "<p>Cette option est disponible uniquement pour la région PACA. Utilisez la rubrique 'Je participe', pour reconnaître les plantes de ma rue partout en France. </p>"+				
+                "<button type='submit'  class='btn btn-gris'>Annuler</button>"+
+                "<button type='reset'  class='btn btn-jaune pull-right'>Poursuivre</button>"+
+               "</form>"					
+              );
+    sauvages.notifications.infoRegion(msg());
+
     var currentView = new app.views.RegionPageView();
     this.displayView(currentView);  
   },
   
   viewMaRegion : function(name) {
     if (typeof app.globals.currentrue !== 'undefined' && app.globals.currentrue.get('name') !== undefined) {
-         var msg = _.template(
-                  "<form role='form form-inline'>"+
-                    "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
-                     "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
-                     "<button type='reset'  class='btn btn-gris visibility-hidden'>Annuler</button>"+
-                    "</form>"					
-                   );
-         sauvages.notifications.SortieProtocol(msg());
+      var msg = _.template(
+               "<form role='form form-inline'>"+
+                 "<p>Vous devez terminer votre rue pour accèder à cette partie de l'application.</p>"+				
+                  "<button type='submit'  class='btn btn-jaune pull-right'>Terminer</button>"+
+                  "<button type='reset'  class='btn btn-gris visibility-hidden'>Annuler</button>"+
+                 "</form>"					
+                );
+      sauvages.notifications.SortieProtocol(msg());
     }
     var region;
     var taxonsPaca  = new app.models.TaxonLiteCollection();

@@ -63,12 +63,12 @@ input,select,textarea,form {
 
 /*-----------------------------*/
 /**loader**/
-.loading{
+.loading,.loading-slide{
 		background-image: url(./images/spinner.gif);
 		background-repeat:no-repeat;
-background-size: 120px;
-background-position: center center;
-width: 100%;
+  background-size: 120px;
+  background-position: center center;
+  width: 100%;
 		margin:auto;
 		background-color:#28717e;
 		position:absolute;
@@ -85,6 +85,12 @@ width: 100%;
   width:100%;
 		margin-top: 33%;
 }
+
+.opacite-null{
+  opacity: 0;
+		z-index: 1;
+}
+
 #splash-screen{
 		width: 100%;
 		position: absolute;
@@ -128,7 +134,7 @@ body > div.mm-page {
 .disabled{
 		z-index: 1;
 		filter: Alpha(Opacity=30);
-		opacity: .3;
+		opacity: 0.3;
 		zoom: 1;
 		color: gray;
 }
@@ -662,7 +668,7 @@ a.btn.btn-footer{
 		background-color: #333;
 }
 #home-page-content .first{
-		background-image: url('images/ENTETE-menu/entete768-large-ratio15.jpg');
+		background-image: url('images/ENTETE-menu/entete480-large-ratio15.jpg');
 		background-size: 100%;
 		background-repeat: no-repeat;
 		background-clip: content-box;
@@ -709,7 +715,6 @@ a.btn.btn-lg.menu-aide {
   top:43%;
   height:57%;
   overflow: scroll;
-  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 #home-page-content .row-fluid .row .col-xs-12.col-sm-12 {
@@ -718,15 +723,14 @@ a.btn.btn-lg.menu-aide {
 }
 
 .icon-scroll-bottom {
-  background: url("images/touch-bottom.svg")no-repeat top right;
-  width: 20%;
+  background: url("images/arrow-bottom.png")no-repeat top right;
+  width: 28px;
   background-size: contain;
-  height: 30%;
+  height: 28px;
   display: block;
   position: absolute;
-  bottom: 0;
-  right: 0;
-  margin-right: 30px;
+  bottom: 5px;
+  left: 46%;
 }
 /****Smartphones (portrait)*****/
 @media  (max-height : 320px){
@@ -798,9 +802,6 @@ font-size: 24px;
 		padding-bottom: 80px;
 }
 
-body.pad-bottom-top.cleliste.liste {
-  -webkit-overflow-scrolling: touch;
-}
 
 #content.container {
 position: absolute;
@@ -1013,9 +1014,17 @@ ul.nav-list ul {
 .page-aide .loc-container{
   margin: 20px 5% 0px;
 }
+.page-aide div.col-xs-3.col-sm-3.col-md-3{
+  margin-top: 5px
+}
 
 .page-aide .flex-control-paging li a:not(.flex-active) {
   background:white;
+}
+
+.page-aide .flex-control-paging li a {
+  width: 8px;
+  height: 8px;
 }
 
 .page-aide .flex-control-paging li a:hover,.page-aide .flex-control-paging li a.flex-active{
@@ -1026,6 +1035,11 @@ ul.nav-list ul {
   border:none;
   margin:0px;
 }
+
+.page-aide .flex-control-nav li {
+  margin: 0 4px;
+}
+
 
 .page-aide .row.en-tete {
   background-color:rgba(3,3,3,0.6);;
@@ -1057,13 +1071,14 @@ a#quitter-aide {
 }
 .page-aide .flex-control-nav {
   position: absolute;
-  bottom: 40px;
+  bottom: 34px;
   text-align: center;
   background-color: rgba(0,0,0,0.58);
-  padding: 8px 0px 0px;
-  margin-left: 10%;
+  padding: 2px 0px 0px;
+  margin-left: 25%;
   border-radius:4px;
-  width: 80%;
+  width: 50%;
+  font-size: 10px;
 }
 /***DETAIL TAXON***/
 .btnObs{
@@ -1324,6 +1339,13 @@ a#quitter-aide {
 				background-size: 110px;
     margin-top: 16%;
 		}
+  .detail-taxon .page-title{
+    font-size:21px;
+  }
+  .detail-taxon .page-block-title p {
+    line-height:1.1em;
+    font-size: 13px;
+  }
 }
 
 /*********************************************/
@@ -1358,6 +1380,15 @@ a#quitter-aide {
   color: yellow;
   opacity: inherit;
   text-shadow: none;
+}
+button.close-lg{
+  color:yellow;
+  font-size:24px;
+  padding-top: 0px;
+  color: yellow;
+  opacity: inherit;
+  text-shadow: none;
+  background-color: transparent;
 }
 /****CARTE SVG******/
 

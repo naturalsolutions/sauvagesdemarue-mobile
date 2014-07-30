@@ -228,6 +228,10 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
 
+  $(function() {
+    FastClick.attach(document.body);
+  });
+
   $(document).ajaxStart(function () {
     var FirstLoad = $('.loading-splash', document).hasClass( "loading-splash" );
       if (!FirstLoad ) {
@@ -304,14 +308,14 @@ function init(){
             Backbone.history.start();
           }        
           //preloader
-          if (app.globals.cListAllTaxons.models != "undefined") {
-            for(var i=0; app.globals.cListAllTaxons.models;i++ ){
-              var image = app.globals.cListAllTaxons.models[i].get('picture');
-              var	imageLocal = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
-              $('#preloader').append(	"<img src="+ imageLocal +" width='1' height='1' />");
-            };
-          }
-          $('#map').load('css/map/map_regions.svg');
+            if (app.globals.cListAllTaxons.models != "undefined") {
+              var elements = app.globals.cListAllTaxons.models.length;
+              for(var i=1; i < elements ;i++ ){
+                var image = app.globals.cListAllTaxons.models[i].get('picture');
+                var	imageLocalThumb = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
+                $('#preloader').append(	"<img src="+ imageLocalThumb +" width='1' height='1' />");
+              };
+            }
         }
     });
   });
@@ -388,17 +392,19 @@ console.log('version avant changeV : ' +app.db.version);
           //teste si les données taxons sont chargés dans la base
           //Si le tableau retourné est vide alors => chargement des données en base
           $.when(runQuery("SELECT * FROM Ttaxon" , [])).done(function (dta) {
-          var arr = [];
+            var arr = [];
+            arr.push(runQuery('DROP TABLE Tuser',[]));
             if (dta.rows.length == 0 ) {
               arr.push(loadXmlTaxa());
               arr.push(loadXmlCriteria());
               arr.push(loadXmlEspCEL());
             }
-          $.when.apply(this, arr).then(function () {
-            deferreds.push(app.dao.baseDAOBD.populate(new app.models.Application()));
-            console.log('when finished dfd.resolve test if data are loaded');
-            return setTimeout(function(){ dfdTaxon.resolve()},1000);
-          });
+            $.when.apply(this, arr).then(function () {
+              deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
+              deferreds.push(app.dao.baseDAOBD.populate(new app.models.Application()));
+              console.log('when finished dfd.resolve test if data are loaded');
+              return setTimeout(function(){ dfdTaxon.resolve()},1000);
+            });
           }).fail(function (err) {
             return dfdTaxon.resolve();
           });
@@ -423,6 +429,7 @@ console.log('version avant changeV : ' +app.db.version);
          //do initial setup
           var dfd = $.Deferred();
           var arr = [];
+          arr.push(runQuery('DROP TABLE Tuser',[]));
           arr.push(runQuery('DROP TABLE Ttaxon',[]));
           arr.push(runQuery('DROP TABLE TvalTaxon_Criteria_values',[]));
           arr.push(runQuery('DROP TABLE Tpicture',[]));
@@ -432,6 +439,7 @@ console.log('version avant changeV : ' +app.db.version);
 
           $.when.apply(this, arr).then(function () {
             console.log('when finished dfd.resolve DROP TABLE');
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Application()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Taxon()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.TaxonCaracValue()));
@@ -446,6 +454,7 @@ console.log('version avant changeV : ' +app.db.version);
               var arr = [];
               if (dta.rows.length == 0 ) {
                 arr.push(loadXmlTaxa());
+                arr.push(loadXmlCriteria());
                 arr.push(loadXmlEspCEL());
               }
               $.when.apply(this, arr).then(function () {
@@ -521,9 +530,9 @@ NS.UI.Form.templateSrc.stacked =
                 '</form>';
   if (intVersionMatch < 4.1) {
     NS.UI.Form.editors.Text.templateSrc.stacked =
-      '<div class="form-group  <%- data.name %>">' +
-                    '    <label  for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-      '   <input class="form-control <%- data.name %>" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" />' +
+      '<div class="form-group  <%- data.name %>" input-text> ' +
+      '  <label  for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+      '  <input class="form-control <%- data.name %>" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" />' +
                     '    <div class="controls">' +   
                     '        <div class="help-inline"></div>' +
                     '        <div class="help-block"><% if (data.helpText) { %><%- data.helpText %><% } %></div>' +
@@ -532,8 +541,8 @@ NS.UI.Form.templateSrc.stacked =
     ;
     NS.UI.Form.editors.Select.templateSrc.stacked =
       '<div class="form-group">' +
-                    '    <label ><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
-      '	<select class="form-control" id="<%- data.id %>" name="<%- data.name %>" <% if (data.multiple) { %> multiple="multiple"<% } %>>' +
+      ' <label ><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
+      ' <select class="form-control" id="<%- data.id %>" name="<%- data.name %>" <% if (data.multiple) { %> multiple="multiple"<% } %>>' +
                     '            <% _.each(data.options, function(group) {' +
                     '                var isGroup = group.label != "";' +
                     '                if (isGroup) { %><optgroup label="<%- group.label %>"><% }' +

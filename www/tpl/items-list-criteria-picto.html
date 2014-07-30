@@ -20,12 +20,12 @@
               <label for="defCaracValue-<%= item.get('criteraValueId') %>">
               
                 <% if ((typeof(item.get('picture') ) !== "undefined")  &&  (item.get('picture')  !== "undefined")){ %> 
-                  <img src="./data/images/pictos/<%= item.get('picture')  %>" />
+                  <img src="./data/images/pictos/<%= item.get('picture')  %>" class="needsclick" />
                 <%} %>
                 
               </label>
               
-              <input type="checkbox" name="defCaracValue-<%= item.get('criteraValueId') %>" id="defCaracValue-<%= item.get('criteraValueId') %>" value="<%= item.get('criteraValueId') %>"/>
+              <input  type="checkbox" name="defCaracValue-<%= item.get('criteraValueId') %>" id="defCaracValue-<%= item.get('criteraValueId') %>" value="<%= item.get('criteraValueId') %>"/>
             </span>
             
           </li>

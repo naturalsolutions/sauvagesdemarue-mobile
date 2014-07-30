@@ -239,7 +239,6 @@ function() {
          $('#nodal').remove();
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
-         $('body').find("#"+idRue).children('.test-obs').removeClass('disabled');
       });
    },
 
@@ -273,6 +272,38 @@ function() {
          $('body').removeClass('modal-open');
       });
     },
+
+   sauvages.infoRegion = function infoRegion(msg) {
+      var myModal = new NS.UI.NotificationModal({
+       type: '',
+       title: 'Sauvages de ma rue en région',
+       message:  msg,
+       delay: '',
+       btnLabel: '', 
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         window.history.back();
+         return false;
+      }, myModal));
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      }, myModal));
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
+    },
    sauvages.SortieProtocol = function SortieProtocol(msg) {
       var myModal = new NS.UI.NotificationModal({
        type: '',
@@ -281,7 +312,7 @@ function() {
        delay: '',
        btnLabel: '', 
       });
-      $('.close').hide();
+      $('.close-lg').hide();
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
         evt.preventDefault();
          $('#nodal').modal('hide');
