@@ -709,7 +709,6 @@ a.btn.btn-lg.menu-aide {
   background-color: #333;
 }
 
-
 #home-page-content .row-fluid {
   position: absolute;
   top:43%;
@@ -731,6 +730,9 @@ a.btn.btn-lg.menu-aide {
   position: absolute;
   bottom: 5px;
   left: 46%;
+}
+.container-home span#flagObs.glyphicon.glyphicon-refresh{
+  font-size:14px;
 }
 /****Smartphones (portrait)*****/
 @media  (max-height : 320px){
@@ -1040,6 +1042,10 @@ ul.nav-list ul {
   margin: 0 4px;
 }
 
+#quitter-aide.btn:active{
+  webkit-box-shadow: none;
+  box-shadow: none;
+}
 
 .page-aide .row.en-tete {
   background-color:rgba(3,3,3,0.6);;
@@ -1062,7 +1068,7 @@ a#quitter-aide {
   right: 0px;
   z-index: 1;
   color: yellow;
-  padding: 10% 1% 1%;
+  padding: 7px 10px 4px 5px;
   width: 100px;
   height: 40px;
 }
@@ -1227,6 +1233,15 @@ a#quitter-aide {
     top: 36.6%;
     height: 63.4%;
   }
+  .page-aide .row.en-tete{
+    padding-top: 10px;
+  }
+  .page-aide .loc-container{
+    margin:60px 5% 0;
+  }
+  .page-aide .flex-control-nav{
+    bottom: -20px;
+  }
 }
 @media all and (aspect-ratio: 40/71){
 		#home-page-content .first {height: 36.6%;}
@@ -1247,6 +1262,12 @@ a#quitter-aide {
   #home-page-content .row-fluid {
     top: 45%;
     height: 55%;
+  }
+  .page-aide .row.en-tete{
+    padding-top: 5px;
+  }
+  .page-aide  a#quitter-aide{
+    height: 35px;
   }
 }
 @media all and (aspect-ratio: 2/3){

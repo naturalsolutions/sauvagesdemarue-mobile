@@ -251,7 +251,7 @@ NS.WSTelaAPIClient = (function() {
                  erreurMsg += 'L\'erreur n\'était pas en JSON.';
                 }
                 console.log(erreurMsg);
-               }
+            }
       });
      // return $.Deferred().resolve();
     }
