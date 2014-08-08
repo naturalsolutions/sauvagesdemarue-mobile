@@ -248,7 +248,8 @@ function onDeviceReady() {
     // Wait first response of Geolocation API before starting app
     app.models.pos.once('change:coords', function() {this.resolve($('#geoloc').remove())}, geoldfd);
     deferreds.push(geoldfd);
-  }
+  };
+  pushNotification();
 
   setTimeout(function(){
     geolocalisation();
@@ -506,7 +507,7 @@ console.log('version avant changeV : ' +app.db.version);
 
   }catch(e) {
     console.log(JSON.stringify(e));
-  }
+  };
 
 
 //NS.UI.Form customize editors' template
@@ -530,7 +531,7 @@ NS.UI.Form.templateSrc.stacked =
                 '</form>';
   if (intVersionMatch < 4.1) {
     NS.UI.Form.editors.Text.templateSrc.stacked =
-      '<div class="form-group  <%- data.name %>" input-text> ' +
+      '<div class="form-group  <%- data.name %>" input-text > ' +
       '  <label  for="<%- data.id %>"><% if (data.required) { %><b>*</b><% } %> <%- data.label %></label>' +
       '  <input class="form-control <%- data.name %>" type="text" id="<%- data.id %>" name="<%- data.name %>" value="<%- data.initialData %>" />' +
                     '    <div class="controls">' +   
@@ -589,4 +590,163 @@ NS.UI.Form.templateSrc.stacked =
                   '    </div>' +
                   '</div>';
   }
-}
+};
+
+/////////// NOTIFICATION PUSH //////////////
+  function pushNotification(){
+				var pushNotification;
+    //a revoir
+    window.onNotification = onNotification;
+
+    document.addEventListener("backbutton", function(e){
+      $("#app-status-ul").append('<li>backbutton event received</li>');		
+      if( $("#home").length > 0){
+        // call this to get a new token each time. don't call it to reuse existing token.
+        //pushNotification.unregister(successHandler, errorHandler);
+        e.preventDefault();
+        navigator.app.exitApp();
+      }else{
+        navigator.app.backHistory();
+      }
+    }, false);			
+    try { 
+      pushNotification = window.plugins.pushNotification;
+      if (device.platform == 'android' || device.platform == 'Android' || device.platform == 'amazon-fireos' ) {
+        pushNotification.register(successHandler, errorHandler, {"senderID":"944655915307","ecb":"onNotification"});		// required!
+      } else {
+        pushNotification.register(tokenHandler, errorHandler, {"badge":"true","sound":"true","alert":"true","ecb":"onNotificationAPN"});	// required!
+      }
+    }
+    catch(err) { 
+      txt="There was an error on this page.\n\n"; 
+      txt+="Error description: " + err.message + "\n\n"; 
+      alert(txt); 
+    }
+				
+				// handle APNS notifications for iOS
+				function onNotificationAPN(e) {
+						if (e.alert) {
+        // showing an alert also requires the org.apache.cordova.dialogs plugin
+        navigator.notification.alert(e.alert);
+						}
+						if (e.sound) {
+									// playing a sound also requires the org.apache.cordova.media plugin
+									var snd = new Media(e.sound);
+									snd.play();
+						}
+						if (e.badge) {
+									pushNotification.setApplicationIconBadgeNumber(successHandler, e.badge);
+						}
+				}
+				
+    var confirmedGcmNotification = true;
+				// handle GCM notifications for Android
+				function onNotification(e) {
+						$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
+						switch( e.event ){
+								case 'registered':
+										if ( e.regid.length > 0 ){
+												// Your GCM push server needs to know the regID before it can push to this device
+            // here is where you might want to send it the regID for later use.
+            var json = {
+              'token' : e.regid, 
+              'type' : device.platform.toLowerCase()
+            };
+            onRegisterServerNS(json);
+            var erreurMsg;
+										}
+										break;	
+								case 'message':
+										// if this flag is set, this notification happened while we were in the foreground.
+										// you might want to play a sound to get the user's attention, throw up a dialog, etc.
+										if (e.foreground){
+            navigator.notification.beep(2);
+            cordova.exec(null, null, 'Notification', 'alert', [e.message, 'Notification', 'OK']);
+
+												// on Android soundname is outside the payload. 
+												// On Amazon FireOS all custom attributes are contained within payload
+												var soundfile = e.soundname || e.payload.sound;
+												// if the notification contains a soundname, play it.
+												// playing a sound also requires the org.apache.cordova.media plugin
+												var my_media = new Media("/android_asset/www/"+ soundfile);
+												my_media.play();
+
+										}else{	// otherwise we were launched because the user touched a notification in the notification tray.
+												if (e.coldstart)
+              cordova.exec(null, null, 'Notification', 'alert', [e.message, 'Notification', 'OK']);
+												else{
+                console.log('Background entered');
+                if(confirmedGcmNotification) {
+                    confirmedGcmNotification = false;
+                    cordova.exec(PushSupport.gcmNotificationBackgroundAlert, null, 'Notification', 'alert', [e.message, 'Notification', 'OK']);
+                }
+              }
+          }
+										//$("#app-status-ul").append('<li>MESSAGE -> MSG: ' + e.payload.message + '</li>');
+													//android only
+										//$("#app-status-ul").append('<li>MESSAGE -> MSGCNT: ' + e.payload.msgcnt + '</li>');
+													//amazon-fireos only
+									/*				$("#app-status-ul").append('<li>MESSAGE -> TIMESTAMP: ' + e.payload.timeStamp + '</li>');*/
+									break;
+									
+								case 'error':
+          console.log("error Push Notification" + e.msg);
+          break;	
+								default:
+          console.log('Unknown, an event was received and we do not know what it is');
+										break;
+						}
+				}
+
+    function gcmNotificationBackgroundAlert() {
+        confirmedGcmNotification = true;
+    }
+				
+				function tokenHandler (result) {
+      //	$("#app-status-ul").append('<li>token: '+ result +'</li>');
+      // Your iOS push server needs to know the token before it can push to this device
+      // here is where you might want to send it the token for later use.
+      var json = {
+        'token' : result, 
+        'type' : device.platform.toLowerCase()
+      };
+      onRegisterServerNS(json);     
+				}
+				
+				function successHandler (result) {
+      console.log('Succes notification '+ result);
+				}
+				
+				function errorHandler (error) {
+      console.log('Erreur notification '+ error);
+				}
+      function onRegisterServerNS(json){
+      var server = "http://www.sauvagesdepaca.fr/mobile_data/push_notifications/";
+      // var server = "http://192.168.1.50/Test/drupal7/Sauvages-PACA/mobile_data/push_notifications";
+      var erreurMsg;
+      //make ajax post to the application server to register device
+      $.ajax(server, {
+        type: "post",
+        dataType: 'json',
+        data: json,
+        success: function(response) {
+          console.log("###Successfully registered device.");
+        },
+        error : function(jqXHR, textStatus, errorThrown) {
+          erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
+          try {
+           var reponse = jQuery.parseJSON(jqXHR.responseText);
+           if (reponse != null) {
+            $.each(reponse, function (cle, valeur) {
+             erreurMsg += valeur + '\n';
+            });
+           }
+          } catch(e) {
+           erreurMsg += 'L\'erreur n\'était pas en JSON.';
+          }
+          console.log(erreurMsg);
+        }
+      }); 
+    }
+				  
+  };
