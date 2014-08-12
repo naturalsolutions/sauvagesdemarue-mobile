@@ -31,7 +31,7 @@
                     expand: true,
                     cwd: 'www',
                     dest: 'build',
-                    src: ['libs/flexslider/flexslider.css']
+                    src: ['libs/flexslider_2.2.2/flexslider.css']
                 }]
             },
             libmmenu: {
@@ -105,7 +105,15 @@
                     expand: true,
                     cwd: 'www',
                     dest: 'tmp',
-                    src: ['libs/fastclick.js']
+                    src: ['libs/fastclick_1.0.2/fastclick.js']
+                }]
+            },
+           libPushNotification: {
+                files: [{
+                    expand: true,
+                    cwd: 'www',
+                    dest: 'tmp',
+                    src: ['libs/cordova_plugin-PushNotification/PushNotification.js']
                 }]
             }
         },
@@ -121,10 +129,10 @@
                         match: /[\s\t]*<link .*css\/key\.css.*\/>/,
                         replacement: ''
                     }, {
-                        match: /libs\/jquery-2\.0\.3\.\min.js/,
+                        match: /libs\/jquery_2\.0\.3\/jquery-2\.0\.3\.\min.js/,
                         replacement: 'preCordova.js'
                     }, {
-                        match: /libs\/flexslider\/jquery\.flexslider-min\.js/,
+                        match: /libs\/flexslider_2\.0\.3\/jquery\.flexslider-min\.js/,
                         replacement: 'postCordova.js'
                     }, {
                         match: /[\s\t]*<script .*src="(libs|js)\/.*<\/script>/g,
@@ -166,7 +174,7 @@
                 options: {
                     separator: ';',
                 },
-                src: ['www/libs/jquery-2.0.3.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
+                src: ['www/libs/jquery_2.0.3/jquery-2.0.3.min.js','www/libs/underscore_1.4.4/underscore-min.js','www/libs/backbone_1.0.0/backbone-min.js'],
                 dest: 'build/preCordova.js'
             },
             distPostCordova: {
@@ -175,14 +183,15 @@
                 },
                 src: [
                     // libriairies déjà minifiées
-                    'www/libs/flexslider/jquery.flexslider-min.js',
+                    'www/libs/flexslider_2.2.2/jquery.flexslider-min.js',
                     'www/libs/jQuery.mmenu-master/src/js/jquery.mmenu.min.js',
                     'www/libs/leaflet/leaflet.js',
                     'www/libs/bootstrap_3.0.2/js/bootstrap.min.js',
                     'www/libs/jquery.hammer.js-master/jquery.hammer-full.min.js',
                     // libriairies minifiées avec uglify ci-dessus
                     'tmp/libs/NS.UI.Notification/notification.js',
-                    'tmp/libs/fastclick.js',
+                    'tmp/libs/fastclick_1.0.2/fastclick.js',
+                    'tmp/libs/cordova_plugin-PushNotification/PushNotification.js',
                     'tmp/js/sauvage_notifications.js',
                     'tmp/js/app.js',
                     'tmp/js/utilities.js',
