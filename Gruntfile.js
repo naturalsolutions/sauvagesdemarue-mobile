@@ -132,7 +132,7 @@
                         match: /libs\/jquery_2\.0\.3\/jquery-2\.0\.3\.\min.js/,
                         replacement: 'preCordova.js'
                     }, {
-                        match: /libs\/flexslider_2\.0\.3\/jquery\.flexslider-min\.js/,
+                        match: /libs\/flexslider_2\.2\.2\/jquery\.flexslider-min\.js/,
                         replacement: 'postCordova.js'
                     }, {
                         match: /[\s\t]*<script .*src="(libs|js)\/.*<\/script>/g,
