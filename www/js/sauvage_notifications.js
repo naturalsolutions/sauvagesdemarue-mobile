@@ -9,7 +9,6 @@ function() {
            'begin_street': 'Début du parcours',
            'end_street':'Fin du parcours',
    },
-		
    sauvages.gpsNotStart = function gpsNotStart() {
       var myModal = new NS.UI.NotificationModal({
        type: '',
@@ -18,10 +17,10 @@ function() {
        delay: 4,
        btnLabel: '',
       onClose: function() {
-          $('#nodal').modal('hide');
-          $('#nodal').remove();
-          $('.modal-backdrop').remove();
-          $('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
        }
       });
    },
@@ -36,7 +35,7 @@ function() {
       });
    },
 	
-   sauvages.finParcours = function finParcours(msg) {
+   sauvages.finParcours = function finParcours(msg,idRue,parcours) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Rue sauvegardée',
@@ -48,6 +47,15 @@ function() {
          },
       });
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         var sendObservations = new NS.SendOBS(idRue,parcours);
+         sendObservations.envoiUtilitaireWS(idRue,parcours);
+      }, myModal)),
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
          $('#nodal').modal('hide');
          $('#nodal').remove();
@@ -124,10 +132,10 @@ function() {
       delay: 2,
       btnLabel: '',
       onClose: function() {
-          $('#nodal').modal('hide');
-          $('#nodal').remove();
-          $('.modal-backdrop').remove();
-          $('body').removeClass('modal-open');
+          //$('#nodal').modal('hide');
+          //$('#nodal').remove();
+          //$('.modal-backdrop').remove();
+          //$('body').removeClass('modal-open');
        }
      });
    },
@@ -140,10 +148,10 @@ function() {
          delay: 1,
          btnLabel: '',
          onClose: function() {
-            $('#nodal').modal('hide');
-            $('#nodal').remove();
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open');
+            //$('#nodal').modal('hide');
+            //$('#nodal').remove();
+            //$('.modal-backdrop').remove();
+            //$('body').removeClass('modal-open');
          }
       });
    },
@@ -161,7 +169,7 @@ function() {
          }
       });
    },
-   sauvages.email = function email(msg,newUser) {
+   sauvages.email = function email(msg,newUser,idRue,parcours,cObservation) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Ajouter votre email.',
@@ -173,18 +181,14 @@ function() {
          evt.preventDefault();
            var currentEmail = this.$el.find('input[type="email"]').val();
             newUser.set('email',String(currentEmail))
-            .save();
-            $('#nodal').modal('hide');
-            $('#nodal').remove();
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open');
+           .save();
+            var sendObservations = new NS.SendOBS(idRue,parcours,cObservation);
+            sendObservations.envoiUtilitaireWS(idRue,parcours,cObservation);
+            //$('#nodal').modal('hide');
+            //$('#nodal').remove();
+            //$('.modal-backdrop').remove();
+            //$('body').removeClass('modal-open');
       }, myModal));
-      $('#myModal').on('hidden.bs.modal', function () {
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-      });
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
       var myModal = new NS.UI.NotificationModal({
@@ -207,17 +211,15 @@ function() {
          delay: '',
          btnLabel: ''
       });
-      $('#myModal').on('hidden.bs.modal', function () {
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-      });
+      //$('#myModal').on('hidden.bs.modal', function () {
+      //   $('#nodal').modal('hide');
+      //   $('#nodal').remove();
+      //   $('.modal-backdrop').remove();
+      //   $('body').removeClass('modal-open');
+      //});
    },
 
-   sauvages.connectionInfo = function connectionInfo(msg,idRue,viewBefore) {
-      var self = this;
-      self.viewBefore = viewBefore ;
+   sauvages.connectionInfo = function connectionInfo(msg) {
       var myModal = new NS.UI.NotificationModal({
        type: '',
        title: 'Êtes-vous vous connecté à un réseau à haut débit ?',
@@ -227,19 +229,11 @@ function() {
       });
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         $(self.viewBefore).find("#"+idRue).children('.test-obs').removeClass('test-obs disabled').addClass('send-obs').trigger('click');
-         $(self.viewBefore).find("#"+idRue).children('.test-obs').removeClass('send-obs').addClass('test-obs');
+      //   $('#nodal').modal('hide');
+      //   $('#nodal').remove();
+      //   $('.modal-backdrop').remove();
+      //   $('body').removeClass('modal-open');
       }, myModal));
-      $('#myModal').on('hidden.bs.modal', function () {
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-      });
    },
 
    sauvages.finDeProtocol = function finDeProtocol(msg) {
@@ -252,25 +246,25 @@ function() {
       });
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
+         //$('#nodal').modal('hide');
+         //$('#nodal').remove();
+         //$('.modal-backdrop').remove();
+         //$('body').removeClass('modal-open');
       }, myModal));
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
+         //$('#nodal').modal('hide');
+         //$('#nodal').remove();
+         //$('.modal-backdrop').remove();
+         //$('body').removeClass('modal-open');
          app.route.navigate('taxonlist', {trigger: true});
       }, myModal));
-      $('#myModal').on('hidden.bs.modal', function () {
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-      });
+      //$('#myModal').on('hidden.bs.modal', function () {
+      //   $('#nodal').modal('hide');
+      //   $('#nodal').remove();
+      //   $('.modal-backdrop').remove();
+      //   $('body').removeClass('modal-open');
+      //});
     },
 
    sauvages.infoRegion = function infoRegion(msg) {
@@ -283,26 +277,26 @@ function() {
       });
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
+         //$('#nodal').modal('hide');
+         //$('#nodal').remove();
+         //$('.modal-backdrop').remove();
+         //$('body').removeClass('modal-open');
          window.history.back();
          return false;
       }, myModal));
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
+         //$('#nodal').modal('hide');
+         //$('#nodal').remove();
+         //$('.modal-backdrop').remove();
+         //$('body').removeClass('modal-open');
       }, myModal));
-      $('#myModal').on('hidden.bs.modal', function () {
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-      });
+      //$('#myModal').on('hidden.bs.modal', function () {
+      //   $('#nodal').modal('hide');
+      //   $('#nodal').remove();
+      //   $('.modal-backdrop').remove();
+      //   $('body').removeClass('modal-open');
+      //});
     },
    sauvages.SortieProtocol = function SortieProtocol(msg) {
       var myModal = new NS.UI.NotificationModal({
@@ -315,19 +309,19 @@ function() {
       $('.close-lg').hide();
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
+         //$('#nodal').modal('hide');
+         //$('#nodal').remove();
+         //$('.modal-backdrop').remove();
+         //$('body').removeClass('modal-open');
          app.route.navigate('addParcours', {trigger: true, replace: true});
          $("#menu").trigger("close");
-      }, myModal))
+      }, myModal));
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
+         //$('#nodal').modal('hide');
+         //$('#nodal').remove();
+         //$('.modal-backdrop').remove();
+         //$('body').removeClass('modal-open');
          $("#menu").trigger("close"); 
       }, myModal))
    }  

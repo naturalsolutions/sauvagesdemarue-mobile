@@ -30,7 +30,6 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 				'click .annuler-enregistrement-obs': 'annulerTerminer',
 				'click .btn-footer-right' : 'verifPhoto',
     'change div.control-group' :'renderView'
-
   },
 
 		verifPhoto : function(e){
@@ -46,6 +45,7 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
         return false;
 		},
   renderView : function(evt){
+    //Fix bug Android Sony
     setTimeout(function(){$('.bottom-navbar').show();},2500)
   }
 });
@@ -336,11 +336,11 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 																					"<div class='form-group'>"+
 																					"		<p>Retrouver vos données dans la rubrique <strong>Mes Sauvages</strong>.<br/> N\'oublier pas de les partager aux scientifiques !</p>"+
 																					"</div>"+
-																					"<button type='submit' class='btn btn-success'>Mes Sauvages</button>"+
-																					"<button type='button' class='btn btn-default pull-right' data-dismiss='modal' aria-hidden='true'>Fermer</button>"+
+																					"<button type='submit' class='btn btn-success'>Partager</button>"+
+																					"<button type='reset' class='btn btn-default pull-right'>Mes Sauvages</button>"+
 																				"</form>"					
 																		);
-														sauvages.notifications.finParcours(msg());				
+														sauvages.notifications.finParcours(msg(),data.get('id'),data);				
 												}
 												//nouvelle rue
 												else {
@@ -782,7 +782,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   events: {
     "click input[type=checkbox]": "filterTaxon",
 				"click #supprimer-filtre" : "suppFiltre",
-    "click .help": "helpShow"
+    "click .help": "helpShow",
   },
 		
   beforeRender: function() {
@@ -808,7 +808,8 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 				$('body').removeClass('cleliste cle');
     $('#languette').remove();
 		},
-		
+	
+
 		helpShow :function(){
 				var self=this;
 				var criteriaName = "Aide de l'assistant d'identification";
@@ -953,7 +954,7 @@ app.views.IKCriteriaListItemFilterTaxonView =  app.utils.BaseView.extend({
       },this);
     }
   },
-});
+});$(window)
 
 app.views.TaxonListView =  app.utils.BaseView.extend({
 
@@ -966,9 +967,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 						this.hrefIdentification = 	'identification/'+this.region;
 				}
     this.collection.bind("reset", this.render, this);
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);		
-		//	_.bindAll(this, 'checkpositionScroll');
-    // bind to window
+				app.utils.BaseView.prototype.initialize.apply(this, arguments);
     $(window).scroll(this.checkpositionScroll);
   },
 
@@ -998,7 +997,8 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
   },
 
 		checkpositionScroll : function(event){
-				var pos = $('body.liste').scrollTop();
+    var $body =  $('body.liste');
+				var pos = $body.scrollTop();
 				if (pos > 0) {
 						app.globals.positionScroll = pos;
 				}
@@ -1008,9 +1008,20 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 				if (this.options.region !== undefined) {
 						$('.footer-default').remove();
 				}
-				$('body.liste').scrollTop(app.globals.positionScroll);
+    setTimeout(this.goToLastPosition(),0);
+    setTimeout(function(){$('.loading.cover-content').remove();},300)
 		},
+
+  goToLastPosition : function(){
+    var bodyListe =  $('body.liste');
+    if (app.globals.positionScroll.length !== 0) {
+      //bodyListe.css({'-webkit-transform':'translateY(-'+app.globals.positionScroll+'px)'});
+      bodyListe.scrollTop(app.globals.positionScroll);
+    }
+  },
+
 		remove: function(){
+    $(window).off("scroll",this.checkpositionScroll);    
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				console.log('remove liste');
 				$('body').removeClass('cleliste liste');
@@ -1110,7 +1121,6 @@ app.views.obsDetailView=  app.utils.BaseView.extend({
 		},
 
 		confirmeSupprObs : function(event){
-    //this.model;
 				var msg = _.template(
 						"<form role='form form-inline'>"+
 							"<div class='form-group'>"+
@@ -1191,8 +1201,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   events: {
     "click #tabObs a[href='#espece']": "tabObsespece",
     "click #tabObs a[href='#rue']": "tabObrue",
-    'click .test-obs': 'testConnection',
-				'click .send-obs': 'sendObs',
+				'click .test-obs': 'sendObs',
 				'click .destroyRue':'destroyRue',
 				'click .back-rue-en-cours':'backRueEnCours',
 				'click .back-home' : 'backHome',
@@ -1226,125 +1235,29 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		toggleChevron: function(event){
     $(event.target).prev().find('.glyph-collpase').toggleClass('glyphicon-minus glyphicon-plus');
 		},
-		validatorsEmail : function(value) {
-				var regex = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-				var flag = regex.test(value);
-				return flag;
-		},
-		testConnection : function(event){
-    var ctarget = $(event.currentTarget);
-    this.idRue =  parseInt(ctarget.context.id);
-    if($('#'+this.idRue).hasClass('processing')) return;
-    $('#'+this.idRue).addClass('processing');
-    var connect = checkConnection();
-    if (connect === '2G' || connect === '3G' || connect === 'Cell' || connect === 'wifi' || connect === true){
-        var msg = _.template(
-          "<form role='form form-inline'>"+
-           "<div class='form-group'>"+
-           "		<p>L'envoi des observations requiert une connexion à haut débit (H+, 4G, wifi).</p>"+
-           "</div>"+
-           "<button type='submit' id='submitEmail' class='btn btn-primary'>Envoyer vos données !</button>"+
-          "</form>"					
-        );
-        sauvages.notifications.connectionInfo(msg(),this.idRue, this.$el);
-    }else if(connect === 'inconnu'||connect === "none" || connect === false || connect === undefined){
-      sauvages.notifications.connection();
-    }
-    $('#'+this.idRue).removeClass('processing');
-		},
-		appelServiceCommuneTela :  function (latParcours,longParcours,callback){
-				if (latParcours && longParcours) {
-						var serviceCommune,
-						lat = latParcours,
-							lng = longParcours;
-						
-						var url_service = SERVICE_NOM_COMMUNE_URL;
-						var urlNomCommuneFormatee = url_service.replace('{lat}', lat).replace('{lon}', lng);
-						var jqxhr = $.ajax({
-							url : urlNomCommuneFormatee,
-							type : 'GET',
-							dataType : 'jsonp',
-							success : function(data) {
-								console.log('NOM_COMMUNE found.');
-								console.log(data['nom']);
-								console.log(data['codeINSEE']);
-								serviceCommune = data;
-								if(typeof callback === "function") callback(serviceCommune);
-							}
-						});
-				} else {
-						console.log("Cette observation n'a pas d'information de géolocalisation.")
-				}
-		},
-  sendObs: function (event) {
-				var ctarget = $(event.currentTarget);
-				this.idRue =  parseInt(ctarget.context.id);
-    var obsTosend ;
-				var emailUser;
-    var self = this;
-				var currentUser = new app.models.User({'id': 1});
-						currentUser.fetch({
-								success: function(data) {
-										self.emailUser = data.get('email');
-										var valEmail = self.validatorsEmail(self.emailUser);
-										if (typeof(self.emailUser) !== 'undefined' && self.emailUser.length !== 0 && valEmail === true) {
-												var latParcours = self.parcours.get(self.idRue).get('begin_latitude');												
-												var longParcours = self.parcours.get(self.idRue).get('begin_longitude');												
-												self.appelServiceCommuneTela(latParcours,longParcours,function(serviceCommune){
-														console.log(serviceCommune);
-														
-														var dfd = $.Deferred();
-														app.utils.queryData.getObservationsTelaWSFormated(self.idRue)
-																.done(
-																		function(data) {
-																				if (data.length !== 0 ) {
-		
-																						//Send to tela via cel ws
-																						var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-																						wstela.sendSauvageObservation(data, self.collection, self.parcours,self.emailUser,serviceCommune).done(function() {
-																								setTimeout(function(){$('#content').scrollTop(0);},100);
-																								self.parcours.models.reverse();
-																								self.render();
-																						});
-																				}else{
-																						alert("Il n'y a pas d'observations à envoyer.");		
-																				}		
-																		}
-																)
-																.fail(function(msg) {
-																		console.log(msg);
-																});
-												});
 
-										}else{
-            var newUser = new app.models.User();
-												var msg = _.template(
-														"<form role='form form-inline'>"+
-															"<div class='form-group'>"+
-															"		<p>Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p>"+
-															'	<div class="input-group input-group-lg">'+
-															'  <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>'+
-															"		<label for='InputEmail' class='sr-only'>Adresse email</label>"+
-															"		<input type='email' class='form-control' id='InputEmail' placeholder='Entrer votre email'>"+
-															"	</div>"+
-															"</div>"+
-															"<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
-														"</form>"					
-													);
-												sauvages.notifications.email(msg(),newUser);
-												$('.modal-footer').addClass("hide");
-										}
-								}
-						});	
-				
+  sendObs: function (event) {
+    var self = this;
+				var idRue = findIdToTargetEvent(event);
+				this.parcoursEnCours = this.findCollectionToTargetID(idRue,this.parcours);
+    var results = this.collection.where({'fk_rue':idRue});
+    var collection = new Backbone.Collection(results);
+
+    var sendObservations = new NS.SendOBS(idRue,this.parcoursEnCours,collection);
+    sendObservations.envoiUtilitaireWS(idRue,this.parcoursEnCours,collection)
+    .done(
+      function() {
+        setTimeout(function(){$('#content').scrollTop(0);},100);
+								self.parcours.models.reverse();
+        self.render();
+      }
+    );
   },
-		abortRequete : function(event){
-				var wstela = new NS.WSTelaAPIClient();
-				wstela.sendToTelaWS.abort();
-		},
+
 		destroyRue : function(event){
 				var self = this;
-				var rueToDestroy = this.findCollectionToTargetEvent(event,self.parcours);
+    var idRue = findIdToTargetEvent(event);
+				var rueToDestroy = this.findCollectionToTargetID(idRue,self.parcours);
 				var idRue = findIdToTargetEvent(event);
 				rueToDestroy.destroy({
 						success: function(rue, idRue) {
@@ -1404,7 +1317,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				this.fermerAllDrag();
 		},
 		fermerAllDrag : function(){
-
 				$('button.destroyRue').remove();
 				$('.panel-heading')
 						.css("border-right-style","none")
@@ -1419,7 +1331,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 		},
 		confirmeSupprRue : function(event){
 				var idRue = findIdToTargetEvent(event);
-				var currentCollection = this.findCollectionToTargetEvent(event,this.parcours);
+				var currentCollection = this.findCollectionToTargetID(idRue,this.parcours);
 				var msg = _.template(
 						"<form role='form form-inline'>"+
 							"<div class='form-group'>"+
@@ -1431,9 +1343,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				);
 				sauvages.notifications.supprimerRue(msg(currentCollection),idRue ,this.$el);
 		},
-		findCollectionToTargetEvent : function(event,collection){
-				var idCurrentTarget = findIdToTargetEvent(event);
-				var currentCollection = collection.findWhere({'id': idCurrentTarget});
+		findCollectionToTargetID : function(id,collection){
+				var currentCollection = collection.findWhere({'id': id});
 				return currentCollection;
 		}
 });

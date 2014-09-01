@@ -68,6 +68,12 @@ NS.UI = (function(ns) {
                     if (self.options.onClose) self.options.onClose();
                 }, self.options.delay*1000);
             }
+            $('#myModal').on('hidden.bs.modal', function () {
+               $('#nodal').modal('hide');
+               $('#nodal').remove();
+               $('.modal-backdrop').remove();
+               $('body').removeClass('modal-open');
+            });
         }
     });
 

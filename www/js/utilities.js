@@ -62,7 +62,7 @@ app.utils.queryData = {
         +"FROM TdataObs_parcours p "
         +"INNER JOIN TdataObs_occurences o "
         +"ON p.id = o.fk_rue "
-        +"WHERE (o.id != -1 AND p.state = 1) OR (o.id IS NOT NULL AND p.state = 1) AND p.id = "+id+";"
+        +"WHERE (o.id IS NOT NULL AND p.state = 1) AND p.id = "+id+";"
     runQuery(sql, parameters).done(
       function(results){
           var len = results.rows.length,
@@ -132,7 +132,11 @@ app.utils.queryData = {
 	}
 }
 
-// WebDataBase DAO base code
+
+/**
+ * WebDataBase DAO base code
+ */
+
 app.dao.baseDAOBD = {
   
   getDaoMetadata : function (model) {
@@ -327,7 +331,10 @@ app.dao.baseDAOBD = {
 
 }
 
-// The Template Loader. Used to asynchronously load templates located in separate .html files
+/**
+ * The Template Loader. Used to asynchronously load templates located in separate .html files
+ */
+
 app.utils.templateLoader = {
     templates: {},
 
@@ -350,6 +357,10 @@ app.utils.templateLoader = {
     }
 
 };
+
+/**
+ * Conversion type backbone form à sqlite
+ */
 
 app.utils.bbforms2sqlite= {
   dataType : {
@@ -375,6 +386,10 @@ app.utils.bbforms2sqlite= {
   },  
 }
 
+/**
+ * Formatage Date
+ */
+
 Date.prototype.format = function(format) {
   var o = {
     "M+" : this.getMonth()+1, //month
@@ -395,7 +410,10 @@ Date.prototype.format = function(format) {
   return format;
 }
 
-// -------------------------------------------------- MMenu slide---------------------------------------------------- //
+/**
+ * PLugin MMENU configuration spécifique
+ */
+
 $("#menu").mmenu({
   classes: "mm-slide",
 });
@@ -486,7 +504,12 @@ $('#menu-item-region').click(function(){
   }
 });
 
+/**
+ * Fonctions génériques 
+ */
+
 function checkConnection() {
+
   if (navigator.connection) {
     var networkState = navigator.connection.type;
 
@@ -505,7 +528,7 @@ function checkConnection() {
     return navigator.onLine;
   }
 }
-//----------------------------------------//
+
 function findIdToTargetEvent(event){
 				var ctarget = $(event.currentTarget);
 				var idCurrentTarget= parseInt(ctarget.context.id);
@@ -521,23 +544,28 @@ function validatorsEmail(value) {
 				var flag = regex.test(value);
 				return flag;
 };
-// -------------------------------------------------- Push Notification ---------------------------------------------------- //
-  function pushNotification(){
+
+
+/**
+ * Cordova plugin Push notification
+ */
+
+var pushNotificationService = function(){
 				var pushNotification;
     // fix bug onNotification is not defined
     window.onNotification = onNotification;
 
-    document.addEventListener("backbutton", function(e){
-      $("#app-status-ul").append('<li>backbutton event received</li>');		
-      if( $("#home").length > 0){
-        // call this to get a new token each time. don't call it to reuse existing token.
-        //pushNotification.unregister(successHandler, errorHandler);
-        e.preventDefault();
-        navigator.app.exitApp();
-      }else{
-        navigator.app.backHistory();
-      }
-    }, false);			
+    //document.addEventListener("backbutton", function(e){
+    //  $("#app-status-ul").append('<li>backbutton event received</li>');		
+    //  if( $("#home").length > 0){
+    //    // call this to get a new token each time. don't call it to reuse existing token.
+    //    //pushNotification.unregister(successHandler, errorHandler);
+    //    e.preventDefault();
+    //    navigator.app.exitApp();
+    //  }else{
+    //    navigator.app.backHistory();
+    //  }
+    //}, false);			
     try { 
       pushNotification = window.plugins.pushNotification;
       if (device.platform == 'android' || device.platform == 'Android' || device.platform == 'amazon-fireos' ) {
@@ -569,9 +597,9 @@ function validatorsEmail(value) {
 				}
 				
     var confirmedGcmNotification = true;
+
 				// handle GCM notifications for Android
 				function onNotification(e) {
-						$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
 						switch( e.event ){
 								case 'registered':
 										if ( e.regid.length > 0 ){
@@ -648,32 +676,32 @@ function validatorsEmail(value) {
 				function errorHandler (error) {
       console.log('Erreur notification '+ error);
 				}
-      function onRegisterServerNS(json){
-      var server = "http://www.sauvagesdepaca.fr/mobile_data/push_notifications/";
-      // var server = "http://192.168.1.50/Test/drupal7/Sauvages-PACA/mobile_data/push_notifications";
-      var erreurMsg;
-      //make ajax post to the application server to register device
-      $.ajax(server, {
-        type: "post",
-        dataType: 'json',
-        data: json,
-        success: function(response) {
-          console.log("###Successfully registered device.");
-        },
-        error : function(jqXHR, textStatus, errorThrown) {
-          erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
-          try {
-           var reponse = jQuery.parseJSON(jqXHR.responseText);
-           if (reponse != null) {
-            $.each(reponse, function (cle, valeur) {
-             erreurMsg += valeur + '\n';
-            });
-           }
-          } catch(e) {
-           erreurMsg += 'L\'erreur n\'était pas en JSON.';
-          }
-          console.log(erreurMsg);
+    function onRegisterServerNS(json){
+    var server = "http://www.sauvagesdepaca.fr/mobile_data/push_notifications/";
+    // var server = "http://192.168.1.50/Test/drupal7/Sauvages-PACA/mobile_data/push_notifications";
+    var erreurMsg;
+    //make ajax post to the application server to register device
+    $.ajax(server, {
+      type: "post",
+      dataType: 'json',
+      data: json,
+      success: function(response) {
+        console.log("###Successfully registered device.");
+      },
+      error : function(jqXHR, textStatus, errorThrown) {
+        erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
+        try {
+         var reponse = jQuery.parseJSON(jqXHR.responseText);
+         if (reponse != null) {
+          $.each(reponse, function (cle, valeur) {
+           erreurMsg += valeur + '\n';
+          });
+         }
+        } catch(e) {
+         erreurMsg += 'L\'erreur n\'était pas en JSON.';
         }
-      }); 
-    }
-  };
+        console.log(erreurMsg);
+      }
+    }); 
+  }
+};

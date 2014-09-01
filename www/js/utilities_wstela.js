@@ -34,8 +34,8 @@ NS.WSTelaAPIClient = (function() {
             _.bind(function (status) {
                 console.log('when finished dfd.resolve obser per rue');
                 
-                this.cParcours.get(this.idp).set('state',2);
-                this.cParcours.get(this.idp).save().done(
+                this.cParcours.set('state',2);
+                this.cParcours.save().done(
                     function (a) {
                         return dfd.resolve();
                     }
@@ -46,7 +46,7 @@ NS.WSTelaAPIClient = (function() {
         
         dfdObs.fail( 
             function (status) {
-                 $('body').removeClass('loading disabled');
+                $('body').removeClass('loading disabled');
                 return dfd.reject();
             }
         );

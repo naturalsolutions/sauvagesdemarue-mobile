@@ -217,14 +217,15 @@ app.Router = Backbone.Router.extend({
   },
 
   viewTaxonlist : function(all) {
+    $('#content').append('<div class="loading cover-content"></div>');
     console.log('viewTaxonlist');
     var taxons;
     if( all || app.globals.currentFilterTaxonIdList.length === 0 ){
       taxons = app.globals.cListAllTaxons;    
     }
     else {
-        taxons  = new app.models.TaxonLiteCollection();
-        taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')});
+      taxons  = new app.models.TaxonLiteCollection();
+      taxons.models = app.globals.cListAllTaxons.multiValueWhere({'taxonId' :_.pluck(app.globals.currentFilterTaxonIdList, 'fk_taxon')});
     }
     var currentView = new app.views.TaxonListView({collection: taxons});
     this.displayView(currentView);

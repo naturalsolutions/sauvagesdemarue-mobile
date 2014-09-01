@@ -131,13 +131,11 @@ app.utils.BaseView = Backbone.View.extend({
       view.$el.addClass('is-visible');
       view.$el.on('webkitTransitionEnd', function () {
         view.$el.addClass('transition-none');
-
         if (_.isFunction(callback)) {
           callback();
         }
       });
     };
-
     _.delay(animateIn, 20);
 
   },
@@ -209,9 +207,7 @@ app.utils.BaseView = Backbone.View.extend({
                 }
                 this._dfd.reject(this);
             }
-
         }, this));
-
         return this;
     },
 
@@ -251,7 +247,7 @@ function onDeviceReady() {
   };
 
   // Cordova Push Notifications Plugin for Android, iOS integration
-  pushNotification();
+  pushNotificationService();
 
   setTimeout(function(){
     geolocalisation();
@@ -288,10 +284,10 @@ function onDeviceReady() {
   new NS.UI.NotificationList();
   new NS.UI.NotificationModalList();
  
-  $("#menu").mmenu({
-          classes: "mm-slide",
-          transitionDuration : 0,
-  });
+  //$("#menu").mmenu({
+  //        classes: "mm-slide",
+  //        transitionDuration : 0,
+  //});
 }
 
 
@@ -310,19 +306,30 @@ function init(){
           if (!Backbone.History.started) {
             Backbone.history.start();
           }        
-          //preloader
-            if (app.globals.cListAllTaxons.models != "undefined") {
+          //preloader CSS pour les images embarquées dans l'application en utilisant l'astuce de Jean-Pierre Vincent (@theystolemynick)
+          if (app.globals.cListAllTaxons.models != "undefined") {
+            var i=0;
+            (function traitement(){
+              var dernierdebut = new Date();
               var elements = app.globals.cListAllTaxons.models.length;
-              for(var i=1; i < elements ;i++ ){
+              //Utilisation de la variable i extérieure
+              for(; i<elements;i++){
+                if((new Date() - dernierdebut) > 50){
+                  setTimeout(traitement,0);
+                  return;
+                }    
+                //corps utile de la boucle
                 var image = app.globals.cListAllTaxons.models[i].get('picture');
                 var	imageLocalThumb = image.replace("http://api.tela-botanica.org/img:","./data/images/images_formated/");
+                var	imageLocalFull = image.replace("http://api.tela-botanica.org/img:","./data/images/images_full/");
                 $('#preloader').append(	"<img src="+ imageLocalThumb +" width='1' height='1' />");
-              };
-            }
+                $('#preloader').append(	"<img src="+ imageLocalFull +" width='1' height='1' />");
+              }
+            }());
+          }
         }
     });
-  });
-  
+  });  
 }
 
 function initDB(){
@@ -451,7 +458,7 @@ console.log('version avant changeV : ' +app.db.version);
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
           
-            //test if data are already loaded
+          //teste si les données taxons sont chargés dans la base
             //Si oui alors => pas de chargement des données en base
             $.when(app.dao.baseDAOBD.populate(new app.models.Taxon())).done(function (dta) {
               var arr = [];
