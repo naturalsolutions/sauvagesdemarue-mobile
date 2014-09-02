@@ -790,7 +790,6 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
       this.insertView("#values-list", new app.views.IKCriteriaListItemView({model: criteria}));
     }, this);
 				$('body').addClass('cleliste cle');
-				$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 				$('.page-title').replaceWith("<div class='page-title'>Identification</div>");
 				if (app.globals.currentrue !== undefined) {
 						$('.page-sub-title').replaceWith("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
@@ -799,6 +798,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
 
 		afterRender :function(){
 				$('body').scrollTop(0);
+  		$('body.cleliste.cle').append("<div id='languette' class='languette-right'><a href='#taxonlist'><span id='taxonNb'>"+ app.globals.cListAllTaxons.length +"</span><span class='glyphicon glyphicon-chevron-right' ></span></a></div>");
 		},
 		
 		remove: function(){
@@ -974,7 +974,6 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 
   beforeRender: function() {
 				$('body').addClass('cleliste liste');
-				$('body.cleliste.liste #content').append("<div id='languette' class='languette-left'><a href='#"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
     var availableLetter  = _.uniq(_.map(this.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase();  }));
     
     this.collection.models = _.sortBy(this.collection.models, function(taxon){
@@ -1005,6 +1004,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 		},
 
 		afterRender: function() {
+				$('body.cleliste.liste #content').append("<div id='languette' class='languette-left'><a href='#"+this.hrefIdentification+"'><span class='glyphicon glyphicon-chevron-left' ></span></a></div>");
 				if (this.options.region !== undefined) {
 						$('.footer-default').remove();
 				}
