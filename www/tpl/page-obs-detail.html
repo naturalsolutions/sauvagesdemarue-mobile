@@ -1,6 +1,6 @@
 <div id="taxon-detail-content" class="container">  
   <div class="loc-container" >
-    <% if(device){var devicePlatform = device.platform; console.log(devicePlatform)}%>
+    <% if(device){var devicePlatform = device.platform;}%>
     <h3>Photographie</h3>
     <% console.log(data.collection.models[0].get('photo'));if((data.collection.models[0].get('photo') && devicePlatform === 'iOS') || (data.collection.models[0].get('photo') !== "undefined" && devicePlatform === 'Android')){ %>
       <div class="photo-obs">
