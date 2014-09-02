@@ -8,7 +8,7 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 		
   initialize: function() {
 				$('.footer-default').hide();
-    this.model.bind("reset", this.render, this);
+   // this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
@@ -84,7 +84,7 @@ app.views.AddSauvageOccurencePasDansListeView = app.utils.BaseView.extend({
 
   initialize: function() {
 				$('.footer-default').hide();
-    this.model.bind("reset", this.render, this);
+    //this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
@@ -164,7 +164,7 @@ app.views.AddSauvageOccurenceView = app.utils.BaseView.extend({
   template: 'form-add-obs',
 
   initialize: function() {
-    this.model.bind("reset", this.render, this);
+    //this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
@@ -245,7 +245,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   
   initialize: function(options) {
 				$('#header').show();
-    this.model.bind("reset", this.render, this);
+   // this.model.bind("reset", this.render, this);
     this.collection = options.collection;
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -376,7 +376,7 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
   template: 'table-obs-rue',
 
   initialize: function() {
-    this.collection.bind('reset', this.render, this);
+   // this.collection.bind('reset', this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
@@ -482,7 +482,7 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   template: 'page-utilisateur',
 
 		initialize: function() {
-				this.model.bind("reset", this.render, this);
+			//	this.model.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
@@ -628,7 +628,7 @@ app.views.MaRegionView= app.utils.BaseView.extend({
   template: 'page-ma-region',
 
 		initialize: function(options) {
-				this.collection.bind("reset", this.render, this);
+			//	this.collection.bind("reset", this.render, this);
 				this.region = options.region;
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -666,7 +666,7 @@ app.views.IdentificationKeyFilterView = app.utils.BaseView.extend({
 				if (this.options !== undefined) {
 						this.filtreRegion = this.options.filtreRegion;
 				}
-    this.collection.bind("reset", this.render, this);
+   // this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
   
@@ -773,7 +773,7 @@ app.views.IdentificationKeyView =  app.utils.BaseView.extend({
   template: 'page-identification-key',
   
   initialize: function() {
-    this.collection.bind("reset", this.render, this);
+    //this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
 				//Mise à zéro de la position du scroll pour la liste
 				app.globals.positionScroll = 0;
@@ -888,7 +888,7 @@ app.views.IKCriteriaListItemView =  app.utils.BaseView.extend({
   template: 'items-list-criteria-picto',
 
   initialize: function() {
-    this.model.bind("reset", this.render, this);
+   // this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
 
@@ -912,7 +912,7 @@ app.views.IKCriteriaListItemFilterView =  app.utils.BaseView.extend({
 				if (this.options.filtreRegion !== undefined) {
 						this.filtreRegion = this.options.filtreRegion;
 				}
-    this.model.bind("reset", this.render, this);
+  //  this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
 
@@ -942,7 +942,7 @@ app.views.IKCriteriaListItemFilterTaxonView =  app.utils.BaseView.extend({
 				if (this.options.taxon !== undefined) {
 						this.taxon = this.options.taxon;
 				}
-    this.model.bind("reset", this.render, this);
+  //  this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -966,7 +966,7 @@ app.views.TaxonListView =  app.utils.BaseView.extend({
 						this.region = this.options.region;
 						this.hrefIdentification = 	'identification/'+this.region;
 				}
-    this.collection.bind("reset", this.render, this);
+    //this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
     $(window).scroll(this.checkpositionScroll);
   },
@@ -1034,8 +1034,8 @@ app.views.TaxonDetailView=  app.utils.BaseView.extend({
   template: 'page-taxon-detail',
 
    initialize: function() {
-				this.collection.bind("reset", this.render, this);
-    this.model.bind("reset", this.render, this);
+				//this.collection.bind("reset", this.render, this);
+    //this.model.bind("reset", this.render, this);
     this.model.bind("change", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
@@ -1091,7 +1091,7 @@ app.views.obsDetailView=  app.utils.BaseView.extend({
 
    initialize: function() {
 				this.parcours = this.options.parcours;
-    this.collection.bind("reset", this.render, this);
+    //this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
   },
 
@@ -1167,7 +1167,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   
   initialize: function() {
 				this.parcours = this.options.parcours;
-    this.collection.bind("reset", this.render, this);
+    //this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
 				this.flagSuppr = false;
 
