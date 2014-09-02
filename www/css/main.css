@@ -684,10 +684,6 @@ a.btn.btn-footer{
 		padding-right: 0;
 }
 
-.first a img{
-		margin-left:50%;
-		display: block;
-}
 .container-home .btn{
   width:100%;
 		border-bottom: 3px solid rgba(0,0,0,0.5);
@@ -897,7 +893,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c0000', end
 
 }
 .taxon-list-item {
-	width: 100%;
+  width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.25);;
 		border-bottom: 0px;
 }
@@ -1188,7 +1184,25 @@ a#quitter-aide {
 		font-size:large;
 		}
 }
-
+/**/
+/*@media only screen and (min-device-width : 320px) and (max-device-width : 480px) and (orientation : portrait) and (-webkit-min-device-pixel-ratio: 1)
+{
+  #home-page-content .first{
+    background-size: 320px;
+  }
+  .container-home .btn{
+    width:320px;
+  }
+  #home-page-content .first{
+    width: 320px;
+  }
+  #home-page-content .row-fluid {
+    width: 320px;
+  }
+  #taxon-list-content .loc-container,#taxon-list-content,.cleliste > div.mm-page > div,.cleliste .mm-page{
+    width: 320px;
+  }
+}*/
 /**********Bootstrap Twitter********/
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
@@ -1368,7 +1382,6 @@ a#quitter-aide {
   }
 		.loading-splash {
 				background-size: 110px;
-    margin-top: 16%;
 		}
   .detail-taxon .page-title{
     font-size:21px;
