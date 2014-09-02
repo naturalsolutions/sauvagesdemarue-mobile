@@ -286,10 +286,10 @@ function() {
       }, myModal));
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         //$('#nodal').modal('hide');
-         //$('#nodal').remove();
-         //$('.modal-backdrop').remove();
-         //$('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
       }, myModal));
       //$('#myModal').on('hidden.bs.modal', function () {
       //   $('#nodal').modal('hide');
@@ -309,10 +309,10 @@ function() {
       $('.close-lg').hide();
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
         evt.preventDefault();
-         //$('#nodal').modal('hide');
-         //$('#nodal').remove();
-         //$('.modal-backdrop').remove();
-         //$('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
          app.route.navigate('addParcours', {trigger: true, replace: true});
          $("#menu").trigger("close");
       }, myModal));
