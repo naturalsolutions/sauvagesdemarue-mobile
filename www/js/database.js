@@ -164,10 +164,10 @@ function loadXmlEspCEL(){
         oTaxon['num_nom'] = parseInt($(this).find('num_nom').text());
         oTaxon['nom_sci'] = $(this).find('nom_complet').text();
       
-       /* oTaxon['famille'] = $(this).find('famille').text();
+      //  oTaxon['famille'] = $(this).find('famille').text();
         oTaxon['num_taxon']=parseInt($(this).find('num_taxon').text());
-        oTaxon['referentiel']=$(this).find('ref').text();*/
-        //arr.push(runQuery(sqlTaxon , [oTaxon['num_nom'],oTaxon['nom_sci'],oTaxon['famille'],oTaxon['num_taxon'],oTaxon['referentiel']]));
+      //  oTaxon['referentiel']=$(this).find('ref').text();
+      //  arrEspece.push(' SELECT '+oTaxon['num_nom'] +','+ oTaxon['nom_sci'] +','+ oTaxon['famille']);
         arrEspece.push(' SELECT '+oTaxon['num_nom'] +','+ oTaxon['nom_sci']);
       });
       
