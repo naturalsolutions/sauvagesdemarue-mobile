@@ -91,7 +91,8 @@
     <script type="text/javascript" src="js/view.js"></script>
     <script type="text/javascript" src="js/router.js"></script>
     <script type="text/javascript" src="js/utilities_wstela.js"></script>
-    <script type="text/javascript" src="js/utilities_send_obs.js"></script>
+				<script type="text/javascript" src="js/utilities_wsNS.js"></script>    
+				<script type="text/javascript" src="js/utilities_send_obs.js"></script>
 				<script type="text/javascript" src="libs/backbone-autocomplete/backbone.autocomplete.js"></script>
     <script type="text/javascript">
 						app.config.debug = true;
@@ -111,8 +112,10 @@
 						//URL du web service réalisant l'insertion des données dans la base du CEL.
 						if (app.config.debug === false){
 								var SERVICE_SAISIE_URL = "http://api.tela-botanica.org/service:cel:CelWidgetSaisie";
+								var SERVICE_SAUVAGESPACA = "http://sauvagesdepaca.fr";
 						}else{
 								var	SERVICE_SAISIE_URL = 'http://api-test.tela-botanica.org/service:cel:CelWidgetSaisie';
+								var SERVICE_SAUVAGESPACA = "http://localhost/Test/drupal7/Sauvages-PACA";
 						}
 						// Squelette d'URL du web service d'eFlore fournissant les noms de communes.
 						var SERVICE_NOM_COMMUNE_URL = "http://api.tela-botanica.org/service:eflore:0.1/osm/nom-commune?lon={lon}&lat={lat}";

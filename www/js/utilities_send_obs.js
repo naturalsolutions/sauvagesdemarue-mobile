@@ -116,6 +116,27 @@ NS.SendOBS = (function() {
         }
     };
 
+    /***
+     * Fonction de gestion de l'uid du site sauvages de paca
+     *  
+     ****/
+
+    
+    sendObs.prototype.registerUser = function(user, callback) {   
+        return $.ajax({
+                 type: "POST",
+                 url: SERVICE_SAUVAGESPACA + '/observation/user',
+                 dataType: 'json',
+                 data: JSON.stringify(user),
+                 contentType: 'application/json',
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    },
+                success: function (data) {console.log(data)}
+             });                 
+    };
+
+
 
     /***
      *  Fonction d'envoie des observations à l'utilitaire de Web Services.
@@ -126,6 +147,7 @@ NS.SendOBS = (function() {
         var dfd = $.Deferred();
         var obsTosend ;
         var emailUser;
+        var uidUser;
         var dfdCollection = $.Deferred();
         this.confirmModal().done(function(){
             if (typeof cObservation === "undefined") {
@@ -146,23 +168,44 @@ NS.SendOBS = (function() {
               currentUser.fetch({
                 success: function(data) {
                   emailUser = data.get('email');
+                  uidUser = data.get('uid');
                   var valEmail = validatorsEmail(emailUser);
                   if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 && valEmail === true) {
+                    // test si il y a un uid dans la table user
+                    if (uidUser.length === 0 || uidUser === 'undefined') {
+                        var user = {
+                                "name": "testuser13", 
+                                "mail": "testuser13@gmail.com", 
+                                "conf_mail": "testuser13@gmail.com",
+                                "account" :{        
+                                    "name": "testuser13", 
+                                    "mail": "testuser13@gmail.com", 
+                                    "conf_mail": "testuser13@gmail.com",
+                                    "status":"1",
+                                    "roles":{"2":"authenticated user","5":"Rédacteur d'actualité"}, 
+                                }
+                                ,
+                               "field_pseudo":{"und":[{"value":"PSEUDO10","format":null,"safe_value":"PSEUDO"}]}
+                            }
+                        var uid = self.registerUser(user).done(function(newUser){data.set('uid',newUser.uid).save()})
+                    }
                     var latParcours = cParcours.get('begin_latitude');												
                     var longParcours = cParcours.get('begin_longitude');												
-                    self.appelServiceCommuneTela(latParcours,longParcours,function(serviceCommune){
-                      console.log(serviceCommune);
-                      
+                    self.appelServiceCommuneTela(latParcours,longParcours,function(serviceCommune){                      
                       app.utils.queryData.getObservationsTelaWSFormated(idRue)
                         .done(
                           function(data) {
                             if (data.length !== 0 ) {
                               //Send to tela via cel ws
-                              var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
+                             /* var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
                               wstela.sendSauvageObservation(data, cObservation, cParcours, emailUser,serviceCommune).done(function() {
                                 setTimeout(function(){$('#content').scrollTop(0);},100);
                                 dfd.resolve();
-                              });
+                              });*/
+                                var wspaca = new NS.WSDrupalAPIClient(SERVICE_SAUVAGESPACA, TAG_IMG, TAG_OBS, TAG_PROJET);
+                                wspaca.sendSauvageObservation(data, cObservation, cParcours, uidUser,serviceCommune).done(function() {
+                                    console.log(' envoi effectué vers sauvages de paca');
+                              });                            
                             }else{
                               alert("Il n'y a pas d'observations à envoyer.");
                               dfd.reject();
