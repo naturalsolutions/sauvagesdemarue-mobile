@@ -4,11 +4,8 @@ var NS = window.NS || {};
 NS.WSDrupalAPIClient = (function() {
     "use strict";
 
-    var wsDrupalApiClient = function (basePath, tagimg, tagobs, tagprojet) {
+    var wsDrupalApiClient = function (basePath) {
       this.basePath = basePath;
-      this.tagimg = tagimg;
-      this.tagobs = tagobs;
-      this.tagprojet = tagprojet;
       this.defaultObs = {'date' : '', 'notes' :  '',
         'nom_sel' : '','num_nom_sel' : '','nom_ret' :'','num_nom_ret' : '','num_taxon' : '-1','famille' : '','referentiel' :'bdtfx',
         'latitude' : '','longitude' : '','commune_nom' :'','commune_code_insee' :'','lieudit' : '','station' : '',
@@ -20,7 +17,7 @@ NS.WSDrupalAPIClient = (function() {
      *  formate les données de l'observation pour le POST
      ****/
     wsDrupalApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, uidUser,serviceCommune){
-        $('body').addClass('loading disabled');
+       // $('body').addClass('loading disabled');
         var dfd = $.Deferred();
         var observations =new Object();
         var dfdObs = $.Deferred();
@@ -33,7 +30,7 @@ NS.WSDrupalAPIClient = (function() {
             _.bind(function (status) {
                 console.log('when finished dfd.resolve obser per rue');
                 
-                this.cParcours.set('state',2);
+                this.cParcours.set('state',3);
                 this.cParcours.save().done(
                     function (a) {
                         return dfd.resolve();
@@ -45,8 +42,8 @@ NS.WSDrupalAPIClient = (function() {
         
         dfdObs.fail( 
             function (status) {
-                $('body').removeClass('loading disabled');
-                return dfd.reject();
+              //  $('body').removeClass('loading disabled');
+              return dfd.reject();
             }
         );
         return dfd.promise();
@@ -57,15 +54,15 @@ NS.WSDrupalAPIClient = (function() {
     wsDrupalApiClient.prototype.treatObservations= function(obsToSend,cObservation, dfdObs,uidUser,serviceCommune){
         var currentobs = obsToSend.pop();
         
-        console.log ('traite 1 ere obs');
         var obs = _.defaults(currentobs, this.defaultObs);
         var dfdImage = $.Deferred();
-        if(obs.img === null || obs.img === "" || obs.img === "undefined"){
-            var observations = this.formatObsToSend(obs,uidUser,serviceCommune);
-            dfdImage.resolve(observations);
-        }else{
-            this.encodeImg(obs,obs.ido,userEmail,dfdImage,serviceCommune);               
-        }          
+        //Pour l'instant on envoie pas les images
+        //if(obs.img === null || obs.img === "" || obs.img === "undefined"){
+          var observations = this.formatObsToSend(obs,uidUser,serviceCommune);
+          dfdImage.resolve(observations);
+        //}else{
+        //   this.encodeImg(obs,obs.ido,uidUser,dfdImage,serviceCommune);               
+        //}         
         var self = this,
         context = {
             'ido' :  currentobs.ido, 'uidUser':uidUser,'cObservation' : cObservation, 'obsToSend':obsToSend, 'dfdObs':dfdObs , 'serviceCommune':serviceCommune
@@ -146,18 +143,21 @@ NS.WSDrupalAPIClient = (function() {
      * ***/
     wsDrupalApiClient.prototype.formatObsToSend= function (obs,uidUser,serviceCommune){
         var observations = new Object();                     
-        //Traitement de l'observation pour correspondre à la table obs du drupal de sauvages 
+        //Traitement de l'observation pour correspondre à la table obs du drupal de sauvages
+
+        var myDate = new Date(obs.date).getTime()/1000;
+
         var observations =          {
                     'uid': uidUser,
                     'num_taxon_eflore': obs.num_nom_sel,
                     'nom_scientifique' :  obs.nom_ret,
-                    'notes': obs.notes,
+                    'notes': obs.note,
                     'commune_nom':serviceCommune.nom ,
                     'commune_code_insee':serviceCommune.codeINSEE,           
-                    'lieudit': obs.lieudit ,
-                    'station': obs.station,                    
+                    'rue': obs.lieudit ,
+                    'region': obs.station,                    
                     'milieu':obs.milieu ,
-                    'date':obs.date ,
+                    'date': myDate ,
                     'latitude': obs.latitude,
                     'longitude':obs.longitude
                   };
@@ -217,9 +217,7 @@ NS.WSDrupalAPIClient = (function() {
             data : JSON.stringify(obs),
             contentType:"application/json; charset=utf-8",
             dataType:"json",
-            success : function(data,textStatus,jqXHR){
-                sauvages.notifications.sendToTelaWSSuccess();
-            },
+            success : function(data,textStatus,jqXHR){},
             error : function(jqXHR, textStatus, errorThrown) {
                 sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
                 msg = 'Erreur indéterminée. Merci de contacter le responsable.';
