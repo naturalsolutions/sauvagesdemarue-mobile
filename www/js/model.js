@@ -54,7 +54,7 @@ app.models.User = Backbone.Model.extend({
   schema: {
     id: { title:'id',type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
     email: { title:'Ajouter votre email.', type:'Email', sqltype:'NVARCHAR(50)',  required: true},
-    pseudo: { title:'Votre pseudo', type:'Text', sqltype:'NVARCHAR(50)' },
+    token: { title:'token', type:'hidden', sqltype:'NVARCHAR(250)' },
     uid: { title:'uid',type:'hidden', sqltype:'INTEGER'},
      },
   dao: app.dao.UserDAO,
