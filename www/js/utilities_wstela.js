@@ -56,9 +56,8 @@ NS.WSTelaAPIClient = (function() {
      *  Fonction qui traite les observations et les envoie une par une.
      * ***/
     wsTelaApiClient.prototype.treatObservations= function(obsToSend,cObservation, dfdObs,userEmail,serviceCommune){
-        var currentobs = obsToSend.pop();
         
-        console.log ('traite 1 ere obs');
+        var currentobs = obsToSend.pop();
         var obs = _.defaults(currentobs, this.defaultObs);
         var dfdImage = $.Deferred();
         if(obs.img === null || obs.img === "" || obs.img === "undefined"){
@@ -80,7 +79,7 @@ NS.WSTelaAPIClient = (function() {
                         _.bind(function() {
                             if (this.obsToSend.length > 0) {
                                 
-                                console.log ('traite obs suivante');
+                                console.log ('reste ' + this.obsToSend.length + 'obs');
                                 //traite l'obs suivante
                                 self.treatObservations(this.obsToSend, this.cObservation, this.dfdObs, this.userEmail,this.serviceCommune);
                             }
