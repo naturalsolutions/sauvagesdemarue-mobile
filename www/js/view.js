@@ -276,15 +276,18 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
   editFormElem : function(evt){
 				var objCurrentTarget=$(evt.target);
 				var idCurrentTarget= objCurrentTarget['context']['id'];
-    $('#'+idCurrentTarget).removeAttr("readonly","readonly");},
+    $('#'+idCurrentTarget).removeAttr("readonly","readonly");
+  },
   
   readOnlyFormElem : function(evt){
 				var objCurrentTarget=$(evt.target);
 				var idCurrentTarget= objCurrentTarget['context']['id'];
-    $('#'+idCurrentTarget).attr("readonly","readonly");},
+    $('#'+idCurrentTarget).attr("readonly","readonly");
+  },
 
   beforeRender: function() {
 				$('.icone-page-title').hide();
+
     this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
 				
 				if (typeof(this.collection) !== 'undefined') {
@@ -299,6 +302,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 						$('.page-sub-title').append('Ma nouvelle rue');
 				}
   }
+
 });
 
 app.views.FormAddSauvageRue = NS.UI.Form.extend({
@@ -369,6 +373,19 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
      }
     $('input:reset', this.$el).attr('style', 'display:none');
     $('h3', this.$el).attr('style', 'display:none');
+
+    var connect = checkConnection();
+    if (connect !== 'inconnu'||connect !== "none" || connect !== false || connect !== undefined) {
+      var self = this;
+      $('#'+this.id+'_name',this.el).geocomplete({country: "FR"}) 
+      .bind("geocode:result", function(event, result){
+        })
+        .bind("geocode:error", function(event, status){
+          console.log("ERROR: " + status);
+        })
+        .bind("geocode:multiple", function(event, results){
+        });
+    }
   }
 });
 

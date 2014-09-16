@@ -154,11 +154,13 @@ NS.WSTelaAPIClient = (function() {
      * ***/
     wsTelaApiClient.prototype.formatObsToSend= function (obs,userEmail,serviceCommune){
         var observations = new Object();
-                       
+
+        var obslieudit = obs.lieudit.toString().split(',');
+
         //Traitement de l'observation
         var json = {
             'date' : obs.date, 
-            'notes' : (obs.ido === -1) ? 'rue sans observation; '+obs.note: obs.note,
+            'notes' : (obs.ido === -1) ? 'rue sans observation; '+obs.notes: obs.notes,
             'nom_sel' : obs.nom_ret ,
             'num_nom_sel' : obs.num_nom_sel,
             'nom_ret' : obs.nom_ret,
@@ -170,8 +172,8 @@ NS.WSTelaAPIClient = (function() {
             'longitude' : (obs.longitude !== null) ? obs.longitude : obs.longitudeDebutRue,
             'commune_nom' :serviceCommune.nom,
             'commune_code_insee' : serviceCommune.codeINSEE,
-            'lieudit' : obs.lieudit,
-            'station' : obs.station,
+            'lieudit' : obslieudit[0] ,
+            'station' : obslieudit[0] ,
             'milieu' : obs.milieu,
             'abondance' : obs.abondance,
             'phenologie' : obs.phenologie,
@@ -221,6 +223,7 @@ NS.WSTelaAPIClient = (function() {
         return observations;   
     };
     
+
     /***
     * Fonction génère la requete  POST d'envoie d'une obs aux services de tela
     * ***/
@@ -252,7 +255,7 @@ NS.WSTelaAPIClient = (function() {
                 console.log(erreurMsg);
             }
       });
-     // return $.Deferred().resolve();
+      //return $.Deferred().resolve();
     }
 
     return wsTelaApiClient;

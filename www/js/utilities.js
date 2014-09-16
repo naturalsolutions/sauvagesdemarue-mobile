@@ -47,6 +47,37 @@ app.utils.queryData = {
     );
     return dfd.promise();
   },
+//getObservationsPacaWSFormated
+getObservationsPacaWSFormated: function(id) {
+  var dfd = $.Deferred();
+  var parameters = new Array();
+  var sql = "SELECT o.id as ido, p.id as idp, o.datetime as date,"
+      +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
+      +"p.name AS lieudit, o.latitude, o.longitude, "
+      +"p.geocomplete AS geocomplete,"
+      +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
+      +"o.milieu, "
+      +"o.notes, "
+      +"o.photo as img,"
+      +"p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue "
+      +"FROM TdataObs_parcours p "
+      +"INNER JOIN TdataObs_occurences o "
+      +"ON p.id = o.fk_rue "
+      +"WHERE (o.id IS NOT NULL AND p.state = 2) AND p.id = "+id+";"
+  runQuery(sql, parameters).done(
+    function(results){
+        var len = results.rows.length,
+          data = [],
+          i = 0;
+        for (; i < len; i = i + 1) {
+          data[i] = results.rows.item(i);
+        }
+        return dfd.resolve(data);
+    }
+  );
+  return dfd.promise();
+},
+
   //Récupère les observations de l'identifiant de la rue passé en paramètre
   getObservationsTelaWSFormated: function(id) {
     var dfd = $.Deferred();
@@ -54,9 +85,12 @@ app.utils.queryData = {
     var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',COALESCE(o.datetime, p.begin_datetime)) as date,"
         +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
         +"p.name AS lieudit, o.latitude, o.longitude, "
+        +"p.name AS adresse,"
+        +"p.cote AS coteRue,"
+        +"p.geocomplete AS geocomplete,"
         +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
         +"o.milieu, "
-        +"o.note, "
+        +"o.notes, "
         +"o.photo as img,"
         +"p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue "
         +"FROM TdataObs_parcours p "
@@ -84,9 +118,12 @@ app.utils.queryData = {
     var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',COALESCE(o.datetime, p.begin_datetime)) as date,"
         +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
         +"p.name AS lieudit, o.latitude, o.longitude, "
+        +"p.name AS adresse,"
+        +"p.cote AS coteRue,"
+        +"p.geocomplete AS geocomplete,"
         +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
         +"o.milieu, "
-        +"o.note, "
+        +"o.notes, "
         +"o.photo as img,"
         +"p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue "
         +"FROM TdataObs_parcours p "
@@ -106,30 +143,31 @@ app.utils.queryData = {
     );
     return dfd.promise();
   },
-	findByName: function(key, callback) {
-  var dfd = $.Deferred();
-  var parameters = new Array();
-	//	this.db.transaction(function(tx) {
-			var sql = 
-				"SELECT num_nom, nom_sci " +
-				"FROM TespeceCel " + 
-				"WHERE nom_sci LIKE ? " +
-				"ORDER BY nom_sci";
 
-		runQuery(sql, [key + '%']).done(
-      function(results){
-          var len = results.rows.length,
-            data = [],
-            i = 0;
-          for (; i < len; i = i + 1) {
-            data[i] = results.rows.item(i);
-          }
-          return dfd.resolve(data);
-      }
-    );
-    return dfd.promise();
-
-	}
+  findByName: function(key, callback) {
+   var dfd = $.Deferred();
+   var parameters = new Array();
+  //	this.db.transaction(function(tx) {
+    var sql = 
+     "SELECT num_nom, nom_sci " +
+     "FROM TespeceCel " + 
+     "WHERE nom_sci LIKE ? " +
+     "ORDER BY nom_sci";
+  
+   runQuery(sql, [key + '%']).done(
+       function(results){
+           var len = results.rows.length,
+             data = [],
+             i = 0;
+           for (; i < len; i = i + 1) {
+             data[i] = results.rows.item(i);
+           }
+           return dfd.resolve(data);
+       }
+     );
+     return dfd.promise();
+  
+  }
 }
 
 
@@ -409,6 +447,7 @@ Date.prototype.format = function(format) {
         ("00"+ o[k]).substr((""+ o[k]).length));
   return format;
 }
+
 
 /**
  * PLugin MMENU configuration spécifique

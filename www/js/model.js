@@ -341,7 +341,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
 				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)',
 				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
 			},
-    note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)'},
+    notes: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)'},
     regionPaca: { title:'regionPaca', type:'hidden',sqltype:'INTEGER'}
   }, 
   dao: app.dao.OccurenceDataValueDAO,
