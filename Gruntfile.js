@@ -188,6 +188,7 @@
                     'www/libs/leaflet/leaflet.js',
                     'www/libs/bootstrap_3.0.2/js/bootstrap.min.js',
                     'www/libs/jquery.hammer.js-master/jquery.hammer-full.min.js',
+                    'www/libs/backbone-geocomplete/jquery.geocomplete.min.js',
                     // libriairies minifiées avec uglify ci-dessus
                     'tmp/libs/NS.UI.Notification/notification.js',
                     'tmp/libs/fastclick_1.0.2/fastclick.js',
