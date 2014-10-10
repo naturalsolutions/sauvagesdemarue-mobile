@@ -554,9 +554,13 @@ app.views.FormUserView = NS.UI.Form.extend({
 						var self = this;
       this.on('submit:valid', function(instance) {
         var self = this;
+
         instance.save().done( function(model, response, options) {
           instance.fetch({
             success: function(data) {
+              var synchroU = new NS.SynchroUser();
+              synchroU.mailExiste();
+//synchro
               $('input[type=text]').addClass('disabled');
               $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
               sauvages.notifications.emailSaveSuccess();

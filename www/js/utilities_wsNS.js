@@ -208,14 +208,14 @@ NS.WSDrupalAPIClient = (function() {
     /***
     * Fonction génère la requete  POST d'envoie d'une obs aux services de tela
     * ***/
-    wsDrupalApiClient.prototype.sendToNSWS= function (obs, id_obs) {
+    wsDrupalApiClient.prototype.sendToNSWS= function (obsNS, id_obs) {
         var msg = '';
         var erreurMsg = '';
         return $.ajax({
-            url : this.basePath +"/observation/obs",
+            url : this.basePath +"/observation/ns_obs",
             type : 'POST',
-            data : JSON.stringify(obs),
-            contentType:"application/json; charset=utf-8",
+            data : JSON.stringify(obsNS),
+            contentType:"application/json",
             dataType:"json",
             success : function(data,textStatus,jqXHR){},
             error : function(jqXHR, textStatus, errorThrown) {

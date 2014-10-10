@@ -209,7 +209,6 @@ NS.WSTelaAPIClient = (function() {
         observations['obsId1'] = json;
             
         //@TODO traiter la réponse
-        //Gestion des deferreds
         observations['projet'] = this.tagprojet;
         observations['tag-obs'] = this.tagobs;
         observations['tag-img'] = this.tagimg;
