@@ -56,13 +56,13 @@ NS.WSDrupalAPIClient = (function() {
         
         var obs = _.defaults(currentobs, this.defaultObs);
         var dfdImage = $.Deferred();
-        //Pour l'instant on envoie pas les images
-        //if(obs.img === null || obs.img === "" || obs.img === "undefined"){
+        //Gestion des images
+        if(obs.img === null || obs.img === "" || obs.img === "undefined"){
           var observations = this.formatObsToSend(obs,uidUser,serviceCommune);
           dfdImage.resolve(observations);
-        //}else{
-        //   this.encodeImg(obs,obs.ido,uidUser,dfdImage,serviceCommune);               
-        //}         
+        }else{
+           this.encodeImg(obs,obs.ido,uidUser,dfdImage,serviceCommune);               
+        }         
         var self = this,
         context = {
             'ido' :  currentobs.ido, 'uidUser':uidUser,'cObservation' : cObservation, 'obsToSend':obsToSend, 'dfdObs':dfdObs , 'serviceCommune':serviceCommune
@@ -94,48 +94,48 @@ NS.WSDrupalAPIClient = (function() {
     /***
      *  Fonction qui encode en base64 une image
      * ***/
-    //wsTelaApiClient.prototype.encodeImg= function (obs,id,userEmail,dfdImage,serviceCommune){
-    //    if (navigator.camera) {
-    //        //mobile
-    //        var imageURI = obs.img;
-    //        var failSystem = function(error) {
-    //            console.log("failed with error code: " + error.code);
-    //            dfdImage.reject();
-    //        };
-    //        var failFile = function(error) {
-    //            console.log("failed with error code: " + error.code);
-    //            dfdImage.reject();
-    //        };
-    //        
-    //        var self = this;
-    //        var gotFileEntry = _.bind(function(fileEntry) {
-    //            console.log("got image file entry: " +  fileEntry.toURL());
-    //            fileEntry.file( _.bind(function(file) {
-    //                var reader = new FileReader();
-    //                reader.onloadend = _.bind(function(evt) {
-    //                   console.log("Read complete!");
-    //                   this.obs.image_b64 = evt.target.result;
-    //                   this.obs.image_nom = this.file.name;
-    //                   var observations = this.self.formatObsToSend(this.obs,this.userEmail,this.serviceCommune);
-    //                   this.dfdImage.resolve(observations);
-    //                }, _.extend(this, {file: file}));
-    //                reader.readAsDataURL(file);
-    //            }, this), failFile);
-    //        }, {
-    //            self: this,
-    //            obs: obs,
-    //            dfdImage: dfdImage,
-    //            userEmail: userEmail,
-    //            serviceCommune : serviceCommune
-    //        });
-    //        window.resolveLocalFileSystemURL(imageURI, gotFileEntry, failSystem);
-    //    }else{
-    //        obs.image_b64 = obs.img;
-    //        obs.image_nom = 'image-obs' + id;
-    //        var observations = this.formatObsToSend(obs,userEmail,serviceCommune);
-    //        dfdImage.resolve(observations);
-    //    }
-    //};
+    wsDrupalApiClient.prototype.encodeImg= function (obs,id,userEmail,dfdImage,serviceCommune){
+        if (navigator.camera) {
+            //mobile
+            var imageURI = obs.img;
+            var failSystem = function(error) {
+                console.log("failed with error code: " + error.code);
+                dfdImage.reject();
+            };
+            var failFile = function(error) {
+                console.log("failed with error code: " + error.code);
+                dfdImage.reject();
+            };
+            
+            var self = this;
+            var gotFileEntry = _.bind(function(fileEntry) {
+                console.log("got image file entry: " +  fileEntry.toURL());
+                fileEntry.file( _.bind(function(file) {
+                    var reader = new FileReader();
+                    reader.onloadend = _.bind(function(evt) {
+                       console.log("Read complete!");
+                       this.obs.image_b64 = evt.target.result;
+                       this.obs.image_nom = this.file.name;
+                       var observations = this.self.formatObsToSend(this.obs,this.userEmail,this.serviceCommune);
+                       this.dfdImage.resolve(observations);
+                    }, _.extend(this, {file: file}));
+                    reader.readAsDataURL(file);
+                }, this), failFile);
+            }, {
+                self: this,
+                obs: obs,
+                dfdImage: dfdImage,
+                userEmail: userEmail,
+                serviceCommune : serviceCommune
+            });
+            window.resolveLocalFileSystemURL(imageURI, gotFileEntry, failSystem);
+        }else{
+            obs.image_b64 = obs.img;
+            obs.image_nom = 'image-obs' + id;
+            var observations = this.formatObsToSend(obs,userEmail,serviceCommune);
+            dfdImage.resolve(observations);
+        }
+    };
 
     
      /***
@@ -162,14 +162,14 @@ NS.WSDrupalAPIClient = (function() {
                     'longitude':obs.longitude
                   };
                         
-        //if (obs.image_b64) {
-        //    //Ajout des champs images
-        //    json.image_nom = obs.image_nom;
-        //    json.image_b64 = obs.image_b64;
-        //    //Ajout des champs images dans l'objet obs par défaut
-        //    this.defaultObs.image_nom = obs.image_nom;
-        //    this.defaultObs.image_b64 = obs.image_b64;
-        //}
+        if (obs.image_b64) {
+            //Ajout des champs images
+            observations.image_nom = obs.image_nom;
+            observations.image_b64 = obs.image_b64;
+            //Ajout des champs images dans l'objet obs par défaut
+            this.defaultObs.image_nom = obs.image_nom;
+            this.defaultObs.image_b64 = obs.image_b64;
+        }
         
         obs = _.omit(obs, 'ido');
         obs = _.omit(obs, 'idp');
@@ -212,7 +212,7 @@ NS.WSDrupalAPIClient = (function() {
         var msg = '';
         var erreurMsg = '';
         return $.ajax({
-            url : this.basePath +"/observation/obs",
+            url : this.basePath +"/observation/ns_obs",
             type : 'POST',
             data : JSON.stringify(obs),
             contentType:"application/json; charset=utf-8",

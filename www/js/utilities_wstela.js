@@ -230,32 +230,32 @@ NS.WSTelaAPIClient = (function() {
     wsTelaApiClient.prototype.sendToTelaWS= function (obs, id_obs) {
         var msg = '';
         var erreurMsg = '';
-        return $.ajax({
-            url : this.basePath,
-            type : 'POST',
-            data : obs,
-            dataType : 'json',
-            success : function(data,textStatus,jqXHR){
-                sauvages.notifications.sendToTelaWSSuccess();
-            },
-            error : function(jqXHR, textStatus, errorThrown) {
-                sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
-                msg = 'Erreur indéterminée. Merci de contacter le responsable.';
-                erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
-                try {
-                 var reponse = jQuery.parseJSON(jqXHR.responseText);
-                 if (reponse != null) {
-                  $.each(reponse, function (cle, valeur) {
-                   erreurMsg += valeur + '\n';
-                  });
-                 }
-                } catch(e) {
-                 erreurMsg += 'L\'erreur n\'était pas en JSON.';
-                }
-                console.log(erreurMsg);
-            }
-      });
-      //return $.Deferred().resolve();
+      //  return $.ajax({
+      //      url : this.basePath,
+      //      type : 'POST',
+      //      data : obs,
+      //      dataType : 'json',
+      //      success : function(data,textStatus,jqXHR){
+      //          sauvages.notifications.sendToTelaWSSuccess();
+      //      },
+      //      error : function(jqXHR, textStatus, errorThrown) {
+      //          sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
+      //          msg = 'Erreur indéterminée. Merci de contacter le responsable.';
+      //          erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
+      //          try {
+      //           var reponse = jQuery.parseJSON(jqXHR.responseText);
+      //           if (reponse != null) {
+      //            $.each(reponse, function (cle, valeur) {
+      //             erreurMsg += valeur + '\n';
+      //            });
+      //           }
+      //          } catch(e) {
+      //           erreurMsg += 'L\'erreur n\'était pas en JSON.';
+      //          }
+      //          console.log(erreurMsg);
+      //      }
+      //});
+      return $.Deferred().resolve();
     }
 
     return wsTelaApiClient;

@@ -125,10 +125,10 @@ NS.SendOBS = (function() {
     sendObs.prototype.registerUser = function(user, callback) {   
         return $.ajax({
                  type: "POST",
-                 url: SERVICE_SAUVAGESPACA + '/observation/user',
+                 url: SERVICE_SAUVAGESPACA + '/observation/obs_user',
                  dataType: 'json',
                  data: JSON.stringify(user),
-                 contentType: 'application/json',
+                 contentType: 'application/json charset=utf-8',
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(errorThrown);
                     },
@@ -174,49 +174,49 @@ NS.SendOBS = (function() {
                     // test si il y a un uid dans la table user
                     if (uidUser.length === 0 || uidUser === 'undefined') {
                         var user = {
-                                "name": "testuser13", 
-                                "mail": "testuser13@gmail.com", 
-                                "conf_mail": "testuser13@gmail.com",
+                                "mail": data.get('email'), 
+                                "conf_mail": data.get('email'),
                                 "account" :{        
-                                    "name": "testuser13", 
-                                    "mail": "testuser13@gmail.com", 
-                                    "conf_mail": "testuser13@gmail.com",
-                                    "status":"1",
-                                    "roles":{"2":"authenticated user","5":"Rédacteur d'actualité"}, 
+                                    "mail": data.get('email'), 
+                                    "conf_mail": data.get('email'),
+                                    }
                                 }
-                                ,
-                               "field_pseudo":{"und":[{"value":"PSEUDO10","format":null,"safe_value":"PSEUDO"}]}
-                            }
                         var uid = self.registerUser(user).done(function(newUser){data.set('uid',newUser.uid).save()})
                     }
                     var latParcours = cParcours.get('begin_latitude');												
                     var longParcours = cParcours.get('begin_longitude');												
                     self.appelServiceCommuneTela(latParcours,longParcours,function(serviceCommune){                      
-                      app.utils.queryData.getObservationsTelaWSFormated(idRue)
-                        .done(
-                          function(data) {
-                            if (data.length !== 0 ) {
-                              //Send to tela via cel ws
-                             /* var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
-                              wstela.sendSauvageObservation(data, cObservation, cParcours, emailUser,serviceCommune).done(function() {
-                                setTimeout(function(){$('#content').scrollTop(0);},100);
-                                dfd.resolve();
-                              });*/
-                                var wspaca = new NS.WSDrupalAPIClient(SERVICE_SAUVAGESPACA, TAG_IMG, TAG_OBS, TAG_PROJET);
-                                wspaca.sendSauvageObservation(data, cObservation, cParcours, uidUser,serviceCommune).done(function() {
-                                    console.log(' envoi effectué vers sauvages de paca');
-                              });                            
-                            }else{
-                              alert("Il n'y a pas d'observations à envoyer.");
+                        app.utils.queryData.getObservationsTelaWSFormated(idRue)
+                            .done(
+                              function(dataWS) {
+                                if (dataWS.length !== 0 ) {
+                                  //Send to tela via cel ws
+                                  var wstela = new NS.WSTelaAPIClient(SERVICE_SAISIE_URL, TAG_IMG, TAG_OBS, TAG_PROJET);
+                                  wstela.sendSauvageObservation(dataWS, cObservation, cParcours, emailUser,serviceCommune).done(function() {
+                                    setTimeout(function(){$('#content').scrollTop(0);},100);
+                                    dfd.resolve();
+                                  });
+                                    setTimeout(function(){$('#content').scrollTop(0);},100);
+                                }else{
+                                  alert("Il n'y a pas d'observations à envoyer.");
+                                  dfd.reject();
+                                }		
+                              }
+                            )
+                            .fail(function(msg) {
+                              console.log(msg);
                               dfd.reject();
-                            }		
-                          }
-                        )
-                        .fail(function(msg) {
-                          console.log(msg);
-                          dfd.reject();
+                            });
+                            dfd.done(function(){
+                                app.utils.queryData.getObservationsPacaWSFormated(idRue)
+                                    .done(function(dataWSpaca){
+                                       var wspaca = new NS.WSDrupalAPIClient(SERVICE_SAUVAGESPACA);                            
+                                            wspaca.sendSauvageObservation(dataWSpaca, cObservation, cParcours, uidUser,serviceCommune).done(function() {
+                                                console.log(' envoi effectué vers sauvages de paca');
+                                            })
+                                    });                        
+                            });
                         });
-                    });
                   }else{
                     var newUser = new app.models.User();
                     var msg = _.template(
