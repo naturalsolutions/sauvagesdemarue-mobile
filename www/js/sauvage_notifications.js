@@ -65,6 +65,34 @@ function() {
       }, myModal))
    },
 	
+   sauvages.createAccount = function createAccount(msg,email) {
+      var myModal = new NS.UI.NotificationModal({
+         type: '',
+         title: 'Création de compte sur sauvagesdepaca.fr',
+         message: msg,
+         delay: '',
+         btnLabel: '',
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         var createAccount = new NS.SynchroUser();
+         createAccount.registerUser(email);
+      }, myModal)),
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         app.route.navigate('utilisateur', {trigger: true});
+      }, myModal))
+   },
+
+
    sauvages.obsSaveSuccess = function obsSaveSuccess(localisation) {
      var myModal = new NS.UI.NotificationModal({
       type: '',

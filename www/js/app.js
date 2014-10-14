@@ -325,6 +325,15 @@ function init(){
                 $('#preloader').append(	"<img src="+ imageLocalThumb +" width='1' height='1' />");
                 $('#preloader').append(	"<img src="+ imageLocalFull +" width='1' height='1' />");
               }
+
+    var synchroU = new NS.SynchroUser();
+    synchroU.mailExiste()
+    //.done(
+    //  function() {
+    //    console.log('okkk')
+    //  }
+    //);
+
             }());
           }
         }
@@ -351,6 +360,7 @@ function initDB(){
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.Context()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.OccurenceDataValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.ParcoursDataValue()));
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.RecompensesDataValue()));
   
 
 try {
@@ -412,6 +422,7 @@ console.log('version avant changeV : ' +app.db.version);
             $.when.apply(this, arr).then(function () {
               deferreds.push(app.dao.baseDAOBD.populate(new app.models.User()));
               deferreds.push(app.dao.baseDAOBD.populate(new app.models.Application()));
+              deferreds.push(app.dao.baseDAOBD.populate(new app.models.RecompensesDataValue()));
               console.log('when finished dfd.resolve test if data are loaded');
               return setTimeout(function(){ dfdTaxon.resolve()},1000);
             });
@@ -457,6 +468,7 @@ console.log('version avant changeV : ' +app.db.version);
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.Picture()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDef()));
             deferreds.push(app.dao.baseDAOBD.populate(new app.models.CaracteristiqueDefValue()));
+            deferreds.push(app.dao.baseDAOBD.populate(new app.models.RecompensesDataValue()));
           
           //teste si les données taxons sont chargés dans la base
             //Si oui alors => pas de chargement des données en base

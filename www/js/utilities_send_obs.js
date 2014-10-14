@@ -1,5 +1,5 @@
 /*
- * Traitements et Tests avant l'envoi à l'utilitaire de Web Services pour répondre au protocol Sauvages de ma rue.
+ * Traitements et Tests avant l'envoi aux Web Services de Tela Botanica et Drupal NS pour répondre au protocol Sauvages de ma rue.
  * Variables:
  * - idRue = identifiant de la rue (l'envoi des obs Sauvages est attaché à une rue)
  * - cParcours = objet parcours
@@ -117,12 +117,20 @@ NS.SendOBS = (function() {
     };
 
     /***
-     * Fonction de gestion de l'uid du site sauvages de paca
+     * Fonction création de compote sur le site sauvages de paca retourne UID
      *  
      ****/
 
     
-    sendObs.prototype.registerUser = function(user, callback) {   
+    sendObs.prototype.registerUser = function(mail, callback) {
+        var user = {
+                   "mail": mail, 
+                   "conf_mail": mail,
+                   "account" :{        
+                       "mail": mail, 
+                       "conf_mail": mail,
+                       }
+                   }
         return $.ajax({
                  type: "POST",
                  url: SERVICE_SAUVAGESPACA + '/observation/obs_user',
@@ -149,6 +157,7 @@ NS.SendOBS = (function() {
         var emailUser;
         var uidUser;
         var dfdCollection = $.Deferred();
+        var dfdCompteNS = $.Deferred();
         this.confirmModal().done(function(){
             if (typeof cObservation === "undefined") {
               var myObsColl = new app.models.OccurenceDataValuesCollection();
@@ -183,6 +192,14 @@ NS.SendOBS = (function() {
                                 }
                         var uid = self.registerUser(user).done(function(newUser){data.set('uid',newUser.uid).save()})
                     }
+                    if (uidUser.length === 0 || uidUser === 'undefined') { 
+                        var uid = self.registerUser(data.get('email')).done(function(newUser){
+                            data.set('uid',newUser.uid).save().done(function(){
+                                uidUser = newUser.uid;
+                                dfdCompteNS.resolve()
+                            })
+                        })
+                    }else{dfdCompteNS.resolve()};
                     var latParcours = cParcours.get('begin_latitude');												
                     var longParcours = cParcours.get('begin_longitude');												
                     self.appelServiceCommuneTela(latParcours,longParcours,function(serviceCommune){                      
@@ -208,6 +225,7 @@ NS.SendOBS = (function() {
                               dfd.reject();
                             });
                             dfd.done(function(){
+<<<<<<< HEAD
                                 app.utils.queryData.getObservationsPacaWSFormated(idRue)
                                     .done(function(dataWSpaca){
                                        var wspaca = new NS.WSDrupalAPIClient(SERVICE_SAUVAGESPACA);                            
@@ -215,6 +233,17 @@ NS.SendOBS = (function() {
                                                 console.log(' envoi effectué vers sauvages de paca');
                                             })
                                     });                        
+=======
+                                dfdCompteNS.done(function(){
+                                    app.utils.queryData.getObservationsPacaWSFormated(idRue)
+                                        .done(function(dataWSpaca){
+                                           var wspaca = new NS.WSDrupalAPIClient(SERVICE_SAUVAGESPACA);                            
+                                            wspaca.sendSauvageObservation(dataWSpaca, cObservation, cParcours, uidUser,serviceCommune).done(function() {
+                                                console.log(' envoi effectué vers sauvages de paca');
+                                            })
+                                        });                        
+                                });
+>>>>>>> 8888a886c00ebfbac1b46880d4465638418a4062
                             });
                         });
                   }else{

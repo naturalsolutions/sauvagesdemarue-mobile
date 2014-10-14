@@ -97,6 +97,10 @@ app.dao.EspeceCELDataValueDAO = function(db) {
     this.db = db;
 };
 
+app.dao.RecompensesDataValueDAO = function(db) {
+    this.db = db;
+};
+
 _.extend(app.dao.UserDAO.prototype, app.dao.baseDAOBD,{});
 _.extend(app.dao.ApplicationDAO.prototype, app.dao.baseDAOBD,{});
 _.extend(app.dao.TaxonDAO.prototype, app.dao.baseDAOBD,{});
@@ -105,6 +109,7 @@ _.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.GroupeDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.RecompensesDataValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD,{
   destroy: function(id,callback) {

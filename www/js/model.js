@@ -395,6 +395,35 @@ app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
   },
 
 });
+
+// The RecompensesDataValues Model
+app.models.RecompensesDataValue = Backbone.Model.extend({
+	defaults: {
+
+	},
+},{
+  table : 'Trecompense',
+   schema: {
+    //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+      id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+      title: { title:'Récompense', type:'Text',required: true},
+      picture : { title:'badge',type:'Text', sqltype:'NVARCHAR(500)', required: true},
+  }, 
+  dao: app.dao.ParcoursDataValueDAO,
+  verboseName: 'Recompense'
+});
+// The RecompensesDataValues Collection
+app.models.RecompensesDataValuesCollection =Backbone.Collection.extend({
+
+  model : app.models.RecompensesDataValue,
+  
+  dao: app.dao.RecompensesDataValueDAO,
+  
+  initialize: function() {
+  },
+
+});
+
 //position
 app.models.Position = Backbone.Model.extend({
 
