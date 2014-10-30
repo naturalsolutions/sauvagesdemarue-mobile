@@ -136,7 +136,7 @@ NS.SendOBS = (function() {
                  url: SERVICE_SAUVAGESPACA + '/observation/obs_user',
                  dataType: 'json',
                  data: JSON.stringify(user),
-                 contentType: 'application/json charset=utf-8',
+                 contentType: 'application/json',
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(errorThrown);
                     },
@@ -224,16 +224,7 @@ NS.SendOBS = (function() {
                               console.log(msg);
                               dfd.reject();
                             });
-                            dfd.done(function(){
-<<<<<<< HEAD
-                                app.utils.queryData.getObservationsPacaWSFormated(idRue)
-                                    .done(function(dataWSpaca){
-                                       var wspaca = new NS.WSDrupalAPIClient(SERVICE_SAUVAGESPACA);                            
-                                            wspaca.sendSauvageObservation(dataWSpaca, cObservation, cParcours, uidUser,serviceCommune).done(function() {
-                                                console.log(' envoi effectué vers sauvages de paca');
-                                            })
-                                    });                        
-=======
+                            dfd.done(function(){                     
                                 dfdCompteNS.done(function(){
                                     app.utils.queryData.getObservationsPacaWSFormated(idRue)
                                         .done(function(dataWSpaca){
@@ -243,7 +234,6 @@ NS.SendOBS = (function() {
                                             })
                                         });                        
                                 });
->>>>>>> 8888a886c00ebfbac1b46880d4465638418a4062
                             });
                         });
                   }else{
