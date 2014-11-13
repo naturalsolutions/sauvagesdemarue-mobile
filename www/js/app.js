@@ -301,7 +301,7 @@ function init(){
     console.log ('all deferreds finished');
     app.globals.cListAllTaxons = new app.models.TaxonLiteCollection();
     app.globals.cListAllTaxons.fetch({
-       success: function(data) {
+      success: function(data) {
           app.route = new app.Router();
           if (!Backbone.History.started) {
             Backbone.history.start();
@@ -325,17 +325,13 @@ function init(){
                 $('#preloader').append(	"<img src="+ imageLocalThumb +" width='1' height='1' />");
                 $('#preloader').append(	"<img src="+ imageLocalFull +" width='1' height='1' />");
               }
-
-    var synchroU = new NS.SynchroUser();
-    synchroU.mailExiste()
-    //.done(
-    //  function() {
-    //    console.log('okkk')
-    //  }
-    //);
-
             }());
           }
+        var connect = checkConnection();
+        if (connect !== 'none' || connect === false){
+							var synchroU = new NS.SynchroUser();
+							synchroU.mailExiste();
+					}
         }
     });
   });  
