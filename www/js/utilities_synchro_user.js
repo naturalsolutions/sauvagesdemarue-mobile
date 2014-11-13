@@ -17,7 +17,7 @@ NS.SynchroUser = (function() {
         var dfd = $.Deferred();
 
         /***
-         * Fonction création de compote sur le site sauvages de paca retourne UID
+         * Fonction création de compte sur le site sauvages de paca retourne UID
          *  
          ****/
         
@@ -83,15 +83,17 @@ NS.SynchroUser = (function() {
         synchroUser.prototype.mailExisteDrupal = function(emailUser, callback) {
             var self = this;
             return $.ajax({
-                     type: "GET",
-                     url: SERVICE_SAUVAGESPACA + '/observation/obs_user/retrieve',
-                     data: 'mail='+ emailUser,
-                     contentType: 'application/x-www-form-urlencoded',
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(errorThrown);
-                            self.errorStatus(jqXHR.status,emailUser);
-                        },
-                    success: function (data) {console.log(data)}
+                    type: "GET",
+                    url: SERVICE_SAUVAGESPACA + '/observation/obs_user/retrieve',
+                    data: 'mail='+ emailUser,
+                    contentType: 'application/x-www-form-urlencoded',
+                       error: function (jqXHR, textStatus, errorThrown) {
+                           console.log(errorThrown);
+                           self.errorStatus(jqXHR.status,emailUser);
+                       },
+                    success: function (data) {
+                        console.log(data);
+                    }
                 });                 
         };
 
@@ -100,7 +102,87 @@ NS.SynchroUser = (function() {
          *  
          ****/
         synchroUser.prototype.treatementRecompense = function(data) {
+            var self = this;
+            _.each(data, function(item){
+                self.testRecompenseExist(item);
+                //self.saveFileImg(item);
+            })
             console.log(data);
+        }
+
+        /***
+         * Fonction de test if this type of recompense exits
+         *  
+         ****/
+        synchroUser.prototype.testRecompenseExist= function (recompense){
+            var self = this;
+            var recompenses = new app.models.RecompensesDataValuesCollection();
+            recompenses.fetch({success: function(collection) {
+                recompense = collection.findWhere({"title": recompense.filename});
+                if(!recompense) self.saveFileImg(item);
+                }
+            });
+        }
+        /***
+         * Fonction de traitements des badges
+         *  
+         ****/
+        synchroUser.prototype.saveFileImg= function (recompense){
+            if (navigator.camera) {
+                var self = this;
+                //The directory to store data
+                var store;                  
+                //URL of our asset
+                var getURL = recompense.uri_full;
+                //File name of our important data file we didn't ship with the app
+                var fileName = recompense.filename;       
+                store = cordova.file.dataDirectory+'/badge/';
+                //Check for the file. 
+                window.resolveLocalFileSystemURL(store + fileName, self.resolveLocalFileSuccess, self.downloadFile(getURL,store,fileName));
+                //save recompense in db
+                this.saveInDB(store,fileName);
+            }else{
+                //save recompense and file base64
+                var file = new app.models.RecompensesDataValue();
+                file.set({title : recompense.filename, picture : 'data:' + recompense.filemime + ';base64' + recompense.uri_full });
+                file.save();
+            }
+        }
+        /***
+         * Fonction save recompense in data base
+         *  
+         ****/
+        synchroUser.prototype.saveInDB = function(store,filename) {
+            console.log('save in db'+ store +filename);
+            var file = new app.models.RecompensesDataValue();
+            file.set({title : filename, picture : store + filename });
+            file.save({success: console.log(filename)});
+        }
+
+        /***
+         * Fonction (success resolveLocalFileSystemURL) le fichier à été trouvé 
+         *  
+         ****/
+        synchroUser.prototype.resolveLocalFileSuccess = function(store,fileName) {
+            console.log('Le fichier existe déjà !');
+        }
+
+        /***
+         * Fonction (error resolveLocalFileSystemURL) download file badge
+         *  
+         ****/
+        synchroUser.prototype.downloadFile = function(getURL, store,fileName) {
+            var self = this;
+            var fileTransfer = new FileTransfer();
+            console.log("About to start transfer");
+            fileTransfer.download(getURL, store + fileName, 
+              function(entry) {
+                console.log("Success!");
+              }, 
+              function(err) {
+                console.log("Error");
+                console.dir(err);
+              });
         }
 
         /***
@@ -110,12 +192,12 @@ NS.SynchroUser = (function() {
         synchroUser.prototype.retrieveRecompenseDrupal = function(uidUser) {
             var self = this;
             return $.ajax({
-                     type: "GET",
-                     url: SERVICE_SAUVAGESPACA + '/observation/ns_recompense/'+uidUser,
-                     contentType: 'application/x-www-form-urlencoded',
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(errorThrown);
-                        },
+                    type: "GET",
+                    url: SERVICE_SAUVAGESPACA + '/observation/ns_recompense/'+uidUser,
+                    contentType: 'application/x-www-form-urlencoded',
+                       error: function (jqXHR, textStatus, errorThrown) {
+                           console.log(errorThrown);
+                       },
                     success: function (data) {self.treatementRecompense(data)}
                 });                 
         };
@@ -147,7 +229,7 @@ NS.SynchroUser = (function() {
                 }
             });
         }
-        return dfd.promise();
+      //  return dfd.promise();
     }
     return synchroUser;
 }) ();
