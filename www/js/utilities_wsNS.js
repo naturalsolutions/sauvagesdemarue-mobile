@@ -17,15 +17,14 @@ NS.WSDrupalAPIClient = (function() {
      *  formate les données de l'observation pour le POST
      ****/
     wsDrupalApiClient.prototype.sendSauvageObservation = function (obsToSend, cObservation, cParcours, uidUser,serviceCommune){
-       // $('body').addClass('loading disabled');
         var dfd = $.Deferred();
         var observations =new Object();
         var dfdObs = $.Deferred();
         var idp = obsToSend[0].idp;
         this.treatObservations(obsToSend, cObservation,dfdObs,uidUser,serviceCommune);
            
-        //Quand toutes les données sont envoyées et les obs MAJ (sended == 1) alors
-        // MAJ des parcours (state == 2) et resolve du deferred
+        //Quand toutes les données sont envoyées alors
+        // MAJ des parcours (state == 3) et resolve du deferred
         dfdObs.done(
             _.bind(function (status) {
                 console.log('when finished dfd.resolve obser per rue');
