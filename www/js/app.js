@@ -220,7 +220,7 @@ app.utils.BaseView = Backbone.View.extend({
 document.addEventListener("deviceready", onDeviceReady, false);
 
 //pour fonctionner sur navigateur desktop
-if (app.config.debug === true){$( document ).ready(function() {onDeviceReady();});}
+if (app.config.debug === true){$(document).ready(function() {onDeviceReady();});}
 
 function onDeviceReady() {
 
