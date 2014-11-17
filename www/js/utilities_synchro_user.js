@@ -39,7 +39,9 @@ NS.SynchroUser = (function() {
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.log(errorThrown);
                         },
-                    success: function (data) {console.log(data)}
+                    success: function (data) {
+                        data.set('uid',newUser.uid).save();
+                    }
                  });                 
         };
 
@@ -228,12 +230,11 @@ NS.SynchroUser = (function() {
                     var emailUser = data.get('email');
                     var uidUser = data.get('uid');
                     var valEmail = validatorsEmail(emailUser);
-                    if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 && valEmail === true) {
+                    if (typeof(emailUser) !== undefined && emailUser.length !== 0 && valEmail === true) {
                         // test si il y a un uid dans la table user
                         if ( !uidUser || uidUser === 'undefined') {
                             self.mailExisteDrupal(emailUser).done(function(newUser){
                                 self.retrieveRecompenseDrupal(newUser.uid);
-                                data.set('uid',newUser.uid).save();
                             })
                         }else{
                             self.retrieveRecompenseDrupal(uidUser);
