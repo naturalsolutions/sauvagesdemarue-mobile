@@ -498,6 +498,9 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   template: 'page-utilisateur',
 
 		initialize: function() {
+    if (this.collection) {
+        this.collection.bind("reset", this.render, this);
+    }
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
     },
 
