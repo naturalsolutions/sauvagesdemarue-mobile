@@ -207,9 +207,10 @@ function() {
       });
       myModal.$el.on('submit', _.bind(function(evt) {
          evt.preventDefault();
-           var currentEmail = this.$el.find('input[type="email"]').val();
+            var currentEmail = this.$el.find('input[type="email"]').val();
             newUser.set('email',String(currentEmail))
            .save();
+            //Send obs on web
             var sendObservations = new NS.SendOBS(idRue,parcours,cObservation);
             sendObservations.envoiUtilitaireWS(idRue,parcours,cObservation);
             //$('#nodal').modal('hide');
