@@ -230,7 +230,7 @@ NS.SynchroUser = (function() {
                     var valEmail = validatorsEmail(emailUser);
                     if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 && valEmail === true) {
                         // test si il y a un uid dans la table user
-                        if ( !uidUser || typeof uidUser === 'undefined') {
+                        if ( !uidUser || uidUser === 'undefined') {
                             self.mailExisteDrupal(emailUser).done(function(newUser){
                                 self.retrieveRecompenseDrupal(newUser.uid);
                                 data.set('uid',newUser.uid).save();
