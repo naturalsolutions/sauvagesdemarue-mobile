@@ -203,6 +203,8 @@
                     'tmp/js/view.js',
                     'tmp/js/router.js',
                     'tmp/js/utilities_wstela.js',
+                    'tmp/js/utilities_wsNS.js',
+                    'tmp/js/utilities_synchro_user.js',
                     'tmp/js/utilities_send_obs.js',
                     'tmp/libs/NS.UI.Notification/notification_modal.js',
                     'tmp/libs/backbone-autocomplete/backbone.autocomplete.js',
