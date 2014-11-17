@@ -181,24 +181,15 @@ NS.SendOBS = (function() {
                   var valEmail = validatorsEmail(emailUser);
                   if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 && valEmail === true) {
                     // test si il y a un uid dans la table user
-                    if (uidUser.length === 0 || uidUser === 'undefined') {
-                        var user = {
-                                "mail": data.get('email'), 
-                                "conf_mail": data.get('email'),
-                                "account" :{        
-                                    "mail": data.get('email'), 
-                                    "conf_mail": data.get('email'),
-                                    }
-                                }
-                        var uid = self.registerUser(user).done(function(newUser){data.set('uid',newUser.uid).save()})
-                    }
-                    if (uidUser.length === 0 || uidUser === 'undefined') { 
-                        var uid = self.registerUser(data.get('email')).done(function(newUser){
+                    if (typeof uidUser === 'undefined' || !uidUser) {
+                        var wsNSsynchro = new NS.SynchroUser();
+                        wsNSsynchro.mailExisteDrupal(data.get('email')).done(function(newUser){
                             data.set('uid',newUser.uid).save().done(function(){
                                 uidUser = newUser.uid;
                                 dfdCompteNS.resolve()
                             })
-                        })
+                        });
+
                     }else{dfdCompteNS.resolve()};
                     var latParcours = cParcours.get('begin_latitude');												
                     var longParcours = cParcours.get('begin_longitude');												
