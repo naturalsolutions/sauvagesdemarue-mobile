@@ -181,7 +181,7 @@ NS.SendOBS = (function() {
                   var valEmail = validatorsEmail(emailUser);
                   if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 && valEmail === true) {
                     // test si il y a un uid dans la table user
-                    if (typeof uidUser === 'undefined' || !uidUser) {
+                    if (uidUser === 'undefined' || !uidUser) {
                         var wsNSsynchro = new NS.SynchroUser();
                         wsNSsynchro.mailExisteDrupal(data.get('email')).done(function(newUser){
                             data.set('uid',newUser.uid).save().done(function(){
