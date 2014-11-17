@@ -118,8 +118,8 @@ NS.SynchroUser = (function() {
             var self = this;
             var recompenses = new app.models.RecompensesDataValuesCollection();
             recompenses.fetch({success: function(collection) {
-                recompense = collection.findWhere({"title": recompense.filename});
-                if(!recompense) self.saveFileImg(item);
+                var isRecompense = collection.findWhere({"title": recompense.filename});
+                if(!isRecompense) self.saveFileImg(recompense);
                 }
             });
         }
@@ -144,7 +144,7 @@ NS.SynchroUser = (function() {
             }else{
                 //save recompense and file base64
                 var file = new app.models.RecompensesDataValue();
-                file.set({title : recompense.filename, picture : 'data:' + recompense.filemime + ';base64' + recompense.uri_full });
+                file.set({title : recompense.filename, picture : recompense.uri_full });
                 file.save();
             }
         }
@@ -202,7 +202,20 @@ NS.SynchroUser = (function() {
                 });                 
         };
 
-    
+        /***
+         * Fonction delete table Trecompense
+         *  
+         ****/
+        synchroUser.prototype.deleteTrecompense = function() {
+
+				var recompenses = new app.models.RecompensesDataValuesCollection();
+            recompenses.fetch({success: function(cRecompense) {
+                _.each(cRecompense.models,function(item) {
+                    item.destroy();
+                });
+            }});
+        };
+
         /***
          * Fonction de récupération du mail et uid dans la base de l'appli 
          *  
@@ -217,7 +230,7 @@ NS.SynchroUser = (function() {
                     var valEmail = validatorsEmail(emailUser);
                     if (typeof(emailUser) !== 'undefined' && emailUser.length !== 0 && valEmail === true) {
                         // test si il y a un uid dans la table user
-                        if (uidUser.length === 0 || uidUser === 'undefined') {
+                        if ( !uidUser || typeof uidUser === 'undefined') {
                             self.mailExisteDrupal(emailUser).done(function(newUser){
                                 self.retrieveRecompenseDrupal(newUser.uid);
                                 data.set('uid',newUser.uid).save();

@@ -109,7 +109,21 @@ _.extend(app.dao.TaxonCaracValueDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.GroupeDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.CaracteristiqueDefValueDAO.prototype, app.dao.baseDAOBD);
-_.extend(app.dao.RecompensesDataValueDAO.prototype, app.dao.baseDAOBD);
+_.extend(app.dao.RecompensesDataValueDAO.prototype, app.dao.baseDAOBD,{
+  destroy: function(id,callback) {
+        this.db.transaction(
+            function(tx) {
+                var sql = "delete from Trecompense where id= ? " ;
+              tx.executeSql(sql, [id], function(tx, results) {
+                callback(id,results);
+              });
+            },
+            function(tx, error) {
+                console.log(tx);
+            }
+        );
+  }
+});
 _.extend(app.dao.ContextDAO.prototype, app.dao.baseDAOBD);
 _.extend(app.dao.OccurenceDataValueDAO.prototype, app.dao.baseDAOBD,{
   destroy: function(id,callback) {

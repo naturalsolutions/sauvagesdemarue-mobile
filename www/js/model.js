@@ -409,7 +409,7 @@ app.models.RecompensesDataValue = Backbone.Model.extend({
       title: { title:'Récompense', type:'Text',required: true},
       picture : { title:'badge',type:'Text', sqltype:'NVARCHAR(500)', required: true},
   }, 
-  dao: app.dao.ParcoursDataValueDAO,
+  dao: app.dao.RecompensesDataValueDAO,
   verboseName: 'Recompense'
 });
 // The RecompensesDataValues Collection

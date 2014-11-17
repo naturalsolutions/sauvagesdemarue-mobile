@@ -102,8 +102,12 @@ app.Router = Backbone.Router.extend({
     var self = this;
     var onDataHandler = function(data, response, options) {
       if (data.get('email') !== undefined) {
-        var currentView = new app.views.UtilisateurPageView({model :data});
-        self.displayView(currentView);
+				var recompenses = new app.models.RecompensesDataValuesCollection();
+				recompenses.fetch({success: function(cRecompense) {
+					var currentView = new app.views.UtilisateurPageView({model :data, collection : cRecompense});
+					self.displayView(currentView);
+					}
+				});
       }else{
         var newUser = new app.models.User();
         var currentView = new app.views.UtilisateurPageView({model :newUser});

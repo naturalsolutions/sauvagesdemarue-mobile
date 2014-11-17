@@ -241,14 +241,14 @@ app.views.FormAddOccurenceView = NS.UI.Form.extend({
 });
 
 app.views.AddSauvageRueView = app.utils.BaseView.extend({
-  template: 'form-add-sauvagerue',
+    template: 'form-add-sauvagerue',
   
-  initialize: function(options) {
+    initialize: function(options) {
 				$('#header').show();
-   // this.model.bind("reset", this.render, this);
-    this.collection = options.collection;
+        // this.model.bind("reset", this.render, this);
+        this.collection = options.collection;
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
+    },
 		serialize: function() {
     if (this.collection) {
 						return {collection:this.collection};
@@ -287,8 +287,7 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 
   beforeRender: function() {
 				$('.icone-page-title').hide();
-
-    this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
+        this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
 				
 				if (typeof(this.collection) !== 'undefined') {
 						var currentCollObs = this.collection.findWhere({'fk_rue' : parseInt(this.model.get('id')) });
@@ -390,20 +389,20 @@ app.views.FormAddSauvageRue = NS.UI.Form.extend({
 });
 
 app.views.ObsRueView=  app.utils.BaseView.extend({
-  template: 'table-obs-rue',
+    template: 'table-obs-rue',
 
-  initialize: function() {
-   // this.collection.bind('reset', this.render, this);
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
+    initialize: function() {
+     // this.collection.bind('reset', this.render, this);
+          app.utils.BaseView.prototype.initialize.apply(this, arguments);
+    },
   
- serialize: function() {
-    return {collection:this.obsCurrentRue};
-  },
+    serialize: function() {
+       return {collection:this.obsCurrentRue};
+    },
   
-  beforeRender: function(){
-    this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});
-  }
+    beforeRender: function(){
+      this.obsCurrentRue = this.collection.where({fk_rue : app.globals.currentrue.get('id')});
+    }
   
 });
 
@@ -413,38 +412,38 @@ app.views.HomePageView=  app.utils.BaseView.extend({
 
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
+    },
 
 		beforeRender:function(){
-    $('#content').addClass('content-home');
-  },
+        $('#content').addClass('content-home');
+    },
 
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('body').addClass('pad-bottom-top');
 				$('.navbar').show();
 				$('#header').removeClass('hide');
-    $('#menu').removeClass('hide');
+        $('#menu').removeClass('hide');
 				$('#content').removeClass('content-home');
 		},
 		afterRender: function(){
 				$('#header').addClass('hide');
-    $('#menu').addClass('hide');
-    app.utils.queryData.getObservationsTelaWSFormatedAll()
-      .done(function(data) {
+        $('#menu').addClass('hide');
+        app.utils.queryData.getObservationsTelaWSFormatedAll()
+        .done(function(data) {
           if (data.length !== 0 && $('#home-page-content .flag-container').has('#flagObs').length === 0) {
             $('#home-page-content .flag-container p').after("<span id='flagObs' class='glyphicon glyphicon-refresh pull-left'></span>");  
           }else if(data.length === 0 && $('#home-page-content .flag-container').has('#flagObs').length === 1){
             $('#flagObs').remove();
           }
-      });
-      if ($('.row-fluid')[0].offsetHeight < $('.row-fluid')[0].scrollHeight) {
-        $('.row-fluid', this.$el).append("<div class='icon-scroll-bottom' ></div>");
-      };
-      $('body #home-page-content div.row-fluid').scroll(this.checkpositionScroll);
-  },
+        });
+        if ($('.row-fluid')[0].offsetHeight < $('.row-fluid')[0].scrollHeight) {
+            $('.row-fluid', this.$el).append("<div class='icon-scroll-bottom' ></div>");
+        };
+        $('body #home-page-content div.row-fluid').scroll(this.checkpositionScroll);
+    },
 
-  checkpositionScroll : function(event){
+    checkpositionScroll : function(event){
 				var pos = $('body #home-page-content div.row-fluid').scrollTop();
 				if (pos > 5) {
 						$('.icon-scroll-bottom').hide();	
@@ -460,10 +459,10 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 
 		initialize: function() {
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
-  beforeRender:function(){
-    $('#content').addClass('content-home');
-  },
+    },
+    beforeRender:function(){
+      $('#content').addClass('content-home');
+    },
 		afterRender: function(){
 				$('.page-title').replaceWith("<div class='page-title'>Ma localisation</div>");
 				var coords = app.models.pos.get('coords');
@@ -484,10 +483,10 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
 						self.goToLastPage();
 				}
 		},
-  remove : function(){
+    remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('#content').removeClass('content-home');
-    $('.page-block-sub-title h1').remove();
+        $('.page-block-sub-title h1').remove();
 				if (app.globals.currentrue !== undefined) {
 						$('.page-block-sub-title').append("<h1 class='page-sub-title'>"+app.globals.currentrue.get('name') +" - "+app.globals.currentrue.get('cote') +"</h1>");
 				}
@@ -499,16 +498,22 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   template: 'page-utilisateur',
 
 		initialize: function() {
-			//	this.model.bind("reset", this.render, this);
+        this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
+    },
+
+    serialize: function() {
+        if (this.collection) {
+            return {collection:this.collection};
+        }
+    },
 
 		events : {
 				"click .modifier-enregistrement"	: "updateEmail",
 				"click .annuler-enregistrement"	: "annuler",
 				"click .enable-email" : "enableInputEmail",
 				"keydown input" : "enableSave"
-	},
+    },
 		
 		annuler: function(evt){
 				app.route.navigate('', {trigger: true});
@@ -528,11 +533,19 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 		},
 		updateEmail: function(evt){
 				var currentEmail = this.$el.find('input[type="text"]').val();
-    if (validatorsEmail(currentEmail)) {
-        this.model.set('email',String(currentEmail)).save().done( function(model, response, options) {
-          $('input[type=text]').addClass('disabled');
-          $('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-          sauvages.notifications.emailSaveSuccess();
+        if (validatorsEmail(currentEmail)) {
+            this.model.set('email',String(currentEmail)).save().done( function(model, response, options) {
+                //synchro
+                var synchroU = new NS.SynchroUser();
+                synchroU.deleteTrecompense({success: function() {
+                    var connect = checkConnection();
+                    if (connect !== 'none' || connect === false){
+                        synchroU.mailExiste();
+                    }
+                }});
+                $('input[type=text]').addClass('disabled');
+                $('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
+                sauvages.notifications.emailSaveSuccess();
         });
     }
 		},
@@ -550,20 +563,23 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 
 app.views.FormUserView = NS.UI.Form.extend({
     initialize: function(options) {
-      NS.UI.Form.prototype.initialize.apply(this, arguments);
-						var self = this;
-      this.on('submit:valid', function(instance) {
+        NS.UI.Form.prototype.initialize.apply(this, arguments);
+        var self = this;
+        this.on('submit:valid', function(instance) {
         var self = this;
 
         instance.save().done( function(model, response, options) {
           instance.fetch({
             success: function(data) {
-              var synchroU = new NS.SynchroUser();
-              synchroU.mailExiste();
-//synchro
-              $('input[type=text]').addClass('disabled');
-              $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-              sauvages.notifications.emailSaveSuccess();
+                var connect = checkConnection();
+                //synchro
+                if (connect !== 'none' || connect === false){
+                  var synchroU = new NS.SynchroUser();
+                  synchroU.mailExiste();
+                }
+                $('input[type=text]').addClass('disabled');
+                $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
+                sauvages.notifications.emailSaveSuccess();
             }
           });
         });
@@ -1219,9 +1235,9 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
 				$('body').removeClass('obsListe');
 		},
-  events: {
-    "click #tabObs a[href='#espece']": "tabObsespece",
-    "click #tabObs a[href='#rue']": "tabObrue",
+    events: {
+        "click #tabObs a[href='#espece']": "tabObsespece",
+        "click #tabObs a[href='#rue']": "tabObrue",
 				'click .test-obs': 'sendObs',
 				'click .destroyRue':'destroyRue',
 				'click .back-rue-en-cours':'backRueEnCours',
@@ -1269,7 +1285,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
     .done(
       function() {
         setTimeout(function(){$('#content').scrollTop(0);},100);
-								self.parcours.models.reverse();
+				self.parcours.models.reverse();
         self.render();
       }
     );
@@ -1277,7 +1293,7 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 
 		destroyRue : function(event){
 				var self = this;
-    var idRue = findIdToTargetEvent(event);
+        var idRue = findIdToTargetEvent(event);
 				var rueToDestroy = this.findCollectionToTargetID(idRue,self.parcours);
 				var idRue = findIdToTargetEvent(event);
 				rueToDestroy.destroy({
