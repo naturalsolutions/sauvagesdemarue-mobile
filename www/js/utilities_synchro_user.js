@@ -22,6 +22,7 @@ NS.SynchroUser = (function() {
          ****/
         
         synchroUser.prototype.registerUser = function(mail) {
+            var self = this;
             var user = {
                        "mail": mail, 
                        "conf_mail": mail,
@@ -40,7 +41,7 @@ NS.SynchroUser = (function() {
                             console.log(errorThrown);
                         },
                     success: function (data) {
-                        data.set('uid',newUser.uid).save();
+                        self.saveUID(data.uid);
                     }
                  });                 
         };
@@ -217,6 +218,20 @@ NS.SynchroUser = (function() {
                 });
             }});
         };
+       
+ /***
+         * Fonction de récupération de l'objet user 
+         *  
+         ****/
+        synchroUser.prototype.saveUID = function($uid) {
+            var self = this;
+            var currentUser = new app.models.User({'id': 1});
+            currentUser.fetch({
+                success: function(data) {
+                    data.set('uid',$uid).save();
+                }
+            });
+        }
 
         /***
          * Fonction de récupération du mail et uid dans la base de l'appli 
@@ -233,7 +248,7 @@ NS.SynchroUser = (function() {
                     if (typeof(emailUser) !== undefined && emailUser.length !== 0 && valEmail === true) {
                         // test si il y a un uid dans la table user
                         if ( !uidUser || uidUser === 'undefined') {
-                            self.mailExisteDrupal(emailUser).done(function(newUser){
+                                self.mailExisteDrupal(emailUser).done(function(newUser){
                                 self.retrieveRecompenseDrupal(newUser.uid);
                             })
                         }else{
