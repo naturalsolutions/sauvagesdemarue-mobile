@@ -34,6 +34,18 @@ input,select,textarea,form {
 	font-style: normal;
 }
 
+@font-face {
+    font-family: 'trottoirregular';
+    src: url('fonts/trottoir-webfont.eot');
+    src: url('fonts/trottoir-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/trottoir-webfont.woff') format('woff'),
+         url('fonts/trottoir-webfont.ttf') format('truetype'),
+         url('fonts/trottoir-webfont.svg#trottoirregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 [class^="icon-"], [class*=" icon-"] {
 		font-family: 'sauvages';
 		speak: none;
