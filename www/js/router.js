@@ -104,8 +104,11 @@ app.Router = Backbone.Router.extend({
       if (data.get('email') !== undefined) {
 				var recompenses = new app.models.RecompensesDataValuesCollection();
 				recompenses.fetch({success: function(cRecompense) {
-					var currentView = new app.views.UtilisateurPageView({model :data, collection : cRecompense});
-					self.displayView(currentView);
+					var classement = new app.models.ClassementDataValuesCollection();
+					classement.fetch({success: function(cClassement) {
+						var currentView = new app.views.UtilisateurPageView({model : data, collection : cRecompense, classement : cClassement});
+						self.displayView(currentView);
+					}})
 					}
 				});
       }else{

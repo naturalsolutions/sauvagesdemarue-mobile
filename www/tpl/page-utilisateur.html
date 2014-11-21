@@ -12,5 +12,16 @@
         <% }) %>
       <% }%>
     </div>
+    <div class='row'>
+      <% if(data !== undefined && data.classement !== undefined) { %>
+        <% console.log(data.classement); %>
+        <%  _.each(data.classement.models,function(rec){ %>
+            <div class="col-md-12 col-xs-12">
+              <div class="col-md-2 col-xs-3" > <%= rec.get('score') %> </div> 
+              <div class="col-md-6 col-xs-9" ><%= rec.get('name') %></div>
+            </div>
+        <% }) %>
+      <% }%>
+    </div>
   </div>
 </div>

@@ -498,15 +498,18 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
   template: 'page-utilisateur',
 
 		initialize: function() {
-    if (this.collection) {
-        this.collection.bind("reset", this.render, this);
-    }
+        if (this.collection) {
+            this.collection.bind('remove', this.render);
+        }
+        if (this.options) {
+               this.classement = this.options.classement;
+        }
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
     },
 
     serialize: function() {
         if (this.collection) {
-            return {collection:this.collection};
+            return {collection:this.collection, classement : this.classement};
         }
     },
 

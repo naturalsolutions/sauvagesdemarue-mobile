@@ -432,9 +432,9 @@ app.models.ClassementDataValue = Backbone.Model.extend({
    schema: {
     //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
      // id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
-      name: { title:'Récompense', type:'Text',required: true},
-      //classement: { title:'Classement', type:'Text',required: true},
-      score: { title:'Score', type:'Text',required: true},
+      name: { title:'Name', type:'Text',required: true},
+      uid: { title:'uid', type:'Text',required: true},
+      score: { title:'score', type:'Text',required: true},
   }, 
   dao: app.dao.ClassementDataValueDAO,
   verboseName: 'Classement'

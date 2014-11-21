@@ -200,7 +200,7 @@ NS.SynchroUser = (function() {
             MyBase.populateTruncateSQLTable();
             _.each(data, function(item){
             var currentClassement = new app.models.ClassementDataValue();
-            currentClassement.set({name : item.name, score : item.score });
+            currentClassement.set({name : item.name, score : item.score , uid : item.uid });
             currentClassement.save({success: console.log('classement')});
             })
 
@@ -295,13 +295,11 @@ NS.SynchroUser = (function() {
                     if (typeof(emailUser) !== undefined && emailUser.length !== 0 && valEmail === true) {
                         // test si il y a un uid dans la table user
                         if ( !uidUser || uidUser === 'undefined') {
-                                self.mailExisteDrupal(emailUser).done(function(newUser){
+                            self.mailExisteDrupal(emailUser).done(function(newUser){
                                 self.retrieveDrupal(newUser.uid);
-                                //self.retrieveRecompenseDrupal(newUser.uid);
                             })
                         }else{
                             self.retrieveDrupal(uidUser);
-                            //self.retrieveRecompenseDrupal(uidUser);
                         }
                     }
                 }
