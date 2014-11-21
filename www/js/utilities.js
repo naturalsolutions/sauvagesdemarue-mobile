@@ -213,7 +213,13 @@ app.dao.baseDAOBD = {
     sql = sql + ')';
     return sql;
   },
-    
+
+
+	populateTruncateSQLTable: function(model){
+		var sql = 'DELETE FROM ' + this.table;
+		return runQuery(sql)  ;
+	},
+
   getSQLFieldList: function()  {
    var field =  _.map(this.schema, function(field, key) {
       if ( ((field.sqltype) || (app.utils.bbforms2sqlite.dataType[field.type] !=='NOT_AVAILABLE' )) && ((field.autoincrement=== false )  || (!field.autoincrement)  ) )  {

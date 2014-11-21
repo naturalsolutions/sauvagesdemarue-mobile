@@ -399,7 +399,6 @@ app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
 // The RecompensesDataValues Model
 app.models.RecompensesDataValue = Backbone.Model.extend({
 	defaults: {
-
 	},
 },{
   table : 'Trecompense',
@@ -418,6 +417,34 @@ app.models.RecompensesDataValuesCollection =Backbone.Collection.extend({
   model : app.models.RecompensesDataValue,
   
   dao: app.dao.RecompensesDataValueDAO,
+  
+  initialize: function() {
+  },
+
+});
+
+// The ClassementDataValues Model
+app.models.ClassementDataValue = Backbone.Model.extend({
+	defaults: {
+	},
+},{
+  table : 'Tclassement',
+   schema: {
+    //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+     // id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
+      name: { title:'Récompense', type:'Text',required: true},
+      //classement: { title:'Classement', type:'Text',required: true},
+      score: { title:'Score', type:'Text',required: true},
+  }, 
+  dao: app.dao.ClassementDataValueDAO,
+  verboseName: 'Classement'
+});
+// The RecompensesDataValues Collection
+app.models.ClassementDataValuesCollection =Backbone.Collection.extend({
+
+  model : app.models.ClassementDataValue,
+  
+  dao: app.dao.ClassementDataValueDAO,
   
   initialize: function() {
   },

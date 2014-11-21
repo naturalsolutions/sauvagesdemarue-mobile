@@ -357,7 +357,7 @@ function initDB(){
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.OccurenceDataValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.ParcoursDataValue()));
   deferreds.push(app.dao.baseDAOBD.populate(new app.models.RecompensesDataValue()));
-  
+  deferreds.push(app.dao.baseDAOBD.populate(new app.models.ClassementDataValue()));
 
 try {
 console.log('version avant changeV : ' +app.db.version);

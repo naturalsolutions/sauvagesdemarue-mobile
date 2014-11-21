@@ -189,7 +189,25 @@ NS.SynchroUser = (function() {
         }
 
         /***
-         * Fonction de test du mail du site sauvages de paca
+         * Fonction save classement in data base
+         *  
+         ****/
+        synchroUser.prototype.saveClassement = function(data) {
+            console.log('save in db'+ data);
+            var self = this;
+            var MyBase = app.dao.baseDAOBD;
+            console.log('après ma base' + MyBase );
+            MyBase.populateTruncateSQLTable();
+            _.each(data, function(item){
+            var currentClassement = new app.models.ClassementDataValue();
+            currentClassement.set({name : item.name, score : item.score });
+            currentClassement.save({success: console.log('classement')});
+            })
+
+        }
+
+        /***
+         * Fonction de récupération des récompenses drupal
          *  
          ****/
         synchroUser.prototype.retrieveRecompenseDrupal = function(uidUser) {
@@ -205,12 +223,30 @@ NS.SynchroUser = (function() {
                 });                 
         };
 
+
+        /***
+         * Fonction de récupération du classement drupal
+         *  
+         ****/
+        synchroUser.prototype.retrieveClassementDrupal = function() {
+            var self = this;
+            return $.ajax({
+                    type: "POST",
+                    url: SERVICE_SAUVAGESPACA + '/observation/ns_score/get_classement',
+                    contentType: 'application/x-www-form-urlencoded',
+                       error: function (jqXHR, textStatus, errorThrown) {
+                           console.log(errorThrown);
+                       },
+                    success: function (data) {self.saveClassement(data)}
+                });                 
+        };
+
+
         /***
          * Fonction delete table Trecompense
          *  
          ****/
         synchroUser.prototype.deleteTrecompense = function() {
-
 				var recompenses = new app.models.RecompensesDataValuesCollection();
             recompenses.fetch({success: function(cRecompense) {
                 _.each(cRecompense.models,function(item) {
@@ -219,7 +255,7 @@ NS.SynchroUser = (function() {
             }});
         };
        
- /***
+        /***
          * Fonction de récupération de l'objet user 
          *  
          ****/
@@ -231,6 +267,17 @@ NS.SynchroUser = (function() {
                     data.set('uid',$uid).save();
                 }
             });
+        }
+
+        /***
+         * Fonction de récupération drupal TODO
+         *  
+         ****/
+        synchroUser.prototype.retrieveDrupal = function($uid) {
+            //var self = this;
+            this.retrieveRecompenseDrupal($uid);
+            this.retrieveClassementDrupal();
+            //this.retrieveMyClassementDrupal($uid);
         }
 
         /***
@@ -249,10 +296,12 @@ NS.SynchroUser = (function() {
                         // test si il y a un uid dans la table user
                         if ( !uidUser || uidUser === 'undefined') {
                                 self.mailExisteDrupal(emailUser).done(function(newUser){
-                                self.retrieveRecompenseDrupal(newUser.uid);
+                                self.retrieveDrupal(newUser.uid);
+                                //self.retrieveRecompenseDrupal(newUser.uid);
                             })
                         }else{
-                            self.retrieveRecompenseDrupal(uidUser);
+                            self.retrieveDrupal(uidUser);
+                            //self.retrieveRecompenseDrupal(uidUser);
                         }
                     }
                 }
