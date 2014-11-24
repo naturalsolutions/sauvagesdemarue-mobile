@@ -435,6 +435,7 @@ app.models.ClassementDataValue = Backbone.Model.extend({
       name: { title:'Name', type:'Text',required: true},
       uid: { title:'uid', type:'Text',required: true},
       score: { title:'score', type:'Text',required: true},
+      rank: { title:'rang', type:'Text',required: true},
   }, 
   dao: app.dao.ClassementDataValueDAO,
   verboseName: 'Classement'

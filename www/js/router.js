@@ -106,7 +106,7 @@ app.Router = Backbone.Router.extend({
 				recompenses.fetch({success: function(cRecompense) {
 					var classement = new app.models.ClassementDataValuesCollection();
 					classement.fetch({success: function(cClassement) {
-						var currentView = new app.views.UtilisateurPageView({model : data, collection : cRecompense, classement : cClassement});
+						var currentView = new app.views.UtilisateurPageView({model : data, collection : cRecompense, classement : cClassement, uid : data.get('uid')});
 						self.displayView(currentView);
 					}})
 					}

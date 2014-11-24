@@ -502,14 +502,15 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
             this.collection.bind('remove', this.render);
         }
         if (this.options) {
-               this.classement = this.options.classement;
+            this.classement = this.options.classement;
+            this.uid = this.options.uid;
         }
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
     },
 
     serialize: function() {
         if (this.collection) {
-            return {collection:this.collection, classement : this.classement};
+            return {collection:this.collection, classement : this.classement, uid : this.uid};
         }
     },
 
@@ -584,21 +585,21 @@ app.views.FormUserView = NS.UI.Form.extend({
                 }
                 $('input[type=text]').addClass('disabled');
                 $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-                sauvages.notifications.emailSaveSuccess();
+                //sauvages.notifications.emailSaveSuccess();
             }
           });
         });
       });
     },
     afterRender: function () {
-						if (this.initialData.email !== undefined) {
-								$('input[type=text]',this.$el).addClass('disabled');
-								$('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button'>Modifier</button>");
-						}
-      $('input:submit', this.$el).attr('value', sauvages.messages.save);
-						$('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' type='button'>Retour à l'accueil</button>");
-						$('.input-text .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-user'></span> ");
-      $('h3', this.$el).attr('style', 'display:none');
+        if (this.initialData.email !== undefined) {
+            $('input[type=text]',this.$el).addClass('disabled');
+            $('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button'>Modifier</button>");
+        }
+        $('input:submit', this.$el).attr('value', sauvages.messages.save);
+              $('input:reset', this.$el).replaceWith("<button class='btn btn-default btn-footer annuler-enregistrement' type='button'>Retour à l'accueil</button>");
+              $('.input-text .glyphicon',this.$el).replaceWith("<span class='glyphicon glyphicon-user'></span> ");
+        $('h3', this.$el).attr('style', 'display:none');
     },
 		
 });

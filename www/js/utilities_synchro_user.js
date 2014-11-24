@@ -196,12 +196,11 @@ NS.SynchroUser = (function() {
             console.log('save in db'+ data);
             var self = this;
             var MyBase = app.dao.baseDAOBD;
-            console.log('après ma base' + MyBase );
             MyBase.populateTruncateSQLTable();
             _.each(data, function(item){
-            var currentClassement = new app.models.ClassementDataValue();
-            currentClassement.set({name : item.name, score : item.score , uid : item.uid });
-            currentClassement.save({success: console.log('classement')});
+                var currentClassement = new app.models.ClassementDataValue();
+                currentClassement.set({name : item.name, score : item.score , uid : item.uid, rank : item.rank });
+                currentClassement.save({success: console.log('classement')});
             })
 
         }
@@ -241,6 +240,23 @@ NS.SynchroUser = (function() {
                 });                 
         };
 
+      /***
+         * Fonction de récupération de mon classement drupal
+         *  
+         ****/
+        synchroUser.prototype.retrieveMyClassementDrupal = function($uid) {
+            var self = this;
+            return $.ajax({
+                    type: "POST",
+                    url: SERVICE_SAUVAGESPACA + '/observation/ns_score/get_my_classement/'+$uid,
+                    contentType: 'application/x-www-form-urlencoded',
+                       error: function (jqXHR, textStatus, errorThrown) {
+                           console.log(errorThrown);
+                       },
+                    success: function (data) {console.log(data)}
+                });                 
+        };
+
 
         /***
          * Fonction delete table Trecompense
@@ -274,10 +290,8 @@ NS.SynchroUser = (function() {
          *  
          ****/
         synchroUser.prototype.retrieveDrupal = function($uid) {
-            //var self = this;
             this.retrieveRecompenseDrupal($uid);
-            this.retrieveClassementDrupal();
-            //this.retrieveMyClassementDrupal($uid);
+            this.retrieveMyClassementDrupal($uid);
         }
 
         /***
@@ -285,6 +299,8 @@ NS.SynchroUser = (function() {
          *  
          ****/
         synchroUser.prototype.mailExiste = function() {
+            //pas besoin de compte pour avoir le classement national
+            this.retrieveClassementDrupal();
             var self = this;
             var currentUser = new app.models.User({'id': 1});
             currentUser.fetch({
@@ -297,6 +313,8 @@ NS.SynchroUser = (function() {
                         if ( !uidUser || uidUser === 'undefined') {
                             self.mailExisteDrupal(emailUser).done(function(newUser){
                                 self.retrieveDrupal(newUser.uid);
+                                self.saveUID(newUser.uid);
+
                             })
                         }else{
                             self.retrieveDrupal(uidUser);

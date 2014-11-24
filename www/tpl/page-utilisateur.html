@@ -12,15 +12,25 @@
         <% }) %>
       <% }%>
     </div>
-    <div class='row'>
-      <% if(data !== undefined && data.classement !== undefined) { %>
-        <% console.log(data.classement); %>
+    <% if(data !== undefined && data.classement !== undefined) { %>
+    <table class='table'>
+      <caption>Classement National</caption>
+      <thead>
+        <tr>
+          <th>Rang</th>
+          <th>Pseudonyme</th>
+          <th>Observation</th>
+        </tr>
+      </thead>
+      <tbody>
         <%  _.each(data.classement.models,function(rec){ %>
-            <div class="col-md-12 col-xs-12">
-              <div class="col-md-2 col-xs-3" > <%= rec.get('score') %> </div> 
-              <div class="col-md-6 col-xs-9" ><%= rec.get('name') %></div>
-            </div>
+          <tr class="col-md-12 col-xs-12 <% if(rec.get('uid') == data.uid) { %> <%= 'active' %> <% } %>">
+            <td class="col-md-2 col-xs-3" > <%= rec.get('rank') %> </td> 
+            <td class="col-md-6 col-xs-9" ><%= rec.get('name') %></td>
+            <td class="col-md-2 col-xs-3" > <%= rec.get('score') %> </td> 
+          </tr>
         <% }) %>
+      </tbody>
       <% }%>
     </div>
   </div>
