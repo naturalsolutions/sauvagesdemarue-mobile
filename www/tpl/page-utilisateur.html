@@ -1,37 +1,8 @@
 <div id="utilisateur" class="container">
   <div class="loc-container">
-    <div><p class="lead">Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p></div>
+    <div id="user-info"></div>
     <div id="user-form"></div>
-    <div class='row'>
-      <% if(data !== undefined && data.collection !== undefined) { %>
-        <%  _.each(data.collection.models,function(rec){ %>
-            <div class="col-md-2 col-xs-4">
-              <img src="<%= rec.get('picture') %>" alt="<%= rec.get('title') %>" class="img-responsive"/>
-              <label><%= rec.get('title') %></label>
-            </div>
-        <% }) %>
-      <% }%>
-    </div>
-    <% if(data !== undefined && data.classement !== undefined) { %>
-    <table class='table'>
-      <caption>Classement National</caption>
-      <thead>
-        <tr>
-          <th>Rang</th>
-          <th>Pseudonyme</th>
-          <th>Observation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%  _.each(data.classement.models,function(rec){ %>
-          <tr class="col-md-12 col-xs-12 <% if(rec.get('uid') == data.uid) { %> <%= 'active' %> <% } %>">
-            <td class="col-md-2 col-xs-3" > <%= rec.get('rank') %> </td> 
-            <td class="col-md-6 col-xs-9" ><%= rec.get('name') %></td>
-            <td class="col-md-2 col-xs-3" > <%= rec.get('score') %> </td> 
-          </tr>
-        <% }) %>
-      </tbody>
-      <% }%>
-    </div>
+    <div id='classement'></div>
+    <div id='recompense'></div>
   </div>
 </div>

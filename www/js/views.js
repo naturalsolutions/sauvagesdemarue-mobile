@@ -6,20 +6,20 @@
 app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 		template: 'form-add-obs-non-identifie',
 		
-  initialize: function() {
-				$('.footer-default').hide();
-   // this.model.bind("reset", this.render, this);
-				app.utils.BaseView.prototype.initialize.apply(this, arguments);
-  },
+    initialize: function() {
+          $('.footer-default').hide();
+     // this.model.bind("reset", this.render, this);
+          app.utils.BaseView.prototype.initialize.apply(this, arguments);
+    },
 
-  beforeRender: function() {
-    this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
-				$('.page-title').replaceWith("<div class='page-title'>Sauvage non identifiée</div>");
-    $('#content').scrollTop(0);
-  },
-  afterRender: function() {
-    $('body').scrollTop(0);
-  },
+    beforeRender: function() {
+      this.insertView("#obs-ni-form", new app.views.FormAddOccurenceNIView({initialData:this.model}));
+      $('.page-title').replaceWith("<div class='page-title'>Sauvage non identifiée</div>");
+      $('#content').scrollTop(0);
+    },
+    afterRender: function() {
+      $('body').scrollTop(0);
+    },
 		
 		remove : function(){
 				app.utils.BaseView.prototype.remove.apply(this, arguments);
@@ -29,25 +29,25 @@ app.views.AddSauvageOccurenceNonIdentifierView = app.utils.BaseView.extend({
 		events:{ 
 				'click .annuler-enregistrement-obs': 'annulerTerminer',
 				'click .btn-footer-right' : 'verifPhoto',
-    'change div.control-group' :'renderView'
-  },
+        'change div.control-group' :'renderView'
+    },
 
 		verifPhoto : function(e){
-                                var val = $('.editor-picture-img',this.$el).attr('src');
+        var val = $('.editor-picture-img',this.$el).attr('src');
 				if (val === '') {
 						$('.img-preview').siblings('.help-inline').html('La photo est obligatoire.').addClass('error');
 						return false;
 				}
 		},
 
-  annulerTerminer : function(evt){
-				window.history.back();
-        return false;
-		},
-  renderView : function(evt){
-    //Fix bug Android Sony
-    setTimeout(function(){$('.bottom-navbar').show();},2500)
-  }
+    annulerTerminer : function(evt){
+          window.history.back();
+          return false;
+      },
+    renderView : function(evt){
+      //Fix bug Android Sony
+      setTimeout(function(){$('.bottom-navbar').show();},2500)
+    }
 });
 app.views.FormAddOccurenceNIView = NS.UI.Form.extend({
     initialize: function(options) {
@@ -250,19 +250,19 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
     },
 		serialize: function() {
-    if (this.collection) {
-						return {collection:this.collection};
-				};
-		return true;
-  },
+        if (this.collection) {
+                return {collection:this.collection};
+            };
+        return true;
+    },
 
 		events:{ 
 		'click .annuler-fin-saisie': 'annulerTerminer',
 		'click .annuler-retour': 'annulerParcours',
-  'focusin .notNew': 'editFormElem',
-  'blur .notNew': 'readOnlyFormElem',
-  "click .input-text" : "editFormElem",
-  },
+    'focusin .notNew': 'editFormElem',
+    'blur .notNew': 'readOnlyFormElem',
+    "click .input-text" : "editFormElem",
+    },
 
 		annulerTerminer : function(evt){
 			app.route.navigate('identification', {trigger: true});
@@ -273,34 +273,34 @@ app.views.AddSauvageRueView = app.utils.BaseView.extend({
 				app.route.navigate('#', {trigger: true});
 				return false;
 		},
-  editFormElem : function(evt){
-				var objCurrentTarget=$(evt.target);
-				var idCurrentTarget= objCurrentTarget['context']['id'];
-    $('#'+idCurrentTarget).removeAttr("readonly","readonly");
-  },
+    editFormElem : function(evt){
+          var objCurrentTarget=$(evt.target);
+          var idCurrentTarget= objCurrentTarget['context']['id'];
+          $('#'+idCurrentTarget).removeAttr("readonly","readonly");
+    },
   
-  readOnlyFormElem : function(evt){
-				var objCurrentTarget=$(evt.target);
-				var idCurrentTarget= objCurrentTarget['context']['id'];
-    $('#'+idCurrentTarget).attr("readonly","readonly");
-  },
+    readOnlyFormElem : function(evt){
+          var objCurrentTarget=$(evt.target);
+          var idCurrentTarget= objCurrentTarget['context']['id'];
+      $('#'+idCurrentTarget).attr("readonly","readonly");
+    },
 
-  beforeRender: function() {
-				$('.icone-page-title').hide();
-        this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
-				
-				if (typeof(this.collection) !== 'undefined') {
-						var currentCollObs = this.collection.findWhere({'fk_rue' : parseInt(this.model.get('id')) });
-						if (this.collection.length !== 0 && typeof(currentCollObs) !== 'undefined') {
-								this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
-						}
-				}
-				if (typeof(this.model.get('name')) === 'undefined') {
-						$('.page-title').replaceWith("<div class='page-title'>J'enregistre ma rue</div>");
-						$('.page-sub-title').empty();
-						$('.page-sub-title').append('Ma nouvelle rue');
-				}
-  }
+    beforeRender: function() {
+          $('.icone-page-title').hide();
+          this.insertView("#rue-form", new app.views.FormAddSauvageRue({initialData:this.model}));
+          
+          if (typeof(this.collection) !== 'undefined') {
+              var currentCollObs = this.collection.findWhere({'fk_rue' : parseInt(this.model.get('id')) });
+              if (this.collection.length !== 0 && typeof(currentCollObs) !== 'undefined') {
+                  this.insertView("#rue-obs", new app.views.ObsRueView({collection: this.collection }));
+              }
+          }
+          if (typeof(this.model.get('name')) === 'undefined') {
+              $('.page-title').replaceWith("<div class='page-title'>J'enregistre ma rue</div>");
+              $('.page-sub-title').empty();
+              $('.page-sub-title').append('Ma nouvelle rue');
+          }
+    }
 
 });
 
@@ -393,7 +393,7 @@ app.views.ObsRueView=  app.utils.BaseView.extend({
 
     initialize: function() {
      // this.collection.bind('reset', this.render, this);
-          app.utils.BaseView.prototype.initialize.apply(this, arguments);
+        app.utils.BaseView.prototype.initialize.apply(this, arguments);
     },
   
     serialize: function() {
@@ -493,24 +493,76 @@ app.views.LocalisationPageView =  app.utils.BaseView.extend({
   }
 });
 
+app.views.ClassementNationalView =  app.utils.BaseView.extend({
+    template: 'table-classement-national',
+
+    initialize: function() {
+        // collection = classement
+        if (this.collection !== undefined) {
+            //this.collection.bind('reset', this.render, this);
+            //this.collection.bind('add', this.render, this);
+        }
+        this.model.bind('reset', this.render, this);
+        this.model.bind('change', this.render, this);
+        app.utils.BaseView.prototype.initialize.apply(this, arguments);
+    },
+  
+    serialize: function() {
+       return {collection: this.collection, model : this.model};
+    },
+  
+    beforeRender: function(){
+    }
+});
+
+app.views.MyRecompenseView =  app.utils.BaseView.extend({
+    template: 'table-recompense',
+
+    initialize: function() {
+        // collection = recompense
+        if (this.collection !== undefined) {
+            //this.collection.bind('reset', this.render, this);
+            this.collection.bind('add', this.render, this);
+        }
+        app.utils.BaseView.prototype.initialize.apply(this, arguments);
+    },
+  
+    serialize: function() {
+       return {collection: this.collection};
+    },
+  
+    beforeRender: function(){
+    }
+});
+
+app.views.infoUserView =  app.utils.BaseView.extend({
+    template: 'block-info-user',
+
+    initialize: function() {
+        // model = user
+        this.model.bind('change', this.render,this);
+        this.model.bind('remove', this.render,this);
+        app.utils.BaseView.prototype.initialize.apply(this, arguments);
+    },
+  
+    serialize: function() {
+       return {model: this.model};
+    },
+  
+    beforeRender: function(){
+    }
+});
 app.views.UtilisateurPageView = app.utils.BaseView.extend({
 
   template: 'page-utilisateur',
 
 		initialize: function() {
-        if (this.collection) {
-            this.collection.bind('remove', this.render);
-        }
-        if (this.options) {
-            this.classement = this.options.classement;
-            this.uid = this.options.uid;
-        }
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
     },
 
     serialize: function() {
         if (this.collection) {
-            return {collection:this.collection, classement : this.classement, uid : this.uid};
+            return {collection:this.collection, model : this.model};
         }
     },
 
@@ -525,20 +577,20 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
 				app.route.navigate('', {trigger: true});
 		},
 
-		enableSave	: function(evt){
+		enableSave	: _.debounce(function(){
 				if ($('.btn-update', this.$el).hasClass('enable-email')) {
 						$('.btn-update', this.$el).addClass('modifier-enregistrement').removeClass('enable-email').html('Enregistrer');
 				}
-		},
-		
+		},800),
+
 		enableInputEmail: function(evt){
 				var isDisabled = $('input[type=text]').hasClass('disabled');
 				if (isDisabled) {
 						$('input[type=text]').removeClass('disabled');		
-				}	
+				}
 		},
 		updateEmail: function(evt){
-				var currentEmail = this.$el.find('input[type="text"]').val();
+        var currentEmail = this.$el.find('input[type="text"]').val();
         if (validatorsEmail(currentEmail)) {
             this.model.set('email',String(currentEmail)).save().done( function(model, response, options) {
                 //synchro
@@ -551,14 +603,17 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
                 }});
                 $('input[type=text]').addClass('disabled');
                 $('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-                sauvages.notifications.emailSaveSuccess();
-        });
-    }
+               // sauvages.notifications.emailSaveSuccess();
+            });
+        }
 		},
 		
 		beforeRender: function(){
 				$('.icone-page-title').hide();		
 				this.insertView("#user-form", new app.views.FormUserView({initialData:this.model}));
+        this.insertView("#classement", new app.views.ClassementNationalView({collection : this.options.classement, model : this.model}));
+        this.insertView("#recompense", new app.views.MyRecompenseView({collection : this.collection}));
+        this.insertView("#user-info", new app.views.infoUserView({model : this.model}));
 		},
 
 		afterRender: function(){
@@ -578,14 +633,29 @@ app.views.FormUserView = NS.UI.Form.extend({
           instance.fetch({
             success: function(data) {
                 var connect = checkConnection();
-                //synchro
-                if (connect !== 'none' || connect === false){
-                  var synchroU = new NS.SynchroUser();
-                  synchroU.mailExiste();
+                    //synchro
+                if ((connect !== 'none' && navigator.camera) || connect === true){
+                    var synchroU = new NS.SynchroUser();
+                    synchroU.mailExisteDrupal(data.get('email'))
+                        .done(function(user){
+                        //Get my_classement et my_recompense with uid
+                        synchroU.retrieveRecompenseDrupal(user.uid).done(function(myRecompenses){
+                            //object to model recompense
+                            //_.each(myRecompenses,function(item) {
+                            //  var modelRecomp = new app.models.RecompensesDataValue({title :item.filename});
+                            //  app.globals.collectionRecompense.add(modelRecomp);
+                            //});
+                            synchroU.retrieveMyClassementDrupal(user.uid).done(function(myClassement){
+                                //object to model classement
+                                app.globals.currentUser.set('score', myClassement[0].score).save;
+                                app.globals.currentUser.set('rank', myClassement[0].rank).save;
+                            });
+                        });
+                    });
                 }
                 $('input[type=text]').addClass('disabled');
-                $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-                //sauvages.notifications.emailSaveSuccess();
+                $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");                
+//sauvages.notifications.emailSaveSuccess();
             }
           });
         });
@@ -1210,7 +1280,6 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
   
   initialize: function() {
 				this.parcours = this.options.parcours;
-    //this.collection.bind("reset", this.render, this);
 				app.utils.BaseView.prototype.initialize.apply(this, arguments);
 				this.flagSuppr = false;
 
@@ -1281,8 +1350,8 @@ app.views.ObservationListView =  app.utils.BaseView.extend({
 
   sendObs: function (event) {
     var self = this;
-				var idRue = findIdToTargetEvent(event);
-				this.parcoursEnCours = this.findCollectionToTargetID(idRue,this.parcours);
+		var idRue = findIdToTargetEvent(event);
+		this.parcoursEnCours = this.findCollectionToTargetID(idRue,this.parcours);
     var results = this.collection.where({'fk_rue':idRue});
     var collection = new Backbone.Collection(results);
 

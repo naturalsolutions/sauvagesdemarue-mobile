@@ -1,0 +1,16 @@
+<div class="block-info-user">
+<% console.log(data); %>
+    <% if(data.model.get('email') !== undefined) { %>
+        <% if(data.model.get('email') !== 'undefined') { %>
+            <% if(data.model.get('name') !== 'undefined') { %>
+              <div><p class="lead">Bonjour <b><%= data.model.get('name') %></b>!</p>
+                <% if(data.model.get('score') !== 'undefined') { %>
+                <p class="lead">Vous êtes à la position <b><%= data.model.get('rank') %></b> du classement avec <b><%= data.model.get('score') %> observations partagées</b>.</p>
+                </div>
+            <% } %>
+        <% } %>
+    <% } %>
+  <% }else{%>
+    <div><p class="lead">Ajouter votre email, vous permettra de retrouver vos observations sur le site Sauvages de ma Rue.</p></div>
+  <% }%>
+</div>
