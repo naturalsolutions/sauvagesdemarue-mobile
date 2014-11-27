@@ -27,6 +27,11 @@ app.Router = Backbone.Router.extend({
   },
 
   initialize: function() {
+
+		//TODO test si data en local
+		app.globals.collectionClassementNational = new app.models.ClassementDataValuesCollection();
+		app.globals.collectionRecompense = new app.models.RecompensesDataValuesCollection();
+
     app.globals.positionScroll = 0;
     app.globals.currentFilter = new Array();
     app.globals.regiontaxon = new Array();
@@ -100,29 +105,46 @@ app.Router = Backbone.Router.extend({
 
   viewUtilisateur: function() {
     var self = this;
-    var onDataHandler = function(data, response, options) {
-      if (data.get('email') !== undefined) {
-				var recompenses = new app.models.RecompensesDataValuesCollection();
-				recompenses.fetch({success: function(cRecompense) {
-					var classement = new app.models.ClassementDataValuesCollection();
-					classement.fetch({success: function(cClassement) {
-						var currentView = new app.views.UtilisateurPageView({model : data, collection : cRecompense, classement : cClassement, uid : data.get('uid')});
-						self.displayView(currentView);
-					}})
-					}
+		//Si connexion
+		var connect = checkConnection();
+		if ((connect !== 'none' && navigator.camera) || connect === true){
+			//get classement national serveur
+			var synchroU = new NS.SynchroUser();
+			synchroU.retrieveClassementDrupal();
+			// si uid
+			if (app.globals.currentUser.get('email') !== undefined && app.globals.currentUser.get('uid') === undefined) {
+				synchroU.mailExisteDrupal(app.globals.currentUser.get('email'))
+					.done(function(user){
+					//Get my_classement et my_recompense with uid
+					synchroU.retrieveRecompenseDrupal(user.uid).done(function(myRecompenses){
+						synchroU.retrieveMyClassementDrupal(user.uid).done(function(myClassement){
+							//object to model classement
+							app.globals.currentUser.set('score', myClassement[0].score).save;
+							app.globals.currentUser.set('rank', myClassement[0].rank).save;
+							var currentView = new app.views.UtilisateurPageView({model : app.globals.currentUser, collection : app.globals.collectionRecompense, classement : app.globals.collectionClassementNational});
+							self.displayView(currentView);
+						});
+					});
 				});
-      }else{
-        var newUser = new app.models.User();
-        var currentView = new app.views.UtilisateurPageView({model :newUser});
-        self.displayView(currentView);
-      }
-    };
-    var onErrorHandler = function(data, response, options) {
-        console.log(response.responseText);
-        alert(response.responseText);
-    };
-    this.currentUser = new app.models.User({'id': 1}); 
-    this.currentUser.fetch({ success : onDataHandler, error: onErrorHandler });
+			}else if (app.globals.currentUser.get('email') !== undefined && app.globals.currentUser.get('uid') !== undefined) {
+					//Get my_classement et my_recompense with uid
+					synchroU.retrieveRecompenseDrupal(app.globals.currentUser.get('uid')).done(function(myRecompenses){
+						synchroU.retrieveMyClassementDrupal(app.globals.currentUser.get('uid')).done(function(myClassement){
+							//object to model classement
+							app.globals.currentUser.set('score', myClassement[0].score).save;
+							app.globals.currentUser.set('rank', myClassement[0].rank).save;
+							var currentView = new app.views.UtilisateurPageView({model : app.globals.currentUser, collection : app.globals.collectionRecompense, classement : app.globals.collectionClassementNational});
+							self.displayView(currentView);
+						});
+					});
+			}else{
+				var currentView = new app.views.UtilisateurPageView({model : app.globals.currentUser, collection : app.globals.collectionRecompense, classement : app.globals.collectionClassementNational});
+				self.displayView(currentView);
+			}
+		}else{
+			var currentView = new app.views.UtilisateurPageView({model : app.globals.currentUser, collection : app.globals.collectionRecompense, classement : app.globals.collectionClassementNational});
+			self.displayView(currentView);
+		}
   },
 
   viewRegions: function() {

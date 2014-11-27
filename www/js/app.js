@@ -284,10 +284,6 @@ function onDeviceReady() {
   new NS.UI.NotificationList();
   new NS.UI.NotificationModalList();
  
-  //$("#menu").mmenu({
-  //        classes: "mm-slide",
-  //        transitionDuration : 0,
-  //});
 }
 
 
@@ -327,11 +323,25 @@ function init(){
               }
             }());
           }
-        var connect = checkConnection();
-        if (connect !== 'none' || connect === false){
-							var synchroU = new NS.SynchroUser();
-							synchroU.mailExiste();
-					}
+					var onDataHandler = function(data, response, options) {
+						if (data.get('email') !== undefined) {
+							app.globals.currentUser = data ;
+						}else{
+							app.globals.currentUser = new app.models.User();
+						}
+						var connect = checkConnection();
+						if ((connect !== 'none' && navigator.camera) || connect === true){
+								var synchroU = new NS.SynchroUser();
+								synchroU.mailExiste();
+						}
+					};
+					var onErrorHandler = function(data, response, options) {
+							console.log(response.responseText);
+							alert(response.responseText);
+					};
+					app.globals.currentUser = new app.models.User({'id': 1}); 
+					app.globals.currentUser.fetch({ success : onDataHandler, error: onErrorHandler });
+
         }
     });
   });  

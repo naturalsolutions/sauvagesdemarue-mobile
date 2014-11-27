@@ -90,12 +90,16 @@ NS.SynchroUser = (function() {
                     url: SERVICE_SAUVAGESPACA + '/observation/obs_user/retrieve',
                     data: 'mail='+ emailUser,
                     contentType: 'application/x-www-form-urlencoded',
-                       error: function (jqXHR, textStatus, errorThrown) {
-                           console.log(errorThrown);
-                           self.errorStatus(jqXHR.status,emailUser);
-                       },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                        self.errorStatus(jqXHR.status,emailUser);
+                    },
                     success: function (data) {
-                        console.log(data);
+                        //update Tuser with uid and name
+                        app.globals.currentUser.set('uid',data.uid)
+                        .save();
+                        app.globals.currentUser.set('name',data.name)
+                        .save();
                     }
                 });                 
         };
@@ -110,7 +114,6 @@ NS.SynchroUser = (function() {
                 self.testRecompenseExist(item);
                 //self.saveFileImg(item);
             })
-            console.log(data);
         }
 
         /***
@@ -119,12 +122,12 @@ NS.SynchroUser = (function() {
          ****/
         synchroUser.prototype.testRecompenseExist= function (recompense){
             var self = this;
-            var recompenses = new app.models.RecompensesDataValuesCollection();
-            recompenses.fetch({success: function(collection) {
-                var isRecompense = collection.findWhere({"title": recompense.filename});
+            //var recompenses = new app.models.RecompensesDataValuesCollection();
+            //recompenses.fetch({success: function(collection) {
+                var isRecompense = app.globals.collectionRecompense.findWhere({"title": recompense.filename});
                 if(!isRecompense) self.saveFileImg(recompense);
-                }
-            });
+                //}
+            //});
         }
         /***
          * Fonction de traitements des badges
@@ -149,6 +152,7 @@ NS.SynchroUser = (function() {
                 var file = new app.models.RecompensesDataValue();
                 file.set({title : recompense.filename, picture : recompense.uri_full });
                 file.save();
+                app.globals.collectionRecompense.add(file);
             }
         }
         /***
@@ -160,6 +164,7 @@ NS.SynchroUser = (function() {
             var file = new app.models.RecompensesDataValue();
             file.set({title : filename, picture : store + filename });
             file.save({success: console.log(filename)});
+            app.globals.collectionRecompense.add(file);
         }
 
         /***
@@ -195,15 +200,33 @@ NS.SynchroUser = (function() {
         synchroUser.prototype.saveClassement = function(data) {
             console.log('save in db'+ data);
             var self = this;
+            var compteur = 0;
             var MyBase = app.dao.baseDAOBD;
             MyBase.populateTruncateSQLTable();
+            app.globals.collectionClassementNational.reset();
             _.each(data, function(item){
                 var currentClassement = new app.models.ClassementDataValue();
                 currentClassement.set({name : item.name, score : item.score , uid : item.uid, rank : item.rank });
-                currentClassement.save({success: console.log('classement')});
+                currentClassement.save({success: compteur += 1});
+                app.globals.collectionClassementNational.add(currentClassement);
+                if (compteur == data.length) {
+                    self.dataEnBase();
+                }
             })
 
         }
+
+        /***
+         * Fonction de synchro view données retourne collection
+         *  
+         ****/
+        synchroUser.prototype.dataEnBase = function(collection) {
+            var dfd = $.Deferred();
+            dfd.resolve(); 
+            return dfd.promise();   
+        };
+
+
 
         /***
          * Fonction de récupération des récompenses drupal
@@ -236,12 +259,14 @@ NS.SynchroUser = (function() {
                        error: function (jqXHR, textStatus, errorThrown) {
                            console.log(errorThrown);
                        },
-                    success: function (data) {self.saveClassement(data)}
+                    success: function (data) {
+                        self.saveClassement(data)
+                    }
                 });                 
         };
 
       /***
-         * Fonction de récupération de mon classement drupal
+         * Fonction de récupération de Mon classement drupal
          *  
          ****/
         synchroUser.prototype.retrieveMyClassementDrupal = function($uid) {
@@ -253,7 +278,7 @@ NS.SynchroUser = (function() {
                        error: function (jqXHR, textStatus, errorThrown) {
                            console.log(errorThrown);
                        },
-                    success: function (data) {console.log(data)}
+                    success: function (data) {return data}
                 });                 
         };
 
@@ -263,12 +288,13 @@ NS.SynchroUser = (function() {
          *  
          ****/
         synchroUser.prototype.deleteTrecompense = function() {
-				var recompenses = new app.models.RecompensesDataValuesCollection();
-            recompenses.fetch({success: function(cRecompense) {
-                _.each(cRecompense.models,function(item) {
+            app.globals.collectionRecompense.reset();
+				//var recompenses = new app.models.RecompensesDataValuesCollection();
+           // recompenses.fetch({success: function(cRecompense) {
+                _.each(app.globals.collectionRecompense.models,function(item) {
                     item.destroy();
                 });
-            }});
+           // }});
         };
        
         /***
@@ -276,13 +302,13 @@ NS.SynchroUser = (function() {
          *  
          ****/
         synchroUser.prototype.saveUID = function($uid) {
-            var self = this;
-            var currentUser = new app.models.User({'id': 1});
-            currentUser.fetch({
-                success: function(data) {
-                    data.set('uid',$uid).save();
-                }
-            });
+            //var self = this;
+            //var currentUser = new app.models.User({'id': 1});
+            //app.models.User.fetch({
+            //    success: function(data) {
+                    app.globals.currentUser.set('uid',$uid).save();
+            //    }
+            //});
         }
 
         /***
@@ -302,11 +328,11 @@ NS.SynchroUser = (function() {
             //pas besoin de compte pour avoir le classement national
             this.retrieveClassementDrupal();
             var self = this;
-            var currentUser = new app.models.User({'id': 1});
-            currentUser.fetch({
-                success: function(data) {
-                    var emailUser = data.get('email');
-                    var uidUser = data.get('uid');
+            //var currentUser = new app.models.User({'id': 1});
+            //app.models.User.fetch({
+            //    success: function(data) {
+                    var emailUser = app.globals.currentUser.get('email');
+                    var uidUser = app.globals.currentUser.get('uid');
                     var valEmail = validatorsEmail(emailUser);
                     if (typeof(emailUser) !== undefined && emailUser.length !== 0 && valEmail === true) {
                         // test si il y a un uid dans la table user
@@ -314,14 +340,13 @@ NS.SynchroUser = (function() {
                             self.mailExisteDrupal(emailUser).done(function(newUser){
                                 self.retrieveDrupal(newUser.uid);
                                 self.saveUID(newUser.uid);
-
                             })
                         }else{
                             self.retrieveDrupal(uidUser);
                         }
                     }
-                }
-            });
+            //    }
+            //});
         }
       //  return dfd.promise();
     }

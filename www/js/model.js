@@ -56,7 +56,10 @@ app.models.User = Backbone.Model.extend({
     email: { title:'Ajouter votre email.', type:'Email', sqltype:'NVARCHAR(50)',  required: true},
     token: { title:'token', type:'hidden', sqltype:'NVARCHAR(250)' },
     uid: { title:'uid',type:'hidden', sqltype:'INTEGER'},
-     },
+    name: { title:'Ajouter votre pseudo', type:'Text', sqltype:'NVARCHAR(200)'},
+		score: { title:'score', type:'hidden'},
+		rank: { title:'rang', type:'hidden'},
+    },
   dao: app.dao.UserDAO,
   verboseName: 'Utilisateur'
 });
@@ -79,7 +82,7 @@ app.models.Application = Backbone.Model.extend({
   dao: app.dao.ApplicationDAO,
   verboseName: 'Application'
 });
-// The User Collection Model
+// The Application Collection Model
 app.models.ApplicationCollection = Backbone.Collection.extend({
   model: app.models.Application,
 });
@@ -399,6 +402,8 @@ app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
 // The RecompensesDataValues Model
 app.models.RecompensesDataValue = Backbone.Model.extend({
 	defaults: {
+		title:'Badge',
+		picture:''
 	},
 },{
   table : 'Trecompense',
@@ -426,6 +431,9 @@ app.models.RecompensesDataValuesCollection =Backbone.Collection.extend({
 // The ClassementDataValues Model
 app.models.ClassementDataValue = Backbone.Model.extend({
 	defaults: {
+		name: '',
+		score: '',
+		rank: ''
 	},
 },{
   table : 'Tclassement',
