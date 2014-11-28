@@ -130,9 +130,11 @@ app.Router = Backbone.Router.extend({
 					//Get my_classement et my_recompense with uid
 					synchroU.retrieveRecompenseDrupal(app.globals.currentUser.get('uid')).done(function(myRecompenses){
 						synchroU.retrieveMyClassementDrupal(app.globals.currentUser.get('uid')).done(function(myClassement){
-							//object to model classement
-							app.globals.currentUser.set('score', myClassement[0].score).save;
-							app.globals.currentUser.set('rank', myClassement[0].rank).save;
+							//si utili
+							if (myClassement.length > 0) {
+								app.globals.currentUser.set('score', myClassement[0].score).save;
+								app.globals.currentUser.set('rank', myClassement[0].rank).save;
+							}
 							var currentView = new app.views.UtilisateurPageView({model : app.globals.currentUser, collection : app.globals.collectionRecompense, classement : app.globals.collectionClassementNational});
 							self.displayView(currentView);
 						});
