@@ -332,7 +332,7 @@ function init(){
 						var connect = checkConnection();
 						if ((connect !== 'none' && navigator.camera) || connect === true){
 								var synchroU = new NS.SynchroUser();
-								synchroU.mailExiste();
+								synchroU.lanceSynchro();
 						}
 					};
 					var onErrorHandler = function(data, response, options) {

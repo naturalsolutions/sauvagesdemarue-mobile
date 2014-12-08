@@ -598,7 +598,7 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
                 synchroU.deleteTrecompense({success: function() {
                     var connect = checkConnection();
                     if (connect !== 'none' || connect === false){
-                        synchroU.mailExiste();
+                        synchroU.lanceSynchro();
                     }
                 }});
                 $('input[type=text]').addClass('disabled');

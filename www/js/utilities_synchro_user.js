@@ -321,10 +321,10 @@ NS.SynchroUser = (function() {
         }
 
         /***
-         * Fonction de récupération du mail et uid dans la base de l'appli 
+         * Fonction de lancement de la synchro 
          *  
          ****/
-        synchroUser.prototype.mailExiste = function() {
+        synchroUser.prototype.lanceSynchro = function() {
             //pas besoin de compte pour avoir le classement national
             this.retrieveClassementDrupal();
             var self = this;
