@@ -30,6 +30,7 @@ app.Router = Backbone.Router.extend({
 
 		//TODO test si data en local
 		app.globals.collectionClassementNational = new app.models.ClassementDataValuesCollection();
+    app.globals.collectionClassementNational.comparator = 'rank';
 		app.globals.collectionRecompense = new app.models.RecompensesDataValuesCollection();
 
     app.globals.positionScroll = 0;
@@ -130,7 +131,6 @@ app.Router = Backbone.Router.extend({
 					//Get my_classement et my_recompense with uid
 					synchroU.retrieveRecompenseDrupal(app.globals.currentUser.get('uid')).done(function(myRecompenses){
 						synchroU.retrieveMyClassementDrupal(app.globals.currentUser.get('uid')).done(function(myClassement){
-							//si utili
 							if (myClassement.length > 0) {
 								app.globals.currentUser.set('score', myClassement[0].score).save;
 								app.globals.currentUser.set('rank', myClassement[0].rank).save;
