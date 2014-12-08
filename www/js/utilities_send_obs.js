@@ -93,24 +93,39 @@ NS.SendOBS = (function() {
      ****/
     sendObs.prototype.appelServiceCommuneTela = function (latParcours,longParcours,callback){
         if (latParcours && longParcours) {
-          var serviceCommune,
-          lat = latParcours,
-          lng = longParcours;
-          
-          var url_service = SERVICE_NOM_COMMUNE_URL;
-          var urlNomCommuneFormatee = url_service.replace('{lat}', lat).replace('{lon}', lng);
-          var jqxhr = $.ajax({
-           url : urlNomCommuneFormatee,
-           type : 'GET',
-           dataType : 'jsonp',
-           success : function(data) {
-            console.log('NOM_COMMUNE found.');
-            console.log(data['nom']);
-            console.log(data['codeINSEE']);
-            serviceCommune = data;
-            if(typeof callback === "function") callback(serviceCommune);
-           }
-          });
+            var serviceCommune,
+            lat = latParcours,
+            lng = longParcours;
+            
+            var url_service = SERVICE_NOM_COMMUNE_URL;
+            var urlNomCommuneFormatee = url_service.replace('{lat}', lat).replace('{lon}', lng);
+            var jqxhr = $.ajax({
+                url : urlNomCommuneFormatee,
+                type : 'GET',
+                dataType : 'jsonp',
+                success : function(data) {
+                    console.log('NOM_COMMUNE found.');
+                    console.log(data['nom']);
+                    console.log(data['codeINSEE']);
+                    serviceCommune = data;
+                    if(typeof callback === "function") callback(serviceCommune);
+                },
+                error : function(jqXHR, textStatus, errorThrown) {
+                    sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
+                    erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
+                    try {
+                     var reponse = jQuery.parseJSON(jqXHR.responseText);
+                     if (reponse != null) {
+                      $.each(reponse, function (cle, valeur) {
+                       erreurMsg += valeur + '\n';
+                      });
+                     }
+                    } catch(e) {
+                     erreurMsg += 'L\'erreur n\'était pas en JSON.';
+                    }
+                    console.log(erreurMsg);
+                }
+            });
         } else {
           console.log("Cette observation n'a pas d'information de géolocalisation.")
         }
@@ -132,14 +147,14 @@ NS.SendOBS = (function() {
                        }
                    }
         return $.ajax({
-                 type: "POST",
-                 url: SERVICE_SAUVAGESPACA + '/observation/obs_user',
-                 dataType: 'json',
-                 data: JSON.stringify(user),
-                 contentType: 'application/json',
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(errorThrown);
-                    },
+                type: "POST",
+                url: SERVICE_SAUVAGESPACA + '/observation/obs_user',
+                dataType: 'json',
+                data: JSON.stringify(user),
+                contentType: 'application/json',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                },
                 success: function (data) {console.log(data)}
              });                 
     };
@@ -173,8 +188,8 @@ NS.SendOBS = (function() {
             }
             
             dfdCollection.done(function(){
-              var currentUser = new app.models.User({'id': 1});
-              currentUser.fetch({
+              //var currentUser = new app.models.User({'id': 1});
+              app.globals.currentUser.fetch({
                 success: function(data) {
                   emailUser = data.get('email');
                   uidUser = data.get('uid');
@@ -228,7 +243,7 @@ NS.SendOBS = (function() {
                             });
                         });
                   }else{
-                    var newUser = new app.models.User();
+                   // var newUser = new app.models.User();
                     var msg = _.template(
                       "<form role='form form-inline'>"+
                        "<div class='form-group'>"+
@@ -242,7 +257,7 @@ NS.SendOBS = (function() {
                        "<button type='submit' id='submitEmail' class='btn btn-primary'>Valider</button>"+
                       "</form>"					
                      );
-                    sauvages.notifications.email(msg(),newUser,idRue,cParcours);
+                    sauvages.notifications.email(msg(),app.globals.currentUser,idRue,cParcours);
                     $('.modal-footer').addClass("hide");
                     dfd.reject();
                   }
