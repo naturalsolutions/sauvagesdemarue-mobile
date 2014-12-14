@@ -34,6 +34,16 @@ function() {
        btnLabel: '',
       });
    },
+
+   sauvages.compteMisAjour = function compteMisAjour() {
+      var myModal = new NS.UI.NotificationModal({
+       type: '',
+       title: 'Votre compte est à jour',
+       message:'Votre compte est à jour' ,
+       delay: 1,
+       btnLabel: '',
+      });
+   },
 	
    sauvages.finParcours = function finParcours(msg,idRue,parcours) {
       var myModal = new NS.UI.NotificationModal({
@@ -65,7 +75,7 @@ function() {
       }, myModal))
    },
 	
-   sauvages.createAccount = function createAccount(msg,email) {
+   sauvages.createAccount = function createAccount(msg,email,name) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Création de compte sur sauvagesdepaca.fr',
@@ -80,7 +90,7 @@ function() {
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
          var createAccount = new NS.SynchroUser();
-         createAccount.registerUser(email);
+         createAccount.registerUser(email,name);
       }, myModal)),
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
@@ -92,6 +102,88 @@ function() {
       }, myModal))
    },
 
+   sauvages.retrieveAccount = function retrieveAccount(msg,dfd) {
+      var myModal = new NS.UI.NotificationModal({
+         type: '',
+         title: 'Ce compte existe déjà sur sauvagesdepaca.fr',
+         message: msg,
+         delay: '',
+         btnLabel: '',
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         app.globals.dontRetrieveMail=false;
+         dfd.resolve();
+      }, myModal)),
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         app.globals.dontRetrieveMail=true;
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         dfd.resolve();
+      }, myModal))
+   },
+
+   sauvages.warningCompteDelete = function warningCompteDelete(msg,currentEmail,dfdWraning) {
+      var myModal = new NS.UI.NotificationModal({
+         type: '',
+         title: 'Attention!!',
+         message: msg,
+         delay: '',
+         btnLabel: '',
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         dfdWraning.resolve();
+      }, myModal)),
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         dfdWraning.reject();
+      }, myModal))
+   },
+
+   sauvages.synchroRetrieveAccount = function synchroRetrieveAccount(msg,userDrupal) {
+      var myModal = new NS.UI.NotificationModal({
+         type: '',
+         title: 'Ce compte existe déjà sur sauvagesdepaca.fr',
+         message: msg,
+         delay: '',
+         btnLabel: '',
+      });
+      myModal.$el.on('submit', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         app.route.navigate('utilisateur', {trigger: true});
+         this.model.set('email',String(userDrupal.mail)).save();
+         this.model.set('name',String(userDrupal.name)).save();
+         this.model.set('uid',String(userDrupal.uid)).save();
+      }, myModal)),
+      myModal.$el.on('reset', 'form', _.bind(function(evt) {
+         evt.preventDefault();
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         app.route.navigate('utilisateur', {trigger: true});
+      }, myModal))
+   },
 
    sauvages.obsSaveSuccess = function obsSaveSuccess(localisation) {
      var myModal = new NS.UI.NotificationModal({
