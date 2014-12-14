@@ -17,18 +17,22 @@ NS.SynchroUser = (function() {
         var dfd = $.Deferred();
 
         /***
-         * Fonction création de compte sur le site sauvages de paca retourne UID
+         * Fonction création de compte sur le site sauvages de paca retourne UID TODO
          *  
          ****/
-        
-        synchroUser.prototype.registerUser = function(mail) {
+   
+        //Détruire la base utilisateur ou vider 
+     
+        synchroUser.prototype.registerUser = function(mail,name) {
             var self = this;
             var user = {
-                       "mail": mail, 
-                       "conf_mail": mail,
-                       "account" :{        
-                           "mail": mail, 
-                           "conf_mail": mail,
+                        "mail": mail, 
+                        "conf_mail": mail,
+                        "name": name,
+                        "account" :{        
+                            "mail": mail, 
+                            "conf_mail": mail,
+                            "name": name,
                            }
                        }
             return $.ajax({
@@ -38,7 +42,10 @@ NS.SynchroUser = (function() {
                      data: JSON.stringify(user),
                      contentType: 'application/json',
                         error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(errorThrown);
+                            if (jqXHR.status === 406) {
+                               app.globals.currentUser.unset('name');
+                            }
+                            alert(errorThrown);
                         },
                     success: function (data) {
                         self.saveUID(data.uid);
@@ -51,7 +58,7 @@ NS.SynchroUser = (function() {
          * Fonction affiche modal création de compte sur le web
          *  
          ****/
-        synchroUser.prototype.printCreateAccount = function(emailUser){
+        synchroUser.prototype.printCreateAccount = function(emailUser,nameUser){
             var msg = _.template(
                   "<form role='form form-inline'>"+
                    "<div class='form-group'>"+
@@ -61,18 +68,56 @@ NS.SynchroUser = (function() {
                    "<button type='reset' class='btn btn-default pull-right'>Modifier l'email</button>"+
                   "</form>"					
                 );
-            sauvages.notifications.createAccount(msg(),emailUser);
+            sauvages.notifications.createAccount(msg(),emailUser,nameUser);
+        };
+
+
+
+
+        /***
+         * Fonction affiche modal recupération d'un compte existant sur le web
+         *  
+         ****/
+        synchroUser.prototype.printRetrieveAccount = function(userDrupal,dfd){
+            $('body').removeClass('disabled');
+            var msg = _.template(
+                  "<form role='form form-inline'>"+
+                   "<div class='form-group'>"+
+                   "		<p>Le compte "+ userDrupal +" existe sur Sauvages de Paca.<br/> Voulez vous récupérer ce compte ?</p>"+
+                   "</div>"+
+                   "<button type='submit' class='btn btn-success'>Recupérer le compte</button>"+
+                   "<button type='reset' class='btn btn-default pull-right'>Modifier l'email</button>"+
+                  "</form>"					
+                );
+            sauvages.notifications.retrieveAccount(msg(),dfd);
+        };
+
+        /***
+         * Fonction affiche modal recupération d'un compte existant sur le web
+         *  
+         ****/
+        synchroUser.prototype.printSynchroRetrieveAccount = function(userDrupal){
+            var msg = _.template(
+                  "<form role='form form-inline'>"+
+                   "<div class='form-group'>"+
+                   "		<p>Le compte "+ userDrupal.mail +" existe sur Sauvages de Paca.<br/> Voulez vous récupérer ce compte ?</p>"+
+                   "</div>"+
+                   "<button type='submit' class='btn btn-success'>Recupérer le compte</button>"+
+                   "<button type='reset' class='btn btn-default pull-right'>Modifier l'email</button>"+
+                  "</form>"					
+                );
+            sauvages.notifications.synchroRetrieveAccount(msg(),userDrupal);
         };
 
         /***
          * Fonction qui retoune le numéro de status de l'erreur ajax
          *  
          ****/
-        synchroUser.prototype.errorStatus = function(status,emailUser){
+        synchroUser.prototype.errorStatus = function(status,emailUser,nameUser){
             console.log(status);
             switch(status) {
                 case 404:
-                    this.printCreateAccount(emailUser);
+                    this.printCreateAccount(emailUser,nameUser);
                     break;
                 default:
                     console.log(status);
@@ -83,7 +128,7 @@ NS.SynchroUser = (function() {
          * Fonction de test du mail du site sauvages de paca
          *  
          ****/
-        synchroUser.prototype.mailExisteDrupal = function(emailUser, callback) {
+        synchroUser.prototype.synchroMailExisteDrupal = function(emailUser, nameUser) {
             var self = this;
             return $.ajax({
                     type: "GET",
@@ -92,17 +137,122 @@ NS.SynchroUser = (function() {
                     contentType: 'application/x-www-form-urlencoded',
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(errorThrown);
-                        self.errorStatus(jqXHR.status,emailUser);
+                        self.errorStatus(jqXHR.status,emailUser,nameUser);
                     },
                     success: function (data) {
-                        //update Tuser with uid and name
-                        app.globals.currentUser.set('uid',data.uid)
-                        .save();
-                        app.globals.currentUser.set('name',data.name)
-                        .save();
+                        // affiche c'est votre compte ? et propose de mettre à jour l'app
+                        this.printRetrieveAccount(emailUser);
+                        ////update Tuser with uid and name
+                        //app.globals.currentUser.set('uid',data.uid)
+                        //.save();
+                        //app.globals.currentUser.set('name',data.name)
+                        //.save();
                     }
                 });                 
         };
+
+
+        /***
+         * Fonction de test du mail du site sauvages de paca
+         *  
+         ****/
+        synchroUser.prototype.mailExisteDrupal = function(emailUser, nameUser) {
+            var self = this;
+            return $.ajax({
+                    type: "GET",
+                    url: SERVICE_SAUVAGESPACA + '/observation/obs_user/retrieve',
+                    data: 'mail='+ emailUser,
+                    contentType: 'application/x-www-form-urlencoded',
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    },
+                    success: function (data) {
+                    }
+                });                 
+        };
+
+        /***
+         * Fonction de test du pseudo du site sauvages de paca
+         *  
+         ****/
+        synchroUser.prototype.nameExisteDrupal = function(nameUser) {
+            var dfd = $.Deferred();
+            var self = this;
+            return $.ajax({
+                    type: "POST",
+                    url: SERVICE_SAUVAGESPACA + '/observation/obs_user/retrievename?name='+ nameUser,
+                    contentType: 'application/x-www-form-urlencoded',
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                        
+                        //lancer update du nom
+                    },
+                    success: function (data) {
+                        alert('pseudo existe');
+                        //le pseudo existe dejà remettre le champ à la valeur de la bd
+                    }
+                });                 
+        };
+
+        /***
+         * Fonction de MAJ du pseudo sur le site sauvages de paca
+         *  
+         ****/
+
+        synchroUser.prototype.updateDrupalName = function(uid,email,name) {
+            var user = {
+                        "name": name,
+                        "mail": email,
+                        "account" :{        
+                            "name": name,
+                            "mail": email
+                           }
+                       }
+            var self = this;
+            return $.ajax({
+                    type: "PUT",
+                    url: SERVICE_SAUVAGESPACA + '/observation/obs_user/uid='+uid,
+                     dataType: 'json',
+                     data: JSON.stringify(user),
+                     contentType: 'application/json',
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            if (jqXHR.status === 406) {
+                               app.globals.currentUser.unset('name');
+                            }
+                            alert(errorThrown);
+                        },
+                        success: function (data) {
+                        }
+                });                 
+        };
+
+        synchroUser.prototype.updateDrupal = function(uid,email,name) {
+            //var name = app.globals.currentUser.get('name');
+            var user = {
+                        "name": name,
+                        "mail": email,
+                        "account" :{        
+                            "mail": email,
+                            "name": name,
+                           }
+                       }
+            var self = this;
+            return $.ajax({
+                    type: "PUT",
+                    url: SERVICE_SAUVAGESPACA + '/observation/obs_user/uid='+uid,
+                     dataType: 'json',
+                     data: JSON.stringify(user),
+                     contentType: 'application/json',
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            if (jqXHR.status === 406) {
+                               app.globals.currentUser.unset('email');
+                            }
+                            alert(errorThrown);
+                        },
+                        success: function (data) {
+                        }
+                });                 
+        };
+
 
         /***
          * Fonction de traitements des récompenses récupérées sur le web
@@ -122,13 +272,10 @@ NS.SynchroUser = (function() {
          ****/
         synchroUser.prototype.testRecompenseExist= function (recompense){
             var self = this;
-            //var recompenses = new app.models.RecompensesDataValuesCollection();
-            //recompenses.fetch({success: function(collection) {
-                var isRecompense = app.globals.collectionRecompense.findWhere({"title": recompense.filename});
-                if(!isRecompense) self.saveFileImg(recompense);
-                //}
-            //});
+            var isRecompense = app.globals.collectionRecompense.findWhere({"title": recompense.filename});
+            if(!isRecompense) self.saveFileImg(recompense);
         }
+
         /***
          * Fonction de traitements des badges
          *  
@@ -198,9 +345,9 @@ NS.SynchroUser = (function() {
          *  
          ****/
         synchroUser.prototype.saveClassement = function(data) {
-            console.log('save in db'+ data);
             var self = this;
             var compteur = 0;
+            //TODO Pourquoi
             var MyBase = app.dao.baseDAOBD;
             MyBase.populateTruncateSQLTable();
             app.globals.collectionClassementNational.reset();
@@ -276,7 +423,10 @@ NS.SynchroUser = (function() {
                     url: SERVICE_SAUVAGESPACA + '/observation/ns_score/get_my_classement/'+$uid,
                     contentType: 'application/x-www-form-urlencoded',
                        error: function (jqXHR, textStatus, errorThrown) {
+                        //TODO gestion des erreurs avec errorThrown : ERR_CONNECTION_TIMED_OUT
                            console.log(errorThrown);
+                           console.log(jqXHR);
+
                        },
                     success: function (data) {return data}
                 });                 
@@ -289,12 +439,9 @@ NS.SynchroUser = (function() {
          ****/
         synchroUser.prototype.deleteTrecompense = function() {
             app.globals.collectionRecompense.reset();
-				//var recompenses = new app.models.RecompensesDataValuesCollection();
-           // recompenses.fetch({success: function(cRecompense) {
-                _.each(app.globals.collectionRecompense.models,function(item) {
-                    item.destroy();
-                });
-           // }});
+            _.each(app.globals.collectionRecompense.models,function(item) {
+                item.destroy();
+            });
         };
        
         /***
@@ -302,17 +449,11 @@ NS.SynchroUser = (function() {
          *  
          ****/
         synchroUser.prototype.saveUID = function($uid) {
-            //var self = this;
-            //var currentUser = new app.models.User({'id': 1});
-            //app.models.User.fetch({
-            //    success: function(data) {
-                    app.globals.currentUser.set('uid',$uid).save();
-            //    }
-            //});
+            app.globals.currentUser.set('uid',$uid).save();
         }
 
         /***
-         * Fonction de récupération drupal TODO
+         * Fonction de récupération drupal
          *  
          ****/
         synchroUser.prototype.retrieveDrupal = function($uid) {
@@ -328,27 +469,22 @@ NS.SynchroUser = (function() {
             //pas besoin de compte pour avoir le classement national
             this.retrieveClassementDrupal();
             var self = this;
-            //var currentUser = new app.models.User({'id': 1});
-            //app.models.User.fetch({
-            //    success: function(data) {
-                    var emailUser = app.globals.currentUser.get('email');
-                    var uidUser = app.globals.currentUser.get('uid');
-                    var valEmail = validatorsEmail(emailUser);
-                    if (valEmail === true) {
-                        // test si il y a un uid dans la table user
-                        if ( !uidUser || uidUser === 'undefined') {
-                            self.mailExisteDrupal(emailUser).done(function(newUser){
-                                self.retrieveDrupal(newUser.uid);
-                                self.saveUID(newUser.uid);
-                            })
-                        }else{
-                            self.retrieveDrupal(uidUser);
-                        }
-                    }
-            //    }
-            //});
+            var emailUser = app.globals.currentUser.get('email');
+            var uidUser = app.globals.currentUser.get('uid');
+            var name =  app.globals.currentUser.get('name');
+            var valEmail = validatorsEmail(emailUser);
+            if (valEmail === true) {
+                // test si il y a un uid dans la table user
+                if ( !uidUser || uidUser === 'undefined') {
+                    self.synchroMailExisteDrupal(emailUser,name).done(function(newUser){
+                        self.retrieveDrupal(newUser.uid);
+                        self.saveUID(newUser.uid);
+                    })
+                }else{
+                    self.retrieveDrupal(uidUser);
+                }
+            }
         }
-      //  return dfd.promise();
     }
     return synchroUser;
 }) ();

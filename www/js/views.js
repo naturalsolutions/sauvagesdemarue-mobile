@@ -567,47 +567,225 @@ app.views.UtilisateurPageView = app.utils.BaseView.extend({
     },
 
 		events : {
-				"click .modifier-enregistrement"	: "updateEmail",
+				"click .modifier-enregistrement"	: "updateUser",
 				"click .annuler-enregistrement"	: "annuler",
 				"click .enable-email" : "enableInputEmail",
-				"keydown input" : "enableSave"
+				"focus input" : "disableSave",
+        "focusout input.name" : "CheckExisteNameInDrupalOnBlur",
+        "focusout input.email" : "CheckExisteEmailInDrupalOnBlur",
+        "click input[type=submit]" : "saveUser",
     },
 		
 		annuler: function(evt){
 				app.route.navigate('', {trigger: true});
 		},
 
-		enableSave	: _.debounce(function(){
+		enableSave: function(){
 				if ($('.btn-update', this.$el).hasClass('enable-email')) {
 						$('.btn-update', this.$el).addClass('modifier-enregistrement').removeClass('enable-email').html('Enregistrer');
 				}
-		},800),
-
-		enableInputEmail: function(evt){
-				var isDisabled = $('input[type=text]').hasClass('disabled');
-				if (isDisabled) {
-						$('input[type=text]').removeClass('disabled');		
-				}
 		},
-		updateEmail: function(evt){
-        var currentEmail = this.$el.find('input[type="text"]').val();
-        if (validatorsEmail(currentEmail)) {
-            this.model.set('email',String(currentEmail)).save().done( function(model, response, options) {
-                //synchro
-                var synchroU = new NS.SynchroUser();
-                synchroU.deleteTrecompense({success: function() {
-                    var connect = checkConnection();
-                    if (connect !== 'none' || connect === false){
-                        synchroU.lanceSynchro();
-                    }
-                }});
-                $('input[type=text]').addClass('disabled');
-                $('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
-               // sauvages.notifications.emailSaveSuccess();
-            });
+
+		disableSave: function(){
+				if ($('.btn-update', this.$el).hasClass('modifier-enregistrement')) {
+            $('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button'>Modifier</button>");
         }
 		},
-		
+
+		enableInputEmail: function(evt){
+        //si j'ai de la connexion je peux mettre à jour mon profil
+        var connect = checkConnection();
+        if (connect !== 'none' || connect === false){
+            var isDisabled = $('input[type=text]').hasClass('disabled');
+            if (isDisabled) {
+                $('input[type=text]').removeClass('disabled');		
+            }
+        }else{
+            alert("Vous devez être connecté pour modifier votre profil.");
+        }
+		},
+
+    saveUser : function(){
+        var mail = app.globals.currentUser.get('email');
+        var name = app.globals.currentUser.get('name');
+        var uid = app.globals.currentUser.get('uid');
+        if (uid === undefined || uid === 'undefined') {
+            var synchroU = new NS.SynchroUser();
+            synchroU.registerUser(mail,name).done(function(){
+                app.globals.currentUser.save().done(function(){
+                    sauvages.notifications.compteMisAjour();
+                    self.enableSave();
+                });
+            });
+            
+        }
+        /*else{
+            if (app.globals.dontRetrieveMail) {
+                synchroU.updateDrupalEmail(mail).done(function(){
+                    sauvages.notifications.compteMisAjour();
+                });
+            };
+            synchroU.updateDrupalName(name);
+        }*/
+    },
+
+    CheckExisteNameInDrupalOnBlur: function(evt){
+        //Flag Name doit etre mis à jour sur le serveur
+        this.flagName = false;
+        var self = this;
+        //a revoir
+        this.$el.find('.name').removeClass('error');
+        //recupere name
+        var currentName = this.$el.find('input.name').val();
+        //test si different, probleme => model mis à jour on blur
+        if (currentName !== '') {
+        //si different check sur drupal
+            //synchro
+            var synchroU = new NS.SynchroUser();
+            synchroU.nameExisteDrupal(currentName)
+                //si existe = requete a retrouvé un utilisateur avec ce nom
+                //print msg existe, met le curseur dans le champ, efface le champ, print error dans le helpline
+                .done(function(msg) {
+                    console.log(msg);
+                    //affiche message erreur et met le curseur dans la champs
+                    self.$el.find('.name').addClass('error');
+                    self.$el.find('.name .help-inline').html('');
+                    self.$el.find('.name .help-inline').html('Il y a déjà un utilisateur avec le pseudo '+currentName+'.');
+                    self.$el.find('input.name').val('');
+                    self.$el.find('.name').focus();
+                })
+                //si existe pas = requete n'a pas trouvé d'utilisateur avec ce nom
+                .fail(function(err){
+                    console.log(err);
+                    //test si erreur est 404
+                    if (err.status === 404) {
+                        //app.globals.currentUser.set('name',String(currentName));
+                        //passe le btn modifier à enregistrer
+                        self.enableSave();
+                        self.flagName = true;
+                    }
+                });
+        }
+    },
+
+    CheckExisteEmailInDrupalOnBlur: function(evt){
+        //Flag Name doit etre mis à jour sur le serveur
+        this.flagEmail = false;
+        var self = this;
+        //a revoir
+        this.$el.find('.email').removeClass('error');
+        //recupere name
+        var currentEmail = this.$el.find('input.email').val();
+        var valEmail = validatorsEmail(currentEmail);
+        if (valEmail === true) {
+            //test si different, probleme => model mis à jour on blur
+            //si different check sur drupal
+                //synchro
+                var synchroU = new NS.SynchroUser();
+                synchroU.mailExisteDrupal(currentEmail)
+                    //si existe = requete a retrouvé un utilisateur avec ce nom
+                    .done(function(userDrupal) {
+                        var dfd = $.Deferred();
+                        synchroU.printRetrieveAccount(currentEmail,dfd);
+                        dfd.done(function(){
+                            //si global dontRetrieveMail = true
+                            if(app.globals.dontRetrieveMail){
+                                app.globals.currentUser.unset('name');
+                                //affiche message erreur et met le curseur dans la champs
+                                self.$el.find('.email').addClass('error');
+                                self.$el.find('.email .help-inline').html('');
+                                self.$el.find('.email .help-inline').html('Il y a déjà un utilisateur avec le mail '+currentEmail+'.');
+                                self.$el.find('input.email').val('');
+                                self.$el.find('.email').focus();
+                                app.globals.dontRetrieveMail = false;
+                            }else{
+                                var dfdWarning = $.Deferred();
+                                // msg danger
+                                var msg = _.template(
+                                      "<form role='form form-inline'>"+
+                                       "<div class='form-group'>"+
+                                       "    <p>Voulez vous écraser votre compte par celui "+ currentEmail +" ?</p>"+
+                                       "</div>"+
+                                       "<button type='submit' class='btn btn-success'>Recupérer le compte</button>"+
+                                       "<button type='reset' class='btn btn-default pull-right'>Modifier l'email</button>"+
+                                      "</form>"					
+                                    );
+                                sauvages.notifications.warningCompteDelete(msg(),currentEmail,dfdWarning);
+                                dfdWarning.done(function(){
+                                    //lance retrieve classement et my classement
+                                    synchroU.retrieveRecompenseDrupal(userDrupal.uid).done(function(){
+                                        synchroU.retrieveMyClassementDrupal(userDrupal.uid).done(function(myClassement){
+                                            //update mobile
+                                            //classement retourne un tableau vide si l'utilisateur n'a jamais envoyé d'obs
+                                            if (myClassement.length !== 0){
+                                                app.globals.currentUser.set('score', myClassement[0].score)
+                                                app.globals.currentUser.set('rank', myClassement[0].rank)
+                                            };
+                                            app.globals.currentUser.set('name',String(userDrupal.name))
+                                            app.globals.currentUser.set('email',currentEmail)
+                                            app.globals.currentUser.set('uid',String(userDrupal.uid))
+                                            .save().done(function(){
+                                                self.$el.find('input.name').val(userDrupal.name);
+                                                //msg succes
+                                                sauvages.notifications.compteMisAjour();
+                                                self.disableSave();
+                                            });
+                                        });
+                                    });
+
+                                });
+                            }
+                        });
+                    })
+                    //si existe pas = requete n'a pas trouvé d'utilisateur avec ce nom
+                    .fail(function(err){
+                        console.log(err);
+                        //test si erreur est 404
+                        if (err.status === 404) {
+                            //app.globals.currentUser.set('email',String(currentEmail));
+                            //passe le btn modifier à enregistrer
+                            self.enableSave();
+                            self.flagEmail = true;
+                            //sauvages.notifications.compteMisAjour();
+                        }
+                    });
+        }
+    },
+
+		updateUser: function(evt){
+        var self = this;
+        var connect = checkConnection();
+        var uidUser = app.globals.currentUser.get('uid');
+        var name = app.globals.currentUser.get('name');
+        var mail = app.globals.currentUser.get('email');
+        var synchroU = new NS.SynchroUser();
+
+        if (connect !== 'none' || connect === false){
+            if (this.flagName) {
+                synchroU.updateDrupalName(uidUser,mail,name).done(function(model, response, options) {
+                    //msg succes
+                    sauvages.notifications.compteMisAjour();
+                    self.disableSave();
+                }).fail(function(err){console.log(err);});
+            }
+            if (this.flagEmail) {
+                synchroU.updateDrupal(uidUser,mail,name).done(function(model, response, options) {
+                    //msg succes
+                    sauvages.notifications.compteMisAjour();
+                    self.disableSave();
+                }).fail(function(err){console.log(err);});
+            }
+        }else{
+        //vous etes deconnecte du reseau ce pseudo est peut-être deja pris
+
+           // this.updateMobileEmail(currentEmail);
+           //$('input[type=text]').addClass('disabled');
+           //$('.modifier-enregistrement', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");
+          // sauvages.notifications.emailSaveSuccess();
+        }
+        
+		},
+
 		beforeRender: function(){
 				$('.icone-page-title').hide();		
 				this.insertView("#user-form", new app.views.FormUserView({initialData:this.model}));
@@ -626,43 +804,42 @@ app.views.FormUserView = NS.UI.Form.extend({
     initialize: function(options) {
         NS.UI.Form.prototype.initialize.apply(this, arguments);
         var self = this;
-        this.on('submit:valid', function(instance) {
+       // this.on('submit:valid', function(instance) {
         var self = this;
+       // instance.save().done( function(model, response, options) {
+        //  instance.fetch({
+          //  success: function(data) {
+                //var connect = checkConnection();
+                //    //synchro
+                //if ((connect !== 'none' && navigator.camera) || connect === true){
+                //    var synchroU = new NS.SynchroUser();
+                //    synchroU.mailExisteDrupal(data.get('email'),data.get('name'))
+                //        .done(function(user){
+                //        //Get my_classement et my_recompense with uid
+                //        synchroU.retrieveRecompenseDrupal(user.uid).done(function(myRecompenses){
+                //            synchroU.retrieveMyClassementDrupal(user.uid).done(function(myClassement){
+                //                //object to model classement
+                //                app.globals.currentUser.set('score', myClassement[0].score).save;
+                //                app.globals.currentUser.set('rank', myClassement[0].rank).save;
+                //            });
+                //        });
+                //    });
+                //}else{
+                //    $('input[type=text]').addClass('disabled');
+                //    $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");                
+                //}
 
-        instance.save().done( function(model, response, options) {
-          instance.fetch({
-            success: function(data) {
-                var connect = checkConnection();
-                    //synchro
-                if ((connect !== 'none' && navigator.camera) || connect === true){
-                    var synchroU = new NS.SynchroUser();
-                    synchroU.mailExisteDrupal(data.get('email'))
-                        .done(function(user){
-                        //Get my_classement et my_recompense with uid
-                        synchroU.retrieveRecompenseDrupal(user.uid).done(function(myRecompenses){
-                            //object to model recompense
-                            //_.each(myRecompenses,function(item) {
-                            //  var modelRecomp = new app.models.RecompensesDataValue({title :item.filename});
-                            //  app.globals.collectionRecompense.add(modelRecomp);
-                            //});
-                            synchroU.retrieveMyClassementDrupal(user.uid).done(function(myClassement){
-                                //object to model classement
-                                app.globals.currentUser.set('score', myClassement[0].score).save;
-                                app.globals.currentUser.set('rank', myClassement[0].rank).save;
-                            });
-                        });
-                    });
-                }
-                $('input[type=text]').addClass('disabled');
-                $('input:submit', self.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button' >Modifier</button>");                
-//sauvages.notifications.emailSaveSuccess();
-            }
-          });
-        });
-      });
+                //sauvages.notifications.emailSaveSuccess();
+          //  }
+        //  });
+       // });
+      //});
     },
     afterRender: function () {
-        if (this.initialData.email !== undefined) {
+        var mail = app.globals.currentUser.get('mail');
+        var name = app.globals.currentUser.get('name');
+        var uid = app.globals.currentUser.get('uid');
+        if (this.initialData.email !== undefined && uid !== "undefined") {
             $('input[type=text]',this.$el).addClass('disabled');
             $('input:submit', this.$el).replaceWith("<button class='btn btn-default btn-footer btn-update enable-email' type='button'>Modifier</button>");
         }
