@@ -32,7 +32,7 @@ app.Router = Backbone.Router.extend({
 		app.globals.collectionClassementNational = new app.models.ClassementDataValuesCollection();
     app.globals.collectionClassementNational.comparator = 'rank';
 		app.globals.collectionRecompense = new app.models.RecompensesDataValuesCollection();
-
+		app.globals.dontRetrieveMail=false;
     app.globals.positionScroll = 0;
     app.globals.currentFilter = new Array();
     app.globals.regiontaxon = new Array();
