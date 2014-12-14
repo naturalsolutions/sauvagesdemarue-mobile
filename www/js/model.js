@@ -56,7 +56,7 @@ app.models.User = Backbone.Model.extend({
     email: { title:'Ajouter votre email.', type:'Email', sqltype:'NVARCHAR(50)',  required: true},
     token: { title:'token', type:'hidden', sqltype:'NVARCHAR(250)' },
     uid: { title:'uid',type:'hidden', sqltype:'INTEGER'},
-    name: { title:'Ajouter votre pseudo', type:'Text', sqltype:'NVARCHAR(200)'},
+    name: { title:'Ajouter votre pseudo', type:'Text', sqltype:'NVARCHAR(200)',  required: true},
 		score: { title:'score', type:'hidden'},
 		rank: { title:'rang', type:'hidden'},
     },
