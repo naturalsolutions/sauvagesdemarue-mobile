@@ -324,10 +324,15 @@ function init(){
             }());
           }
 					var onDataHandler = function(data, response, options) {
-						if (data.get('email') !== undefined) {
+					//tuser vide ou undefined
+					//if (typeof data.get('email') === 'undefined' ? data.get('email') === 'undefined' : data.get('email') !== 'undefined') {
+					//tuser vide
+						if (typeof data.get('email') !== 'undefined' ) {
 							app.globals.currentUser = data ;
 						}else{
+						// si tuser vide, j'insert un model user dans la table tuser
 							app.globals.currentUser = new app.models.User();
+							app.globals.currentUser.save();
 						}
 						var connect = checkConnection();
 						if ((connect !== 'none' && navigator.camera) || connect === true){
