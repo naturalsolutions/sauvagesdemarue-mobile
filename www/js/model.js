@@ -54,12 +54,8 @@ app.models.User = Backbone.Model.extend({
   schema: {
     id: { title:'id',type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
     email: { title:'Ajouter votre email.', type:'Email', sqltype:'NVARCHAR(50)',  required: true},
-    token: { title:'token', type:'hidden', sqltype:'NVARCHAR(250)' },
-    uid: { title:'uid',type:'hidden', sqltype:'INTEGER'},
-    name: { title:'Ajouter votre pseudo', type:'Text', sqltype:'NVARCHAR(200)',  required: true},
-		score: { title:'score', type:'hidden'},
-		rank: { title:'rang', type:'hidden'},
-    },
+   // pseudo: { title:'commonName', type:'Text', sqltype:'NVARCHAR(50)' },
+     },
   dao: app.dao.UserDAO,
   verboseName: 'Utilisateur'
 });
@@ -82,7 +78,7 @@ app.models.Application = Backbone.Model.extend({
   dao: app.dao.ApplicationDAO,
   verboseName: 'Application'
 });
-// The Application Collection Model
+// The User Collection Model
 app.models.ApplicationCollection = Backbone.Collection.extend({
   model: app.models.Application,
 });
@@ -344,7 +340,7 @@ app.models.OccurenceDataValue = Backbone.Model.extend({
 				title:'Photo',  type:'Picture',sqltype:'NVARCHAR(500)',
 				optCamera:{'quality': 50,'correctOrientation': false,'encodingType': 'navigator.camera.EncodingType.JPEG', 'source': 'navigator.camera.PictureSourceType.CAMERA',	'targetWidth': 200,'destinationType': 'navigator.camera.DestinationType.DATA_URL'} 
 			},
-    notes: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)'},
+    note: { title:'Note',  type:'Textarea',sqltype:'NVARCHAR(500)'},
     regionPaca: { title:'regionPaca', type:'hidden',sqltype:'INTEGER'}
   }, 
   dao: app.dao.OccurenceDataValueDAO,
@@ -398,68 +394,6 @@ app.models.ParcoursDataValuesCollection =Backbone.Collection.extend({
   },
 
 });
-
-// The RecompensesDataValues Model
-app.models.RecompensesDataValue = Backbone.Model.extend({
-	defaults: {
-		title:'Badge',
-		picture:''
-	},
-},{
-  table : 'Trecompense',
-   schema: {
-    //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-      id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
-      title: { title:'Récompense', type:'Text',required: true},
-      picture : { title:'badge',type:'Text', sqltype:'NVARCHAR(500)', required: true},
-  }, 
-  dao: app.dao.RecompensesDataValueDAO,
-  verboseName: 'Recompense'
-});
-// The RecompensesDataValues Collection
-app.models.RecompensesDataValuesCollection =Backbone.Collection.extend({
-
-  model : app.models.RecompensesDataValue,
-  
-  dao: app.dao.RecompensesDataValueDAO,
-  
-  initialize: function() {
-  },
-
-});
-
-// The ClassementDataValues Model
-app.models.ClassementDataValue = Backbone.Model.extend({
-	defaults: {
-		name: '',
-		score: '',
-		rank: ''
-	},
-},{
-  table : 'Tclassement',
-   schema: {
-    //INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-     // id: { title:'id', type:'hidden', sqltype:'INTEGER', sqlconstraints:'PRIMARY KEY', autoincrement:true},
-      name: { title:'Name', type:'Text',required: true},
-      uid: { title:'uid', type:'Text',required: true},
-      score: { title:'score', type:'Text',required: true},
-      rank: { title:'rang', type:'Text',required: true},
-  }, 
-  dao: app.dao.ClassementDataValueDAO,
-  verboseName: 'Classement'
-});
-// The RecompensesDataValues Collection
-app.models.ClassementDataValuesCollection =Backbone.Collection.extend({
-
-  model : app.models.ClassementDataValue,
-  
-  dao: app.dao.ClassementDataValueDAO,
-  
-  initialize: function() {
-  },
-
-});
-
 //position
 app.models.Position = Backbone.Model.extend({
 

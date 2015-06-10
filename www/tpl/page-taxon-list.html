@@ -1,6 +1,6 @@
 <div id="taxon-list-content" class="container">
    <%
-      var col = _.groupBy(data.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
+    var col = _.groupBy(data.collection.models, function(taxon){ return taxon.get("commonName").charAt(0).toUpperCase(); });
       var flag = false;
    %>
    <div class="loc-container" >

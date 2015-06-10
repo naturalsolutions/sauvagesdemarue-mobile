@@ -9,18 +9,19 @@ function() {
            'begin_street': 'Début du parcours',
            'end_street':'Fin du parcours',
    },
+		
    sauvages.gpsNotStart = function gpsNotStart() {
       var myModal = new NS.UI.NotificationModal({
        type: '',
        title: "Géolocalisation",
-       message: "Activer votre GPS ou le WIFI",
+       message: "Activer la localisation dans les paramètres de votre appareil",
        delay: 4,
        btnLabel: '',
       onClose: function() {
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
+          $('#nodal').modal('hide');
+          $('#nodal').remove();
+          $('.modal-backdrop').remove();
+          $('body').removeClass('modal-open');
        }
       });
    },
@@ -34,18 +35,8 @@ function() {
        btnLabel: '',
       });
    },
-
-   sauvages.compteMisAjour = function compteMisAjour() {
-      var myModal = new NS.UI.NotificationModal({
-       type: '',
-       title: 'Votre compte est à jour',
-       message:'Votre compte est à jour' ,
-       delay: 1,
-       btnLabel: '',
-      });
-   },
 	
-   sauvages.finParcours = function finParcours(msg,idRue,parcours) {
+   sauvages.finParcours = function finParcours(msg) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Rue sauvegardée',
@@ -62,129 +53,10 @@ function() {
          $('#nodal').remove();
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
-         var sendObservations = new NS.SendOBS(idRue,parcours);
-         sendObservations.envoiUtilitaireWS(idRue,parcours);
-      }, myModal)),
-      myModal.$el.on('reset', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
          app.route.navigate('myObservation', {trigger: true});
       }, myModal))
    },
 	
-   sauvages.createAccount = function createAccount(msg,email,name) {
-      var myModal = new NS.UI.NotificationModal({
-         type: '',
-         title: 'Création de compte sur sauvagesdepaca.fr',
-         message: msg,
-         delay: '',
-         btnLabel: '',
-      });
-      myModal.$el.on('submit', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         var createAccount = new NS.SynchroUser();
-         createAccount.registerUser(email,name);
-      }, myModal)),
-      myModal.$el.on('reset', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         app.route.navigate('utilisateur', {trigger: true});
-      }, myModal))
-   },
-
-   sauvages.retrieveAccount = function retrieveAccount(msg,dfd) {
-      var myModal = new NS.UI.NotificationModal({
-         type: '',
-         title: 'Ce compte existe déjà sur sauvagesdepaca.fr',
-         message: msg,
-         delay: '',
-         btnLabel: '',
-      });
-      myModal.$el.on('submit', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         app.globals.dontRetrieveMail=false;
-         dfd.resolve();
-      }, myModal)),
-      myModal.$el.on('reset', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         app.globals.dontRetrieveMail=true;
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         dfd.resolve();
-      }, myModal))
-   },
-
-   sauvages.warningCompteDelete = function warningCompteDelete(msg,currentEmail,dfdWraning) {
-      var myModal = new NS.UI.NotificationModal({
-         type: '',
-         title: 'Attention!!',
-         message: msg,
-         delay: '',
-         btnLabel: '',
-      });
-      myModal.$el.on('submit', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         dfdWraning.resolve();
-      }, myModal)),
-      myModal.$el.on('reset', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         dfdWraning.reject();
-      }, myModal))
-   },
-
-   sauvages.synchroRetrieveAccount = function synchroRetrieveAccount(msg,userDrupal) {
-      var myModal = new NS.UI.NotificationModal({
-         type: '',
-         title: 'Ce compte existe déjà sur sauvagesdepaca.fr',
-         message: msg,
-         delay: '',
-         btnLabel: '',
-      });
-      myModal.$el.on('submit', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         app.route.navigate('utilisateur', {trigger: true});
-         this.model.set('email',String(userDrupal.mail)).save();
-         this.model.set('name',String(userDrupal.name)).save();
-         this.model.set('uid',String(userDrupal.uid)).save();
-      }, myModal)),
-      myModal.$el.on('reset', 'form', _.bind(function(evt) {
-         evt.preventDefault();
-         $('#nodal').modal('hide');
-         $('#nodal').remove();
-         $('.modal-backdrop').remove();
-         $('body').removeClass('modal-open');
-         app.route.navigate('utilisateur', {trigger: true});
-      }, myModal))
-   },
-
    sauvages.obsSaveSuccess = function obsSaveSuccess(localisation) {
      var myModal = new NS.UI.NotificationModal({
       type: '',
@@ -252,10 +124,10 @@ function() {
       delay: 2,
       btnLabel: '',
       onClose: function() {
-          //$('#nodal').modal('hide');
-          //$('#nodal').remove();
-          //$('.modal-backdrop').remove();
-          //$('body').removeClass('modal-open');
+          $('#nodal').modal('hide');
+          $('#nodal').remove();
+          $('.modal-backdrop').remove();
+          $('body').removeClass('modal-open');
        }
      });
    },
@@ -268,10 +140,10 @@ function() {
          delay: 1,
          btnLabel: '',
          onClose: function() {
-            //$('#nodal').modal('hide');
-            //$('#nodal').remove();
-            //$('.modal-backdrop').remove();
-            //$('body').removeClass('modal-open');
+            $('#nodal').modal('hide');
+            $('#nodal').remove();
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
          }
       });
    },
@@ -289,7 +161,7 @@ function() {
          }
       });
    },
-   sauvages.email = function email(msg,newUser,idRue,parcours,cObservation) {
+   sauvages.email = function email(msg,newUser) {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Ajouter votre email.',
@@ -299,17 +171,20 @@ function() {
       });
       myModal.$el.on('submit', _.bind(function(evt) {
          evt.preventDefault();
-            var currentEmail = this.$el.find('input[type="email"]').val();
+           var currentEmail = this.$el.find('input[type="email"]').val();
             newUser.set('email',String(currentEmail))
-           .save();
-            //Send obs on web
-            var sendObservations = new NS.SendOBS(idRue,parcours,cObservation);
-            sendObservations.envoiUtilitaireWS(idRue,parcours,cObservation);
-            //$('#nodal').modal('hide');
-            //$('#nodal').remove();
-            //$('.modal-backdrop').remove();
-            //$('body').removeClass('modal-open');
+            .save();
+            $('#nodal').modal('hide');
+            $('#nodal').remove();
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
       }, myModal));
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
    },
    sauvages.helpKey = function helpKey(criteriaName,criteriaValues) {
       var myModal = new NS.UI.NotificationModal({
@@ -328,33 +203,43 @@ function() {
       var myModal = new NS.UI.NotificationModal({
          type: '',
          title: 'Connection à internet',
-         message: "L'envoi des observations requiert une connexion à haut débit (H+, 4G, wifi)." ,
+         message: "L'envoi des observations requiert une connexion à haut débit (3G, 4G, wifi)." ,
          delay: '',
          btnLabel: ''
       });
-      //$('#myModal').on('hidden.bs.modal', function () {
-      //   $('#nodal').modal('hide');
-      //   $('#nodal').remove();
-      //   $('.modal-backdrop').remove();
-      //   $('body').removeClass('modal-open');
-      //});
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
    },
 
-   sauvages.connectionInfo = function connectionInfo(msg) {
+   sauvages.connectionInfo = function connectionInfo(msg,idRue,viewBefore) {
+      var self = this;
+      self.viewBefore = viewBefore ;
       var myModal = new NS.UI.NotificationModal({
        type: '',
-       title: 'Êtes-vous vous connecté à un réseau à haut débit ?',
+       title: 'Êtes-vous connecté à un réseau à haut débit ?',
        message:  msg,
        delay: '',
        btnLabel: ''
       });
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
          evt.preventDefault();
-      //   $('#nodal').modal('hide');
-      //   $('#nodal').remove();
-      //   $('.modal-backdrop').remove();
-      //   $('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+         $(self.viewBefore).find("#"+idRue).children('.test-obs').removeClass('test-obs disabled').addClass('send-obs').trigger('click');
+         $(self.viewBefore).find("#"+idRue).children('.test-obs').removeClass('send-obs').addClass('test-obs');
       }, myModal));
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
    },
 
    sauvages.finDeProtocol = function finDeProtocol(msg) {
@@ -363,29 +248,29 @@ function() {
        title: 'Voulez-vous terminer votre parcours ?',
        message:  msg,
        delay: '',
-       btnLabel: '', 
+       btnLabel: '',
       });
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         //$('#nodal').modal('hide');
-         //$('#nodal').remove();
-         //$('.modal-backdrop').remove();
-         //$('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
       }, myModal));
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         //$('#nodal').modal('hide');
-         //$('#nodal').remove();
-         //$('.modal-backdrop').remove();
-         //$('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
          app.route.navigate('taxonlist', {trigger: true});
       }, myModal));
-      //$('#myModal').on('hidden.bs.modal', function () {
-      //   $('#nodal').modal('hide');
-      //   $('#nodal').remove();
-      //   $('.modal-backdrop').remove();
-      //   $('body').removeClass('modal-open');
-      //});
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
     },
 
    sauvages.infoRegion = function infoRegion(msg) {
@@ -398,10 +283,10 @@ function() {
       });
       myModal.$el.on('submit', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         //$('#nodal').modal('hide');
-         //$('#nodal').remove();
-         //$('.modal-backdrop').remove();
-         //$('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
          window.history.back();
          return false;
       }, myModal));
@@ -412,12 +297,12 @@ function() {
          $('.modal-backdrop').remove();
          $('body').removeClass('modal-open');
       }, myModal));
-      //$('#myModal').on('hidden.bs.modal', function () {
-      //   $('#nodal').modal('hide');
-      //   $('#nodal').remove();
-      //   $('.modal-backdrop').remove();
-      //   $('body').removeClass('modal-open');
-      //});
+      $('#myModal').on('hidden.bs.modal', function () {
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
+      });
     },
    sauvages.SortieProtocol = function SortieProtocol(msg) {
       var myModal = new NS.UI.NotificationModal({
@@ -436,13 +321,13 @@ function() {
          $('body').removeClass('modal-open');
          app.route.navigate('addParcours', {trigger: true, replace: true});
          $("#menu").trigger("close");
-      }, myModal));
+      }, myModal))
       myModal.$el.on('reset', 'form', _.bind(function(evt) {
          evt.preventDefault();
-         //$('#nodal').modal('hide');
-         //$('#nodal').remove();
-         //$('.modal-backdrop').remove();
-         //$('body').removeClass('modal-open');
+         $('#nodal').modal('hide');
+         $('#nodal').remove();
+         $('.modal-backdrop').remove();
+         $('body').removeClass('modal-open');
          $("#menu").trigger("close"); 
       }, myModal))
    }  

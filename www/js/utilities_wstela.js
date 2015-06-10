@@ -34,8 +34,8 @@ NS.WSTelaAPIClient = (function() {
             _.bind(function (status) {
                 console.log('when finished dfd.resolve obser per rue');
                 
-                this.cParcours.set('state',2);
-                this.cParcours.save().done(
+                this.cParcours.get(this.idp).set('state',2);
+                this.cParcours.get(this.idp).save().done(
                     function (a) {
                         return dfd.resolve();
                     }
@@ -46,7 +46,7 @@ NS.WSTelaAPIClient = (function() {
         
         dfdObs.fail( 
             function (status) {
-                $('body').removeClass('loading disabled');
+                 $('body').removeClass('loading disabled');
                 return dfd.reject();
             }
         );
@@ -56,8 +56,9 @@ NS.WSTelaAPIClient = (function() {
      *  Fonction qui traite les observations et les envoie une par une.
      * ***/
     wsTelaApiClient.prototype.treatObservations= function(obsToSend,cObservation, dfdObs,userEmail,serviceCommune){
-        
         var currentobs = obsToSend.pop();
+        
+        console.log ('traite 1 ere obs');
         var obs = _.defaults(currentobs, this.defaultObs);
         var dfdImage = $.Deferred();
         if(obs.img === null || obs.img === "" || obs.img === "undefined"){
@@ -79,7 +80,7 @@ NS.WSTelaAPIClient = (function() {
                         _.bind(function() {
                             if (this.obsToSend.length > 0) {
                                 
-                                console.log ('reste ' + this.obsToSend.length + 'obs');
+                                console.log ('traite obs suivante');
                                 //traite l'obs suivante
                                 self.treatObservations(this.obsToSend, this.cObservation, this.dfdObs, this.userEmail,this.serviceCommune);
                             }
@@ -154,13 +155,11 @@ NS.WSTelaAPIClient = (function() {
      * ***/
     wsTelaApiClient.prototype.formatObsToSend= function (obs,userEmail,serviceCommune){
         var observations = new Object();
-
-        var obslieudit = obs.lieudit.toString().split(',');
-
+                       
         //Traitement de l'observation
         var json = {
             'date' : obs.date, 
-            'notes' : (obs.ido === -1) ? 'rue sans observation; '+obs.notes: obs.notes,
+            'notes' : (obs.ido === -1) ? 'rue sans observation; '+obs.note: obs.note,
             'nom_sel' : obs.nom_ret ,
             'num_nom_sel' : obs.num_nom_sel,
             'nom_ret' : obs.nom_ret,
@@ -172,8 +171,8 @@ NS.WSTelaAPIClient = (function() {
             'longitude' : (obs.longitude !== null) ? obs.longitude : obs.longitudeDebutRue,
             'commune_nom' :serviceCommune.nom,
             'commune_code_insee' : serviceCommune.codeINSEE,
-            'lieudit' : obslieudit[0] ,
-            'station' : obslieudit[0] ,
+            'lieudit' : obs.lieudit,
+            'station' : obs.station,
             'milieu' : obs.milieu,
             'abondance' : obs.abondance,
             'phenologie' : obs.phenologie,
@@ -209,6 +208,7 @@ NS.WSTelaAPIClient = (function() {
         observations['obsId1'] = json;
             
         //@TODO traiter la réponse
+        //Gestion des deferreds
         observations['projet'] = this.tagprojet;
         observations['tag-obs'] = this.tagobs;
         observations['tag-img'] = this.tagimg;
@@ -222,39 +222,38 @@ NS.WSTelaAPIClient = (function() {
         return observations;   
     };
     
-
     /***
     * Fonction génère la requete  POST d'envoie d'une obs aux services de tela
     * ***/
     wsTelaApiClient.prototype.sendToTelaWS= function (obs, id_obs) {
         var msg = '';
         var erreurMsg = '';
-      //  return $.ajax({
-      //      url : this.basePath,
-      //      type : 'POST',
-      //      data : obs,
-      //      dataType : 'json',
-      //      success : function(data,textStatus,jqXHR){
-      //          sauvages.notifications.sendToTelaWSSuccess();
-      //      },
-      //      error : function(jqXHR, textStatus, errorThrown) {
-      //          sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
-      //          msg = 'Erreur indéterminée. Merci de contacter le responsable.';
-      //          erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
-      //          try {
-      //           var reponse = jQuery.parseJSON(jqXHR.responseText);
-      //           if (reponse != null) {
-      //            $.each(reponse, function (cle, valeur) {
-      //             erreurMsg += valeur + '\n';
-      //            });
-      //           }
-      //          } catch(e) {
-      //           erreurMsg += 'L\'erreur n\'était pas en JSON.';
-      //          }
-      //          console.log(erreurMsg);
-      //      }
-      //});
-      return $.Deferred().resolve();
+        return $.ajax({
+            url : this.basePath,
+            type : 'POST',
+            data : obs,
+            dataType : 'json',
+            success : function(data,textStatus,jqXHR){
+                sauvages.notifications.sendToTelaWSSuccess();
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                sauvages.notifications.sendToTelaWSFail('Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n');
+                msg = 'Erreur indéterminée. Merci de contacter le responsable.';
+                erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
+                try {
+                 var reponse = jQuery.parseJSON(jqXHR.responseText);
+                 if (reponse != null) {
+                  $.each(reponse, function (cle, valeur) {
+                   erreurMsg += valeur + '\n';
+                  });
+                 }
+                } catch(e) {
+                 erreurMsg += 'L\'erreur n\'était pas en JSON.';
+                }
+                console.log(erreurMsg);
+               }
+      });
+     // return $.Deferred().resolve();
     }
 
     return wsTelaApiClient;

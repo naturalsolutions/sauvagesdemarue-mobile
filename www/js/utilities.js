@@ -47,36 +47,6 @@ app.utils.queryData = {
     );
     return dfd.promise();
   },
-//getObservationsPacaWSFormated
-getObservationsPacaWSFormated: function(id) {
-  var dfd = $.Deferred();
-  var parameters = new Array();
-  var sql = "SELECT o.id as ido, p.id as idp, o.datetime as date,"
-      +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
-      +"p.name AS lieudit, o.latitude, o.longitude, "
-      +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
-      +"o.milieu, "
-      +"o.notes, "
-      +"o.photo as img,"
-      +"p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue "
-      +"FROM TdataObs_parcours p "
-      +"INNER JOIN TdataObs_occurences o "
-      +"ON p.id = o.fk_rue "
-      +"WHERE (o.id IS NOT NULL AND p.state = 2) AND p.id = "+id+";"
-  runQuery(sql, parameters).done(
-    function(results){
-        var len = results.rows.length,
-          data = [],
-          i = 0;
-        for (; i < len; i = i + 1) {
-          data[i] = results.rows.item(i);
-        }
-        return dfd.resolve(data);
-    }
-  );
-  return dfd.promise();
-},
-
   //Récupère les observations de l'identifiant de la rue passé en paramètre
   getObservationsTelaWSFormated: function(id) {
     var dfd = $.Deferred();
@@ -84,17 +54,15 @@ getObservationsPacaWSFormated: function(id) {
     var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',COALESCE(o.datetime, p.begin_datetime)) as date,"
         +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
         +"p.name AS lieudit, o.latitude, o.longitude, "
-        +"p.name AS adresse,"
-        +"p.cote AS coteRue,"
         +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
         +"o.milieu, "
-        +"o.notes, "
+        +"o.note, "
         +"o.photo as img,"
         +"p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue "
         +"FROM TdataObs_parcours p "
         +"INNER JOIN TdataObs_occurences o "
         +"ON p.id = o.fk_rue "
-        +"WHERE (o.id IS NOT NULL AND p.state = 1) AND p.id = "+id+";"
+        +"WHERE ((o.id != -1 AND p.state = 1) OR (o.id IS NOT NULL AND p.state = 1)) AND p.id = "+id+";"
     runQuery(sql, parameters).done(
       function(results){
           var len = results.rows.length,
@@ -116,11 +84,9 @@ getObservationsPacaWSFormated: function(id) {
     var sql = "SELECT o.id as ido, p.id as idp, strftime('%d/%m/%Y',COALESCE(o.datetime, p.begin_datetime)) as date,"
         +"begin_latitude|| ','|| begin_longitude|| ';'|| end_latitude|| ','|| end_longitude|| ';'|| cote AS station, "
         +"p.name AS lieudit, o.latitude, o.longitude, "
-        +"p.name AS adresse,"
-        +"p.cote AS coteRue,"
         +"o.scientificName as nom_sel, o.scientificName as nom_ret, o.fk_taxon as num_nom_sel, o.fk_taxon as num_nom_ret,"
         +"o.milieu, "
-        +"o.notes, "
+        +"o.note, "
         +"o.photo as img,"
         +"p.begin_latitude as latitudeDebutRue,p.begin_longitude as longitudeDebutRue,p.end_latitude as latitudeFinRue,p.end_longitude as longitudeFinRue "
         +"FROM TdataObs_parcours p "
@@ -140,38 +106,33 @@ getObservationsPacaWSFormated: function(id) {
     );
     return dfd.promise();
   },
+	findByName: function(key, callback) {
+  var dfd = $.Deferred();
+  var parameters = new Array();
+	//	this.db.transaction(function(tx) {
+			var sql = 
+				"SELECT num_nom, nom_sci " +
+				"FROM TespeceCel " + 
+				"WHERE nom_sci LIKE ? " +
+				"ORDER BY nom_sci";
 
-  findByName: function(key, callback) {
-   var dfd = $.Deferred();
-   var parameters = new Array();
-  //	this.db.transaction(function(tx) {
-    var sql = 
-     "SELECT num_nom, nom_sci " +
-     "FROM TespeceCel " + 
-     "WHERE nom_sci LIKE ? " +
-     "ORDER BY nom_sci";
-  
-   runQuery(sql, [key + '%']).done(
-       function(results){
-           var len = results.rows.length,
-             data = [],
-             i = 0;
-           for (; i < len; i = i + 1) {
-             data[i] = results.rows.item(i);
-           }
-           return dfd.resolve(data);
-       }
-     );
-     return dfd.promise();
-  
-  }
+		runQuery(sql, [key + '%']).done(
+      function(results){
+          var len = results.rows.length,
+            data = [],
+            i = 0;
+          for (; i < len; i = i + 1) {
+            data[i] = results.rows.item(i);
+          }
+          return dfd.resolve(data);
+      }
+    );
+    return dfd.promise();
+
+	}
 }
 
-
-/**
- * WebDataBase DAO base code
- */
-
+// WebDataBase DAO base code
 app.dao.baseDAOBD = {
   
   getDaoMetadata : function (model) {
@@ -213,13 +174,7 @@ app.dao.baseDAOBD = {
     sql = sql + ')';
     return sql;
   },
-
-
-	populateTruncateSQLTable: function(model){
-		var sql = 'DELETE FROM ' + this.table;
-		return runQuery(sql)  ;
-	},
-
+    
   getSQLFieldList: function()  {
    var field =  _.map(this.schema, function(field, key) {
       if ( ((field.sqltype) || (app.utils.bbforms2sqlite.dataType[field.type] !=='NOT_AVAILABLE' )) && ((field.autoincrement=== false )  || (!field.autoincrement)  ) )  {
@@ -372,10 +327,7 @@ app.dao.baseDAOBD = {
 
 }
 
-/**
- * The Template Loader. Used to asynchronously load templates located in separate .html files
- */
-
+// The Template Loader. Used to asynchronously load templates located in separate .html files
 app.utils.templateLoader = {
     templates: {},
 
@@ -398,10 +350,6 @@ app.utils.templateLoader = {
     }
 
 };
-
-/**
- * Conversion type backbone form à sqlite
- */
 
 app.utils.bbforms2sqlite= {
   dataType : {
@@ -427,10 +375,6 @@ app.utils.bbforms2sqlite= {
   },  
 }
 
-/**
- * Formatage Date
- */
-
 Date.prototype.format = function(format) {
   var o = {
     "M+" : this.getMonth()+1, //month
@@ -451,11 +395,7 @@ Date.prototype.format = function(format) {
   return format;
 }
 
-
-/**
- * PLugin MMENU configuration spécifique
- */
-
+// -------------------------------------------------- MMenu slide---------------------------------------------------- //
 $("#menu").mmenu({
   classes: "mm-slide",
 });
@@ -546,12 +486,8 @@ $('#menu-item-region').click(function(){
   }
 });
 
-/**
- * Fonctions génériques 
- */
-
+// -------------------------------------------------- checkConnection ---------------------------------------------------- //
 function checkConnection() {
-
   if (navigator.connection) {
     var networkState = navigator.connection.type;
 
@@ -570,7 +506,7 @@ function checkConnection() {
     return navigator.onLine;
   }
 }
-
+//----------------------------------------//
 function findIdToTargetEvent(event){
 				var ctarget = $(event.currentTarget);
 				var idCurrentTarget= parseInt(ctarget.context.id);
@@ -585,165 +521,4 @@ function validatorsEmail(value) {
 				var regex = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
 				var flag = regex.test(value);
 				return flag;
-};
-
-
-/**
- * Cordova plugin Push notification
- */
-
-var pushNotificationService = function(){
-				var pushNotification;
-    // fix bug onNotification is not defined
-    window.onNotification = onNotification;
-
-    //document.addEventListener("backbutton", function(e){
-    //  $("#app-status-ul").append('<li>backbutton event received</li>');		
-    //  if( $("#home").length > 0){
-    //    // call this to get a new token each time. don't call it to reuse existing token.
-    //    //pushNotification.unregister(successHandler, errorHandler);
-    //    e.preventDefault();
-    //    navigator.app.exitApp();
-    //  }else{
-    //    navigator.app.backHistory();
-    //  }
-    //}, false);			
-    try { 
-      pushNotification = window.plugins.pushNotification;
-      if (device.platform == 'android' || device.platform == 'Android' || device.platform == 'amazon-fireos' ) {
-        pushNotification.register(successHandler, errorHandler, {"senderID":"944655915307","ecb":"onNotification"});		// required!
-      } else {
-        pushNotification.register(tokenHandler, errorHandler, {"badge":"true","sound":"true","alert":"true","ecb":"onNotificationAPN"});	// required!
-      }
-    }
-    catch(err) { 
-     var txt="There was an error on this page.\n\n"; 
-      txt+="Error description: " + err.message + "\n\n"; 
-      alert(txt); 
-    }
-				
-				// handle APNS notifications for iOS
-				function onNotificationAPN(e) {
-						if (e.alert) {
-        // showing an alert also requires the org.apache.cordova.dialogs plugin
-        navigator.notification.alert(e.alert);
-						}
-						if (e.sound) {
-									// playing a sound also requires the org.apache.cordova.media plugin
-									var snd = new Media(e.sound);
-									snd.play();
-						}
-						if (e.badge) {
-									pushNotification.setApplicationIconBadgeNumber(successHandler, e.badge);
-						}
-				}
-				
-    var confirmedGcmNotification = true;
-
-				// handle GCM notifications for Android
-				function onNotification(e) {
-						switch( e.event ){
-								case 'registered':
-										if ( e.regid.length > 0 ){
-												// Your GCM push server needs to know the regID before it can push to this device
-            // here is where you might want to send it the regID for later use.
-            var json = {
-              'token' : e.regid, 
-              'type' : device.platform.toLowerCase()
-            };
-            onRegisterServerNS(json);
-            var erreurMsg;
-										}
-										break;	
-								case 'message':
-										// if this flag is set, this notification happened while we were in the foreground.
-										// you might want to play a sound to get the user's attention, throw up a dialog, etc.
-										if (e.foreground){
-            navigator.notification.beep(2);
-            cordova.exec(null, null, 'Notification', 'alert', [e.message, 'Notification', 'OK']);
-
-												// on Android soundname is outside the payload. 
-												// On Amazon FireOS all custom attributes are contained within payload
-												var soundfile = e.soundname || e.payload.sound;
-												// if the notification contains a soundname, play it.
-												// playing a sound also requires the org.apache.cordova.media plugin
-												var my_media = new Media("/android_asset/www/"+ soundfile);
-												my_media.play();
-
-										}else{	// otherwise we were launched because the user touched a notification in the notification tray.
-												if (e.coldstart)
-              cordova.exec(null, null, 'Notification', 'alert', [e.message, 'Notification', 'OK']);
-												else{
-                console.log('Background entered');
-                if(confirmedGcmNotification) {
-                    confirmedGcmNotification = false;
-                    cordova.exec(PushSupport.gcmNotificationBackgroundAlert, null, 'Notification', 'alert', [e.message, 'Notification', 'OK']);
-                }
-              }
-          }
-										//$("#app-status-ul").append('<li>MESSAGE -> MSG: ' + e.payload.message + '</li>');
-													//android only
-										//$("#app-status-ul").append('<li>MESSAGE -> MSGCNT: ' + e.payload.msgcnt + '</li>');
-													//amazon-fireos only
-									/*				$("#app-status-ul").append('<li>MESSAGE -> TIMESTAMP: ' + e.payload.timeStamp + '</li>');*/
-									break;
-									
-								case 'error':
-          console.log("error Push Notification" + e.msg);
-          break;	
-								default:
-          console.log('Unknown, an event was received and we do not know what it is');
-										break;
-						}
-				}
-
-    function gcmNotificationBackgroundAlert() {
-        confirmedGcmNotification = true;
-    }
-				
-				function tokenHandler (result) {
-      // Your iOS push server needs to know the token before it can push to this device
-      // here is where you might want to send it the token for later use.
-      var json = {
-        'token' : result, 
-        'type' : device.platform.toLowerCase()
-      };
-      onRegisterServerNS(json);     
-				}
-				
-				function successHandler (result) {
-      console.log('Succes notification '+ result);
-				}
-				
-				function errorHandler (error) {
-      console.log('Erreur notification '+ error);
-				}
-    function onRegisterServerNS(json){
-    var server = "http://www.sauvagesdepaca.fr/mobile_data/push_notifications/";
-    // var server = "http://192.168.1.50/Test/drupal7/Sauvages-PACA/mobile_data/push_notifications";
-    var erreurMsg;
-    //make ajax post to the application server to register device
-    $.ajax(server, {
-      type: "post",
-      dataType: 'json',
-      data: json,
-      success: function(response) {
-        console.log("###Successfully registered device.");
-      },
-      error : function(jqXHR, textStatus, errorThrown) {
-        erreurMsg += 'Erreur Ajax de type : ' + textStatus + '\n' + errorThrown + '\n';
-        try {
-         var reponse = jQuery.parseJSON(jqXHR.responseText);
-         if (reponse != null) {
-          $.each(reponse, function (cle, valeur) {
-           erreurMsg += valeur + '\n';
-          });
-         }
-        } catch(e) {
-         erreurMsg += 'L\'erreur n\'était pas en JSON.';
-        }
-        console.log(erreurMsg);
-      }
-    }); 
-  }
 };
