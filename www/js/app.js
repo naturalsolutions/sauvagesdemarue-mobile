@@ -63,7 +63,7 @@ var app = {
 
         //Manage geolocation when the application goes to the background
         document.addEventListener('resume',function(){ app.getPosition();},false);
-        document.addEventListener('pause',function(){ app.clearPosition();},false);
+        document.addEventListener('pause',function(){  app.clearPosition();},false);
 
         //Detect when the keyboard will be shown ou hidden
         window.addEventListener('native.keyboardshow', function() {
@@ -104,45 +104,31 @@ var app = {
         });
 
     },
-    getPosition: function(notmsg) {
-        var options = { enableHighAccuracy: true, maximumAge: 10000, timeout: 60000 },
-            geolocId = navigator.geolocation.watchPosition(
-                function(position) {
-                    app.models.pos.set({'coords': position.coords});
-                    $('#geoloc').remove();
-                },
-                function(error) {
-                    app.models.pos.clear();
-                    console.log('ERROR(' + error.code + '): ' + error.message);
-                    if (error.code === 2 || error.code === 1 || error.code === 0) {
-                       
-                        if (!notmsg) {
-                          sauvages.notifications.gpsNotStart();
-                          fromError = true;
-                        }
-                        
+    getPosition: function() {
+        var options = { enableHighAccuracy: true, maximumAge: 60000, timeout: 60000 };
+        app.geolocId = navigator.geolocation.watchPosition(
+            function(position) {
+                app.models.pos.set({'coords': position.coords});
+                $('#geoloc').remove();
+            },
+            function(error) {
+                app.models.pos.clear();             
+                console.log('ERROR(' + error.code + '): ' + error.message);
+                if (error.code === 2 || error.code === 1 || error.code === 3) {
+                    //test if modal is open
+                    if ($('#nodal').length === 0){
+                      sauvages.notifications.gpsNotStart();
                     }
-                    //app.clearPosition(geolocId);
-                    //app.getPosition(fromError);
-                  },
-                options
-              
-            );
-        //FIX Timeout    
-        if(typeof app.models.pos.get('coords') === 'undefined'){
-            var timeout = setTimeout( function() {
-                    navigator.geolocation.clearWatch( geolocId );
-                    var notmsg = true;
-                    app.getPosition(notmsg);
-                }, 5000 );
-        }
-        return geolocId;
+                    app.clearPosition();
+                }
+              },
+            options
+        );
     },
-
     clearPosition: function(){
-        if(app.getPosition()){
-            var notmsg = true;
-            navigator.geolocation.clearWatch(app.getPosition(notmsg));
+        if(app.geolocId){
+            navigator.geolocation.clearWatch(app.geolocId);
+            app.geolocId = null;
         }
     },
 

@@ -52,7 +52,6 @@ app.Router = Backbone.Router.extend({
   },
 	
   viewHomePage: function() {
-    app.getPosition();
     var self = this;
     var onDataHandler = function(data, response, options) {
       $('body').css('background-color', '#28717E');
