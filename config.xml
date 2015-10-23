@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="eu.NaturalSolutions.SauvagesDeMaRue" version="1.4.94" 
+    versionCode="171"
+    xmlns="http://www.w3.org/ns/widgets" 
+    xmlns:gap="http://phonegap.com/ns/1.0">
+
+    <name>SauvagesDeMaRue</name>
+    <description>
+        Mobile application for "sauvage de ma rue" citizen science project
+    </description>
+    <author email="contact@natural-solutions.eu" href="http://www.natural-solutions.eu">
+        Natural Solutions 
+    </author>
+    <content src="index.html" />
+
+    <allow-intent href="*://*.sauvagesdepaca.fr/*" />
+    <allow-intent href="*://*.googleapis.com/*" />
+    <allow-intent href="*://*.tela-botanica.org/*" />
+    <allow-intent href="*://*.gstatic.com/*" />
+    <allow-intent href="*://*.openstreetmap.fr/*" />
+
+
+    <access origin="http://maps.googleapis.com" />
+    <access origin="http://*.googleapis.com" />
+    <access origin="http://*.gstatic.com" />
+    <access origin="https://*.gstatic.com" />
+    <access origin="http://*.openstreetmap.fr" />
+    <access origin="https://*.googleapis.com" />
+    <access origin="http://*.tela-botanica.org/*" />
+    <access origin="http://*.sauvagesdepaca.fr" />
+
+    <preference name="phonegap-version" value="3.6.3" />
+
+    <preference name="DisallowOverscroll" value="true"/>
+    <preference name="Orientation" value="portrait" />
+    <preference name="prerendered-icon" value="true" />
+
+    <preference name="iosPersistentFileLocation" value="Compatibility" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+
+    <preference name="android-permission" value="ACCESS_FINE_LOCATION" />
+
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+
+
+    <feature name="http://api.phonegap.com/1.0/geolocation" />
+    <feature name="http://api.phonegap.com/1.0/network" />
+    <feature name="http://api.phonegap.com/1.0/device" />
+    <feature name="http://api.phonegap.com/1.0/file" />
+
+
+    <feature name="NetworkStatus">
+        <param name="ios-package" value="CDVConnection" />
+    </feature>
+
+    <!-- Status Bar-->
+    <!-- Android -->        
+    <!-- Ios -->
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" onload="true" />
+    </feature>
+
+    <!-- Android ios splash screen-->
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen"/>
+        <param name="onload" value="true" />
+    </feature>
+    <preference name="AutoHideSplashScreen" value="true" /> 
+    <preference name="FadeSplashScreen" value="true"/>
+    <preference name="ShowSplashScreenSpinner" value="true"/>
+<!--     <preference name="FadeSplashScreenDuration" value="4"/>
+ -->    
+    <!-- Android splash screen-->
+    <preference name="SplashScreen" value="splash" />
+    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+</widget>
